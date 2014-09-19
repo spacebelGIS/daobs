@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<enumsConfig>
+  <enum name="inspireAnnex">
+    <value>I</value>
+    <value>II</value>
+    <value>III"</value>
+  </enum>
+</enumsConfig>
