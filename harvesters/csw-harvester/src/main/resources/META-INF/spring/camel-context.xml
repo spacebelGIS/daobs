@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <!-- bridge spring property placeholder with Camel -->
+  <!-- you must NOT use the <context:property-placeholder at the same time, only this bridge bean -->
+  <bean id="bridgePropertyPlaceholder"
+        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+    <property name="location" value="config.properties"/>
+  </bean>
+
+  <bean id="cswHarvester" class="i.harvester.CswHarvester">
+    <property name="maxRecords" value="${csw.get.records.max.records}"/>
+  </bean>
+
+  <camel:errorHandler id="loggingErrorHandler"
+                      type="LoggingErrorHandler"
+                      logName="i.harvesters.csw"
+                      level="DEBUG"/>
+
+  <camel:camelContext xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+      errorHandlerRef="loggingErrorHandler">
+
+    <camel:route startupOrder="2">
+      <camel:description>Send a GetRecords request with no filter
+        in order to retrieve the max number of records to harvest.
+        The numberOfRecordsMatched attribute of the response is
+        retrieved.</camel:description>
+      <!-- Start once.
+      TODO: Should be cron based.
+      http://camel.apache.org/quartz2.html
+      -->
+      <camel:from uri="timer://start?repeatCount=1"/>
+      <camel:log message="Harvesting from {{csw.server.url}} ..."/>
+      <camel:setHeader headerName="CamelHttpMethod">
+        <camel:constant>POST</camel:constant>
+      </camel:setHeader>
+      <camel:setHeader headerName="Content-Type">
+        <camel:constant>application/xml</camel:constant>
+      </camel:setHeader>
+      <camel:setBody>
+        <camel:simple>resource:classpath:csw-get-records-hits.xml</camel:simple>
+      </camel:setBody>
+      <camel:to uri="http4://{{csw.server.url}}"/>
+      <camel:convertBodyTo type="org.w3c.dom.Document"/>
+      <camel:choice>
+        <camel:when>
+          <camel:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched > 0]</camel:xpath>
+          <camel:setHeader headerName="numberOfRecordsMatched">
+            <camel:xpath resultType="java.lang.String">/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched</camel:xpath>
+          </camel:setHeader>
+          <camel:log message="$simple{header.numberOfRecordsMatched} record(s) to harvest."/>
+          <camel:to uri="bean:cswHarvester?method=setNumberOfRecords(${header.numberOfRecordsMatched})"/>
+          <camel:to uri="direct:cswGetRecords"/>
+        </camel:when>
+        <camel:when>
+          <camel:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched = 0]</camel:xpath>
+          <camel:log message="No record found."/>
+        </camel:when>
+        <camel:otherwise>
+          <camel:log message="Probably an exception occured. Check response: ${body}"/>
+        </camel:otherwise>
+      </camel:choice>
+    </camel:route>
+
+
+    <camel:route startupOrder="0">
+      <camel:description>Based on the total number of records
+      to be harvested, retrieve records per page and index
+      them in SOLR. All records are removed from the indexed
+      when the task starts.
+
+      TODO: Improve update strategy.
+      </camel:description>
+      <camel:from uri="direct:cswGetRecords"/>
+      <camel:log message="Harvesting records ..."/>
+      <!--<camel:to uri="direct:indexDelete"/>-->
+      <camel:split parallelProcessing="false">
+        <camel:method bean="cswHarvester" method="getPages"/>
+        <camel:log message="Processing page: $simple{property.CamelSplitIndex}"/>
+        <camel:log message="GetRecords request ..."/>
+        <camel:setHeader headerName="CamelHttpMethod">
+          <camel:constant>POST</camel:constant>
+        </camel:setHeader>
+        <camel:setHeader headerName="Content-Type">
+          <camel:constant>application/xml</camel:constant>
+        </camel:setHeader>
+        <camel:setBody>
+          <camel:simple>bean:cswHarvester?method=generateGetRecordsQuery</camel:simple>
+        </camel:setBody>
+        <camel:to uri="http4://{{csw.server.url}}"/>
+        <!--<camel:to uri="xslt:metadata-iso19139.xsl?saxon=true&amp;output=DOM"/>-->
+        <camel:log message="GetRecords response received. Indexing records ..."/>
+        <camel:setHeader headerName="CamelHttpMethod">
+          <camel:constant>POST</camel:constant>
+        </camel:setHeader>
+        <camel:setHeader headerName="Content-Type">
+          <camel:constant>application/xml</camel:constant>
+        </camel:setHeader>
+        <camel:setBody>
+          <camel:simple>${body}</camel:simple>
+        </camel:setBody>
+        <camel:multicast stopOnException="false" parallelProcessing="true">
+          <camel:to uri="file:csw/get-records-response"/>
+          <camel:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl"/>
+        </camel:multicast>
+        <!-- Another option would have been to use SOLR component
+        but it fails to send body-->
+        <!--<camel:setHeader headerName="SolrOperation">-->
+        <!--<camel:constant>INSERT</camel:constant>-->
+        <!--</camel:setHeader>-->
+        <!--<camel:to uri="solr://localhost:8983/solr/catalog"/>-->
+      </camel:split>
+    </camel:route>
+
+
+    <camel:route>
+      <camel:description>
+        Delete all records from the index.
+
+        TODO: Should only delete record for this harvester.
+      </camel:description>
+      <camel:from uri="direct:indexDelete"/>
+      <camel:setHeader headerName="SolrOperation">
+        <camel:constant>DELETE_BY_QUERY</camel:constant>
+      </camel:setHeader>
+      <camel:setBody>
+        <camel:simple>{{solr.delete.filter}}</camel:simple>
+      </camel:setBody>
+      <camel:to uri="solr://{{solr.server.url}}"/>
+    </camel:route>
+  </camel:camelContext>
+</beans>
