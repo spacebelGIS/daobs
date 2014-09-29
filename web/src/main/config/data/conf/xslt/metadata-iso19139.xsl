@@ -17,7 +17,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   exclude-result-prefixes="#all"
   version="2.0">
-  
+
+  <xsl:variable name="harvester" select="/harvestedContent/harvester"/>
+
   <xsl:template match="/">
     <add>
       <xsl:for-each select="//gmd:MD_Metadata">
@@ -26,19 +28,30 @@
        <doc>
          <field name="id"><xsl:value-of select="gmd:fileIdentifier/gco:CharacterString"/></field>
          <field name="documentType">metadata</field>
-         <field name="country"></field>
-         
+         <field name="territory"><xsl:value-of select="$harvester/territory"/></field>
+         <field name="harvesterId"><xsl:value-of select="$harvester/url"/></field>
+
+         <!-- TODO improve date formatting maybe using Joda parser -->
          <xsl:for-each select="gmd:dateStamp/*">
-           <field name="dateStamp"><xsl:value-of select="."/></field>
+           <field name="dateStamp">
+             <xsl:value-of select="if (name() = 'gco:Date')
+                                    then concat(., 'T00:00:00Z')
+                                    else concat(., 'Z')"/>
+           </field>
          </xsl:for-each>
          
-         <xsl:for-each select="gmd:language/gco:CharacterString
-           |gmd:language/gmd:LanguageCode/@codeListValue
-           |gmd:locale/gmd:PT_Locale/gmd:languageCode/gmd:LanguageCode/@codeListValue">
+         <xsl:for-each
+                 select="gmd:language/gco:CharacterString[normalize-space(.) != '']|
+                         gmd:language/gmd:LanguageCode/@codeListValue[normalize-space(.) != '']">
            <field name="mainLanguage"><xsl:value-of select="."/></field>
          </xsl:for-each>
-         
-         <xsl:for-each select="gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue[.!='']">
+         <xsl:for-each
+                 select="gmd:locale/gmd:PT_Locale/
+                          gmd:languageCode/gmd:LanguageCode/@codeListValue[normalize-space(.) != '']">
+           <field name="otherLanguage"><xsl:value-of select="."/></field>
+         </xsl:for-each>
+
+         <xsl:for-each select="gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue[normalize-space(.) != '']">
            <field name="resourceType"><xsl:value-of select="."/></field>
          </xsl:for-each>
          
