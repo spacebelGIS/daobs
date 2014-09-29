@@ -9,19 +9,22 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
   <!-- bridge spring property placeholder with Camel -->
-  <!-- you must NOT use the <context:property-placeholder at the same time, only this bridge bean -->
+  <!-- you must NOT use the <context:property-placeholder at the same time,
+  only this bridge bean -->
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
     <property name="location" value="config.properties"/>
   </bean>
 
-  <bean id="cswHarvester" class="i.harvester.CswHarvester">
+  <bean id="cswHarvester" class="org.daobs.harvester.CswHarvester">
     <property name="maxRecords" value="${csw.get.records.max.records}"/>
+  </bean>
+  <bean id="harvesterDetailsAgg" class="org.daobs.harvester.HarvesterDetailsAggregate">
   </bean>
 
   <camel:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
-                      logName="i.harvesters.csw"
+                      logName="daobs.harvesters.csw"
                       level="DEBUG"/>
 
   <camel:camelContext xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
@@ -106,8 +109,15 @@
         <camel:setBody>
           <camel:simple>${body}</camel:simple>
         </camel:setBody>
-        <camel:multicast stopOnException="false" parallelProcessing="true">
-          <camel:to uri="file:csw/get-records-response"/>
+        <camel:convertBodyTo type="org.w3c.dom.Document"/>
+        <camel:bean ref="harvesterDetailsAgg" method="doTransform"/>
+        <!--<camel:enrich strategyRef="harvesterDetailsAgg"-->
+          <!--uri="file:resources/config/?fileName={{harvester.territory}}.xml&amp;noop=true&amp;readLock=none"/>-->
+        <camel:multicast stopOnException="false"
+                         parallelProcessing="false">
+          <!-- Backup response as XML file-->
+          <camel:to uri="file:csw/get-records-response/?fileName={{harvester.territory}}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+          <!-- Index in Solr -->
           <camel:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl"/>
         </camel:multicast>
         <!-- Another option would have been to use SOLR component
@@ -124,7 +134,7 @@
       <camel:description>
         Delete all records from the index.
 
-        TODO: Should only delete record for this harvester.
+        TODO: Should only delete record for this harvester only
       </camel:description>
       <camel:from uri="direct:indexDelete"/>
       <camel:setHeader headerName="SolrOperation">

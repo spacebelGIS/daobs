@@ -1,4 +1,4 @@
-package i.harvester;
+package org.daobs.harvester;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
