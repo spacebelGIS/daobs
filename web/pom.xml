@@ -215,7 +215,7 @@
             <force>true</force>
             <systemProperty>
               <name>solr.solr.home</name>
-              <value>/home/francois/dev/daobs/web/target/solr-cores</value>
+              <value>${project.basedir}/target/solr-cores</value>
               <!--<value>${project.build.directory}/${solr.solr.home}</value>-->
             </systemProperty>
           </systemProperties>
