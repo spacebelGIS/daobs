@@ -21,6 +21,9 @@ Starting web application:
 
 ```
 cd web
+mvn tomcat:run-war
+
+# Using Jetty, the REST API is not accessible
 mvn jetty:run
 ```
 
@@ -58,7 +61,6 @@ done
 Manually indexing INSPIRE monitoring reporting:
 
 ```
-
 for f in *.xml; do
   echo "importing '$f' file..";
   curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
