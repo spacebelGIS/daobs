@@ -120,18 +120,6 @@
       <name>GeoNetwork remote repository</name>
       <url>https://raw.githubusercontent.com/geonetwork/core-maven-repo/master</url>
     </repository>
-
-    <!--<repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <id>localGeoNetwork</id>
-      <name>GeoNetwork local repository</name>
-      <url>file://maven_repo</url>
-    </repository>-->
   </repositories>
 
   <modules>
