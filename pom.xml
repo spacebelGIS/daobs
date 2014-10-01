@@ -22,9 +22,132 @@
     <url>https://github.com/titellus/daobs/issues</url>
   </issueManagement>
 
+  <dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr</artifactId>
+      <version>${solr.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-velocity</artifactId>
+      <version>${solr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-dataimporthandler</artifactId>
+      <version>${solr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+      <version>${solr.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>${saxon.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>saxon-dom</artifactId>
+      <version>${saxon-dom.version}</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+  </dependencies>
+  </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>core-maven-repo</id>
+      <name>GeoNetwork remote repository</name>
+      <url>https://raw.githubusercontent.com/geonetwork/core-maven-repo/master</url>
+    </repository>
+
+    <!--<repository>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>localGeoNetwork</id>
+      <name>GeoNetwork local repository</name>
+      <url>file://maven_repo</url>
+    </repository>-->
+  </repositories>
+
   <modules>
-    <module>web</module>
+    <module>core</module>
     <module>dashboard</module>
+    <module>web</module>
   </modules>
+
+
+  <properties>
+    <slf4j.version>1.7.7</slf4j.version>
+    <log4j.version>1.2.17</log4j.version>
+    <solr.version>4.10.0</solr.version>
+    <saxon.version>9.1.0.8b-patch</saxon.version>
+    <saxon-dom.version>9.1.0.8b</saxon-dom.version>
+    <spring.version>4.0.7.RELEASE</spring.version>
+  </properties>
 </project>
 
