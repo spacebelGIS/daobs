@@ -104,7 +104,7 @@
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
   <field name="harvesterId" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
-  <field name="harvestedDate" type="date" stored="true" indexed="true" multiValued="false"/>
+  <field name="harvestedDate" type="date" stored="true" indexed="true" multiValued="true"/>
   <field name="dateStamp" type="date" stored="true" indexed="true" multiValued="false"/>
   <field name="mainLanguage" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
   <field name="otherLanguage" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
@@ -112,12 +112,16 @@
   <field name="resourceTitle" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="resourceTitle_*" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="resourceAbstract" type="string" stored="true" indexed="true" multiValued="false"/>
-  <field name="inspireThemeEn" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="inspireTheme_syn" type="managed_inspiretheme" stored="true" indexed="true" multiValued="true"/>
+  <field name="inspireTheme" type="only_inspiretheme" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireTheme_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
-  <field name="inspireAnnex" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
-  <!--<field name="inspireAnnex" type="solr.EnumField" stored="true" indexed="true"
-         multiValued="true" docValues="true" enumsConfig="enumsConfig.xml" enumName="inspireAnnex"/>
--->
+  <field name="inspireAnnex_syn" type="managed_inspireannex" stored="true" indexed="true" multiValued="true"/>
+  <field name="inspireAnnex" type="only_inspireannex" stored="true" indexed="true" multiValued="true"/>
+  <field name="inspireConformity" type="boolean" stored="true" indexed="true" multiValued="false"/>
+
+  <field name="serviceType" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="serviceTypeAndVersion" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
 
   <!--
   <field name="sku" type="text_en_splitting_tight" indexed="true" stored="true" omitNorms="true"/>
@@ -457,6 +461,78 @@
       <filter class="solr.ManagedSynonymFilterFactory" managed="english"/>
     </analyzer>
   </fieldType>
+
+  <!-- A managed field which search for an INSPIRE
+  matching themes in english. The input should be one
+  of the translation or the skos identifier.
+
+  See configuration in _schema_analysis_synonyms_inspiretheme.json
+  -->
+  <fieldType name="managed_inspiretheme"
+             class="solr.TextField"
+             termVectors="false"
+             positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.ManagedSynonymFilterFactory"
+              managed="inspiretheme"/>
+    </analyzer>
+  </fieldType>
+
+  <!-- A field type which only preserve english version
+  of the INSPIRE themes.
+
+  See configuration in inspiretheme.txt.
+  -->
+  <fieldType name="only_inspiretheme"
+             class="solr.TextField"
+             termVectors="false"
+             positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.KeepWordFilterFactory"
+              words="inspiretheme.txt"
+              ignoreCase="true"/>
+    </analyzer>
+  </fieldType>
+
+  <!-- A managed field which search for an INSPIRE
+  matching annex based on the INSPIRE theme in english.
+  The input should be one the english version of an INSPIRE
+  theme.
+
+  See configuration in _schema_analysis_synonyms_inspireannex.json
+  -->
+  <fieldType name="managed_inspireannex"
+             class="solr.TextField"
+             termVectors="false"
+             positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.ManagedSynonymFilterFactory"
+              managed="inspireannex"/>
+    </analyzer>
+  </fieldType>
+
+
+  <!-- A field type which only preserve INSPIRE annex values.
+
+  See configuration in inspireannex.txt.
+  -->
+  <fieldType name="only_inspireannex"
+             class="solr.TextField"
+             termVectors="false"
+             positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.KeepWordFilterFactory"
+              words="inspireannex.txt"
+              ignoreCase="true"/>
+    </analyzer>
+  </fieldType>
+
 
   <!-- A general text field that has reasonable, generic
        cross-language defaults: it tokenizes with StandardTokenizer,
