@@ -27,6 +27,16 @@ mvn tomcat7:run-war
 Access the Solr admin page from http://localhost:8983/solr.
 Access the dashboard from http://localhost:8983/solr/dashboard.
 
+## Loading dashboard
+
+Access the dashboard page, click load and choose dashboard configuration from
+https://github.com/titellus/banana/tree/develop/src/app/dashboards
+
+* Browse: Search for metadata records and filter your search easily (facets, INSPIRE themes and annexes charts).
+* INSPIRE-Dashboard: Home page
+* default: Monitoring reporting 2013 dashboard
+
+
 ## Harvesting records
 
 Harvesting records from a CSW end-point:
