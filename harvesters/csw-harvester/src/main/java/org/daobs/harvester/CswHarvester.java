@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class CswHarvester {
     private String getRecordsTemplate = "";
+    List<String> pages = new ArrayList<String>();
 
     public CswHarvester() {
         String fileName = "csw-get-records.xml";
@@ -21,7 +22,6 @@ public class CswHarvester {
             getRecordsTemplate = Files.toString(
                     new ClassPathResource(fileName).getFile(),
                     Charsets.UTF_8);
-            System.out.println("GetRecords request template '" + getRecordsTemplate + "'.");
         } catch (IOException e) {
             System.out.println("Can't find '" + fileName + "'.");
         }
@@ -48,24 +48,32 @@ public class CswHarvester {
     private int numberOfRecordsMatched;
 
     public void setNumberOfRecords(String numberOfRecordsMatched) {
-        this.numberOfRecordsMatched = Integer.valueOf(numberOfRecordsMatched);
+        this.numberOfRecordsMatched = Integer.parseInt(numberOfRecordsMatched);
     }
 
     public int getNumberOfPages() {
-        return numberOfRecordsMatched / maxRecords;
+        return pages.size();
     }
 
     ;
 
     public List<String> getPages() {
-        List<String> pages = new ArrayList<String>();
         int numberOfPages = numberOfRecordsMatched / maxRecords;
-        System.out.println("numberOfRecordsMatched " + numberOfRecordsMatched + "'.");
-        System.out.println("maxRecords " + maxRecords + "'.");
-        System.out.println("numberOfPages " + numberOfPages + "'.");
-        for (int i = 0; i < numberOfPages; i++) {
+        int remainingRecords = numberOfRecordsMatched - (numberOfPages * maxRecords);
+
+        int i;
+        for (i = 0; i < numberOfPages; i++) {
             pages.add(i + "");
         }
+
+        // Add one more page to collect remaining records
+        if (remainingRecords > 0) {
+            pages.add(i++ + "");
+        }
+        System.out.println("numberOfRecordsMatched " + numberOfRecordsMatched + "'.");
+        System.out.println("maxRecords " + maxRecords + "'.");
+        System.out.println("numberOfPages " + pages.size() + "'.");
+        System.out.println("remainingRecords " + remainingRecords + "'.");
         return pages;
     }
 
