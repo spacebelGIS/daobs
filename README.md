@@ -21,10 +21,7 @@ Starting web application:
 
 ```
 cd web
-mvn tomcat:run-war
-
-# Using Jetty, the REST API is not accessible
-mvn jetty:run
+mvn tomcat7:run-war
 ```
 
 Access the Solr admin page from http://localhost:8983/solr.
