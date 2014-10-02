@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Configures the Camel Context-->
+<!-- Configures the cm Context-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:cm="http://camel.apache.org/schema/spring"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+       http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  <!-- bridge spring property placeholder with Camel -->
+  <!-- bridge spring property placeholder with cm -->
   <!-- you must NOT use the <context:property-placeholder at the same time,
   only this bridge bean -->
   <bean id="bridgePropertyPlaceholder"
@@ -22,128 +24,135 @@
   <bean id="harvesterDetailsAgg" class="org.daobs.harvester.HarvesterDetailsAggregate">
   </bean>
 
-  <camel:errorHandler id="loggingErrorHandler"
+  <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
                       logName="daobs.harvesters.csw"
                       level="DEBUG"/>
 
-  <camel:camelContext xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+  <cm:camelContext xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
       errorHandlerRef="loggingErrorHandler">
 
-    <camel:route startupOrder="2">
-      <camel:description>Send a GetRecords request with no filter
+    <cm:route startupOrder="2">
+      <cm:description>
+        Send a GetRecords request with no filter (cf. csw-get-records-hits.xml)
         in order to retrieve the max number of records to harvest.
         The numberOfRecordsMatched attribute of the response is
-        retrieved.</camel:description>
+        retrieved.
+      </cm:description>
       <!-- Start once.
       TODO: Should be cron based.
       http://camel.apache.org/quartz2.html
       -->
-      <camel:from uri="timer://start?repeatCount=1"/>
-      <camel:log message="Harvesting from {{csw.server.url}} ..."/>
-      <camel:setHeader headerName="CamelHttpMethod">
-        <camel:constant>POST</camel:constant>
-      </camel:setHeader>
-      <camel:setHeader headerName="Content-Type">
-        <camel:constant>application/xml</camel:constant>
-      </camel:setHeader>
-      <camel:setBody>
-        <camel:simple>resource:classpath:csw-get-records-hits.xml</camel:simple>
-      </camel:setBody>
-      <camel:to uri="http4://{{csw.server.url}}"/>
-      <camel:convertBodyTo type="org.w3c.dom.Document"/>
-      <camel:choice>
-        <camel:when>
-          <camel:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched > 0]</camel:xpath>
-          <camel:setHeader headerName="numberOfRecordsMatched">
-            <camel:xpath resultType="java.lang.String">/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched</camel:xpath>
-          </camel:setHeader>
-          <camel:log message="$simple{header.numberOfRecordsMatched} record(s) to harvest."/>
-          <camel:to uri="bean:cswHarvester?method=setNumberOfRecords(${header.numberOfRecordsMatched})"/>
-          <camel:to uri="direct:cswGetRecords"/>
-        </camel:when>
-        <camel:when>
-          <camel:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched = 0]</camel:xpath>
-          <camel:log message="No record found."/>
-        </camel:when>
-        <camel:otherwise>
-          <camel:log message="Probably an exception occured. Check response: ${body}"/>
-        </camel:otherwise>
-      </camel:choice>
-    </camel:route>
+      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:log message="Harvesting from {{csw.server.url}} ..."/>
+      <!-- Add logger for time http://camel.apache.org/eventnotifier-to-log-details-about-all-sent-exchanges.html -->
+      <cm:setHeader headerName="cmHttpMethod">
+        <cm:constant>POST</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:constant>application/xml</cm:constant>
+      </cm:setHeader>
+      <cm:setBody>
+        <cm:simple>resource:classpath:csw-get-records-hits.xml</cm:simple>
+      </cm:setBody>
+      <cm:to uri="http4://{{csw.server.url}}"/>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+      <cm:choice>
+        <cm:when>
+          <!-- If records found, next route is direct:cswGetRecords. -->
+          <cm:xpath>/csw:GetRecordsResponse/
+            csw:SearchResults[@numberOfRecordsMatched > 0]</cm:xpath>
+          <cm:setHeader headerName="numberOfRecordsMatched">
+            <cm:xpath resultType="java.lang.String">
+              /csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched
+            </cm:xpath>
+          </cm:setHeader>
+          <cm:log message="$simple{header.numberOfRecordsMatched} record(s) to harvest."/>
+          <cm:to uri="bean:cswHarvester?method=setNumberOfRecords(${header.numberOfRecordsMatched})"/>
+          <cm:to uri="direct:cswGetRecords"/>
+        </cm:when>
+        <cm:when>
+          <cm:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched = 0]</cm:xpath>
+          <cm:log message="No record found."/>
+        </cm:when>
+        <cm:otherwise>
+          <cm:log message="Probably an exception occurred. Check CSW response: ${body}"/>
+        </cm:otherwise>
+      </cm:choice>
+    </cm:route>
 
 
-    <camel:route startupOrder="0">
-      <camel:description>Based on the total number of records
+    <cm:route startupOrder="0">
+      <cm:description>Based on the total number of records
       to be harvested, retrieve records per page and index
       them in SOLR. All records are removed from the indexed
       when the task starts.
 
       TODO: Improve update strategy.
-      </camel:description>
-      <camel:from uri="direct:cswGetRecords"/>
-      <camel:log message="Harvesting records ..."/>
-      <!--<camel:to uri="direct:indexDelete"/>-->
-      <camel:split parallelProcessing="false">
-        <camel:method bean="cswHarvester" method="getPages"/>
-        <camel:log message="Processing page: $simple{property.CamelSplitIndex}"/>
-        <camel:log message="GetRecords request ..."/>
-        <camel:setHeader headerName="CamelHttpMethod">
-          <camel:constant>POST</camel:constant>
-        </camel:setHeader>
-        <camel:setHeader headerName="Content-Type">
-          <camel:constant>application/xml</camel:constant>
-        </camel:setHeader>
-        <camel:setBody>
-          <camel:simple>bean:cswHarvester?method=generateGetRecordsQuery</camel:simple>
-        </camel:setBody>
-        <camel:to uri="http4://{{csw.server.url}}"/>
-        <!--<camel:to uri="xslt:metadata-iso19139.xsl?saxon=true&amp;output=DOM"/>-->
-        <camel:log message="GetRecords response received. Indexing records ..."/>
-        <camel:setHeader headerName="CamelHttpMethod">
-          <camel:constant>POST</camel:constant>
-        </camel:setHeader>
-        <camel:setHeader headerName="Content-Type">
-          <camel:constant>application/xml</camel:constant>
-        </camel:setHeader>
-        <camel:setBody>
-          <camel:simple>${body}</camel:simple>
-        </camel:setBody>
-        <camel:convertBodyTo type="org.w3c.dom.Document"/>
-        <camel:bean ref="harvesterDetailsAgg" method="doTransform"/>
-        <!--<camel:enrich strategyRef="harvesterDetailsAgg"-->
+      </cm:description>
+      <cm:from uri="direct:cswGetRecords"/>
+      <cm:log message="Harvesting records ..."/>
+      <!--<cm:to uri="direct:indexDelete"/>-->
+      <cm:split parallelProcessing="true">
+        <cm:method bean="cswHarvester" method="getPages"/>
+        <cm:log message="Processing page: $simple{property.CamelSplitIndex} / $simple{bean:cswHarvester?method=getNumberOfPages}"/>
+        <cm:log message="GetRecords request ..."/>
+        <cm:setHeader headerName="cmHttpMethod">
+          <cm:constant>POST</cm:constant>
+        </cm:setHeader>
+        <cm:setHeader headerName="Content-Type">
+          <cm:constant>application/xml</cm:constant>
+        </cm:setHeader>
+        <cm:setBody>
+          <cm:simple>bean:cswHarvester?method=generateGetRecordsQuery</cm:simple>
+        </cm:setBody>
+        <cm:to uri="http4://{{csw.server.url}}"/>
+        <!--<cm:to uri="xslt:metadata-iso19139.xsl?saxon=true&amp;output=DOM"/>-->
+        <cm:log message="GetRecords response received. Indexing records ..."/>
+        <cm:setHeader headerName="cmHttpMethod">
+          <cm:constant>POST</cm:constant>
+        </cm:setHeader>
+        <cm:setHeader headerName="Content-Type">
+          <cm:constant>application/xml</cm:constant>
+        </cm:setHeader>
+        <cm:setBody>
+          <cm:simple>${body}</cm:simple>
+        </cm:setBody>
+        <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        <cm:bean ref="harvesterDetailsAgg" method="doTransform"/>
+        <!--<cm:enrich strategyRef="harvesterDetailsAgg"-->
           <!--uri="file:resources/config/?fileName={{harvester.territory}}.xml&amp;noop=true&amp;readLock=none"/>-->
-        <camel:multicast stopOnException="false"
+        <cm:multicast stopOnException="false"
                          parallelProcessing="false">
           <!-- Backup response as XML file-->
-          <camel:to uri="file:csw/get-records-response/?fileName={{harvester.territory}}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+          <cm:to uri="file:csw/get-records-response/?fileName={{harvester.territory}}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <!-- Index in Solr -->
-          <camel:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl"/>
-        </camel:multicast>
+          <cm:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl"/>
+        </cm:multicast>
         <!-- Another option would have been to use SOLR component
         but it fails to send body-->
-        <!--<camel:setHeader headerName="SolrOperation">-->
-        <!--<camel:constant>INSERT</camel:constant>-->
-        <!--</camel:setHeader>-->
-        <!--<camel:to uri="solr://localhost:8983/solr/catalog"/>-->
-      </camel:split>
-    </camel:route>
+        <!--<cm:setHeader headerName="SolrOperation">-->
+        <!--<cm:constant>INSERT</cm:constant>-->
+        <!--</cm:setHeader>-->
+        <!--<cm:to uri="solr://localhost:8983/solr/catalog"/>-->
+      </cm:split>
+    </cm:route>
 
 
-    <camel:route>
-      <camel:description>
+    <cm:route>
+      <cm:description>
         Delete all records from the index.
 
         TODO: Should only delete record for this harvester only
-      </camel:description>
-      <camel:from uri="direct:indexDelete"/>
-      <camel:setHeader headerName="SolrOperation">
-        <camel:constant>DELETE_BY_QUERY</camel:constant>
-      </camel:setHeader>
-      <camel:setBody>
-        <camel:simple>{{solr.delete.filter}}</camel:simple>
-      </camel:setBody>
-      <camel:to uri="solr://{{solr.server.url}}"/>
-    </camel:route>
-  </camel:camelContext>
+      </cm:description>
+      <cm:from uri="direct:indexDelete"/>
+      <cm:setHeader headerName="SolrOperation">
+        <cm:constant>DELETE_BY_QUERY</cm:constant>
+      </cm:setHeader>
+      <cm:setBody>
+        <cm:simple>{{solr.delete.filter}}</cm:simple>
+      </cm:setBody>
+      <cm:to uri="solr://{{solr.server.url}}"/>
+    </cm:route>
+  </cm:camelContext>
 </beans>
