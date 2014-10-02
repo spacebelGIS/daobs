@@ -117,7 +117,8 @@
   <field name="inspireTheme_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="inspireAnnex_syn" type="managed_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireAnnex" type="only_inspireannex" stored="true" indexed="true" multiValued="true"/>
-  <field name="inspireConformity" type="boolean" stored="true" indexed="true" multiValued="false"/>
+  <!-- TODO: check if conformity could be multivalued -->
+  <field name="inspireConformity" type="boolean" stored="true" indexed="true" multiValued="true"/>
 
   <field name="serviceType" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="serviceTypeAndVersion" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>

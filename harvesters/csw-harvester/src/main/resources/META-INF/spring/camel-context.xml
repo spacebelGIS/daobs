@@ -46,7 +46,7 @@
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:log message="Harvesting from {{csw.server.url}} ..."/>
       <!-- Add logger for time http://camel.apache.org/eventnotifier-to-log-details-about-all-sent-exchanges.html -->
-      <cm:setHeader headerName="cmHttpMethod">
+      <cm:setHeader headerName="camelHttpMethod">
         <cm:constant>POST</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Content-Type">
@@ -109,7 +109,7 @@
         <cm:to uri="http4://{{csw.server.url}}"/>
         <!--<cm:to uri="xslt:metadata-iso19139.xsl?saxon=true&amp;output=DOM"/>-->
         <cm:log message="GetRecords response received. Indexing records ..."/>
-        <cm:setHeader headerName="cmHttpMethod">
+        <cm:setHeader headerName="camelHttpMethod">
           <cm:constant>POST</cm:constant>
         </cm:setHeader>
         <cm:setHeader headerName="Content-Type">
@@ -128,13 +128,17 @@
           <cm:to uri="file:csw/get-records-response/?fileName={{harvester.territory}}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <!-- Index in Solr -->
           <cm:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl"/>
+          <!-- Camel Solr component can't be used to set the
+          xslt transformation to use in the request handler. -->
+          <!--<cm:setHeader headerName="SolrOperation">-->
+            <!--<cm:constant>INSERT</cm:constant>-->
+          <!--</cm:setHeader>-->
+          <!--<cm:to uri="solr://localhost:8983/solr/data/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl'"/>-->
         </cm:multicast>
+        <cm:log message="Solr update response: ${body}"/>
         <!-- Another option would have been to use SOLR component
         but it fails to send body-->
-        <!--<cm:setHeader headerName="SolrOperation">-->
-        <!--<cm:constant>INSERT</cm:constant>-->
-        <!--</cm:setHeader>-->
-        <!--<cm:to uri="solr://localhost:8983/solr/catalog"/>-->
+
       </cm:split>
     </cm:route>
 
