@@ -1,5 +1,5 @@
 
-This project used Solr (http://lucene.apache.org/solr/) and Banana to analyze metadata catalog content.
+This project is using Solr (http://lucene.apache.org/solr/) and Banana dashboard tool to analyze metadata catalog content.
 
 ## Features
 
