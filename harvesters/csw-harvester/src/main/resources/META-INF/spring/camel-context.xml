@@ -29,7 +29,8 @@
                       logName="daobs.harvesters.csw"
                       level="DEBUG"/>
 
-  <cm:camelContext xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+  <cm:camelContext xmlns:ogc="http://www.opengis.net/ogc"
+                   xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
       errorHandlerRef="loggingErrorHandler">
 
     <cm:onException>
@@ -59,10 +60,26 @@
         <cm:setHeader headerName="harvesterName">
           <cm:xpath resultType="java.lang.String">harvester/name</cm:xpath>
         </cm:setHeader>
+        <cm:choice>
+          <cm:when>
+            <cm:xpath>harvester/filter/ogc:Filter</cm:xpath>
+            <cm:setHeader headerName="harvesterFilter">
+              <cm:xpath resultType="org.w3c.dom.Document">harvester/filter/ogc:Filter</cm:xpath>
+            </cm:setHeader>
+          </cm:when>
+          <cm:otherwise>
+            <cm:setHeader headerName="harvesterFilter">
+              <cm:simple resultType="org.w3c.dom.Document">
+                <![CDATA[<Filter xmlns="http://www.opengis.net/ogc"/>]]>
+              </cm:simple>
+            </cm:setHeader>
+          </cm:otherwise>
+        </cm:choice>
         <cm:setHeader headerName="harvesterBeginTime">
           <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
         </cm:setHeader>
         <cm:log message="Harvesting node $simple{header.harvesterName} ($simple{header.harvesterTerritory}) at $simple{header.harvesterURL}"/>
+        <cm:log message="CSW filter is $simple{header.harvesterFilter}"/>
         <cm:log message="Starting at $simple{header.harvesterBeginTime}"/>
 
         <cm:to uri="direct:harvestNode"/>
@@ -81,6 +98,7 @@
       http://camel.apache.org/quartz2.html
       -->
       <cm:from uri="direct:harvestNode"/>
+      <cm:bean ref="cswHarvester" method="initialize"/>
       <!--<cm:from uri="timer://start?repeatCount=1"/>-->
       <cm:log message="Harvesting from $simple{header.harvesterUrl} ..."/>
       <!-- Add logger for time http://camel.apache.org/eventnotifier-to-log-details-about-all-sent-exchanges.html -->
@@ -91,12 +109,31 @@
         <cm:constant>application/xml</cm:constant>
       </cm:setHeader>
       <cm:setBody>
-        <cm:simple>resource:classpath:csw-get-records-hits.xml</cm:simple>
+        <cm:simple>bean:cswHarvester?method=generateGetRecordsHitsQuery</cm:simple>
       </cm:setBody>
-      <cm:recipientList>
+     <!-- <cm:setBody>
+        <cm:simple>resource:classpath:csw-get-records-hits.xml</cm:simple>
+      </cm:setBody>-->
+      <!--<cm:choice>
+        <cm:when>
+          <cm:simple>$header.harvesterUrl startsWith "https"</cm:simple>
+          <cm:recipientList>
+            <cm:simple>http4://$simple{header.harvesterUrl}.replaceAll("https://", "")</cm:simple>
+          </cm:recipientList>
+        </cm:when>
+        <cm:otherwise>
+          <cm:recipientList>
+            <cm:simple>http4://$simple{header.harvesterUrl}.replaceAll("http://", "")</cm:simple>
+          </cm:recipientList>
+        </cm:otherwise>
+      </cm:choice>-->
+      <!--<cm:recipientList>
         <cm:simple>http4://$simple{header.harvesterUrl}</cm:simple>
-      </cm:recipientList>
-      <!--<cm:to uri="http4://{{csw.server.url}}"/>-->
+      </cm:recipientList>-->
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>${header.harvesterUrl}</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://csw.server.url"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
       <cm:choice>
         <cm:when>
@@ -147,10 +184,10 @@
         <cm:setBody>
           <cm:simple>bean:cswHarvester?method=generateGetRecordsQuery</cm:simple>
         </cm:setBody>
-        <cm:recipientList>
-          <cm:simple>http4://$simple{header.harvesterUrl}</cm:simple>
-        </cm:recipientList>
-        <!--<cm:to uri="http4://{{csw.server.url}}"/>-->
+        <cm:setHeader headerName="Exchange.HTTP_URI">
+          <cm:simple>${header.harvesterUrl}</cm:simple>
+        </cm:setHeader>
+        <cm:to uri="http4://csw.server.url"/>
         <!--<cm:to uri="xslt:metadata-iso19139.xsl?saxon=true&amp;output=DOM"/>-->
         <cm:log message="GetRecords response received. Indexing records ..."/>
         <cm:setHeader headerName="camelHttpMethod">
@@ -163,10 +200,9 @@
           <cm:simple>${body}</cm:simple>
         </cm:setBody>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        <!-- TODO: Add CSW request to the document -->
         <cm:bean ref="harvesterDetailsAgg"
                  method="doTransform($simple{body}, $simple{header.harvesterUrl}, $simple{header.harvesterTerritory})"/>
-        <!--<cm:enrich strategyRef="harvesterDetailsAgg"-->
-          <!--uri="file:resources/config/?fileName={{harvester.territory}}.xml&amp;noop=true&amp;readLock=none"/>-->
         <cm:multicast stopOnException="false"
                          parallelProcessing="false">
           <!-- Backup response as XML file-->
@@ -186,7 +222,10 @@
         Index records in Solr and report any errors.
       </cm:description>
       <cm:from uri="direct:indexDocuments"/>
-      <cm:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl&amp;throwExceptionOnFailure=false" />
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>http://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl&amp;</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?throwExceptionOnFailure=false" />
       <!-- Camel Solr component can't be used to set the
       xslt transformation to use in the request handler. -->
       <!--<cm:setHeader headerName="SolrOperation">-->
@@ -212,7 +251,7 @@
               /response/lst/int[@name = 'QTime']/text()
             </cm:xpath>
           </cm:setHeader>
-          <cm:log message="Records indexed in $simple{header.indexingTime}." loggingLevel="INFO"/>
+          <cm:log message="Records indexed in $simple{header.indexingTime}ms." loggingLevel="INFO"/>
         </cm:otherwise>
       </cm:choice>
     </cm:route>

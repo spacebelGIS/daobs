@@ -2,54 +2,158 @@
   <!-- List of CSW endpoints
   from http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/ -->
 
+
+
+  <harvester>
+    <territory>es</territory>
+    <name>IDEE Discovery service</name>
+    <url>http://www.idee.es/csw-inspire-idee/srv/spa/csw</url>
+  </harvester>
+  <harvester>
+    <territory>fi</territory>
+    <name>Paikkatietohakemisto</name>
+    <url>http://www.paikkatietohakemisto.fi/geonetwork/srv/fi/csw</url>
+  </harvester>
+  <harvester>
+    <territory>fr</territory>
+    <name>Geocatalogue Catalogue Server INSPIRE</name>
+    <url>http://www.geocatalogue.fr/api-public/inspire/servicesRest?</url>
+  </harvester>
+  <harvester>
+    <territory>hr</territory>
+    <name>Pilot kataloškog servera</name>
+    <url>http://geoportal.nipp.hr/geonetwork/srv/hrv/csw-inspire</url>
+  </harvester>
+  <harvester>
+    <territory>si</territory>
+    <name>Slovenski Inspire metadata katalog</name>
+    <url>http://prostor3.gov.si/imps/srv/sl/csw</url>
+  </harvester>
+  <harvester>
+    <territory>sk</territory>
+    <name>Katalógová (vyhľadávacia) služba MŽP SR</name>
+    <url>http://geo.enviroportal.sk/catalog-server/CSWStartup</url>
+  </harvester>
+
+  <harvester>
+    <territory>ee</territory>
+    <name>Estonia Discovery Service</name>
+    <url>http://inspire.maaamet.ee/geoportal/csw</url>
+  </harvester>
+  <harvester>
+    <territory>el</territory>
+    <name>ΚΑΤΑΛΟΓΟΣ</name>
+    <url>http://www1.okxe.gr/geonetwork/srv/en/csw</url>
+  </harvester>
+  <harvester>
+    <territory>lv/lgia</territory>
+    <name>Latvian Geospatial Information Agency metadata catalogue</name>
+    <url>http://kartes.lgia.gov.lv/geoportal/csw</url>
+  </harvester>
+  <harvester>
+    <territory>lv/viss</territory>
+    <name>Latvian metadata catalogue. GDC (Geospatial data connector)</name>
+    <url>https://geometadati.viss.gov.lv/geoportal/csw</url>
+  </harvester>
+  <harvester>
+    <territory>at</territory>
+    <name>INSPIREGeo-Portal Katalogservice BMLFUW/Österreich</name>
+    <url>https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/de/csw202</url>
+    <filter>
+      <ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">
+        <ogc:PropertyIsLike escapeChar="\" singleChar="?" wildCard="*">
+          <ogc:PropertyName>AnyText</ogc:PropertyName>
+          <ogc:Literal>*</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+    </filter>
+  </harvester>
+  <harvester>
+    <territory>ie</territory>
+    <name>Geoportal IE - INSPIREDiscovery Service</name>
+    <url>https://www.geoportal.ie/geoportal/csw</url>
+  </harvester>
+  <harvester>
+    <territory>be/geobru</territory>
+    <name>GeoCatalogue de la Région de Bruxelles-Capitale</name>
+    <url>http://geobru.irisnet.be/geonetwork/srv/fre/csw</url>
+  </harvester>
+  <harvester>
+    <territory>be/geopunt</territory>
+    <name>Geopunt-Metadatacenter zoekdienst</name>
+    <url>http://metadata.geopunt.be/zoekdienst/srv/dut/csw</url>
+  </harvester>
+  <harvester>
+    <territory>be/geo</territory>
+    <name>CSW service of the belgian federal government</name>
+    <url>http://csw.geo.be/eng/csw</url>
+  </harvester>
+  <harvester>
+    <territory>cz</territory>
+    <name>Czech republic INSPIRE metadata catalogue</name>
+    <url>http://geoportal.gov.cz/php/micka/csw/index.php</url>
+  </harvester>
+  <harvester>
+    <territory>de</territory>
+    <name>GeoDatenKatalog.De</name>
+    <url>http://ims.geoportal.de/inspire/srv/eng/csw</url>
+    <filter>
+      <ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">
+        <ogc:PropertyIsLike escapeChar="\" singleChar="?" wildCard="*">
+          <ogc:PropertyName>AnyText</ogc:PropertyName>
+          <ogc:Literal>inspireidentifiziert</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+    </filter>
+  </harvester>
   <harvester>
     <territory>uk</territory>
     <name>UK Service</name>
-    <url>csw.data.gov.uk/geonetwork/srv/en/csw</url>
+    <url>http://csw.data.gov.uk/geonetwork/srv/en/csw</url>
   </harvester>
   <harvester>
     <territory>dk</territory>
     <name>DK Service</name>
-    <url>www.geodata-info.dk/registrant/srv/en/csw</url>
+    <url>http://www.geodata-info.dk/registrant/srv/en/csw</url>
   </harvester>
-  <!--<harvester>
+  <harvester>
     <territory>ro</territory>
     <name>ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP</name>
-    <url>geoportal.ancpi.ro/geoportal/csw</url>
+    <url>http://geoportal.ancpi.ro/geoportal/csw</url>
   </harvester>
   <harvester>
     <territory>se</territory>
     <name>Nationell svensk metadatakatalog</name>
-    <url>www.geodata.se/InspireCswProxy/csw</url>
+    <url>http://www.geodata.se/InspireCswProxy/csw</url>
   </harvester>
   <harvester>
     <territory>is</territory>
     <name>Iceland Service</name>
-    <url>gatt.lmi.is/geoportal122/csw</url>
+    <url>http://gatt.lmi.is/geoportal122/csw</url>
   </harvester>
   <harvester>
     <territory>lu</territory>
     <name>INSPIRE Geoportal CSW of the Grand-Duchy of Luxembourg</name>
-    <url>inspire.geoportail.lu/geoportal/csw</url>
+    <url>http://inspire.geoportail.lu/geoportal/csw</url>
   </harvester>
   <harvester>
     <territory>nl</territory>
     <name>Nationaal GeoRegister</name>
-    <url>nationaalgeoregister.nl/geonetwork/srv/dut/inspire</url>
+    <url>http://nationaalgeoregister.nl/geonetwork/srv/dut/inspire</url>
   </harvester>
   <harvester>
     <territory>no</territory>
     <name>Geonorge - National CSW service for Norway</name>
-    <url>www.geonorge.no/geonetwork/srv/nor/csw-inspire</url>
+    <url>http://www.geonorge.no/geonetwork/srv/nor/csw-inspire</url>
   </harvester>
   <harvester>
     <territory>pl</territory>
     <name>Geoportal - Polska Usługa WyszukiwaniaINSPIRE</name>
-    <url>mapy.geoportal.gov.pl/wss/service/CSWINSP/guest/CSWStartup</url>
+    <url>http://mapy.geoportal.gov.pl/wss/service/CSWINSP/guest/CSWStartup</url>
   </harvester>
   <harvester>
     <territory>pt</territory>
     <name>INSPIRE-PT Catalog Service</name>
-    <url>cgpr.igeo.pt/catalogo-inspire-pt/services/csw?</url>
-  </harvester>-->
+    <url>http://cgpr.igeo.pt/catalogo-inspire-pt/services/csw?</url>
+  </harvester>
 </harvesters>
