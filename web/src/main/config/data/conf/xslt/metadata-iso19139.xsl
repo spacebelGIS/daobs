@@ -32,8 +32,10 @@
   <xsl:template match="/">
     <!-- Add a Solr document -->
     <add>
-      <!-- For any ISO19139 records in the input XML document -->
-      <xsl:for-each select="//gmd:MD_Metadata">
+      <!-- For any ISO19139 records in the input XML document
+      Some records from IS do not have record identifier. Ignore them.
+      -->
+      <xsl:for-each select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString != '']">
         <doc>
 
           <!-- Main variables for the document -->
