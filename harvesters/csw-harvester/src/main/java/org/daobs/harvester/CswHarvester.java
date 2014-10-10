@@ -24,11 +24,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created by francois on 9/1/14.
  */
 public class CswHarvester {
+    Logger log = Logger.getLogger("org.daobs.harvester.csw");
+
     class Config {
         public void Config() {
 
@@ -80,11 +83,10 @@ public class CswHarvester {
                 pages.add(i++ + "");
             }
 
-            System.out.println(this);
-            System.out.println("numberOfRecordsMatched " + numberOfRecordsMatched + ".");
-            System.out.println("maxRecords " + maxRecords + ".");
-            System.out.println("numberOfPages " + pages.size() + ".");
-            System.out.println("remainingRecords " + remainingRecords + ".");
+            log.info("numberOfRecordsMatched " + numberOfRecordsMatched + ".");
+            log.info("maxRecords " + maxRecords + ".");
+            log.info("numberOfPages " + pages.size() + ".");
+            log.info("remainingRecords " + remainingRecords + ".");
             return pages;
         }
 
@@ -122,7 +124,7 @@ public class CswHarvester {
                     new ClassPathResource(fileName).getFile(),
                     Charsets.UTF_8);
         } catch (IOException e) {
-            System.out.println("Can't find '" + fileName + "'.");
+            log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
         }
         String fileNameHits = "csw-get-records-hits.xml";
         try {
@@ -130,13 +132,14 @@ public class CswHarvester {
                     new ClassPathResource(fileNameHits).getFile(),
                     Charsets.UTF_8);
         } catch (IOException e) {
-            System.out.println("Can't find '" + fileNameHits + "'.");
+            log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
         }
     }
 
     public Config initialize(@Header("harvesterUrl") String identifier,
                              @Header("harvesterFilter") Document filter) {
 
+        log.info(String.format("Initializing configuration for %s.", identifier));
         Config config = new Config();
         config.setMaxRecords(maxRecords);
         config.setRecordsFilter(filter.getFirstChild());
@@ -151,15 +154,12 @@ public class CswHarvester {
             harvesters.put(identifier, config);
 
         }
-        System.out.println(identifier + ">getConfig:" + config);
-
         return config;
     }
 
     public void setNumberOfRecords(@Header("harvesterUrl") String identifier, String numberOfRecordsMatched) {
         Config config = getConfig(identifier);
         config.setNumberOfRecordsMatched(Integer.parseInt(numberOfRecordsMatched));
-        System.out.println(identifier + ">setNumberOfRecords:" + numberOfRecordsMatched);
 
     }
     public List<String> getPages(@Header("harvesterUrl") String identifier) {
@@ -168,7 +168,6 @@ public class CswHarvester {
     }
     public int getNumberOfPages(@Header("harvesterUrl") String identifier) {
         Config config = getConfig(identifier);
-        System.out.println(identifier + ">getNumberOfPages:" + config.getPages().size());
         return config.getPages().size();
     }
 
@@ -230,6 +229,7 @@ public class CswHarvester {
                     new DOMSource(getRecordsRequest),
                     new StreamResult(sw));
             String response = sw.toString();
+            log.info(response);
             return response;
         } catch (ParserConfigurationException e) {
             e.printStackTrace();

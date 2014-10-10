@@ -31,31 +31,47 @@
 
   <cm:camelContext xmlns:ogc="http://www.opengis.net/ogc"
                    xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
-      errorHandlerRef="loggingErrorHandler">
+          id="csw"
+          errorHandlerRef="loggingErrorHandler"
+          useMDCLogging="true">
 
     <cm:onException>
       <cm:exception>org.apache.camel.component.http4.HttpOperationFailedException</cm:exception>
       <cm:continued>
         <cm:constant>true</cm:constant>
       </cm:continued>
-      <cm:log message="Oops, something went wrong: $simple{exception.message}" loggingLevel="ERROR"/>
-      <cm:log message="$simple{exception.stacktrace}" loggingLevel="ERROR"/>
+      <cm:log message="Oops, something went wrong: $simple{exception.message}."
+              loggingLevel="ERROR"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:log message="$simple{exception.responseBody}"
+              loggingLevel="ERROR"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:log message="$simple{exception.stacktrace}"
+              loggingLevel="ERROR"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
+
     </cm:onException>
 
 
-    <cm:route>
+    <cm:route id="route-csw-init">
       <!--<cm:from uri="timer://start?repeatCount=1"/>-->
       <cm:from uri="file:src/main/resources/?fileName=config-harvesters.xml&amp;noop=true&amp;consumer.delay=100000"/>
-      <cm:log message="Loading configuration ..."/>
+      <cm:log message="Loading harvesters configuration ..."
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
-      <cm:split>
+      <cm:split parallelProcessing="true">
         <cm:xpath>/harvesters/harvester</cm:xpath>
-        <cm:to uri="log:org.daobs.harvester.csw?showBody=true"/>
+        <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
         <cm:setHeader headerName="harvesterUrl">
           <cm:xpath resultType="java.lang.String">harvester/url</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterTerritory">
           <cm:xpath resultType="java.lang.String">harvester/territory</cm:xpath>
+        </cm:setHeader>
+        <cm:setHeader headerName="harvesterFolder">
+          <cm:xpath resultType="java.lang.String">harvester/folder</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterName">
           <cm:xpath resultType="java.lang.String">harvester/name</cm:xpath>
@@ -78,17 +94,26 @@
         <cm:setHeader headerName="harvesterBeginTime">
           <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
         </cm:setHeader>
-        <cm:log message="Harvesting node $simple{header.harvesterName} ($simple{header.harvesterTerritory}) at $simple{header.harvesterURL}"/>
-        <cm:log message="CSW filter is $simple{header.harvesterFilter}"/>
-        <cm:log message="Starting at $simple{header.harvesterBeginTime}"/>
+
+
+        <cm:log message="Harvesting node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory}) at '$simple{header.harvesterURL}'"
+                loggingLevel="INFO"
+                logName="org.daobs.harvester.CswHarvester"/>
+        <cm:log message="CSW filter is $simple{header.harvesterFilter}"
+                loggingLevel="INFO"
+                logName="org.daobs.harvester.CswHarvester"/>
+        <cm:log message="Starting at $simple{header.harvesterBeginTime}"
+                loggingLevel="INFO"
+                logName="org.daobs.harvester.CswHarvester"/>
 
         <cm:to uri="direct:harvestNode"/>
       </cm:split>
     </cm:route>
 
-    <cm:route startupOrder="2">
+    <cm:route id="route-csw-hits"
+              startupOrder="2">
       <cm:description>
-        Send a GetRecords request with no filter (cf. csw-get-records-hits.xml)
+        Send a GetRecords request (cf. csw-get-records-hits.xml)
         in order to retrieve the max number of records to harvest.
         The numberOfRecordsMatched attribute of the response is
         retrieved.
@@ -99,8 +124,9 @@
       -->
       <cm:from uri="direct:harvestNode"/>
       <cm:bean ref="cswHarvester" method="initialize"/>
-      <!--<cm:from uri="timer://start?repeatCount=1"/>-->
-      <cm:log message="Harvesting from $simple{header.harvesterUrl} ..."/>
+      <cm:log message="Query $simple{header.harvesterUrl} to get numberOfRecordsMatched ..."
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
       <!-- Add logger for time http://camel.apache.org/eventnotifier-to-log-details-about-all-sent-exchanges.html -->
       <cm:setHeader headerName="camelHttpMethod">
         <cm:constant>POST</cm:constant>
@@ -111,25 +137,7 @@
       <cm:setBody>
         <cm:simple>bean:cswHarvester?method=generateGetRecordsHitsQuery</cm:simple>
       </cm:setBody>
-     <!-- <cm:setBody>
-        <cm:simple>resource:classpath:csw-get-records-hits.xml</cm:simple>
-      </cm:setBody>-->
-      <!--<cm:choice>
-        <cm:when>
-          <cm:simple>$header.harvesterUrl startsWith "https"</cm:simple>
-          <cm:recipientList>
-            <cm:simple>http4://$simple{header.harvesterUrl}.replaceAll("https://", "")</cm:simple>
-          </cm:recipientList>
-        </cm:when>
-        <cm:otherwise>
-          <cm:recipientList>
-            <cm:simple>http4://$simple{header.harvesterUrl}.replaceAll("http://", "")</cm:simple>
-          </cm:recipientList>
-        </cm:otherwise>
-      </cm:choice>-->
-      <!--<cm:recipientList>
-        <cm:simple>http4://$simple{header.harvesterUrl}</cm:simple>
-      </cm:recipientList>-->
+      <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>${header.harvesterUrl}</cm:simple>
       </cm:setHeader>
@@ -145,22 +153,30 @@
               /csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched
             </cm:xpath>
           </cm:setHeader>
-          <cm:log message="$simple{header.numberOfRecordsMatched} record(s) to harvest."/>
+          <cm:log message="$simple{header.numberOfRecordsMatched} record(s) to harvest."
+                  loggingLevel="INFO"
+                  logName="org.daobs.harvester.CswHarvester"/>
           <cm:to uri="bean:cswHarvester?method=setNumberOfRecords(${header.harvesterUrl}, ${header.numberOfRecordsMatched})"/>
           <cm:to uri="direct:cswGetRecords"/>
         </cm:when>
         <cm:when>
           <cm:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched = 0]</cm:xpath>
-          <cm:log message="No record found."/>
+          <cm:log message="No record found."
+                  loggingLevel="INFO"
+                  logName="org.daobs.harvester.CswHarvester"/>
         </cm:when>
         <cm:otherwise>
-          <cm:log message="Probably an exception occurred. Check CSW response: ${body}"/>
+          <cm:log message="Probably an exception occurred. Check CSW response: ${body}"
+                  loggingLevel="INFO"
+                  logName="org.daobs.harvester.CswHarvester"/>
         </cm:otherwise>
       </cm:choice>
     </cm:route>
 
 
-    <cm:route startupOrder="0" shutdownRunningTask="CompleteAllTasks">
+    <cm:route id="route-csw-get-records"
+              startupOrder="0"
+              shutdownRunningTask="CompleteAllTasks">
       <cm:description>Based on the total number of records
       to be harvested, retrieve records per page and index
       them in SOLR. All records are removed from the indexed
@@ -169,12 +185,18 @@
       TODO: Improve update strategy.
       </cm:description>
       <cm:from uri="direct:cswGetRecords"/>
-      <cm:log message="Harvesting records ..."/>
+      <cm:log message="Harvesting records ..."
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
       <!--<cm:to uri="direct:indexDeleteDocuments"/>-->
-      <cm:split parallelProcessing="true">
+      <cm:split>
         <cm:method bean="cswHarvester" method="getPages"/>
-        <cm:log message="Processing page: $simple{property.CamelSplitIndex} / $simple{bean:cswHarvester?method=getNumberOfPages}"/>
-        <cm:log message="GetRecords request ..."/>
+        <cm:log message="Processing page at index: $simple{property.CamelSplitIndex} (Total number of pages: $simple{bean:cswHarvester?method=getNumberOfPages})"
+                loggingLevel="INFO"
+                logName="org.daobs.harvester.CswHarvester"/>
+        <cm:log message="GetRecords request ..."
+                loggingLevel="INFO"
+                logName="org.daobs.harvester.CswHarvester"/>
         <cm:setHeader headerName="cmHttpMethod">
           <cm:constant>POST</cm:constant>
         </cm:setHeader>
@@ -184,12 +206,15 @@
         <cm:setBody>
           <cm:simple>bean:cswHarvester?method=generateGetRecordsQuery</cm:simple>
         </cm:setBody>
+        <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
         <cm:setHeader headerName="Exchange.HTTP_URI">
           <cm:simple>${header.harvesterUrl}</cm:simple>
         </cm:setHeader>
         <cm:to uri="http4://csw.server.url"/>
         <!--<cm:to uri="xslt:metadata-iso19139.xsl?saxon=true&amp;output=DOM"/>-->
-        <cm:log message="GetRecords response received. Indexing records ..."/>
+        <cm:log message="GetRecords response received. Indexing records ..."
+                loggingLevel="INFO"
+                logName="org.daobs.harvester.CswHarvester"/>
         <cm:setHeader headerName="camelHttpMethod">
           <cm:constant>POST</cm:constant>
         </cm:setHeader>
@@ -206,18 +231,16 @@
         <cm:multicast stopOnException="false"
                          parallelProcessing="false">
           <!-- Backup response as XML file-->
-          <cm:to uri="file:csw/get-records-response/?fileName=$simple{header.harvesterTerritory}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+          <cm:to uri="file:csw/get-records-response/?fileName=$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <!-- Index in Solr -->
           <!--<cm:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl&amp;throwExceptionOnFailure=false" />-->
           <cm:to uri="direct:indexDocuments"/>
         </cm:multicast>
-
-
       </cm:split>
     </cm:route>
 
 
-    <cm:route>
+    <cm:route id="route-index">
       <cm:description>
         Index records in Solr and report any errors.
       </cm:description>
@@ -233,7 +256,7 @@
       <!--</cm:setHeader>-->
       <!--<cm:to uri="solr://localhost:8983/solr/data/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl'"/>-->
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
-      <cm:to uri="log:org.daobs.harvester.csw?showBody=true"/>
+      <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
       <cm:choice>
         <cm:when>
           <!-- If records found, next route is direct:cswGetRecords. -->
@@ -243,7 +266,9 @@
               /response/lst/str[@name = 'msg']/text()
             </cm:xpath>
           </cm:setHeader>
-          <cm:log message="Oops, error while indexing records of page #$simple{property.CamelSplitIndex}: $simple{header.indexingError}." loggingLevel="ERROR"/>
+          <cm:log message="Oops, error while indexing records of page #$simple{property.CamelSplitIndex}: $simple{header.indexingError}."
+                  loggingLevel="ERROR"
+                  logName="org.daobs.harvester.CswHarvester"/>
         </cm:when>
         <cm:otherwise>
           <cm:setHeader headerName="indexingTime">
@@ -251,12 +276,14 @@
               /response/lst/int[@name = 'QTime']/text()
             </cm:xpath>
           </cm:setHeader>
-          <cm:log message="Records indexed in $simple{header.indexingTime}ms." loggingLevel="INFO"/>
+          <cm:log message="Records indexed in $simple{header.indexingTime}ms."
+                  loggingLevel="INFO"
+                  logName="org.daobs.harvester.CswHarvester"/>
         </cm:otherwise>
       </cm:choice>
     </cm:route>
 
-    <cm:route>
+    <cm:route id="route-delete">
       <cm:description>
         Delete all records from the index.
 

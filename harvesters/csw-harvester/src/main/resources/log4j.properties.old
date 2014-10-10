@@ -1,0 +1,29 @@
+#
+# The logging properties used
+#
+log4j.rootLogger=INFO, out, camel-mdc
+
+# uncomment the following line to turn on Camel debugging
+log4j.logger.org.apache.camel=DEBUG
+
+log4j.logger.org.springframework=WARN
+
+log4j.appender.out=org.apache.log4j.ConsoleAppender
+log4j.appender.out.layout=org.apache.log4j.PatternLayout
+#log4j.appender.out.layout.ConversionPattern=[%30.30t] %-30.30c{1} %-5p %m%n
+#log4j.appender.out.layout.ConversionPattern=%d [%-15.15t] %-5p %-30.30c{1} - %m%n
+log4j.appender.out.layout.ConversionPattern=%d [%-15.15t] %-5p %-30.30c{1}-\
+%-10.10X{camel.exchangeId}-\
+%-24.24X{camel.routeId}-%m%n
+
+# Camel Mapper Diagnostic Context (MDC) appender
+#log4j.appender.camel-mdc=org.apache.log4j.sift.MDCSiftingAppender
+#log4j.appender.camel-mdc.key=camel.routeId
+#log4j.appender.camel-mdc.default=unknown
+#log4j.appender.camel-mdc.appender=org.apache.log4j.RollingFileAppender
+#log4j.appender.camel-mdc.appender.layout=org.apache.log4j.PatternLayout
+#log4j.appender.camel-mdc.appender.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %X{routeId} %X{bundle.version} | %X{exchangeId} | %m%n
+#log4j.appender.camel-mdc.appender.file=log/mediation-$\\{camelContextId\\}.log
+#log4j.appender.camel-mdc.appender.append=true
+#log4j.appender.camel-mdc.appender.maxFileSize=1MB
+#log4j.appender.camel-mdc.appender.maxBackupIndex=10
