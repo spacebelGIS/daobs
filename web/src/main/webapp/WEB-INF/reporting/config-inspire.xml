@@ -1,0 +1,470 @@
+<daobs:reporting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://daobs.org xsd/daobsIndicatorConfig.xsd" xmlns:daobs="http://daobs.org">
+  <daobs:variables>
+
+    <!-- Indicator MDi1 (Existence of metadata) -->
+
+    <!-- DSv are estimates based on metadata. See MDvXX.
+    The reported value may be more than this. -->
+    <daobs:variable id="DSv_Num">
+      <daobs:name xml:lang="en">Number of spatial data sets for all Annexes</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment>
+        Number of records in all annexes. If the following formula is used:
+        DSv_Num = DSv_Num1 + DSv_Num2 + DSv_Num3
+        the number of datasets may be over estimated (a record being part of more than one Annex).
+      </daobs:comment>
+    </daobs:variable>
+
+    <daobs:variable id="DSv_Num1">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex I</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="DSv_Num2">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex II</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="DSv_Num3">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex III</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>
+    </daobs:variable>
+
+
+    <daobs:variable id="SDSv_Num">
+      <daobs:name xml:lang="en">Number of spatial data services</daobs:name>
+      <daobs:query>+resourceType:service</daobs:query>
+      <!-- TODO: Should we force to be part of an INSPIRE annex ? We may harvest records not being part of any. -->
+    </daobs:variable>
+
+
+    <daobs:variable id="NSv_NumDiscServ">
+      <daobs:name xml:lang="en">Number of discovery services</daobs:name>
+      <daobs:query>+resourceType:service +inspireServiceType:discovery</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="NSv_NumViewServ">
+      <daobs:name xml:lang="en">Number of view services</daobs:name>
+      <daobs:query>+resourceType:service +inspireServiceType:view</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="NSv_NumDownlServ">
+      <daobs:name xml:lang="en">Number of download services</daobs:name>
+      <daobs:query>+resourceType:service +inspireServiceType:download</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="NSv_NumInvkServ">
+      <daobs:name xml:lang="en">Number of invoke services</daobs:name>
+      <daobs:query>+resourceType:service +inspireServiceType:invoke</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="NSv_NumTransfServ">
+      <daobs:name xml:lang="en">Number of transformation services</daobs:name>
+      <daobs:query>+resourceType:service +inspireServiceType:transformation</daobs:query>
+    </daobs:variable>
+
+
+
+    <daobs:variable id="MDv11">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="MDv12">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="MDv13">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>
+    </daobs:variable>
+
+
+
+    <daobs:variable id="MDv14">
+      <daobs:name xml:lang="en">Number of spatial data services that have metadata</daobs:name>
+      <daobs:query>+resourceType:service</daobs:query>
+    </daobs:variable>
+
+
+    <!-- Indicator MDi2 (Conformity of metadata) -->
+    <daobs:variable id="MDv21">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:i</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="MDv22">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:ii</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="MDv23">
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:iii</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="MDv24">
+      <daobs:name xml:lang="en">Number of spatial data services that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:service) +inspireConformMetadata:true</daobs:query>
+    </daobs:variable>
+
+
+    <!-- INSPIRE DSi1 (Geographical coverage of spatial data sets) -->
+
+    <!-- INSPIRE DSi2 (Conformity of spatial data sets) -->
+    <daobs:variable id="DSv21">
+      <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex I that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:i +inspireConformResource:true</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="DSv22">
+      <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex II that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:ii +inspireConformResource:true</daobs:query>
+    </daobs:variable>
+
+    <daobs:variable id="DSv23">
+      <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex III that have conformant metadata</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:iii +inspireConformResource:true</daobs:query>
+    </daobs:variable>
+
+
+    <!-- INSPIRE NSi1 (Accessibility of metadata through discovery services) -->
+    <daobs:variable id="NSv11">
+      <daobs:name xml:lang="en">Number of spatial data sets with metadata for which a discovery service exists</daobs:name>
+      <daobs:query>+(resourceType:dataset resourceType:series)</daobs:query>
+      <!-- TODO -->
+    </daobs:variable>
+    <daobs:variable id="NSv12">
+      <daobs:name xml:lang="en">Number of spatial data services with metadata for which a discovery service exists</daobs:name>
+      <daobs:query>+resourceType:service</daobs:query>
+      <!-- TODO -->
+    </daobs:variable>
+
+
+    <!-- INSPIRE NSi2 (Accessibility of data sets through view or download services) -->
+    <daobs:variable id="NSv21">
+      <daobs:name xml:lang="en">Number of spatial data sets for which a view service exists</daobs:name>
+      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view</daobs:query>
+    </daobs:variable>
+    <daobs:variable id="NSv22">
+      <daobs:name xml:lang="en">Number of spatial data sets for which a download service exists</daobs:name>
+      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download</daobs:query>
+    </daobs:variable>
+    <!-- TODO view and download NSv23 -->
+
+
+    <!-- INSPIRE NSi3 (Use of network services)
+    NSv3.1: sum of the annual number of network service request for all the discovery services
+    NSv3.2: sum of the annual number of network service request for all the view services
+    NSv3.3: sum of the annual number of network service request for all the download services
+    NSv3.4: sum of the annual number of network service request for all the transformation
+    services
+    NSv3.5: sum of the annual number of network service request for all the invoke services
+    NSv3: sum of the annual number of network service request for all services
+    NSv3 = NSv3.1 + NSv3.2 + NSv3.3 + NSv3.4 + NSv3.5
+
+
+
+    NSv4.1: number of conformant discovery network services
+    NSv4.2: number of conformant view network services
+    NSv4.3: number of conformant download network services
+    NSv4.4: number of conformant transformation network services
+    NSv4.5: number of conformant invoke network services
+    NSv4 : number of all conformant network services
+    NSv4 = NSv4.1 + NSv4.2 + NSv4.3 + NSv4.4 + NSv4.5
+
+
+         -->
+        <!-- TODO: related to AI
+    Monitoring of the geographical coverage of spatial data sets
+    DSv1.1_ActArea: sum of the actual areas of all the spatial data sets of Annex I
+    DSv1.2_ActArea: sum of the actual areas of all the spatial data sets of Annex II
+    DSv1.3_ActArea: sum of the actual areas of all the spatial data sets of Annex III
+    DSv1_ActArea: sum of the actual areas of all the spatial data sets of all Annexes
+    DSv1_ActArea = DSv1.1_ActArea + DSv1.2_ActArea + DSv1.3_ActArea
+
+    DSv1.1_RelArea: sum of the relevant areas of all the spatial data sets of Annex I
+    DSv1.2_RelArea: sum of the relevant areas of all the spatial data sets of Annex II
+    DSv1.3_RelArea: sum of the relevant areas of all the spatial data sets of Annex III
+    DSv1_RelArea: sum of the actual areas of all the spatial data sets of all Annexes
+    DSv1_RelArea = DSv1.1_RelArea + DSv1.2_RelArea + DSv1.3_RelArea
+
+    Specific indicators
+    DSi1.1 = DSv1.1_ActArea / DSv1.1_RelArea
+    DSi1.2 = DSv1.2_ActArea / DSv1.2_RelArea
+    DSi2.3 = DSv1.3_ActArea / DSv1.3_RelArea
+    General Indicator
+    DSi1 = DSv1_ActArea / DSv1_RelArea
+-->
+    <daobs:variable id="DSv11_ActArea">
+      <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex I</daobs:name>
+      <daobs:query>TODO</daobs:query>
+    </daobs:variable>
+  </daobs:variables>
+
+
+
+  <daobs:indicators>
+    <daobs:indicator id="NSv_NumAllServ">
+      <daobs:name>Number of all services</daobs:name>
+      <daobs:expression>NSv_NumDiscServ + NSv_NumViewServ + NSv_NumDownlServ + NSv_NumTransfServ + NSv_NumInvkServ</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv_NumDiscServ"/>
+        <daobs:parameter id="NSv_NumViewServ"/>
+        <daobs:parameter id="NSv_NumDownlServ"/>
+        <daobs:parameter id="NSv_NumTransfServ"/>
+        <daobs:parameter id="NSv_NumInvkServ"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+
+    <daobs:indicator id="MDi11">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv11 / DSv_Num1</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv11"/>
+        <daobs:parameter id="DSv_Num1"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi12">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv12 / DSv_Num2</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv12"/>
+        <daobs:parameter id="DSv_Num2"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi13">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv13 / DSv_Num3</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv13"/>
+        <daobs:parameter id="DSv_Num3"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi14">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv14 / SDSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv14"/>
+        <daobs:parameter id="SDSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+    <daobs:indicator id="MDi1">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>(MDv11 + MDv12 + MDv13 + MDv14) / (DSv_Num + SDSv_Num)</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv11"/>
+        <daobs:parameter id="MDv12"/>
+        <daobs:parameter id="MDv13"/>
+        <daobs:parameter id="MDv14"/>
+        <daobs:parameter id="DSv_Num"/>
+        <daobs:parameter id="SDSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+
+
+    <daobs:indicator id="MDv1_DS">
+      <daobs:name xml:lang="en">Number of spatial data sets that have metadata</daobs:name>
+      <daobs:expression>MDv11 + MDv12 + MDv13</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv11"/>
+        <daobs:parameter id="MDv12"/>
+        <daobs:parameter id="MDv13"/>
+      </daobs:parameters>
+      <daobs:comment>
+        Same remark as DSv_Num.
+      </daobs:comment>
+    </daobs:indicator>
+
+    <daobs:indicator id="MDv2_DS">
+      <daobs:name>Number of spatial data sets for all Annexes that have conformant metadata</daobs:name>
+      <daobs:expression>MDv21 + MDv22 + MDv23</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv21"/>
+        <daobs:parameter id="MDv22"/>
+        <daobs:parameter id="MDv23"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+
+    <daobs:indicator id="MDi21">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv21 / DSv_Num1</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv21"/>
+        <daobs:parameter id="DSv_Num1"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi22">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv22 / DSv_Num2</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv22"/>
+        <daobs:parameter id="DSv_Num2"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi23">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv23 / DSv_Num3</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv23"/>
+        <daobs:parameter id="DSv_Num3"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi24">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>MDv24 / SDSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv24"/>
+        <daobs:parameter id="SDSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="MDi2">
+      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:expression>(MDv21 + MDv22 + MDv23 + MDv24) / (DSv_Num + SDSv_Num)</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="MDv21"/>
+        <daobs:parameter id="MDv22"/>
+        <daobs:parameter id="MDv23"/>
+        <daobs:parameter id="MDv24"/>
+        <daobs:parameter id="SDSv_Num"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+
+    <daobs:indicator id="DSv2">
+      <daobs:name>Number of conformant spatial data sets with conformant metadata for all Annexes</daobs:name>
+      <daobs:expression>DSv21 + DSv22 + DSv23</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv21"/>
+        <daobs:parameter id="DSv22"/>
+        <daobs:parameter id="DSv23"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+    <daobs:indicator id="DSi21">
+      <daobs:name></daobs:name>
+      <daobs:expression>DSv21 / DSv_Num1</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv21"/>
+        <daobs:parameter id="DSv_Num1"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="DSi22">
+      <daobs:name></daobs:name>
+      <daobs:expression>DSv22 / DSv_Num2</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv22"/>
+        <daobs:parameter id="DSv_Num2"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="DSi23">
+      <daobs:name></daobs:name>
+      <daobs:expression>DSv23 / DSv_Num3</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv23"/>
+        <daobs:parameter id="DSv_Num3"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="DSi2">
+      <daobs:name></daobs:name>
+      <daobs:expression>DSv2 / DSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv2"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+
+    <daobs:indicator id="NSi11">
+      <daobs:name></daobs:name>
+      <daobs:expression>NSv11 / DSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv11"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="NSi12">
+      <daobs:name></daobs:name>
+      <daobs:expression>NSv12 / DSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv12"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+    <daobs:indicator id="NSi1">
+      <daobs:name></daobs:name>
+      <daobs:expression>(NSv11 + NSv12) / (DSv_Num + SDSv_Num)</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv11"/>
+        <daobs:parameter id="NSv12"/>
+        <daobs:parameter id="DSv_Num"/>
+        <daobs:parameter id="SDSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+    <daobs:indicator id="NSi21">
+      <daobs:name></daobs:name>
+      <daobs:expression>NSv21 / DSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv21"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="NSi22">
+      <daobs:name></daobs:name>
+      <daobs:expression>NSv22 / DSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv22"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+    <daobs:indicator id="NSi2">
+      <daobs:name></daobs:name>
+      <daobs:expression>NSv23 / DSv_Num</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv23"/>
+        <daobs:parameter id="DSv_Num"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
+
+    <!-- TODO: Nsi*
+
+    Specific indicators
+    NSi3.1 = NSv3.1 / NSv_NumDiscServ
+    NSi3.2 = NSv3.2 / NSv_NumViewServ
+    NSi3.3 = NSv3.3 / NSv_NumDownServ
+    NSi3.4 = NSv3.4 / NSv_NumTransServ
+    NSi3.5 = NSv3.5 / NSv_NumInvkServ
+    General Indicator
+    NSi3 = NSv3 / NSv_NumAllServ
+
+
+    Sub-indicators
+    NSi4.1 = NSv4.1 / NSv_NumDiscServ
+    NSi4.2 = NSv4.2 / NSv_NumViewServ
+    NSi4.3 = NSv4.3 / NSv_NumDownServ
+    NSi4.4 = NSv4.4 / NSv_NumTransServ
+    NSi4.5 = NSv4.5 / NSv_NumInvkServ
+    Indicator
+    NSi4 = NSv4 / NSv_NumAllServ
+    -->
+  </daobs:indicators>
+
+</daobs:reporting>

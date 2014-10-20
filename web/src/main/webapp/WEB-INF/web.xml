@@ -23,39 +23,21 @@
 >
 
 
-  <!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/spring/root-context.xml</param-value>
-  </context-param>
+  <servlet>
+    <servlet-name>SpringDispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/daobs-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
-  <!-- Creates the Spring Container shared by all Servlets and Filters -->
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
+  <servlet-mapping>
+    <servlet-name>SpringDispatcher</servlet-name>
+    <url-pattern>/daobs/*</url-pattern>
+  </servlet-mapping>
 
-  <!-- Uncomment if you are trying to use a Resin version before 3.0.19.
-    Their XML implementation isn't entirely compatible with Xerces.
-    Below are the implementations to use with Sun's JVM.
-  <system-property javax.xml.xpath.XPathFactory=
-             "com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl"/>
-  <system-property javax.xml.parsers.DocumentBuilderFactory=
-             "com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"/>
-  <system-property javax.xml.parsers.SAXParserFactory=
-             "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"/>
-   -->
-
-  <!-- People who want to hardcode their "Solr Home" directly into the
-       WAR File can set the JNDI property here...
-   -->
-  <!--
-    <env-entry>
-       <env-entry-name>solr/home</env-entry-name>
-       <env-entry-value>/put/your/solr/home/here</env-entry-value>
-       <env-entry-type>java.lang.String</env-entry-type>
-    </env-entry>
-   -->
-   
   <!-- Any path (name) registered in solrconfig.xml will be sent to that filter -->
   <filter>
     <filter-name>SolrRequestFilter</filter-name>

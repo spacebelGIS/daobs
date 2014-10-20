@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://daobs.org" xmlns:daobs="http://daobs.org">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:element name="reporting">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="daobs:variables"/>
+        <xs:element ref="daobs:indicators"/>
+      </xs:sequence>
+      <xs:attribute name="computationTime" type="xs:int"/>
+    </xs:complexType>
+    <xs:key name="indicator-id-key">
+      <xs:selector xpath="daobs:variables/daobs:variable|daobs:indicators/daobs:indicator"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+  </xs:element>
+  <xs:element name="variables">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="daobs:variable"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="indicators">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="daobs:indicator"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="variable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="daobs:name"/>
+        <xs:element ref="daobs:query"/>
+        <xs:element ref="daobs:format" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:value" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:status" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:comment" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="indicator">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="daobs:name"/>
+        <xs:element ref="daobs:expression"/>
+        <xs:element ref="daobs:parameters"/>
+        <xs:element ref="daobs:format" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:value" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:status" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:comment" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:lang" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="value" type="xs:string"/>
+  <xs:element name="format" type="xs:string"/>
+  <xs:element name="query" type="xs:string"/>
+  <xs:element name="expression" type="xs:string"/>
+  <xs:element name="comment" type="xs:string"/>
+  <xs:element name="status" type="xs:string"/>
+  <xs:element name="parameters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="daobs:parameter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="parameter">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="status" use="optional" type="xs:string"/>
+      <xs:attribute name="value" use="optional" type="xs:string"/>
+    </xs:complexType>
+    <!--<xs:keyref refer="daobs:indicator-id-key" name="indicator-id-fkey">
+      <xs:selector xpath="."></xs:selector>
+      <xs:field xpath="@id"></xs:field>
+    </xs:keyref>-->
+  </xs:element>
+</xs:schema>
