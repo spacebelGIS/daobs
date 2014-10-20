@@ -35,37 +35,40 @@
       <!-- For any ISO19139 records in the input XML document
       Some records from IS do not have record identifier. Ignore them.
       -->
-      <xsl:for-each select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString != '']">
-        <doc>
+      <xsl:variable name="records" select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString != '']"/>
 
-          <!-- Main variables for the document -->
-          <xsl:variable name="identifier" as="xs:string"
-                        select="gmd:fileIdentifier/gco:CharacterString"/>
+      <xsl:for-each select="$records">
 
-          <xsl:variable name="mainLanguage" as="xs:string?"
-                        select="gmd:language/gco:CharacterString[normalize-space(.) != '']|
+        <!-- Main variables for the document -->
+        <xsl:variable name="identifier" as="xs:string"
+                      select="gmd:fileIdentifier/gco:CharacterString[. != '']"/>
+
+        <xsl:variable name="mainLanguage" as="xs:string?"
+                      select="gmd:language/gco:CharacterString[normalize-space(.) != '']|
                           gmd:language/gmd:LanguageCode/
                             @codeListValue[normalize-space(.) != '']"/>
 
-          <xsl:variable name="otherLanguages" as="attribute()*"
-                        select="gmd:locale/gmd:PT_Locale/
+        <xsl:variable name="otherLanguages" as="attribute()*"
+                      select="gmd:locale/gmd:PT_Locale/
                             gmd:languageCode/gmd:LanguageCode/
                               @codeListValue[normalize-space(.) != '']"/>
 
-          <!-- Record is dataset if no hierarchyLevel -->
-          <xsl:variable name="isDataset" as="xs:boolean"
-                        select="
+        <!-- Record is dataset if no hierarchyLevel -->
+        <xsl:variable name="isDataset" as="xs:boolean"
+                      select="
                           count(gmd:hierarchyLevel[gmd:MD_ScopeCode/@codeListValue='dataset']) > 0 or
                           count(gmd:hierarchyLevel) = 0"/>
-          <xsl:variable name="isService" as="xs:boolean"
-                        select="
+        <xsl:variable name="isService" as="xs:boolean"
+                      select="
                           count(gmd:hierarchyLevel[gmd:MD_ScopeCode/@codeListValue='service']) > 0"/>
 
-          <xsl:message>#<xsl:value-of select="$identifier"/></xsl:message>
+        <xsl:message>#<xsl:value-of select="$identifier"/></xsl:message>
 
-
+        <!-- Create a first document representing the main record. -->
+        <doc>
           <field name="documentType">metadata</field>
           <field name="id"><xsl:value-of select="$identifier"/></field>
+          <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
 
           <!-- Harvester details -->
           <field name="territory"><xsl:value-of select="$harvester/territory"/></field>
@@ -130,7 +133,15 @@
 
           <xsl:for-each select="gmd:identificationInfo/*/srv:serviceType/gco:LocalName">
             <field name="serviceType"><xsl:value-of select="text()"/></field>
-
+            <xsl:variable name="inspireServiceType" as="xs:string"
+                          select="solr:analyzeField(
+                            'inspireServiceType', text(),
+                            'query',
+                            'org.apache.lucene.analysis.miscellaneous.KeepWordFilter',
+                            0)"/>
+            <xsl:if test="$inspireServiceType != ''">
+              <field name="inspireServiceType"><xsl:value-of select="lower-case($inspireServiceType)"/></field>
+            </xsl:if>
             <xsl:if test="following-sibling::srv:serviceTypeVersion">
               <field name="serviceTypeAndVersion">
                 <xsl:value-of select="concat(
@@ -177,10 +188,94 @@
                                     gmd:title/gco:CharacterString, $specificationTitle)]"/>
 
           <xsl:for-each select="$results">
-            <field name="inspireConformity"><xsl:value-of select="*/gmd:pass/gco:Boolean"/></field>
+            <field name="inspireConformResource"><xsl:value-of select="*/gmd:pass/gco:Boolean"/></field>
           </xsl:for-each>
 
+
+          <!-- Service/dataset relation. Create document for the association.
+           This could be used to retrieve :
+          {!child of=documentType:metadata}+documentType:metadata +id:9940c446-6fd4-4ab3-a4de-7d0ee028a8d1
+          {!child of=documentType:metadata}+documentType:metadata +resourceType:service +serviceType:view
+          {!child of=documentType:metadata}+documentType:metadata +resourceType:service +serviceType:download
+           -->
+          <xsl:for-each select="gmd:identificationInfo/srv:SV_ServiceIdentification/srv:operatesOn">
+            <xsl:message>## operatesOn</xsl:message>
+            <xsl:variable name="associationType" select="'operatesOn'"/>
+            <xsl:variable name="serviceType" select="../srv:serviceType/gco:LocalName"/>
+            <!--<xsl:variable name="relatedTo" select="@uuidref"/>-->
+            <xsl:variable name="relatedTo">
+              <xsl:analyze-string select="@xlink:href"
+                                  regex=".*id=([\w-]*).*">
+                <xsl:matching-substring>
+                  <xsl:value-of select="regex-group(1)"/>
+                </xsl:matching-substring>
+              </xsl:analyze-string>
+            </xsl:variable>
+            <field name="recordOperateOn"><xsl:value-of select="$relatedTo"/></field>
+
+            <doc>
+              <field name="id"><xsl:value-of
+                      select="concat('association', $identifier,
+                $associationType, $relatedTo)"/></field>
+              <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
+              <field name="documentType">association</field>
+              <field name="record"><xsl:value-of select="$identifier"/></field>
+              <field name="associationType"><xsl:value-of select="$associationType"/></field>
+              <field name="relatedTo"><xsl:value-of select="$relatedTo"/></field>
+            </doc>
+            <doc>
+              <field name="id"><xsl:value-of
+                      select="concat('association',
+                $associationType, $relatedTo)"/></field>
+              <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
+              <field name="documentType">association2</field>
+              <field name="record"><xsl:value-of select="$identifier"/></field>
+              <field name="associationType"><xsl:value-of select="concat($associationType, $serviceType)"/></field>
+              <field name="relatedTo"><xsl:value-of select="$relatedTo"/></field>
+            </doc>
+          </xsl:for-each>
         </doc>
+
+
+        <!-- Create or update child document and register service relation
+        in recordOperatedBy field and als associated resources.
+
+         TODO: Some countries are using uuidref to store
+         resource identifier and not metadata identifier. -->
+        <xsl:for-each select="gmd:identificationInfo/srv:SV_ServiceIdentification/srv:operatesOn">
+          <xsl:message>## child record <xsl:value-of select="@xlink:href"/> </xsl:message>
+
+          <!--
+          uuiref store resource identifier and not metadata identifier.
+              <xsl:variable name="relatedTo" select="@uuidref"/>
+          -->
+          <xsl:variable name="relatedTo">
+            <xsl:analyze-string select="@xlink:href"
+                                regex=".*id=([\w-]*).*">
+              <xsl:matching-substring>
+                <xsl:value-of select="regex-group(1)"/>
+              </xsl:matching-substring>
+            </xsl:analyze-string>
+          </xsl:variable>
+          <xsl:message>## child record <xsl:value-of select="$relatedTo"/> </xsl:message>
+
+          <xsl:choose>
+            <xsl:when test="$relatedTo">
+              <doc>
+                <field name="id"><xsl:value-of select="$relatedTo"/></field>
+                <field name="metadataIdentifier" update="set"><xsl:value-of select="$relatedTo"/></field>
+                <field name="recordOperatedBy" update="add"><xsl:value-of select="$identifier"/></field>
+                <xsl:for-each select="../srv:serviceType/gco:LocalName">
+                  <field name="recordOperatedByType" update="add"><xsl:value-of select="."/></field>
+                </xsl:for-each>
+              </doc>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:message>Failed to extract metadata identifier from @uuidref or xlink:href <xsl:value-of select="@xlink:href"/></xsl:message>
+            </xsl:otherwise>
+          </xsl:choose>
+
+        </xsl:for-each>
       </xsl:for-each>
     </add>
   </xsl:template>

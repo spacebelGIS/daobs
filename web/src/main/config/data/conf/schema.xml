@@ -90,6 +90,9 @@
   -->
   <field name="_root_" type="string" indexed="true" stored="false"/>
 
+  <field name="type_s" type="text_general" indexed="true" stored="true" multiValued="false"/>
+  <field name="ISBN_s" type="text_general" indexed="true" stored="true" multiValued="false"/>
+  <field name="text_t" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <!-- Only remove the "id" field if you have a very good reason to. While not strictly
     required, it is highly recommended. A <uniqueKey> is present in almost all Solr
     installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
@@ -102,7 +105,24 @@
   <field name="reportingDate" type="date" stored="true" indexed="true" multiValued="false"/>
   <field name="territory" type="string" indexed="true" stored="true" multiValued="false"/>
 
+
+
+  <field name="associationType" type="string" indexed="true" stored="true" multiValued="false"/>
+  <field name="record" type="string" indexed="true" stored="true" multiValued="false"/>
+  <field name="relatedTo" type="string" indexed="true" stored="true" multiValued="false"/>
+
+  <field name="linkType" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="from" type="string" indexed="true" stored="true" multiValued="false"/>
+  <field name="to" type="string" indexed="true" stored="true" multiValued="false"/>
+
+  <field name="recordOperateOn" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="recordOperatedBy" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="recordOperatedByType" type="string" indexed="true" stored="true" multiValued="true"/>
+
+
+
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
+  <field name="metadataIdentifier" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
   <field name="harvesterId" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
   <field name="harvestedDate" type="date" stored="true" indexed="true" multiValued="true"/>
   <field name="dateStamp" type="date" stored="true" indexed="true" multiValued="false"/>
@@ -118,11 +138,13 @@
   <field name="inspireAnnex_syn" type="managed_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireAnnex" type="only_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <!-- TODO: check if conformity could be multivalued -->
-  <field name="inspireConformity" type="boolean" stored="true" indexed="true" multiValued="true"/>
+  <field name="inspireConformResource" type="boolean" stored="true" indexed="true" multiValued="true"/>
+  <field name="inspireConformMetadata" type="boolean" stored="true" indexed="true" multiValued="true"/>
 
   <field name="serviceType" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="serviceTypeAndVersion" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
-
+  <!--<copyField source="serviceType" dest="inspireServiceType"/>-->
+  <field name="inspireServiceType" type="only_inspireservicetype" stored="true" indexed="true" multiValued="true"/>
 
   <!--
   <field name="sku" type="text_en_splitting_tight" indexed="true" stored="true" omitNorms="true"/>
@@ -533,7 +555,17 @@
               ignoreCase="true"/>
     </analyzer>
   </fieldType>
-
+  <fieldType name="only_inspireservicetype"
+             class="solr.TextField"
+             termVectors="false"
+             positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.KeepWordFilterFactory"
+              words="inspireservicetype.txt"
+              ignoreCase="true"/>
+    </analyzer>
+  </fieldType>
 
   <!-- A general text field that has reasonable, generic
        cross-language defaults: it tokenizes with StandardTokenizer,
