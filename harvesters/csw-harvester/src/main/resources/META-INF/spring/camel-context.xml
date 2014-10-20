@@ -237,6 +237,22 @@
           <cm:to uri="direct:indexDocuments"/>
         </cm:multicast>
       </cm:split>
+
+      <cm:setHeader headerName="harvesterEndTime">
+        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+      </cm:setHeader>
+
+
+      <cm:log message="End harvesting for node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory})"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:log message="Ending at $simple{header.harvesterEndTime}"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:log message="Ellapsed time $simple{header.harvesterBeginTime} - $simple{header.harvesterBeginTime}"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+
     </cm:route>
 
 
