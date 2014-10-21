@@ -1,5 +1,13 @@
 <daobs:reporting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://daobs.org xsd/daobsIndicatorConfig.xsd" xmlns:daobs="http://daobs.org">
+                 xsi:schemaLocation="http://daobs.org ../xsd/daobsIndicatorConfig.xsd"
+                 xmlns:daobs="http://daobs.org"
+                 id="inspire">
+  <daobs:identification>
+    <daobs:title xml:lang="en">Monitoring Indicators</daobs:title>
+    <daobs:author>Monitoring and Reporting Drafting Team</daobs:author>
+    <daobs:url>http://inspire.ec.europa.eu/index.cfm/pageid/5022</daobs:url>
+  </daobs:identification>
+
   <daobs:variables>
 
     <!-- Indicator MDi1 (Existence of metadata) -->

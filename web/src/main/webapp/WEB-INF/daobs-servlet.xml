@@ -31,6 +31,8 @@
 
   <mvc:annotation-driven content-negotiation-manager="contentNegocationManager"/>
 
+
+
   <ctx:property-placeholder location="WEB-INF/config.properties"
                             file-encoding="UTF-8"
                             ignore-unresolvable="true"/>
@@ -44,6 +46,9 @@
   <bean id="SolrRequest"
         class="org.daobs.index.SolrRequestBean"/>
 
+
+
+
   <bean id="XSLTViewResolver"
         class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
     <property name="order" value="1"/>
@@ -51,7 +56,7 @@
     <property name="viewClass" value="org.springframework.web.servlet.view.xslt.XsltView"/>
     <property name="viewNames">
       <array>
-        <value>reporting</value>
+        <value>reporting-xslt-inspire</value>
       </array>
     </property>
     <property name="prefix" value="/WEB-INF/xslt/" />
@@ -59,11 +64,11 @@
     <property name="contentType" value="application/xml;charset=UTF-8"/>
   </bean>
 
-  <bean id="JSPViewResolver"
+ <!-- <bean id="JSPViewResolver"
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="order" value="2"/>
     <property name="prefix" value="/WEB-INF/jsp/" />
     <property name="suffix" value=".jsp" />
-  </bean>
+  </bean>-->
 
 </beans>

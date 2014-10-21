@@ -1,19 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://daobs.org" xmlns:daobs="http://daobs.org">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+  targetNamespace="http://daobs.org" xmlns:daobs="http://daobs.org">
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:element name="reports">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="daobs:reporting" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="reporting">
     <xs:complexType>
       <xs:sequence>
+        <xs:element ref="daobs:identification"/>
         <xs:element ref="daobs:variables"/>
         <xs:element ref="daobs:indicators"/>
       </xs:sequence>
       <xs:attribute name="computationTime" type="xs:int"/>
+      <xs:attribute name="id" type="xs:NCName"/>
     </xs:complexType>
     <xs:key name="indicator-id-key">
       <xs:selector xpath="daobs:variables/daobs:variable|daobs:indicators/daobs:indicator"/>
       <xs:field xpath="@id"/>
     </xs:key>
   </xs:element>
+  <xs:element name="identification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="daobs:title"/>
+        <xs:element ref="daobs:author"/>
+        <xs:element ref="daobs:url"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="title">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:lang" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="author" type="xs:string"/>
+  <xs:element name="url" type="xs:string"/>
   <xs:element name="variables">
     <xs:complexType>
       <xs:sequence>
@@ -39,6 +65,7 @@
         <xs:element ref="daobs:comment" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="error" use="optional" type="xs:boolean"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="indicator">
@@ -53,6 +80,7 @@
         <xs:element ref="daobs:comment" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="error" use="optional" type="xs:boolean"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="name">
@@ -76,6 +104,7 @@
   <xs:element name="parameter">
     <xs:complexType>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="error" use="optional" type="xs:boolean"/>
       <xs:attribute name="status" use="optional" type="xs:string"/>
       <xs:attribute name="value" use="optional" type="xs:string"/>
     </xs:complexType>
