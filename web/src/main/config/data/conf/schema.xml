@@ -99,7 +99,9 @@
   <field name="indicatorType" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <field name="indicatorName" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <field name="indicatorValue" type="double" indexed="true" stored="true" multiValued="false"/>
+  <field name="reportingDateSubmission" type="date" stored="true" indexed="true" multiValued="false"/>
   <field name="reportingDate" type="date" stored="true" indexed="true" multiValued="false"/>
+  <field name="reportingYear" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="territory" type="string" indexed="true" stored="true" multiValued="false"/>
 
 
@@ -119,16 +121,38 @@
 
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
-  <field name="metadataIdentifier" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
+  <field name="metadataIdentifier" type="string" indexed="true" stored="true" multiValued="false"/>
   <field name="harvesterId" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
   <field name="harvestedDate" type="date" stored="true" indexed="true" multiValued="true"/>
   <field name="dateStamp" type="date" stored="true" indexed="true" multiValued="false"/>
   <field name="mainLanguage" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
   <field name="otherLanguage" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
+  <dynamicField name="*Org" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="contact" type="string" stored="true" indexed="false" multiValued="true"/>
+
+
   <field name="resourceType" type="string" stored="true" indexed="true" multiValued="true"/>
   <field name="resourceTitle" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="resourceTitle_*" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="resourceAbstract" type="string" stored="true" indexed="true" multiValued="false"/>
+  <field name="resourceLanguage" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
+  <field name="overviewUrl" type="string" stored="true" indexed="true" multiValued="true"/>
+
+  <!-- TODO: should be date type -->
+  <dynamicField name="*DateForResource" type="string" stored="true" indexed="true" multiValued="true"/>
+  <dynamicField name="*YearForResource" type="string" stored="false" indexed="true" multiValued="true"/>
+  <dynamicField name="*MonthForResource" type="string" stored="false" indexed="true" multiValued="true"/>
+
+  <dynamicField name="*OrgForResource" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="contactForResource" type="string" stored="true" indexed="false" multiValued="true"/>
+
+  <field name="presentationForm" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
+  <field name="tag" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="topic" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
   <field name="inspireTheme_syn" type="managed_inspiretheme" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireTheme" type="only_inspiretheme" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireTheme_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
@@ -138,11 +162,23 @@
   <field name="inspireConformResource" type="boolean" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireConformMetadata" type="boolean" stored="true" indexed="true" multiValued="true"/>
 
+  <field name="resolutionScaleDenominator" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="resolutionDistance" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="spatialRepresentationType" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
   <field name="serviceType" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="serviceTypeAndVersion" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <!--<copyField source="serviceType" dest="inspireServiceType"/>-->
   <field name="inspireServiceType" type="only_inspireservicetype" stored="true" indexed="true" multiValued="true"/>
 
+
+  <field name="geoTag" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="coordinateSystem" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+
+  <field name="accessConstraints" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="otherConstraints" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="constraintClassification" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="useLimitation" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <!--
   <field name="sku" type="text_en_splitting_tight" indexed="true" stored="true" omitNorms="true"/>
   <field name="name" type="text_general" indexed="true" stored="true"/>
