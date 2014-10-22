@@ -86,7 +86,7 @@
           <!-- TODO improve date formatting maybe using Joda parser -->
           <xsl:for-each select="gmd:dateStamp/*">
             <field name="dateStamp">
-              <xsl:value-of select="if (name() = 'gco:Date')
+              <xsl:value-of select="if (name() = 'gco:Date' or string-length(.) = 10)
                                     then concat(., 'T00:00:00Z')
                                     else (
                                       if (ends-with(., 'Z'))
@@ -190,10 +190,24 @@
 
               <field name="inspireTheme_syn"><xsl:value-of select="text()"/></field>
               <field name="inspireTheme"><xsl:value-of select="$inspireTheme"/></field>
-              <field name="inspireAnnex">
-                <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
-              </field>
+
+              <!--
+              WARNING: Here we only index the first keyword in order
+              to properly compute one INSPIRE annex.
+              -->
+              <xsl:if test="position() = 1">
+                <field name="inspireAnnex">
+                  <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
+                </field>
+              </xsl:if>
             </xsl:for-each>
+
+            <field name="numberOfInspireTheme"><xsl:value-of select="count(gmd:descriptiveKeywords
+                       /gmd:MD_Keywords[contains(
+                         gmd:thesaurusName/gmd:CI_Citation/
+                           gmd:title/gco:CharacterString/text(),
+                           'GEMET - INSPIRE themes')]
+                      /gmd:keyword)"/></field>
 
             <xsl:for-each
                     select="gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString">
@@ -311,6 +325,10 @@
           <xsl:for-each select="$results">
             <field name="inspireConformResource"><xsl:value-of select="*/gmd:pass/gco:Boolean"/></field>
           </xsl:for-each>
+
+          <field name="lineage"><xsl:value-of select="gmd:dataQualityInfo/*/
+                                  gmd:lineage/gmd:LI_Lineage/
+                                    gmd:statement/gco:CharacterString"/></field>
 
 
           <!-- Service/dataset relation. Create document for the association.

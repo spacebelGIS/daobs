@@ -156,11 +156,14 @@
   <field name="inspireTheme_syn" type="managed_inspiretheme" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireTheme" type="only_inspiretheme" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireTheme_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="numberOfInspireTheme" type="int" stored="true" indexed="true" multiValued="false"/>
   <field name="inspireAnnex_syn" type="managed_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireAnnex" type="only_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <!-- TODO: check if conformity could be multivalued -->
   <field name="inspireConformResource" type="boolean" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireConformMetadata" type="boolean" stored="true" indexed="true" multiValued="true"/>
+
+  <field name="lineage" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
 
   <field name="resolutionScaleDenominator" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="resolutionDistance" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
