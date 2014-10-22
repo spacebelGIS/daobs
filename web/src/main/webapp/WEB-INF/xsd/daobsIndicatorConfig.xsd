@@ -28,8 +28,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="daobs:title"/>
-        <xs:element ref="daobs:author"/>
-        <xs:element ref="daobs:url"/>
+        <xs:element ref="daobs:author" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="daobs:url" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
