@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="daobs">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body data-ng-controller="RootController"
+        data-ng-cloak>
+  <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li data-ng-repeat="link in navLinks"
+                  data-ng-class="navClass('{{link.url}}')">
+            <a href="{{link.url}}"
+                    title="{{link.title}}">
+              <i class="glyphicon" data-ng-class="link.icon"></i>
+              {{link.text}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <p data-ng-view="">
+    </p>
+  </div>
+
+  <script src="lib/jquery/jquery-2.1.1.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-resource.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.min.js"></script>
+
+  <!--<script src="lib/angular/angular.min.js" language="JavaScript"/>-->
+
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/app/app.js"></script>
+</body>
+</html>

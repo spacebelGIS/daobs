@@ -1,0 +1,32 @@
+
+<div class="row">
+  <div class="col-sm-6">
+
+    <div class="jumbotron">
+      <p>
+      Collect information and configure indicators
+      to generate reporting. Build dashboards using the online creation tools.
+      Share your dashboards and provide access to all monitoring information.
+      </p>
+
+      <p><a class="btn btn-primary btn-lg" role="button"
+              href="dashboard">
+        <i class="glyphicon glyphicon-stats"></i>
+        <span data-translate="">View dashboards</span></a></p>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <h3>Latest dashboards</h3>
+    <div class="list-group">
+      <a href="#"
+         class="list-group-item"
+         data-ng-repeat="dashboard in dashboards"
+         data-ng-class="{active: hover}"
+         data-ng-mouseenter="hover = true"
+         data-ng-mouseleave="hover = false"
+         data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
+        {{dashboard.title}}
+      </a>
+    </div>
+  </div>
+</div>

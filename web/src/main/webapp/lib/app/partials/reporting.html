@@ -1,0 +1,161 @@
+<h1 data-translate="">Generate reporting</h1>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="reportingField" class="col-sm-2 control-label">Choose reporting</label>
+    <div class="col-sm-10">
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <select id="reportingField" class="form-control"
+                    data-ng-model="reporting"
+                    data-ng-options="value.id for (key, value) in reportingConfig | orderBy: 'id'">
+            </select>
+            <div class="input-group-btn">
+              <button type="submit"
+                      class="btn btn-default"
+                      data-ng-click="overview()">View variables &amp; indicators</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="reportingAreaField" class="col-sm-2 control-label">Choose reporting area</label>
+    <div class="col-sm-10">
+      <select id="reportingAreaField"
+              class="form-control"
+              data-ng-model="territory"
+              data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit"
+              class="btn btn-primary"
+              data-ng-disabled="!territory"
+              data-ng-click="preview()">Preview</button>
+      <div class="btn-group">
+        <button type="button"
+                class="btn btn-default dropdown-toggle"
+                data-ng-disabled="!territory"
+                data-toggle="dropdown">
+          <span data-translate="">Download</span> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a target="_blank"
+                 ng-href="/solr/daobs/reporting/{{reporting.id}}/{{territory.label}}.json">JSON</a></li>
+          <li><a target="_blank"
+                 ng-href="/solr/daobs/reporting/{{reporting.id}}/{{territory.label}}.xml">XML</a></li>
+          <li><a target="_blank"
+                 ng-href="/solr/daobs/reporting/custom/{{reporting.id}}/{{territory.label}}">INSPIRE</a></li>
+        </ul>
+      </div>
+      <button type="submit"
+              class="btn btn-default"
+              data-ng-disabled="!territory"
+              data-ng-click="submit()"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Not available yet!">Submit</button>
+    </div>
+  </div>
+
+  <div data-ng-show="report != null && overview">
+
+    <h2 data-translate="">Variables &amp; indicators</h2>
+
+    <div class="alert alert-info" data-translate="">
+      A report is created from a set of variables and indicators.
+      Variables are defined using query expressions to be computed by the search engine.
+      Indicators are created from mathematical expressions based on variables.
+    </div>
+
+    <table class="table table-striped">
+      <tr>
+        <th>type</th>
+        <th>id</th>
+        <th>Name</th>
+        <th>Query or expression</th>
+      </tr>
+      <tr>
+        <th colspan="4">
+          <input class="form-control"
+                 data-ng-model="reportConfigSearch.$"
+                 autofocus=""
+                 placeholder="{{'filter'}}">
+        </th>
+      </tr>
+      <tr data-ng-repeat="v in report.variables.variable | filter:reportConfigSearch">
+        <td>Variable</td>
+        <td>{{v.id}}</td>
+        <td>{{v.name.content}}</td>
+        <td>
+          {{v.query}}
+        </td>
+      </tr>
+      <tr data-ng-repeat="v in report.indicators.indicator | filter:reportConfigSearch">
+        <td>Indicator</td>
+        <td>{{v.id}}</td>
+        <td>{{v.name.content}}</td>
+        <td>{{v.expression}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div data-ng-show="report != null && overview == false">
+    <h2 data-translate="">Reporting <strong>{{reporting.id}}</strong>
+      for <strong>{{territory.label}}</strong>
+      based on {{territory.count}} record(s).</h2>
+
+
+    <div class="alert alert-info" data-translate="">
+      The table below shows the list of variables and indicators computed
+      for the selected area. It may also reports any errors encountered
+      during computation.
+    </div>
+
+    <table class="table table-striped">
+      <tr>
+        <th colspan="3">
+          <input class="form-control"
+                 data-ng-model="reportSearch.$"
+                 autofocus=""
+                 placeholder="{{'filter'}}">
+        </th>
+      </tr>
+      <tr>
+        <th colspan="3">Variables</th>
+      </tr>
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Value</th>
+      </tr>
+      <tr data-ng-repeat="v in report.variables.variable | filter:reportSearch">
+        <td>{{v.id}}</td>
+        <td title="{{v.query}}">{{v.name.content}}</td>
+        <td>{{v.value}}</td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <th colspan="3">Indicators</th>
+      </tr>
+      <tr data-ng-repeat="v in report.indicators.indicator | filter:reportSearch">
+        <td>{{v.id}}</td>
+        <td title="{{v.expression}}">
+          {{v.name.content}}
+          <div class="alert alert-danger"
+               data-ng-show="v.status.indexOf('Error')"
+               role="alert">{{v.status}}</div>
+        </td>
+        <td>{{v.value}}</td>
+      </tr>
+    </table>
+
+  </div>
+</form>
