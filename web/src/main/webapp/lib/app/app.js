@@ -62,6 +62,11 @@
         title: 'Harvest information',
         icon: 'glyphicon-download-alt',
         url: '#/harvesting'
+      }, {
+        text: '',
+        title: 'Admin console',
+        icon: 'glyphicon-cog',
+        url: 'admin.html'
       }];
 
       // Change class based on route path
@@ -122,6 +127,7 @@
       $scope.territory = null;
       $scope.reporting = null;
       $scope.report = null;
+      $scope.rules = null;
       $scope.overview = false;
 
       $scope.reportingConfig = null;
@@ -151,12 +157,23 @@
         } while (i < facet.length);
       });
 
+      function setReport(data) {
+        $scope.report = data;
+        $scope.rules = [];
+        if (data.indicators.indicator) {
+          $scope.rules.push.apply($scope.rules, data.indicators.indicator);
+        }
+        if (data.variables.variable) {
+          $scope.rules.push.apply($scope.rules, data.variables.variable);
+        }
+      }
+
       // View report configuration
-      $scope.overview = function () {
+      $scope.getReportDetails = function () {
         $scope.territory = null;
         $http.get(cfg.SERVICES.reporting +
           $scope.reporting.id + '.json').success(function (data) {
-          $scope.report = data;
+          setReport(data);
           $scope.overview = true;
         });
       };
@@ -169,7 +186,7 @@
         $http.get(cfg.SERVICES.reporting +
           $scope.reporting.id + '/' +
           area + '.json').success(function (data) {
-          $scope.report = data;
+          setReport(data);
         });
       };
 

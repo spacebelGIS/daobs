@@ -14,7 +14,7 @@
             <div class="input-group-btn">
               <button type="submit"
                       class="btn btn-default"
-                      data-ng-click="overview()">View variables &amp; indicators</button>
+                      data-ng-click="getReportDetails()">View report rules</button>
             </div>
           </div>
         </div>
@@ -66,8 +66,13 @@
 
   <div data-ng-show="report != null && overview">
 
-    <h2 data-translate="">Variables &amp; indicators</h2>
+    <h2 data-translate="">Report rules for
+      <strong>{{report.identification.title.content}}</strong></h2>
 
+    <p data-ng-show="report.identification.url">
+      More information at
+      <a href="{{report.identification.url}}">{{report.identification.url}}</a>
+    </p>
     <div class="alert alert-info" data-translate="">
       A report is created from a set of variables and indicators.
       Variables are defined using query expressions to be computed by the search engine.
@@ -76,40 +81,35 @@
 
     <table class="table table-striped">
       <tr>
-        <th>type</th>
-        <th>id</th>
+        <th></th>
         <th>Name</th>
         <th>Query or expression</th>
+        <th>Remark</th>
       </tr>
       <tr>
-        <th colspan="4">
+        <th colspan="3">
           <input class="form-control"
                  data-ng-model="reportConfigSearch.$"
                  autofocus=""
                  placeholder="{{'filter'}}">
         </th>
       </tr>
-      <tr data-ng-repeat="v in report.variables.variable | filter:reportConfigSearch">
-        <td>Variable</td>
+      <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
         <td>{{v.id}}</td>
         <td>{{v.name.content}}</td>
         <td>
-          {{v.query}}
+          {{v.query}}{{v.expression}}
         </td>
-      </tr>
-      <tr data-ng-repeat="v in report.indicators.indicator | filter:reportConfigSearch">
-        <td>Indicator</td>
-        <td>{{v.id}}</td>
-        <td>{{v.name.content}}</td>
-        <td>{{v.expression}}</td>
+        <td>{{v.comment}}</td>
       </tr>
     </table>
   </div>
 
   <div data-ng-show="report != null && overview == false">
-    <h2 data-translate="">Reporting <strong>{{reporting.id}}</strong>
-      for <strong>{{territory.label}}</strong>
-      based on {{territory.count}} record(s).</h2>
+    <h2 data-translate="">Report on
+      <strong>{{report.identification.title.content}}</strong>
+      generated for <strong>{{territory.label}}</strong>
+      based on <strong>{{territory.count}} record(s)</strong></h2>
 
 
     <div class="alert alert-info" data-translate="">
@@ -120,6 +120,11 @@
 
     <table class="table table-striped">
       <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Value</th>
+      </tr>
+      <tr>
         <th colspan="3">
           <input class="form-control"
                  data-ng-model="reportSearch.$"
@@ -127,33 +132,27 @@
                  placeholder="{{'filter'}}">
         </th>
       </tr>
-      <tr>
-        <th colspan="3">Variables</th>
-      </tr>
-      <tr>
-        <th>id</th>
-        <th>Name</th>
-        <th>Value</th>
-      </tr>
-      <tr data-ng-repeat="v in report.variables.variable | filter:reportSearch">
+      <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch">
         <td>{{v.id}}</td>
-        <td title="{{v.query}}">{{v.name.content}}</td>
-        <td>{{v.value}}</td>
-        <td></td>
-      </tr>
-
-      <tr>
-        <th colspan="3">Indicators</th>
-      </tr>
-      <tr data-ng-repeat="v in report.indicators.indicator | filter:reportSearch">
-        <td>{{v.id}}</td>
-        <td title="{{v.expression}}">
+        <td title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
           {{v.name.content}}
           <div class="alert alert-danger"
                data-ng-show="v.status.indexOf('Error')"
-               role="alert">{{v.status}}</div>
+               role="alert">
+            <strong data-ng-show="v.comment">{{v.comment}}</strong>
+            <p>{{v.status}}</p>
+            <span data-ng-show="v.parameters">Parameters:</span>
+            <ul>
+              <li data-ng-repeat="p in v.parameters.parameter">
+                {{p.id}}
+                <span data-ng-show="p.status === 'set'">{{p.status}} with value {{p.value}}</span>
+                <span data-ng-show="p.status === 'undefined'">{{p.status}}</span>
+              </li>
+            </ul>
+          </div>
         </td>
         <td>{{v.value}}</td>
+        <td></td>
       </tr>
     </table>
 
