@@ -94,14 +94,17 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             logger.log(java.util.logging.Level.FINE,
                     String.format("  Expression '%s'.", variable.getQuery())
             );
-
-            long numFound = SolrRequestBean.getNumFound(variable.getQuery(), filterQuery);
-
-            logger.log(java.util.logging.Level.FINE,
-                    String.format("  Results '%s'.", numFound)
-            );
-            indicatorResults.put(variable.getId(), Long.valueOf(numFound).doubleValue());
-            variable.setValue(numFound + "");
+            long numFound;
+            if (variable.getQuery() != null) {
+                numFound = SolrRequestBean.getNumFound(variable.getQuery(), filterQuery);
+                logger.log(java.util.logging.Level.FINE,
+                        String.format("  Results '%s'.", numFound)
+                );
+                indicatorResults.put(variable.getId(), Long.valueOf(numFound).doubleValue());
+                variable.setValue(numFound + "");
+            } else {
+                variable.setStatus("No query defined.");
+            }
             // TODO: Add indicator exception when computing value
         }
 

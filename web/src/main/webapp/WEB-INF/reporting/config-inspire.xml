@@ -14,62 +14,61 @@
 
     <!-- DSv are estimates based on metadata. See MDvXX.
     The reported value may be more than this. -->
-    <daobs:variable id="DSv_Num">
-      <daobs:name xml:lang="en">Number of spatial data sets for all Annexes</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
-      <daobs:comment>
-        Number of records in all annexes. If the following formula is used:
-        DSv_Num = DSv_Num1 + DSv_Num2 + DSv_Num3
-        the number of datasets may be over estimated (a record being part of more than one Annex).
-      </daobs:comment>
-    </daobs:variable>
-
     <daobs:variable id="DSv_Num1">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>
+      <daobs:comment>The value is based on the harvested records. It may be underestimated
+        if the number of spatial data set does not have metadata or if error occurred
+        during harvesting.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv_Num2">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>
+      <daobs:comment>The value is based on the harvested records. It may be underestimated
+        if the number of spatial data set does not have metadata or if error occurred
+        during harvesting.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv_Num3">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>
+      <daobs:comment>The value is based on the harvested records. It may be underestimated
+        if the number of spatial data set does not have metadata or if error occurred
+        during harvesting.</daobs:comment>
     </daobs:variable>
 
 
     <daobs:variable id="SDSv_Num">
       <daobs:name xml:lang="en">Number of spatial data services</daobs:name>
-      <daobs:query>+resourceType:service</daobs:query>
-      <!-- TODO: Should we force to be part of an INSPIRE annex ? We may harvest records not being part of any. -->
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment>Only services having an INSPIRE annex are took into account. We may harvest records related to no annex.</daobs:comment>
     </daobs:variable>
 
 
     <daobs:variable id="NSv_NumDiscServ">
       <daobs:name xml:lang="en">Number of discovery services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:discovery</daobs:query>
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:discovery</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="NSv_NumViewServ">
       <daobs:name xml:lang="en">Number of view services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:view</daobs:query>
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:view</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="NSv_NumDownlServ">
       <daobs:name xml:lang="en">Number of download services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:download</daobs:query>
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:download</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="NSv_NumInvkServ">
       <daobs:name xml:lang="en">Number of invoke services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:invoke</daobs:query>
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:invoke</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="NSv_NumTransfServ">
       <daobs:name xml:lang="en">Number of transformation services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:transformation</daobs:query>
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:transformation</daobs:query>
     </daobs:variable>
 
 
@@ -93,7 +92,7 @@
 
     <daobs:variable id="MDv14">
       <daobs:name xml:lang="en">Number of spatial data services that have metadata</daobs:name>
-      <daobs:query>+resourceType:service</daobs:query>
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
     </daobs:variable>
 
 
@@ -101,21 +100,25 @@
     <daobs:variable id="MDv21">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:i</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv22">
-      <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have conformant metadata</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:ii</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv23">
-      <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
+      <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have conformant metadata</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:iii</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv24">
       <daobs:name xml:lang="en">Number of spatial data services that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:service) +inspireConformMetadata:true</daobs:query>
+      <daobs:query>+(resourceType:service) +inspireConformMetadata:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
 
@@ -125,96 +128,132 @@
     <daobs:variable id="DSv21">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex I that have conformant metadata</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:i +inspireConformResource:true</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv22">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex II that have conformant metadata</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:ii +inspireConformResource:true</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv23">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex III that have conformant metadata</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:iii +inspireConformResource:true</daobs:query>
+      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
 
     <!-- INSPIRE NSi1 (Accessibility of metadata through discovery services) -->
     <daobs:variable id="NSv11">
       <daobs:name xml:lang="en">Number of spatial data sets with metadata for which a discovery service exists</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series)</daobs:query>
-      <!-- TODO -->
+      <daobs:query>+(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to DSv_Num).</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv12">
       <daobs:name xml:lang="en">Number of spatial data services with metadata for which a discovery service exists</daobs:name>
-      <daobs:query>+resourceType:service</daobs:query>
-      <!-- TODO -->
+      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to SDSv_Num).</daobs:comment>
     </daobs:variable>
 
 
     <!-- INSPIRE NSi2 (Accessibility of data sets through view or download services) -->
     <daobs:variable id="NSv21">
       <daobs:name xml:lang="en">Number of spatial data sets for which a view service exists</daobs:name>
-      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view</daobs:query>
+      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment></daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv22">
       <daobs:name xml:lang="en">Number of spatial data sets for which a download service exists</daobs:name>
-      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download</daobs:query>
+      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment></daobs:comment>
     </daobs:variable>
     <!-- TODO view and download NSv23 -->
 
 
-    <!-- INSPIRE NSi3 (Use of network services)
-    NSv3.1: sum of the annual number of network service request for all the discovery services
-    NSv3.2: sum of the annual number of network service request for all the view services
-    NSv3.3: sum of the annual number of network service request for all the download services
-    NSv3.4: sum of the annual number of network service request for all the transformation
-    services
-    NSv3.5: sum of the annual number of network service request for all the invoke services
-    NSv3: sum of the annual number of network service request for all services
-    NSv3 = NSv3.1 + NSv3.2 + NSv3.3 + NSv3.4 + NSv3.5
+
+    <daobs:variable id="NSv41">
+      <daobs:name xml:lang="en">Number of conformant discovery network services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv42">
+      <daobs:name xml:lang="en">Number of conformant view network services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv43">
+      <daobs:name xml:lang="en">Number of conformant download network services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv44">
+      <daobs:name xml:lang="en">Number of conformant transformation network services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv45">
+      <daobs:name xml:lang="en">Number of conformant discovery invoke services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
 
 
+    <daobs:variable id="NSv31">
+      <daobs:name xml:lang="en">Sum of the annual number of network service request for all the discovery services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv32">
+      <daobs:name xml:lang="en">Sum of the annual number of network service request for all the view services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv33">
+      <daobs:name xml:lang="en">Sum of the annual number of network service request for all the download services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv34">
+      <daobs:name xml:lang="en">Sum of the annual number of network service request for all the transformation services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="NSv35">
+      <daobs:name xml:lang="en">Sum of the annual number of network service request for all the invoke services</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
 
-    NSv4.1: number of conformant discovery network services
-    NSv4.2: number of conformant view network services
-    NSv4.3: number of conformant download network services
-    NSv4.4: number of conformant transformation network services
-    NSv4.5: number of conformant invoke network services
-    NSv4 : number of all conformant network services
-    NSv4 = NSv4.1 + NSv4.2 + NSv4.3 + NSv4.4 + NSv4.5
-
-
-         -->
-        <!-- TODO: related to AI
-    Monitoring of the geographical coverage of spatial data sets
-    DSv1.1_ActArea: sum of the actual areas of all the spatial data sets of Annex I
-    DSv1.2_ActArea: sum of the actual areas of all the spatial data sets of Annex II
-    DSv1.3_ActArea: sum of the actual areas of all the spatial data sets of Annex III
-    DSv1_ActArea: sum of the actual areas of all the spatial data sets of all Annexes
-    DSv1_ActArea = DSv1.1_ActArea + DSv1.2_ActArea + DSv1.3_ActArea
-
-    DSv1.1_RelArea: sum of the relevant areas of all the spatial data sets of Annex I
-    DSv1.2_RelArea: sum of the relevant areas of all the spatial data sets of Annex II
-    DSv1.3_RelArea: sum of the relevant areas of all the spatial data sets of Annex III
-    DSv1_RelArea: sum of the actual areas of all the spatial data sets of all Annexes
-    DSv1_RelArea = DSv1.1_RelArea + DSv1.2_RelArea + DSv1.3_RelArea
-
-    Specific indicators
-    DSi1.1 = DSv1.1_ActArea / DSv1.1_RelArea
-    DSi1.2 = DSv1.2_ActArea / DSv1.2_RelArea
-    DSi2.3 = DSv1.3_ActArea / DSv1.3_RelArea
-    General Indicator
-    DSi1 = DSv1_ActArea / DSv1_RelArea
--->
     <daobs:variable id="DSv11_ActArea">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex I</daobs:name>
-      <daobs:query>TODO</daobs:query>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="DSv12_ActArea">
+      <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex II</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="DSv13_ActArea">
+      <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex III</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="DSv11_RelArea">
+      <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex I</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="DSv12_RelArea">
+      <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex II</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:variable>
+    <daobs:variable id="DSv13_RelArea">
+      <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex III</daobs:name>
+      <daobs:comment>Not implemented yet.</daobs:comment>
     </daobs:variable>
   </daobs:variables>
 
 
 
   <daobs:indicators>
+    <daobs:indicator id="DSv_Num">
+      <daobs:name xml:lang="en">Number of spatial data sets for all Annexes</daobs:name>
+      <daobs:expression>DSv_Num1 + DSv_Num2 + DSv_Num3</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv_Num1"/>
+        <daobs:parameter id="DSv_Num2"/>
+        <daobs:parameter id="DSv_Num3"/>
+      </daobs:parameters>
+    </daobs:indicator>
+
     <daobs:indicator id="NSv_NumAllServ">
       <daobs:name>Number of all services</daobs:name>
       <daobs:expression>NSv_NumDiscServ + NSv_NumViewServ + NSv_NumDownlServ + NSv_NumTransfServ + NSv_NumInvkServ</daobs:expression>
@@ -230,41 +269,45 @@
 
 
     <daobs:indicator id="MDi11">
-      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:name xml:lang="en">%age of spatial data sets for Annex I having metadata</daobs:name>
       <daobs:expression>MDv11 / DSv_Num1</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv11"/>
         <daobs:parameter id="DSv_Num1"/>
       </daobs:parameters>
+      <daobs:comment>Using only harvesting records, it should be 1.</daobs:comment>
     </daobs:indicator>
     <daobs:indicator id="MDi12">
-      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:name xml:lang="en">%age of spatial data sets for Annex II having metadata</daobs:name>
       <daobs:expression>MDv12 / DSv_Num2</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv12"/>
         <daobs:parameter id="DSv_Num2"/>
       </daobs:parameters>
+      <daobs:comment>Using only harvesting records, it should be 1.</daobs:comment>
     </daobs:indicator>
     <daobs:indicator id="MDi13">
-      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:name xml:lang="en">%age of spatial data sets for Annex II having metadata</daobs:name>
       <daobs:expression>MDv13 / DSv_Num3</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv13"/>
         <daobs:parameter id="DSv_Num3"/>
       </daobs:parameters>
+      <daobs:comment>Using only harvesting records, it should be 1.</daobs:comment>
     </daobs:indicator>
     <daobs:indicator id="MDi14">
-      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:name xml:lang="en">%age of spatial services having metadata</daobs:name>
       <daobs:expression>MDv14 / SDSv_Num</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv14"/>
         <daobs:parameter id="SDSv_Num"/>
       </daobs:parameters>
+      <daobs:comment>Using only harvesting records, it should be 1.</daobs:comment>
     </daobs:indicator>
 
 
     <daobs:indicator id="MDi1">
-      <daobs:name xml:lang="en"></daobs:name>
+      <daobs:name xml:lang="en">%age of spatial data sets or services having metadata</daobs:name>
       <daobs:expression>(MDv11 + MDv12 + MDv13 + MDv14) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv11"/>
@@ -274,6 +317,7 @@
         <daobs:parameter id="DSv_Num"/>
         <daobs:parameter id="SDSv_Num"/>
       </daobs:parameters>
+      <daobs:comment>Using only harvesting records, it should be 1.</daobs:comment>
     </daobs:indicator>
 
 
@@ -449,6 +493,93 @@
         <daobs:parameter id="NSv23"/>
         <daobs:parameter id="DSv_Num"/>
       </daobs:parameters>
+    </daobs:indicator>
+
+
+    <daobs:indicator id="DSv1_ActArea">
+      <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of all Annexes</daobs:name>
+      <daobs:expression>DSv11_ActArea + DSv12_ActArea + DSv13_ActArea</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv11_ActArea"/>
+        <daobs:parameter id="DSv12_ActArea"/>
+        <daobs:parameter id="DSv13_ActArea"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+
+    <daobs:indicator id="DSv1_RelArea">
+      <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of all Annexes</daobs:name>
+      <daobs:expression>DSv11_RelArea + DSv12_RelArea + DSv13_RelArea</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv11_RelArea"/>
+        <daobs:parameter id="DSv12_RelArea"/>
+        <daobs:parameter id="DSv13_RelArea"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+
+    <daobs:indicator id="DSi11">
+      <daobs:name xml:lang="en">%age of actual/relative area for spatial data sets for Annex I</daobs:name>
+      <daobs:expression>DSv11_ActArea / DSv11_RelArea</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv11_ActArea"/>
+        <daobs:parameter id="DSv11_RelArea"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+    <daobs:indicator id="DSi12">
+      <daobs:name xml:lang="en">%age of actual/relative area for spatial data sets for Annex II</daobs:name>
+      <daobs:expression>DSv12_ActArea / DSv12_RelArea</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv12_ActArea"/>
+        <daobs:parameter id="DSv12_RelArea"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+    <daobs:indicator id="DSi13">
+      <daobs:name xml:lang="en">%age of actual/relative area for spatial data sets for Annex III</daobs:name>
+      <daobs:expression>DSv13_ActArea / DSv13_RelArea</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv13_ActArea"/>
+        <daobs:parameter id="DSv13_RelArea"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+    <daobs:indicator id="DSi">
+      <daobs:name xml:lang="en">%age of actual/relative area for all spatial data sets</daobs:name>
+      <daobs:expression>DSv1_ActArea / DSv1_RelArea</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="DSv1_ActArea"/>
+        <daobs:parameter id="DSv1_RelArea"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+
+
+    <daobs:indicator id="NSv3">
+      <daobs:name xml:lang="en">Sum of the annual number of network service request for all services</daobs:name>
+      <daobs:expression>NSv31 + NSv32 + NSv33 + NSv34 + NSv35</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv31"/>
+        <daobs:parameter id="NSv32"/>
+        <daobs:parameter id="NSv33"/>
+        <daobs:parameter id="NSv34"/>
+        <daobs:parameter id="NSv35"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
+    </daobs:indicator>
+
+    <daobs:indicator id="NSv4">
+      <daobs:name xml:lang="en">Number of all conformant network services</daobs:name>
+      <daobs:expression>NSv41 + NSv42 + NSv43 + NSv44 + NSv45</daobs:expression>
+      <daobs:parameters>
+        <daobs:parameter id="NSv41"/>
+        <daobs:parameter id="NSv42"/>
+        <daobs:parameter id="NSv43"/>
+        <daobs:parameter id="NSv44"/>
+        <daobs:parameter id="NSv45"/>
+      </daobs:parameters>
+      <daobs:comment>Not implemented yet.</daobs:comment>
     </daobs:indicator>
 
 
