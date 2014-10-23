@@ -1,5 +1,7 @@
 <daobs:harvesters xmlns:daobs="http://daobs.org">
-  <!-- List of CSW endpoints
+  <!--
+  FIXME: this file is duplicated from the harvester module.
+  List of CSW endpoints
   from http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/ -->
 
   <daobs:harvester>
