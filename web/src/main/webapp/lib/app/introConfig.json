@@ -1,0 +1,48 @@
+{
+  "steps": {
+    "menu": [{
+      "element": "#ds-menu-home",
+      "intro": "Link to the home page."
+      }, {
+        "element": "#ds-menu-dashboard",
+        "intro": "Dashboard creation and consultation tools. Use this application to analyze information."
+      }, {
+        "element": "#ds-menu-report",
+        "intro": "Display reports configuration and generate reporting. This page also provides download links to generated reporting in different formats (XML, JSON, ...)."
+      }, {
+        "element": "#ds-menu-harvest",
+        "intro": "Display the list of all harvested nodes and their configurations."
+      }, {
+        "element": "#ds-menu-admin",
+        "intro": "Search engine admin console."
+      }],
+    "home": [{
+      "element": "#ds-latest-dashboard",
+      "intro": "Choose a dashboard from the list!",
+      "position": "left"
+    }],
+    "reporting": [{
+      "element": "#ds-report-choose",
+      "intro": "Choose a report to generate from the list."
+    }, {
+      "element": "#ds-report-view",
+      "intro": "Click here to display the list of variables and indicators in the selected report. A report is created from a set of variables and indicators. Variables are defined using query expressions to be computed by the search engine. Indicators are created from mathematical expressions based on variables."
+    }, {
+      "element": "#ds-reportarea-choose",
+      "intro": "Choose an area for reporting. The list is generated based on the harvested records. Only area where an harvesting endpoint has been defined are available in the list. The report will be created on the records of this area."
+    }, {
+      "element": "#ds-btn-report-preview",
+      "intro": "Compute the report for the area and display results."
+    }, {
+      "element": "#ds-btn-report-dwn",
+      "intro": "Compute and download the report for the area available in different formats (XML, JSON, ...)"
+    }, {
+      "element": "#ds-btn-report-submit",
+      "intro": "Save the report as an official reporting snapshot for this date. This is used to follow the indicators in time. Not available yet."
+    }, {
+      "element": "#ds-report-results",
+      "intro": "Report results.",
+      "position": "top"
+    }]
+  }
+}

@@ -1,18 +1,19 @@
 <h1 data-translate="">Generate reporting</h1>
 <form class="form-horizontal" role="form">
-  <div class="form-group">
-    <label for="reportingField" class="col-sm-2 control-label">Choose reporting</label>
+  <div class="form-group" id="ds-report-choose">
+    <label for="ds-report-field" class="col-sm-2 control-label">Choose reporting</label>
     <div class="col-sm-10">
 
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
           <div class="input-group">
-            <select id="reportingField" class="form-control"
+            <select id="ds-report-field" class="form-control"
                     data-ng-model="reporting"
                     data-ng-options="value.id for (key, value) in reportingConfig | orderBy: 'id'">
             </select>
             <div class="input-group-btn">
               <button type="submit"
+                      id="ds-report-view"
                       class="btn btn-default"
                       data-ng-click="getReportDetails()">View report rules</button>
             </div>
@@ -21,10 +22,10 @@
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="reportingAreaField" class="col-sm-2 control-label">Choose reporting area</label>
+  <div class="form-group" id="ds-reportarea-choose">
+    <label for="ds-reportarea-field" class="col-sm-2 control-label">Choose reporting area</label>
     <div class="col-sm-10">
-      <select id="reportingAreaField"
+      <select id="ds-reportarea-field"
               class="form-control"
               data-ng-model="territory"
               data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
@@ -34,12 +35,14 @@
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit"
+      <button id="ds-btn-report-preview"
+              type="submit"
               class="btn btn-primary"
               data-ng-disabled="!territory"
               data-ng-click="preview()">Preview</button>
       <div class="btn-group">
-        <button type="button"
+        <button id="ds-btn-report-dwn"
+                type="button"
                 class="btn btn-default dropdown-toggle"
                 data-ng-disabled="!territory"
                 data-toggle="dropdown">
@@ -54,7 +57,8 @@
                  ng-href="/solr/daobs/reporting/custom/{{reporting.id}}/{{territory.label}}">INSPIRE</a></li>
         </ul>
       </div>
-      <button type="submit"
+      <button id="ds-btn-report-submit"
+              type="submit"
               class="btn btn-default"
               data-ng-disabled="!territory"
               data-ng-click="submit()"
@@ -64,7 +68,8 @@
     </div>
   </div>
 
-  <div data-ng-show="report != null && overview">
+  <div data-ng-show="report != null && overview"
+       id="ds-report-results">
 
     <h2 data-translate="">Report rules for
       <strong>{{report.identification.title.content}}</strong></h2>

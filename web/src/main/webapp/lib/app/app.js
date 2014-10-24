@@ -10,6 +10,7 @@
 
   app.constant('cfg', {
     'SERVICES': {
+      root: '/solr',
       dashboardCore: '/solr/dashboard',
       dataCore: '/solr/data',
       harvesterConfig: '/solr/daobs/harvester.json',
@@ -40,29 +41,34 @@
 
 
   app.controller('RootController', [
-    '$scope', '$location',
-    function ($scope, $location) {
+    '$scope', '$location', '$http', 'cfg',
+    function ($scope, $location, $http, cfg) {
       $scope.navLinks = [{
+        id: 'home',
         text: 'Home',
         title: '',
         icon: 'glyphicon-home',
         url: '#/'
       }, {
+        id: 'dashboard',
         text: 'Dashboard',
         title: 'View & create dashboards',
         icon: 'glyphicon-stats',
         url: 'dashboard'
       }, {
+        id: 'report',
         text: 'Reporting',
         title: 'Create report',
         icon: 'glyphicon-list-alt',
         url: '#/reporting'
       }, {
+        id: 'harvest',
         text: 'Harvesting',
         title: 'Harvest information',
         icon: 'glyphicon-download-alt',
         url: '#/harvesting'
       }, {
+        id: 'admin',
         text: '',
         title: 'Admin console',
         icon: 'glyphicon-cog',
@@ -70,10 +76,24 @@
       }];
 
       // Change class based on route path
+      $scope.currentRoute = null;
       $scope.navClass = function (page) {
-        var currentRoute = $location.path() || 'home';
-        return page.replace('#', '') === currentRoute ? 'active' : '';
+        var path = $location.path().replace('/', '');
+        $scope.currentRoute = path || 'home';
+        return page.replace('#/', '') === $scope.currentRoute ? 'active' : '';
       };
+
+      $scope.startIntro = function () {
+        var intro = introJs();
+        $http.get(cfg.SERVICES.root +
+          '/lib/app/introConfig.json').
+          success(function (data) {
+            var items = data.steps.menu;
+            items.push.apply(items, data.steps[$scope.currentRoute]);
+            intro.setOptions({steps: items});
+            intro.start();
+          });
+      }
     }]);
 
 
