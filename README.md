@@ -1,8 +1,8 @@
 
+# Overview
+
 Collect information and configure indicators to generate reporting. Build dashboards using the online creation tools. Share your dashboards and provide access to all monitoring information. This project is using [Solr](http://lucene.apache.org/solr/) and [Banana](https://github.com/LucidWorks/banana) dashboard tool to analyze geospatial metadata catalog content.
 
-
-# Overview
 
 * Advanced full-text search capabilities
 * Create, share and visualize online dashboards
