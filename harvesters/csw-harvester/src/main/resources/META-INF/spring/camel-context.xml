@@ -31,6 +31,7 @@
 
   <cm:camelContext xmlns:ogc="http://www.opengis.net/ogc"
                    xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+                   xmlns:daobs="http://daobs.org"
           id="csw"
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
@@ -62,25 +63,25 @@
               logName="org.daobs.harvester.CswHarvester"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
       <cm:split parallelProcessing="true">
-        <cm:xpath>/harvesters/harvester</cm:xpath>
+        <cm:xpath>//daobs:harvester</cm:xpath>
         <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
         <cm:setHeader headerName="harvesterUrl">
-          <cm:xpath resultType="java.lang.String">harvester/url</cm:xpath>
+          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:url</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterTerritory">
-          <cm:xpath resultType="java.lang.String">harvester/territory</cm:xpath>
+          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:territory</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterFolder">
-          <cm:xpath resultType="java.lang.String">harvester/folder</cm:xpath>
+          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:folder</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterName">
-          <cm:xpath resultType="java.lang.String">harvester/name</cm:xpath>
+          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:name</cm:xpath>
         </cm:setHeader>
         <cm:choice>
           <cm:when>
-            <cm:xpath>harvester/filter/ogc:Filter</cm:xpath>
+            <cm:xpath>daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
             <cm:setHeader headerName="harvesterFilter">
-              <cm:xpath resultType="org.w3c.dom.Document">harvester/filter/ogc:Filter</cm:xpath>
+              <cm:xpath resultType="org.w3c.dom.Document">daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
             </cm:setHeader>
           </cm:when>
           <cm:otherwise>
