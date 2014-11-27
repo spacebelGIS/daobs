@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
                 service="CSW"
+                outputSchema="http://www.isotc211.org/2005/gmd"
                 version="2.0.2">
   <csw:Query typeNames="csw:Record">
-    <csw:ElementSetName>summary</csw:ElementSetName>
+    <csw:ElementSetName>brief</csw:ElementSetName>
     <csw:Constraint version="1.1.0">
       <Filter xmlns="http://www.opengis.net/ogc"/>
     </csw:Constraint>
