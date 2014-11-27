@@ -17,8 +17,14 @@
   xmlns:gn="http://www.fao.org/geonetwork" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:solr="java:org.daobs.index.SolrRequestBean"
+  xmlns:saxon="http://saxon.sf.net/"
+  extension-element-prefixes="saxon"
   exclude-result-prefixes="#all"
   version="2.0">
+
+  <xsl:output name="default-serialize-mode"
+              indent="no"
+              omit-xml-declaration="yes" />
 
   <xsl:variable name="harvester" as="element()"
                 select="/harvestedContent/harvester"/>
@@ -68,6 +74,9 @@
         <!-- Create a first document representing the main record. -->
         <doc>
           <field name="documentType">metadata</field>
+
+          <!-- Index the metadata document as XML -->
+          <field name="document"><xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/></field>
           <field name="id"><xsl:value-of select="$identifier"/></field>
           <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
 
@@ -128,8 +137,11 @@
           <!-- Indexing resource information
           TODO: Should we support multiple identification in the same record
           eg. nl db60a314-5583-437d-a2ff-1e59cc57704e
+          Also avoid error when records contains multiple MD_IdentificationInfo
+          or SRV_ServiceIdentification or a mix
+          eg. de 8bb5334f-558b-982b-7b12-86ea486540d7
           -->
-          <xsl:for-each select="gmd:identificationInfo[1]/*">
+          <xsl:for-each select="gmd:identificationInfo[1]/*[1]">
             <xsl:for-each select="gmd:citation/gmd:CI_Citation">
               <field name="resourceTitle">
                 <xsl:value-of select="gmd:title/gco:CharacterString/text()"/>
@@ -176,12 +188,18 @@
 
 
             <!-- TODO: create specific INSPIRE template or mode -->
-            <!-- INSPIRE themes -->
+            <!-- INSPIRE themes
+
+            Select the first thesaurus name only as some records
+            may contains many even if invalid.
+            Also get the first title at it may happen that a record
+            have more than one.
+            -->
             <xsl:for-each
                     select="gmd:descriptiveKeywords
                        /gmd:MD_Keywords[contains(
-                         gmd:thesaurusName/gmd:CI_Citation/
-                           gmd:title/gco:CharacterString/text(),
+                         gmd:thesaurusName[1]/gmd:CI_Citation/
+                           gmd:title[1]/gco:CharacterString/text(),
                            'GEMET - INSPIRE themes')]
                       /gmd:keyword/gco:CharacterString">
 
@@ -204,8 +222,8 @@
 
             <field name="numberOfInspireTheme"><xsl:value-of select="count(gmd:descriptiveKeywords
                        /gmd:MD_Keywords[contains(
-                         gmd:thesaurusName/gmd:CI_Citation/
-                           gmd:title/gco:CharacterString/text(),
+                         gmd:thesaurusName[1]/gmd:CI_Citation/
+                           gmd:title[1]/gco:CharacterString/text(),
                            'GEMET - INSPIRE themes')]
                       /gmd:keyword)"/></field>
 
@@ -426,11 +444,15 @@
   <xsl:template mode="index-contact" match="*">
     <xsl:param name="fieldSuffix" select="''" as="xs:string"/>
 
+    <!-- Select the first child which should be a CI_ResponsibleParty.
+    Some records contains more than one CI_ResponsibleParty which is
+    not valid and they will be ignored. -->
     <xsl:variable name="organisationName"
-                  select="*/gmd:organisationName/(gco:CharacterString|gmx:Anchor)"
+                  select="*[1]/gmd:organisationName/(gco:CharacterString|gmx:Anchor)"
                   as="xs:string*"/>
+
     <xsl:variable name="role"
-                  select="*/gmd:role/*/@codeListValue"
+                  select="*[1]/gmd:role/*/@codeListValue"
                   as="xs:string?"/>
     <xsl:if test="normalize-space($organisationName) != ''">
       <field name="Org{$fieldSuffix}"><xsl:value-of select="$organisationName"/></field>

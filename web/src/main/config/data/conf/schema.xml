@@ -95,6 +95,7 @@
     installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
   -->
   <field name="documentType" type="text_general" indexed="true" stored="true" multiValued="false"/>
+  <field name="document" type="text_general" indexed="false" stored="true" multiValued="false"/>
 
   <field name="indicatorType" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <field name="indicatorName" type="text_general" indexed="true" stored="true" multiValued="false"/>
