@@ -25,7 +25,7 @@ The guide for user installing and configuring the application.
 Clone and compile the application:
 
 ```
-git clone https://github.com/titellus/daobs.git
+git clone --recursive https://github.com/titellus/daobs.git
 cd daobs
 mvn clean install
 ```
@@ -139,6 +139,13 @@ done
 find . -name *.xml -type f |
 while read f
 do
+  echo "importing '$f' file..";
+  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+done
+
+or 
+
+for f in *.xml; do
   echo "importing '$f' file..";
   curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
