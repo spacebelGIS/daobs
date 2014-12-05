@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
 
-  <name>Validation checker background task</name>
+  <name>Background task / Validation checker</name>
   <url></url>
 
   <properties>
