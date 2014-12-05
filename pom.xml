@@ -191,6 +191,8 @@
     <module>core</module>
     <module>dashboard</module>
     <module>web</module>
+    <module>harvesters/csw-harvester</module>
+    <module>tasks/validation-checker</module>
   </modules>
 
 
