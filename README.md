@@ -130,6 +130,7 @@ Manually index XML records:
 for f in *.xml; do
   echo "importing '$f' file..";
   curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" \
+     -u username:password \
      -H "Content-Type: text/xml; charset=utf-8" \
      --data-binary @$f
 done
@@ -140,7 +141,7 @@ find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u username:password -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
@@ -157,10 +158,12 @@ Manually dropped all records:
 ```
 curl http://localhost:8983/solr/data/update \
     --data '<delete><query>documentType:*</query></delete>' \
+    -u username:password \
     -H 'Content-type:text/xml; charset=utf-8'
 
 curl http://localhost:8983/solr/data/update \
     --data '<commit/>' \
+    -u username:password \
     -H 'Content-type:text/xml; charset=utf-8'
 ```
 

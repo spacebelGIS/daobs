@@ -83,7 +83,7 @@
         <version>${saxon-dom.version}</version>
       </dependency>
 
-
+      <!-- Spring framework -->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
@@ -108,6 +108,31 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${spring.version}</version>
+      </dependency>
+
+      <!-- Spring security -->
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-ldap</artifactId>
+        <version>${spring-security.version}</version>
       </dependency>
 
       <dependency>
@@ -176,6 +201,7 @@
     <saxon.version>9.1.0.8b-patch</saxon.version>
     <saxon-dom.version>9.1.0.8b</saxon-dom.version>
     <spring.version>4.0.7.RELEASE</spring.version>
+    <spring-security.version>3.2.5.RELEASE</spring-security.version>
 
     <java.version>1.7</java.version>
 

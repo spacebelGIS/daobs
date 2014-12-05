@@ -1,8 +1,15 @@
 package org.daobs.index;
 
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.StringUtils;
 
 /**
  * Create a bean providing a connection to the
@@ -17,6 +24,8 @@ public class SolrServerBean implements InitializingBean {
     private SolrServer server;
     private String solrServerUrl;
     private String solrServerCore;
+    private String solrServerUsername;
+    private String solrServerPassword;
     private boolean connectionChecked = false;
 
     /**
@@ -42,7 +51,17 @@ public class SolrServerBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         if (solrServerUrl != null) {
-            server = new HttpSolrServer(this.solrServerUrl);
+            if (!StringUtils.isEmpty(solrServerUsername) && !StringUtils.isEmpty(solrServerPassword)) {
+                CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+                credentialsProvider.setCredentials(AuthScope.ANY,
+                        new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
+                CloseableHttpClient httpClient =
+                        HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+                server = new HttpSolrServer(this.solrServerUrl, httpClient);
+            } else {
+                server = new HttpSolrServer(this.solrServerUrl);
+            }
+
             instance = this;
         } else {
             throw new Exception(String.format("No Solr server URL defined in %s. " +
@@ -105,5 +124,37 @@ public class SolrServerBean implements InitializingBean {
      */
     public void setSolrServerCore(String solrServerCore) {
         this.solrServerCore = solrServerCore;
+    }
+
+    /**
+     *
+     * @return Return Solr server username for credentials
+     */
+    public String getSolrServerUsername() {
+        return solrServerUsername;
+    }
+
+    /**
+     *
+     * @param solrServerUsername    The Solr server credentials username
+     */
+    public void setSolrServerUsername(String solrServerUsername) {
+        this.solrServerUsername = solrServerUsername;
+    }
+
+    /**
+     *
+     * @return Return Solr server password for credentials
+     */
+    public String getSolrServerPassword() {
+        return solrServerPassword;
+    }
+
+    /**
+     *
+     * @param solrServerPassword    The Solr server credentials password
+     */
+    public void setSolrServerPassword(String solrServerPassword) {
+        this.solrServerPassword = solrServerPassword;
     }
 }

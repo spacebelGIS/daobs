@@ -132,6 +132,29 @@
       <artifactId>daobs-core</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
+
+    <!-- Spring Security -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-ldap</artifactId>
+    </dependency>
+
     <!--
     <dependency>
       <groupId>org.apache.solr</groupId>
@@ -289,5 +312,6 @@
     <solr.server.stopport>9966</solr.server.stopport>
     <solr.core.directory>solr-cores</solr.core.directory>
     <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
+    <spring.version>3.2.5.RELEASE</spring.version>
   </properties>
 </project>
