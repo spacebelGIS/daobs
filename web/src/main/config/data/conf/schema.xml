@@ -96,6 +96,8 @@
   -->
   <field name="documentType" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <field name="document" type="text_general" indexed="false" stored="true" multiValued="false"/>
+  <field name="documentStandard" type="text_general" indexed="true" stored="true" multiValued="false"/>
+
 
   <field name="indicatorType" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <field name="indicatorName" type="text_general" indexed="true" stored="true" multiValued="false"/>
@@ -161,6 +163,16 @@
   <field name="inspireAnnex_syn" type="managed_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireAnnex" type="only_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <!-- TODO: check if conformity could be multivalued -->
+
+  <!-- Field to store validation against the XSD -->
+  <field name="isSchemaValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
+  <field name="schemaValidReport" type="string" stored="true" indexed="true" multiValued="false"/>
+
+  <!-- Field to store validation status agains a remote validation service
+  eg. INSPIRE validation service -->
+  <field name="isValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
+  <field name="validReport" type="string" stored="true" indexed="true" multiValued="false"/>
+
   <field name="inspireConformResource" type="boolean" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireConformMetadata" type="boolean" stored="true" indexed="true" multiValued="true"/>
 

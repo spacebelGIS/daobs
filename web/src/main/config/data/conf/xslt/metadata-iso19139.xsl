@@ -74,6 +74,7 @@
         <!-- Create a first document representing the main record. -->
         <doc>
           <field name="documentType">metadata</field>
+          <field name="documentStandard">iso19139</field>
 
           <!-- Index the metadata document as XML -->
           <field name="document"><xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/></field>
