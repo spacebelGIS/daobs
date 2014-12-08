@@ -166,12 +166,15 @@
 
   <!-- Field to store validation against the XSD -->
   <field name="isSchemaValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
-  <field name="schemaValidReport" type="string" stored="true" indexed="true" multiValued="false"/>
+  <field name="schemaValidDate" type="string" stored="true" indexed="true" multiValued="false"/>
+  <field name="schemaValidReport" type="string" stored="true" indexed="false" multiValued="false"/>
 
   <!-- Field to store validation status agains a remote validation service
   eg. INSPIRE validation service -->
   <field name="isValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
-  <field name="validReport" type="string" stored="true" indexed="true" multiValued="false"/>
+  <field name="validDate" type="string" stored="true" indexed="true" multiValued="false"/>
+  <field name="validReport" type="string" stored="true" indexed="false" multiValued="false"/>
+  <field name="validInfo" type="string" stored="true" indexed="false" multiValued="false"/>
 
   <field name="inspireConformResource" type="boolean" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireConformMetadata" type="boolean" stored="true" indexed="true" multiValued="true"/>
