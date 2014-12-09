@@ -74,22 +74,18 @@
 
       <!-- TODO: Add paging or load all -->
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>http://{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=0&amp;rows=1000</cm:simple>
+        <cm:simple>http://{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=0&amp;rows=10000</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <!--<cm:convertBodyTo type="org.w3c.dom.Document"/>-->
       <cm:split parallelProcessing="true">
         <cm:xpath>//doc</cm:xpath>
-        <cm:setHeader headerName="document">
+        <cm:setBody>
           <cm:xpath resultType="java.lang.String">doc/str[@name = 'document']/text()</cm:xpath>
-        </cm:setHeader>
+        </cm:setBody>
         <cm:setHeader headerName="uuid">
           <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
         </cm:setHeader>
-        <cm:transform>
-          <cm:simple>${header.document}</cm:simple>
-        </cm:transform>
-        <cm:convertBodyTo type="org.w3c.dom.Document" charset="UTF-8"/>
+        <!--<cm:convertBodyTo type="org.w3c.dom.Document" charset="UTF-8"/>-->
 
         <cm:multicast>
           <!-- XSD validation-->
@@ -111,9 +107,6 @@
       <cm:setHeader headerName="beginTime">
         <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
       </cm:setHeader>
-      <cm:log message="Checking record with UUID '$simple{header.uuid}' using its standards XSD. Start at $simple{header.beginTime}."
-              loggingLevel="INFO"
-              logName="org.daobs.task.ValidationChecker"/>
 
       <!-- Retrieve UUID from XML document or Solr document ? -->
       <cm:setHeader headerName="documentIdentifier">
@@ -121,6 +114,9 @@
           /gmd:MD_Metadata/gmd:fileIdentifier/gco:CharacterString/text()
         </cm:xpath>
       </cm:setHeader>
+      <cm:log message="Checking record with UUID '$simple{header.documentIdentifier}' using its standards XSD. Start at $simple{header.beginTime}."
+              loggingLevel="INFO"
+              logName="org.daobs.task.ValidationChecker"/>
 
       <!--<cm:log message="XML document is: ${body}"
               loggingLevel="DEBUG"
@@ -128,7 +124,7 @@
 
       <!-- Check document against an XSD -->
       <cm:doTry>
-        <cm:to uri="validator:file:src/main/resources/schemas/iso19139/schema.xsd?useDom=true"/>
+        <cm:to uri="validator:file:src/main/resources/schemas/iso19139/schema.xsd?useDom=false"/>
         <cm:setBody>
           <cm:simple>
             <![CDATA[<add commitWithin="10000">

@@ -6,5 +6,5 @@
 				xmlns:srv="http://www.isotc211.org/2005/srv">
 	<xs:include schemaLocation="schema/gmd/metadataApplication.xsd"/>
 	<xs:import namespace="http://www.isotc211.org/2005/srv" schemaLocation="schema/srv/srv.xsd"/>
-	<!--<xs:import namespace="http://www.isotc211.org/2005/gmx" schemaLocation="schema/gmx/gmx.xsd"/>-->
+  <xs:import namespace="http://www.isotc211.org/2005/gmx" schemaLocation="schema/gmx/gmxUsage.xsd"/>
 </xs:schema>
