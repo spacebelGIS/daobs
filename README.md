@@ -179,6 +179,28 @@ curl http://localhost:8983/solr/data/update \
 
 
 
+## Analysis tasks
+
+A set of background tasks could be triggered on the content of the index and improve or add information to the index.
+
+### Validation task
+
+A two steps validation task is defined:
+
+* XML Schema validation
+* INSPIRE validator (http://inspire-geoportal.ec.europa.eu/validator2/#)
+
+The results and details of the validation process are stored in the index.
+
+To trigger the validation:
+
+```
+cd tasks/validation-checker
+mvn camel:run
+```
+
+By default, the task validates all records which have not been validated before (ie. +documentType:metadata -isValid:[* TO *]). A custom set of records could be validated by changing the solr.select.filter in the config.properties file.
+
 
 ## Loading dashboards
 
