@@ -43,6 +43,7 @@
       <artifactId>camel-msv</artifactId>
       <version>${camel.version}</version>
     </dependency>
+
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
