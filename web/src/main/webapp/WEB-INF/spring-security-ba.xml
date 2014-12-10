@@ -6,7 +6,13 @@
   http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
   <http>
-    <intercept-url pattern="/**" access="ROLE_ADMIN" />
+    <!-- SOLR admin -->
+    <intercept-url pattern='/admin.html*' access='ROLE_ADMIN'/>
+
+    <!-- Controllers -->
+    <intercept-url pattern='/*/reporting*' access='ROLE_ADMIN'/>
+    <intercept-url pattern='/*/harvester*' access='ROLE_ADMIN'/>
+
     <http-basic />
   </http>
 
