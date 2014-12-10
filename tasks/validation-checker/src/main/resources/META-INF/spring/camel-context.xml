@@ -30,6 +30,7 @@
   <cm:camelContext
           xmlns:gmd="http://www.isotc211.org/2005/gmd"
           xmlns:gco="http://www.isotc211.org/2005/gco"
+          xmlns:geoportal="http://inspire.ec.europa.eu/schemas/geoportal/1.0"
           id="validation-checker"
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
@@ -227,6 +228,9 @@
 
       <cm:bean ref="inspireValidationClient" method="validateBody"/>
 
+      <cm:log message="Validated in $simple{body.totalTimeSeconds}s."
+              loggingLevel="INFO"
+              logName="org.daobs.task.ValidationChecker"/>
       <cm:setBody>
         <cm:simple>
           <![CDATA[<add commitWithin="10000">
@@ -235,10 +239,12 @@
                 <field name="validDate" update="set">$simple{header.beginTime}</field>
                 <field name="isValid" update="set">${body.status}</field>
                 <field name="validReport" update="set"><![CDATA[${body.report}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-                <field name="validInfo" update="set">${body.info}</field>
+                <field name="validInfo" update="set">${body.info} - ${body.completenessIndicator}</field>
               </doc>
             </add>]]>
         </cm:simple>
+        <!-- TODO add <field name="validCompleteness" update="set"></field>-->
+
       </cm:setBody>
       <cm:to uri="file:tmp/query/?fileName=inspire-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
     </cm:route>

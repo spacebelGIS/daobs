@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+
+<lst name="responseHeader">
+  <int name="status">0</int>
+  <int name="QTime">2</int>
+  <lst name="params">
+    <str name="indent">true</str>
+    <str name="q">id:81aea739-4d21-427d-bec4-082cb64b825b</str>
+    <str name="wt">xml</str>
+  </lst>
+</lst>
+<result name="response" numFound="1" start="0">
+  <doc>
+    <str name="documentType">metadata</str>
+    <str name="documentStandard">iso19139</str>
+    <str name="document">&lt;gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd"&gt;
+      &lt;gmd:fileIdentifier&gt;
+        &lt;gco:CharacterString&gt;81aea739-4d21-427d-bec4-082cb64b825b&lt;/gco:CharacterString&gt;
+      &lt;/gmd:fileIdentifier&gt;
+      &lt;gmd:language&gt;
+        &lt;gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng"/&gt;
+      &lt;/gmd:language&gt;
+      &lt;gmd:characterSet&gt;
+        &lt;gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8"/&gt;
+      &lt;/gmd:characterSet&gt;
+      &lt;gmd:parentIdentifier&gt;
+        &lt;gco:CharacterString&gt;650c3735-28c7-43bb-b521-3952ce4d6246&lt;/gco:CharacterString&gt;
+      &lt;/gmd:parentIdentifier&gt;
+      &lt;gmd:hierarchyLevel&gt;
+        &lt;gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset"/&gt;
+      &lt;/gmd:hierarchyLevel&gt;
+      &lt;gmd:contact&gt;
+        &lt;gmd:CI_ResponsibleParty&gt;
+          &lt;gmd:organisationName&gt;
+            &lt;gco:CharacterString&gt;European Environment Agency&lt;/gco:CharacterString&gt;
+          &lt;/gmd:organisationName&gt;
+          &lt;gmd:contactInfo&gt;
+            &lt;gmd:CI_Contact&gt;
+              &lt;gmd:address&gt;
+                &lt;gmd:CI_Address&gt;
+                  &lt;gmd:deliveryPoint&gt;
+                    &lt;gco:CharacterString&gt;Kongens Nytorv 6&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:deliveryPoint&gt;
+                  &lt;gmd:city&gt;
+                    &lt;gco:CharacterString&gt;Copenhagen&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:city&gt;
+                  &lt;gmd:administrativeArea&gt;
+                    &lt;gco:CharacterString&gt;K&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:administrativeArea&gt;
+                  &lt;gmd:postalCode&gt;
+                    &lt;gco:CharacterString&gt;1050&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:postalCode&gt;
+                  &lt;gmd:country&gt;
+                    &lt;gco:CharacterString&gt;Denmark&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:country&gt;
+                  &lt;gmd:electronicMailAddress&gt;
+                    &lt;gco:CharacterString&gt;eea.enquiries@eea.europa.eu&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:electronicMailAddress&gt;
+                &lt;/gmd:CI_Address&gt;
+              &lt;/gmd:address&gt;
+            &lt;/gmd:CI_Contact&gt;
+          &lt;/gmd:contactInfo&gt;
+          &lt;gmd:role&gt;
+            &lt;gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact"/&gt;
+          &lt;/gmd:role&gt;
+        &lt;/gmd:CI_ResponsibleParty&gt;
+      &lt;/gmd:contact&gt;
+      &lt;gmd:dateStamp&gt;
+        &lt;gco:DateTime&gt;2014-12-09T08:52:17&lt;/gco:DateTime&gt;
+      &lt;/gmd:dateStamp&gt;
+      &lt;gmd:metadataStandardName&gt;
+        &lt;gco:CharacterString xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx"&gt;ISO 19115:2003/19139&lt;/gco:CharacterString&gt;
+      &lt;/gmd:metadataStandardName&gt;
+      &lt;gmd:metadataStandardVersion&gt;
+        &lt;gco:CharacterString xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx"&gt;1.0&lt;/gco:CharacterString&gt;
+      &lt;/gmd:metadataStandardVersion&gt;
+      &lt;gmd:referenceSystemInfo&gt;
+        &lt;gmd:MD_ReferenceSystem&gt;
+          &lt;gmd:referenceSystemIdentifier&gt;
+            &lt;gmd:RS_Identifier&gt;
+              &lt;gmd:code&gt;
+                &lt;gco:CharacterString&gt;http://www.opengis.net/def/crs/EPSG/0/4936&lt;/gco:CharacterString&gt;
+              &lt;/gmd:code&gt;
+              &lt;gmd:codeSpace&gt;
+                &lt;gco:CharacterString&gt;EPSG&lt;/gco:CharacterString&gt;
+              &lt;/gmd:codeSpace&gt;
+            &lt;/gmd:RS_Identifier&gt;
+          &lt;/gmd:referenceSystemIdentifier&gt;
+        &lt;/gmd:MD_ReferenceSystem&gt;
+      &lt;/gmd:referenceSystemInfo&gt;
+      &lt;gmd:identificationInfo&gt;
+        &lt;gmd:MD_DataIdentification&gt;
+          &lt;gmd:citation&gt;
+            &lt;gmd:CI_Citation&gt;
+              &lt;gmd:title&gt;
+                &lt;gco:CharacterString&gt;Urban Atlas - Spain - Santander&lt;/gco:CharacterString&gt;
+              &lt;/gmd:title&gt;
+              &lt;gmd:date&gt;
+                &lt;gmd:CI_Date&gt;
+                  &lt;gmd:date&gt;
+                    &lt;gco:Date&gt;2010-05-28&lt;/gco:Date&gt;
+                  &lt;/gmd:date&gt;
+                  &lt;gmd:dateType&gt;
+                    &lt;gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/&gt;
+                  &lt;/gmd:dateType&gt;
+                &lt;/gmd:CI_Date&gt;
+              &lt;/gmd:date&gt;
+              &lt;gmd:date&gt;
+                &lt;gmd:CI_Date&gt;
+                  &lt;gmd:date&gt;
+                    &lt;gco:Date&gt;2010-05-28&lt;/gco:Date&gt;
+                  &lt;/gmd:date&gt;
+                  &lt;gmd:dateType&gt;
+                    &lt;gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation"/&gt;
+                  &lt;/gmd:dateType&gt;
+                &lt;/gmd:CI_Date&gt;
+              &lt;/gmd:date&gt;
+              &lt;gmd:identifier&gt;
+                &lt;gmd:RS_Identifier&gt;
+                  &lt;gmd:code&gt;
+                    &lt;gco:CharacterString&gt;regio_v_32630_10_k_urban-atlas-es015l_santander_2006&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:code&gt;
+                &lt;/gmd:RS_Identifier&gt;
+              &lt;/gmd:identifier&gt;
+            &lt;/gmd:CI_Citation&gt;
+          &lt;/gmd:citation&gt;
+          &lt;gmd:abstract&gt;
+            &lt;gco:CharacterString&gt;The Urban Atlas is providing pan-European comparable land use and land cover data for Large Urban Zones with more than 100.000 inhabitants as defined by the Urban Audit. Urban Atlas' mission is to provide high-resolution hotspot mapping of changes in urban spaces and indicators for users such as city governments, the European Environment Agency (EEA) and European Commission departments.&lt;/gco:CharacterString&gt;
+          &lt;/gmd:abstract&gt;
+          &lt;gmd:pointOfContact&gt;
+            &lt;gmd:CI_ResponsibleParty&gt;
+              &lt;gmd:organisationName&gt;
+                &lt;gco:CharacterString&gt;European Environment Agency&lt;/gco:CharacterString&gt;
+              &lt;/gmd:organisationName&gt;
+              &lt;gmd:contactInfo&gt;
+                &lt;gmd:CI_Contact&gt;
+                  &lt;gmd:address&gt;
+                    &lt;gmd:CI_Address&gt;
+                      &lt;gmd:deliveryPoint&gt;
+                        &lt;gco:CharacterString&gt;Kongens Nytorv 6&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:deliveryPoint&gt;
+                      &lt;gmd:city&gt;
+                        &lt;gco:CharacterString&gt;Copenhagen&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:city&gt;
+                      &lt;gmd:administrativeArea&gt;
+                        &lt;gco:CharacterString&gt;K&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:administrativeArea&gt;
+                      &lt;gmd:postalCode&gt;
+                        &lt;gco:CharacterString&gt;1050&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:postalCode&gt;
+                      &lt;gmd:country&gt;
+                        &lt;gco:CharacterString&gt;Denmark&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:country&gt;
+                      &lt;gmd:electronicMailAddress&gt;
+                        &lt;gco:CharacterString&gt;eea.enquiries@eea.europa.eu&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:electronicMailAddress&gt;
+                    &lt;/gmd:CI_Address&gt;
+                  &lt;/gmd:address&gt;
+                  &lt;gmd:onlineResource&gt;
+                    &lt;gmd:CI_OnlineResource&gt;
+                      &lt;gmd:linkage&gt;
+                        &lt;gmd:URL&gt;http://www.eea.europa.eu&lt;/gmd:URL&gt;
+                      &lt;/gmd:linkage&gt;
+                      &lt;gmd:protocol&gt;
+                        &lt;gco:CharacterString&gt;WWW:LINK-1.0-http--link&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:protocol&gt;
+                      &lt;gmd:name&gt;
+                        &lt;gco:CharacterString&gt;Europen Environment Agency public website&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:name&gt;
+                      &lt;gmd:function&gt;
+                        &lt;gmd:CI_OnLineFunctionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information"/&gt;
+                      &lt;/gmd:function&gt;
+                    &lt;/gmd:CI_OnlineResource&gt;
+                  &lt;/gmd:onlineResource&gt;
+                &lt;/gmd:CI_Contact&gt;
+              &lt;/gmd:contactInfo&gt;
+              &lt;gmd:role&gt;
+                &lt;gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact"/&gt;
+              &lt;/gmd:role&gt;
+            &lt;/gmd:CI_ResponsibleParty&gt;
+          &lt;/gmd:pointOfContact&gt;
+          &lt;gmd:graphicOverview&gt;
+            &lt;gmd:MD_BrowseGraphic&gt;
+              &lt;gmd:fileName&gt;
+                &lt;gco:CharacterString&gt;http://sdi.eea.europa.eu/public/catalogue-graphic-overview/c8ecdabf-2e71-4d0b-b27d-9d409ce8cb6f.png&lt;/gco:CharacterString&gt;
+              &lt;/gmd:fileName&gt;
+            &lt;/gmd:MD_BrowseGraphic&gt;
+          &lt;/gmd:graphicOverview&gt;
+          &lt;gmd:descriptiveKeywords&gt;
+            &lt;gmd:MD_Keywords&gt;
+              &lt;gmd:keyword&gt;
+                &lt;gco:CharacterString&gt;Land use&lt;/gco:CharacterString&gt;
+              &lt;/gmd:keyword&gt;
+              &lt;gmd:thesaurusName&gt;
+                &lt;gmd:CI_Citation&gt;
+                  &lt;gmd:title&gt;
+                    &lt;gco:CharacterString&gt;GEMET - INSPIRE themes, version 1.0&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:title&gt;
+                  &lt;gmd:date&gt;
+                    &lt;gmd:CI_Date&gt;
+                      &lt;gmd:date&gt;
+                        &lt;gco:Date&gt;2008-06-01&lt;/gco:Date&gt;
+                      &lt;/gmd:date&gt;
+                      &lt;gmd:dateType&gt;
+                        &lt;gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/&gt;
+                      &lt;/gmd:dateType&gt;
+                    &lt;/gmd:CI_Date&gt;
+                  &lt;/gmd:date&gt;
+                &lt;/gmd:CI_Citation&gt;
+              &lt;/gmd:thesaurusName&gt;
+            &lt;/gmd:MD_Keywords&gt;
+          &lt;/gmd:descriptiveKeywords&gt;
+          &lt;gmd:descriptiveKeywords&gt;
+            &lt;gmd:MD_Keywords&gt;
+              &lt;gmd:keyword&gt;
+                &lt;gco:CharacterString&gt;urban area&lt;/gco:CharacterString&gt;
+              &lt;/gmd:keyword&gt;
+              &lt;gmd:keyword&gt;
+                &lt;gco:CharacterString&gt;land use&lt;/gco:CharacterString&gt;
+              &lt;/gmd:keyword&gt;
+              &lt;gmd:thesaurusName&gt;
+                &lt;gmd:CI_Citation&gt;
+                  &lt;gmd:title&gt;
+                    &lt;gco:CharacterString&gt;GEMET - Concepts, version 3.0&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:title&gt;
+                  &lt;gmd:date&gt;
+                    &lt;gmd:CI_Date&gt;
+                      &lt;gmd:date&gt;
+                        &lt;gco:Date&gt;2011-07-13&lt;/gco:Date&gt;
+                      &lt;/gmd:date&gt;
+                      &lt;gmd:dateType&gt;
+                        &lt;gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/&gt;
+                      &lt;/gmd:dateType&gt;
+                    &lt;/gmd:CI_Date&gt;
+                  &lt;/gmd:date&gt;
+                &lt;/gmd:CI_Citation&gt;
+              &lt;/gmd:thesaurusName&gt;
+            &lt;/gmd:MD_Keywords&gt;
+          &lt;/gmd:descriptiveKeywords&gt;
+          &lt;gmd:descriptiveKeywords&gt;
+            &lt;gmd:MD_Keywords&gt;
+              &lt;gmd:keyword&gt;
+                &lt;gco:CharacterString&gt;Spain&lt;/gco:CharacterString&gt;
+              &lt;/gmd:keyword&gt;
+              &lt;gmd:keyword&gt;
+                &lt;gco:CharacterString&gt;Santander&lt;/gco:CharacterString&gt;
+              &lt;/gmd:keyword&gt;
+              &lt;gmd:type&gt;
+                &lt;gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place"/&gt;
+              &lt;/gmd:type&gt;
+            &lt;/gmd:MD_Keywords&gt;
+          &lt;/gmd:descriptiveKeywords&gt;
+          &lt;gmd:resourceConstraints&gt;
+            &lt;gmd:MD_Constraints&gt;
+              &lt;gmd:useLimitation&gt;
+                &lt;gco:CharacterString&gt;EEA standard re-use policy: unless otherwise indicated, re-use of content on the EEA website for commercial or non-commercial purposes is permitted free of charge, provided that the source is acknowledged (http://www.eea.europa.eu/legal/copyright). Copyright holder: Directorate-General Enterprise and Industry.&lt;/gco:CharacterString&gt;
+              &lt;/gmd:useLimitation&gt;
+            &lt;/gmd:MD_Constraints&gt;
+          &lt;/gmd:resourceConstraints&gt;
+          &lt;gmd:resourceConstraints&gt;
+            &lt;gmd:MD_LegalConstraints&gt;
+              &lt;gmd:accessConstraints&gt;
+                &lt;gmd:MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions"/&gt;
+              &lt;/gmd:accessConstraints&gt;
+              &lt;gmd:otherConstraints&gt;
+                &lt;gco:CharacterString&gt;no limitations&lt;/gco:CharacterString&gt;
+              &lt;/gmd:otherConstraints&gt;
+            &lt;/gmd:MD_LegalConstraints&gt;
+          &lt;/gmd:resourceConstraints&gt;
+          &lt;gmd:spatialRepresentationType&gt;
+            &lt;gmd:MD_SpatialRepresentationTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector"/&gt;
+          &lt;/gmd:spatialRepresentationType&gt;
+          &lt;gmd:spatialResolution&gt;
+            &lt;gmd:MD_Resolution&gt;
+              &lt;gmd:equivalentScale&gt;
+                &lt;gmd:MD_RepresentativeFraction&gt;
+                  &lt;gmd:denominator&gt;
+                    &lt;gco:Integer&gt;10000&lt;/gco:Integer&gt;
+                  &lt;/gmd:denominator&gt;
+                &lt;/gmd:MD_RepresentativeFraction&gt;
+              &lt;/gmd:equivalentScale&gt;
+            &lt;/gmd:MD_Resolution&gt;
+          &lt;/gmd:spatialResolution&gt;
+          &lt;gmd:language&gt;
+            &lt;gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng"/&gt;
+          &lt;/gmd:language&gt;
+          &lt;gmd:topicCategory&gt;
+            &lt;gmd:MD_TopicCategoryCode&gt;society&lt;/gmd:MD_TopicCategoryCode&gt;
+          &lt;/gmd:topicCategory&gt;
+          &lt;gmd:extent&gt;
+            &lt;gmd:EX_Extent&gt;
+              &lt;gmd:geographicElement&gt;
+                &lt;gmd:EX_GeographicBoundingBox&gt;
+                  &lt;gmd:westBoundLongitude&gt;
+                    &lt;gco:Decimal&gt;-4.015566&lt;/gco:Decimal&gt;
+                  &lt;/gmd:westBoundLongitude&gt;
+                  &lt;gmd:eastBoundLongitude&gt;
+                    &lt;gco:Decimal&gt;-3.6115434&lt;/gco:Decimal&gt;
+                  &lt;/gmd:eastBoundLongitude&gt;
+                  &lt;gmd:southBoundLatitude&gt;
+                    &lt;gco:Decimal&gt;43.245655&lt;/gco:Decimal&gt;
+                  &lt;/gmd:southBoundLatitude&gt;
+                  &lt;gmd:northBoundLatitude&gt;
+                    &lt;gco:Decimal&gt;43.49501&lt;/gco:Decimal&gt;
+                  &lt;/gmd:northBoundLatitude&gt;
+                &lt;/gmd:EX_GeographicBoundingBox&gt;
+              &lt;/gmd:geographicElement&gt;
+            &lt;/gmd:EX_Extent&gt;
+          &lt;/gmd:extent&gt;
+          &lt;gmd:extent&gt;
+            &lt;gmd:EX_Extent&gt;
+              &lt;gmd:temporalElement&gt;
+                &lt;gmd:EX_TemporalExtent&gt;
+                  &lt;gmd:extent&gt;
+                    &lt;gml:TimePeriod gml:id="d28e322a1049886"&gt;
+                      &lt;gml:beginPosition&gt;2006-10-13&lt;/gml:beginPosition&gt;
+                      &lt;gml:endPosition&gt;2006-10-13&lt;/gml:endPosition&gt;
+                    &lt;/gml:TimePeriod&gt;
+                  &lt;/gmd:extent&gt;
+                &lt;/gmd:EX_TemporalExtent&gt;
+              &lt;/gmd:temporalElement&gt;
+            &lt;/gmd:EX_Extent&gt;
+          &lt;/gmd:extent&gt;
+        &lt;/gmd:MD_DataIdentification&gt;
+      &lt;/gmd:identificationInfo&gt;
+      &lt;gmd:distributionInfo&gt;
+        &lt;gmd:MD_Distribution&gt;
+          &lt;gmd:distributionFormat&gt;
+            &lt;gmd:MD_Format&gt;
+              &lt;gmd:name&gt;
+                &lt;gco:CharacterString&gt;SHP&lt;/gco:CharacterString&gt;
+              &lt;/gmd:name&gt;
+              &lt;gmd:version gco:nilReason="missing"&gt;
+                &lt;gco:CharacterString/&gt;
+              &lt;/gmd:version&gt;
+            &lt;/gmd:MD_Format&gt;
+          &lt;/gmd:distributionFormat&gt;
+          &lt;gmd:transferOptions&gt;
+            &lt;gmd:MD_DigitalTransferOptions&gt;
+              &lt;gmd:onLine&gt;
+                &lt;gmd:CI_OnlineResource&gt;
+                  &lt;gmd:linkage&gt;
+                    &lt;gmd:URL&gt;http://www.eea.europa.eu/data-and-maps/data/ds_resolveuid/9df69b925454fd267512ea65898dbbdc&lt;/gmd:URL&gt;
+                  &lt;/gmd:linkage&gt;
+                  &lt;gmd:protocol&gt;
+                    &lt;gco:CharacterString&gt;WWW:LINK-1.0-http--link&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:protocol&gt;
+                  &lt;gmd:description&gt;
+                    &lt;gco:CharacterString&gt;GMES Urban Atlas download page&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:description&gt;
+                  &lt;gmd:function&gt;
+                    &lt;gmd:CI_OnLineFunctionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="download"/&gt;
+                  &lt;/gmd:function&gt;
+                &lt;/gmd:CI_OnlineResource&gt;
+              &lt;/gmd:onLine&gt;
+            &lt;/gmd:MD_DigitalTransferOptions&gt;
+          &lt;/gmd:transferOptions&gt;
+        &lt;/gmd:MD_Distribution&gt;
+      &lt;/gmd:distributionInfo&gt;
+      &lt;gmd:dataQualityInfo&gt;
+        &lt;gmd:DQ_DataQuality&gt;
+          &lt;gmd:scope&gt;
+            &lt;gmd:DQ_Scope&gt;
+              &lt;gmd:level&gt;
+                &lt;gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset"/&gt;
+              &lt;/gmd:level&gt;
+            &lt;/gmd:DQ_Scope&gt;
+          &lt;/gmd:scope&gt;
+          &lt;gmd:report&gt;
+            &lt;gmd:DQ_DomainConsistency&gt;
+              &lt;gmd:result&gt;
+                &lt;gmd:DQ_ConformanceResult&gt;
+                  &lt;gmd:specification&gt;
+                    &lt;gmd:CI_Citation&gt;
+                      &lt;gmd:title&gt;
+                        &lt;gco:CharacterString&gt;Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services&lt;/gco:CharacterString&gt;
+                      &lt;/gmd:title&gt;
+                      &lt;gmd:date&gt;
+                        &lt;gmd:CI_Date&gt;
+                          &lt;gmd:date&gt;
+                            &lt;gco:Date&gt;2010-12-08&lt;/gco:Date&gt;
+                          &lt;/gmd:date&gt;
+                          &lt;gmd:dateType&gt;
+                            &lt;gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/&gt;
+                          &lt;/gmd:dateType&gt;
+                        &lt;/gmd:CI_Date&gt;
+                      &lt;/gmd:date&gt;
+                    &lt;/gmd:CI_Citation&gt;
+                  &lt;/gmd:specification&gt;
+                  &lt;gmd:explanation&gt;
+                    &lt;gco:CharacterString&gt;See the referenced specification&lt;/gco:CharacterString&gt;
+                  &lt;/gmd:explanation&gt;
+                  &lt;gmd:pass&gt;
+                    &lt;gco:Boolean&gt;true&lt;/gco:Boolean&gt;
+                  &lt;/gmd:pass&gt;
+                &lt;/gmd:DQ_ConformanceResult&gt;
+              &lt;/gmd:result&gt;
+            &lt;/gmd:DQ_DomainConsistency&gt;
+          &lt;/gmd:report&gt;
+          &lt;gmd:lineage&gt;
+            &lt;gmd:LI_Lineage&gt;
+              &lt;gmd:statement&gt;
+                &lt;gco:CharacterString&gt;Earth Observation (EO) Data used:
+                      * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)&lt;/gco:CharacterString&gt;
+              &lt;/gmd:statement&gt;
+            &lt;/gmd:LI_Lineage&gt;
+          &lt;/gmd:lineage&gt;
+        &lt;/gmd:DQ_DataQuality&gt;
+      &lt;/gmd:dataQualityInfo&gt;
+    &lt;/gmd:MD_Metadata&gt;</str>
+    <str name="id">81aea739-4d21-427d-bec4-082cb64b825b</str>
+    <str name="metadataIdentifier">81aea739-4d21-427d-bec4-082cb64b825b</str>
+    <str name="territory">demo</str>
+    <str name="harvesterId">http://apps.titellus.net/geonetwork/srv/eng/csw?</str>
+    <arr name="harvestedDate">
+      <date>2014-12-09T08:47:56Z</date>
+    </arr>
+    <date name="dateStamp">2014-12-09T08:52:17Z</date>
+    <str name="mainLanguage">eng</str>
+    <arr name="resourceType">
+      <str>dataset</str>
+    </arr>
+    <arr name="Org">
+      <str>European Environment Agency</str>
+    </arr>
+    <arr name="pointOfContactOrg">
+      <str>European Environment Agency</str>
+    </arr>
+    <arr name="contact">
+      <str>{
+      org:"European Environment Agency",
+      role:"pointOfContact"
+      }
+    </str>
+    </arr>
+    <str name="resourceTitle">Urban Atlas - Spain - Santander</str>
+    <arr name="publicationDateForResource">
+      <str>2010-05-28</str>
+    </arr>
+    <arr name="creationDateForResource">
+      <str>2010-05-28</str>
+    </arr>
+    <str name="resourceAbstract">The Urban Atlas is providing pan-European comparable land use and land cover data for Large Urban Zones with more than 100.000 inhabitants as defined by the Urban Audit. Urban Atlas' mission is to provide high-resolution hotspot mapping of changes in urban spaces and indicators for users such as city governments, the European Environment Agency (EEA) and European Commission departments.</str>
+    <arr name="OrgForResource">
+      <str>European Environment Agency</str>
+    </arr>
+    <arr name="pointOfContactOrgForResource">
+      <str>European Environment Agency</str>
+    </arr>
+    <arr name="contactForResource">
+      <str>{
+      org:"European Environment Agency",
+      role:"pointOfContact"
+      }
+    </str>
+    </arr>
+    <arr name="overviewUrl">
+      <str>http://sdi.eea.europa.eu/public/catalogue-graphic-overview/c8ecdabf-2e71-4d0b-b27d-9d409ce8cb6f.png</str>
+    </arr>
+    <arr name="resourceLanguage">
+      <str>eng</str>
+    </arr>
+    <arr name="inspireTheme_syn">
+      <str>Land use</str>
+    </arr>
+    <arr name="inspireTheme">
+      <str>land use</str>
+    </arr>
+    <arr name="inspireAnnex">
+      <str>iii</str>
+    </arr>
+    <int name="numberOfInspireTheme">1</int>
+    <arr name="tag">
+      <str>Land use</str>
+      <str>urban area</str>
+      <str>land use</str>
+      <str>Spain</str>
+      <str>Santander</str>
+    </arr>
+    <arr name="topic">
+      <str>society</str>
+    </arr>
+    <arr name="resolutionScaleDenominator">
+      <str>10000</str>
+    </arr>
+    <arr name="spatialRepresentationType">
+      <str>vector</str>
+    </arr>
+    <arr name="useLimitation">
+      <str>EEA standard re-use policy: unless otherwise indicated, re-use of content on the EEA website for commercial or non-commercial purposes is permitted free of charge, provided that the source is acknowledged (http://www.eea.europa.eu/legal/copyright). Copyright holder: Directorate-General Enterprise and Industry.</str>
+    </arr>
+    <arr name="accessConstraints">
+      <str>otherRestrictions</str>
+    </arr>
+    <arr name="otherConstraints">
+      <str>no limitations</str>
+    </arr>
+    <arr name="coordinateSystem">
+      <str>http://www.opengis.net/def/crs/EPSG/0/4936</str>
+    </arr>
+    <arr name="inspireConformResource">
+      <bool>true</bool>
+    </arr>
+    <arr name="lineage">
+      <str>Earth Observation (EO) Data used:
+                      * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)</str>
+    </arr>
+    <str name="validInfo">No validation issues were found. The metadata information extracted is available at the following URL: http://inspire-geoportal.ec.europa.eu/resources/sandbox/INSPIRE-be0fdc4d-7f7c-11e4-9dc1-52540004b857_20141209-092406/datasets/1</str>
+    <str name="validDate">20141209T09:24:193</str>
+    <bool name="isValid">true</bool>
+    <str name="validReport">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;ns2:Resource xmlns="http://inspire.ec.europa.eu/schemas/common/1.0" xmlns:ns2="http://inspire.ec.europa.eu/schemas/geoportal/1.0"&gt;&lt;ns2:SpatialDataSetResource remoteIdentifier="81aea739-4d21-427d-bec4-082cb64b825b"&gt;&lt;ResourceTitle&gt;Urban Atlas - Spain - Santander&lt;/ResourceTitle&gt;&lt;ResourceAbstract&gt;The Urban Atlas is providing pan-European comparable land use and land cover data for Large Urban Zones with more than 100.000 inhabitants as defined by the Urban Audit. Urban Atlas' mission is to provide high-resolution hotspot mapping of changes in urban spaces and indicators for users such as city governments, the European Environment Agency (EEA) and European Commission departments.&lt;/ResourceAbstract&gt;&lt;ResourceType&gt;dataset&lt;/ResourceType&gt;&lt;ResourceLocator originalEncodingReference="gmd:transferOptions" functionCodeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"&gt;&lt;URL&gt;http://www.eea.europa.eu/data-and-maps/data/ds_resolveuid/9df69b925454fd267512ea65898dbbdc&lt;/URL&gt;&lt;MediaType&gt;application/xhtml+xml&lt;/MediaType&gt;&lt;LinkDescription&gt;GMES Urban Atlas download page&lt;/LinkDescription&gt;&lt;InitialResponseMilliseconds&gt;238&lt;/InitialResponseMilliseconds&gt;&lt;BytesTransferred&gt;459246&lt;/BytesTransferred&gt;&lt;TimeElapsed&gt;186&lt;/TimeElapsed&gt;&lt;AverageBytesPerSecond&gt;2469064.5161290322&lt;/AverageBytesPerSecond&gt;&lt;/ResourceLocator&gt;&lt;MandatoryKeyword&gt;&lt;OriginatingControlledVocabulary&gt;&lt;Title&gt;GEMET - INSPIRE themes&lt;/Title&gt;&lt;DateOfPublication&gt;2008-06-01&lt;/DateOfPublication&gt;&lt;/OriginatingControlledVocabulary&gt;&lt;KeywordValue&gt;Land use&lt;/KeywordValue&gt;&lt;KeywordLocator&gt;&lt;URL&gt;#&lt;/URL&gt;&lt;LinkDescription metadataLanguage="eng"&gt;LAND_USE&lt;/LinkDescription&gt;&lt;/KeywordLocator&gt;&lt;/MandatoryKeyword&gt;&lt;Keyword&gt;&lt;OriginatingControlledVocabulary&gt;&lt;Title&gt;GEMET - Concepts, version 3.0&lt;/Title&gt;&lt;DateOfPublication&gt;2011-07-13&lt;/DateOfPublication&gt;&lt;/OriginatingControlledVocabulary&gt;&lt;KeywordValue&gt;urban area&lt;/KeywordValue&gt;&lt;/Keyword&gt;&lt;Keyword&gt;&lt;OriginatingControlledVocabulary&gt;&lt;Title&gt;GEMET - Concepts, version 3.0&lt;/Title&gt;&lt;DateOfPublication&gt;2011-07-13&lt;/DateOfPublication&gt;&lt;/OriginatingControlledVocabulary&gt;&lt;KeywordValue&gt;land use&lt;/KeywordValue&gt;&lt;/Keyword&gt;&lt;Keyword&gt;&lt;KeywordValue&gt;Spain&lt;/KeywordValue&gt;&lt;/Keyword&gt;&lt;Keyword&gt;&lt;KeywordValue&gt;Santander&lt;/KeywordValue&gt;&lt;/Keyword&gt;&lt;GeographicBoundingBox&gt;&lt;East&gt;-03.6115434&lt;/East&gt;&lt;West&gt;-4.015566&lt;/West&gt;&lt;North&gt;43.49501&lt;/North&gt;&lt;South&gt;43.245655&lt;/South&gt;&lt;/GeographicBoundingBox&gt;&lt;TemporalReference&gt;&lt;TemporalExtent&gt;&lt;IntervalOfDates&gt;&lt;StartingDate&gt;2006-10-13&lt;/StartingDate&gt;&lt;EndDate&gt;2006-10-13&lt;/EndDate&gt;&lt;/IntervalOfDates&gt;&lt;/TemporalExtent&gt;&lt;/TemporalReference&gt;&lt;TemporalReference&gt;&lt;DateOfCreation&gt;2010-05-28&lt;/DateOfCreation&gt;&lt;/TemporalReference&gt;&lt;TemporalReference&gt;&lt;DateOfPublication&gt;2010-05-28&lt;/DateOfPublication&gt;&lt;/TemporalReference&gt;&lt;SpatialResolution&gt;&lt;EquivalentScale&gt;10000&lt;/EquivalentScale&gt;&lt;/SpatialResolution&gt;&lt;Conformity&gt;&lt;Specification&gt;&lt;Title&gt;Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services&lt;/Title&gt;&lt;DateOfPublication&gt;2010-12-08&lt;/DateOfPublication&gt;&lt;/Specification&gt;&lt;Degree&gt;conformant&lt;/Degree&gt;&lt;/Conformity&gt;&lt;ConditionsForAccessAndUse&gt;EEA standard re-use policy: unless otherwise indicated, re-use of content on the EEA website for commercial or non-commercial purposes is permitted free of charge, provided that the source is acknowledged (http://www.eea.europa.eu/legal/copyright). Copyright holder: Directorate-General Enterprise and Industry.&lt;/ConditionsForAccessAndUse&gt;&lt;LimitationsOnPublicAccess&gt;no limitations&lt;/LimitationsOnPublicAccess&gt;&lt;ResponsibleOrganisation&gt;&lt;ResponsibleParty&gt;&lt;OrganisationName&gt;European Environment Agency&lt;/OrganisationName&gt;&lt;EmailAddress&gt;eea.enquiries@eea.europa.eu&lt;/EmailAddress&gt;&lt;/ResponsibleParty&gt;&lt;ResponsiblePartyRole&gt;pointOfContact&lt;/ResponsiblePartyRole&gt;&lt;/ResponsibleOrganisation&gt;&lt;MetadataPointOfContact&gt;&lt;OrganisationName&gt;European Environment Agency&lt;/OrganisationName&gt;&lt;EmailAddress&gt;eea.enquiries@eea.europa.eu&lt;/EmailAddress&gt;&lt;/MetadataPointOfContact&gt;&lt;MetadataDate&gt;2014-12-09T08:52:17&lt;/MetadataDate&gt;&lt;MetadataLanguage&gt;eng&lt;/MetadataLanguage&gt;&lt;UniqueResourceIdentifier&gt;&lt;Code&gt;regio_v_32630_10_k_urban-atlas-es015l_santander_2006&lt;/Code&gt;&lt;/UniqueResourceIdentifier&gt;&lt;ResourceLanguage&gt;eng&lt;/ResourceLanguage&gt;&lt;TopicCategory&gt;society&lt;/TopicCategory&gt;&lt;Lineage&gt;Earth Observation (EO) Data used:
+                      * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)&lt;/Lineage&gt;&lt;CoordinateReferenceSystem&gt;&lt;UniqueResourceIdentifier&gt;&lt;Code&gt;http://www.opengis.net/def/crs/EPSG/0/4936&lt;/Code&gt;&lt;Namespace&gt;EPSG&lt;/Namespace&gt;&lt;/UniqueResourceIdentifier&gt;&lt;/CoordinateReferenceSystem&gt;&lt;/ns2:SpatialDataSetResource&gt;&lt;ns2:AuditRecord&gt;&lt;ns2:CreationDate&gt;2014-12-09T09:24:06.993&lt;/ns2:CreationDate&gt;&lt;ns2:LastUpdateDate&gt;2014-12-09T09:24:09.162&lt;/ns2:LastUpdateDate&gt;&lt;/ns2:AuditRecord&gt;&lt;ns2:SourceMetadataLocator remoteIdentifier="81aea739-4d21-427d-bec4-082cb64b825b"&gt;&lt;URL&gt;../../downloaded.xml&lt;/URL&gt;&lt;MediaType&gt;application/vnd.iso.19139+xml&lt;/MediaType&gt;&lt;/ns2:SourceMetadataLocator&gt;&lt;ns2:GeoportalMetadataLocator&gt;&lt;URL&gt;/sandbox/INSPIRE-be0fdc4d-7f7c-11e4-9dc1-52540004b857_20141209-092406/datasets/1&lt;/URL&gt;&lt;MediaType&gt;application/vnd.eu.europa.ec.inspire.geoportal.resource.dataset+xml&lt;/MediaType&gt;&lt;LinkDescription metadataLanguage="eng"&gt;Urban Atlas - Spain - Santander (European Environment Agency)&lt;/LinkDescription&gt;&lt;FileName&gt;inspire.geoportal.resource.dataset.xml&lt;/FileName&gt;&lt;/ns2:GeoportalMetadataLocator&gt;&lt;ns2:OriginalRepresentation&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;gmd:MD_Metadata xmlns:gmd=&amp;quot;http://www.isotc211.org/2005/gmd&amp;quot;
+                 xmlns:gco=&amp;quot;http://www.isotc211.org/2005/gco&amp;quot;
+                 xmlns:xlink=&amp;quot;http://www.w3.org/1999/xlink&amp;quot;
+                 xmlns:gml=&amp;quot;http://www.opengis.net/gml&amp;quot;
+                 xmlns:geonet=&amp;quot;http://www.fao.org/geonetwork&amp;quot;
+                 xmlns:csw=&amp;quot;http://www.opengis.net/cat/csw/2.0.2&amp;quot;
+                 xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+                 xsi:schemaLocation=&amp;quot;http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd&amp;quot;&amp;gt;
+      &amp;lt;gmd:fileIdentifier&amp;gt;
+        &amp;lt;gco:CharacterString&amp;gt;81aea739-4d21-427d-bec4-082cb64b825b&amp;lt;/gco:CharacterString&amp;gt;
+      &amp;lt;/gmd:fileIdentifier&amp;gt;
+      &amp;lt;gmd:language&amp;gt;
+        &amp;lt;gmd:LanguageCode codeList=&amp;quot;http://www.loc.gov/standards/iso639-2/&amp;quot; codeListValue=&amp;quot;eng&amp;quot;/&amp;gt;
+      &amp;lt;/gmd:language&amp;gt;
+      &amp;lt;gmd:characterSet&amp;gt;
+        &amp;lt;gmd:MD_CharacterSetCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode&amp;quot;
+                               codeListValue=&amp;quot;utf8&amp;quot;/&amp;gt;
+      &amp;lt;/gmd:characterSet&amp;gt;
+      &amp;lt;gmd:parentIdentifier&amp;gt;
+        &amp;lt;gco:CharacterString&amp;gt;650c3735-28c7-43bb-b521-3952ce4d6246&amp;lt;/gco:CharacterString&amp;gt;
+      &amp;lt;/gmd:parentIdentifier&amp;gt;
+      &amp;lt;gmd:hierarchyLevel&amp;gt;
+        &amp;lt;gmd:MD_ScopeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode&amp;quot;
+                        codeListValue=&amp;quot;dataset&amp;quot;/&amp;gt;
+      &amp;lt;/gmd:hierarchyLevel&amp;gt;
+      &amp;lt;gmd:contact&amp;gt;
+        &amp;lt;gmd:CI_ResponsibleParty&amp;gt;
+          &amp;lt;gmd:organisationName&amp;gt;
+            &amp;lt;gco:CharacterString&amp;gt;European Environment Agency&amp;lt;/gco:CharacterString&amp;gt;
+          &amp;lt;/gmd:organisationName&amp;gt;
+          &amp;lt;gmd:contactInfo&amp;gt;
+            &amp;lt;gmd:CI_Contact&amp;gt;
+              &amp;lt;gmd:address&amp;gt;
+                  &amp;lt;gmd:CI_Address&amp;gt;
+                     &amp;lt;gmd:deliveryPoint&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;Kongens Nytorv 6&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:deliveryPoint&amp;gt;
+                     &amp;lt;gmd:city&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;Copenhagen&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:city&amp;gt;
+                     &amp;lt;gmd:administrativeArea&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;K&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:administrativeArea&amp;gt;
+                     &amp;lt;gmd:postalCode&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;1050&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:postalCode&amp;gt;
+                     &amp;lt;gmd:country&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;Denmark&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:country&amp;gt;
+                     &amp;lt;gmd:electronicMailAddress&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;eea.enquiries@eea.europa.eu&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:electronicMailAddress&amp;gt;
+                  &amp;lt;/gmd:CI_Address&amp;gt;
+              &amp;lt;/gmd:address&amp;gt;
+            &amp;lt;/gmd:CI_Contact&amp;gt;
+          &amp;lt;/gmd:contactInfo&amp;gt;
+          &amp;lt;gmd:role&amp;gt;
+            &amp;lt;gmd:CI_RoleCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode&amp;quot;
+                             codeListValue=&amp;quot;pointOfContact&amp;quot;/&amp;gt;
+          &amp;lt;/gmd:role&amp;gt;
+        &amp;lt;/gmd:CI_ResponsibleParty&amp;gt;
+      &amp;lt;/gmd:contact&amp;gt;
+      &amp;lt;gmd:dateStamp&amp;gt;
+        &amp;lt;gco:DateTime&amp;gt;2014-12-09T08:52:17&amp;lt;/gco:DateTime&amp;gt;
+      &amp;lt;/gmd:dateStamp&amp;gt;
+      &amp;lt;gmd:metadataStandardName&amp;gt;
+        &amp;lt;gco:CharacterString xmlns:srv=&amp;quot;http://www.isotc211.org/2005/srv&amp;quot;
+                           xmlns:gmx=&amp;quot;http://www.isotc211.org/2005/gmx&amp;quot;&amp;gt;ISO 19115:2003/19139&amp;lt;/gco:CharacterString&amp;gt;
+      &amp;lt;/gmd:metadataStandardName&amp;gt;
+      &amp;lt;gmd:metadataStandardVersion&amp;gt;
+        &amp;lt;gco:CharacterString xmlns:srv=&amp;quot;http://www.isotc211.org/2005/srv&amp;quot;
+                           xmlns:gmx=&amp;quot;http://www.isotc211.org/2005/gmx&amp;quot;&amp;gt;1.0&amp;lt;/gco:CharacterString&amp;gt;
+      &amp;lt;/gmd:metadataStandardVersion&amp;gt;
+      &amp;lt;gmd:referenceSystemInfo&amp;gt;
+        &amp;lt;gmd:MD_ReferenceSystem&amp;gt;
+          &amp;lt;gmd:referenceSystemIdentifier&amp;gt;
+            &amp;lt;gmd:RS_Identifier&amp;gt;
+              &amp;lt;gmd:code&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;http://www.opengis.net/def/crs/EPSG/0/4936&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:code&amp;gt;
+              &amp;lt;gmd:codeSpace&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;EPSG&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:codeSpace&amp;gt;
+            &amp;lt;/gmd:RS_Identifier&amp;gt;
+          &amp;lt;/gmd:referenceSystemIdentifier&amp;gt;
+        &amp;lt;/gmd:MD_ReferenceSystem&amp;gt;
+      &amp;lt;/gmd:referenceSystemInfo&amp;gt;
+      &amp;lt;gmd:identificationInfo&amp;gt;
+        &amp;lt;gmd:MD_DataIdentification&amp;gt;
+          &amp;lt;gmd:citation&amp;gt;
+            &amp;lt;gmd:CI_Citation&amp;gt;
+              &amp;lt;gmd:title&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;Urban Atlas - Spain - Santander&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:title&amp;gt;
+              &amp;lt;gmd:date&amp;gt;
+                  &amp;lt;gmd:CI_Date&amp;gt;
+                     &amp;lt;gmd:date&amp;gt;
+                        &amp;lt;gco:Date&amp;gt;2010-05-28&amp;lt;/gco:Date&amp;gt;
+                     &amp;lt;/gmd:date&amp;gt;
+                     &amp;lt;gmd:dateType&amp;gt;
+                        &amp;lt;gmd:CI_DateTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode&amp;quot;
+                                             codeListValue=&amp;quot;publication&amp;quot;/&amp;gt;
+                     &amp;lt;/gmd:dateType&amp;gt;
+                  &amp;lt;/gmd:CI_Date&amp;gt;
+              &amp;lt;/gmd:date&amp;gt;
+              &amp;lt;gmd:date&amp;gt;
+                  &amp;lt;gmd:CI_Date&amp;gt;
+                     &amp;lt;gmd:date&amp;gt;
+                        &amp;lt;gco:Date&amp;gt;2010-05-28&amp;lt;/gco:Date&amp;gt;
+                     &amp;lt;/gmd:date&amp;gt;
+                     &amp;lt;gmd:dateType&amp;gt;
+                        &amp;lt;gmd:CI_DateTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode&amp;quot;
+                                             codeListValue=&amp;quot;creation&amp;quot;/&amp;gt;
+                     &amp;lt;/gmd:dateType&amp;gt;
+                  &amp;lt;/gmd:CI_Date&amp;gt;
+              &amp;lt;/gmd:date&amp;gt;
+              &amp;lt;gmd:identifier&amp;gt;
+                  &amp;lt;gmd:RS_Identifier&amp;gt;
+                     &amp;lt;gmd:code&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;regio_v_32630_10_k_urban-atlas-es015l_santander_2006&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:code&amp;gt;
+                  &amp;lt;/gmd:RS_Identifier&amp;gt;
+              &amp;lt;/gmd:identifier&amp;gt;
+            &amp;lt;/gmd:CI_Citation&amp;gt;
+          &amp;lt;/gmd:citation&amp;gt;
+          &amp;lt;gmd:abstract&amp;gt;
+            &amp;lt;gco:CharacterString&amp;gt;The Urban Atlas is providing pan-European comparable land use and land cover data for Large Urban Zones with more than 100.000 inhabitants as defined by the Urban Audit. Urban Atlas' mission is to provide high-resolution hotspot mapping of changes in urban spaces and indicators for users such as city governments, the European Environment Agency (EEA) and European Commission departments.&amp;lt;/gco:CharacterString&amp;gt;
+          &amp;lt;/gmd:abstract&amp;gt;
+          &amp;lt;gmd:pointOfContact&amp;gt;
+            &amp;lt;gmd:CI_ResponsibleParty&amp;gt;
+              &amp;lt;gmd:organisationName&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;European Environment Agency&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:organisationName&amp;gt;
+              &amp;lt;gmd:contactInfo&amp;gt;
+                  &amp;lt;gmd:CI_Contact&amp;gt;
+                     &amp;lt;gmd:address&amp;gt;
+                        &amp;lt;gmd:CI_Address&amp;gt;
+                           &amp;lt;gmd:deliveryPoint&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;Kongens Nytorv 6&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:deliveryPoint&amp;gt;
+                           &amp;lt;gmd:city&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;Copenhagen&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:city&amp;gt;
+                           &amp;lt;gmd:administrativeArea&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;K&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:administrativeArea&amp;gt;
+                           &amp;lt;gmd:postalCode&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;1050&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:postalCode&amp;gt;
+                           &amp;lt;gmd:country&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;Denmark&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:country&amp;gt;
+                           &amp;lt;gmd:electronicMailAddress&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;eea.enquiries@eea.europa.eu&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:electronicMailAddress&amp;gt;
+                        &amp;lt;/gmd:CI_Address&amp;gt;
+                     &amp;lt;/gmd:address&amp;gt;
+                     &amp;lt;gmd:onlineResource&amp;gt;
+                        &amp;lt;gmd:CI_OnlineResource&amp;gt;
+                           &amp;lt;gmd:linkage&amp;gt;
+                              &amp;lt;gmd:URL&amp;gt;http://www.eea.europa.eu&amp;lt;/gmd:URL&amp;gt;
+                           &amp;lt;/gmd:linkage&amp;gt;
+                           &amp;lt;gmd:protocol&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;WWW:LINK-1.0-http--link&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:protocol&amp;gt;
+                           &amp;lt;gmd:name&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;Europen Environment Agency public website&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:name&amp;gt;
+                           &amp;lt;gmd:function&amp;gt;
+                              &amp;lt;gmd:CI_OnLineFunctionCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode&amp;quot;
+                                                         codeListValue=&amp;quot;information&amp;quot;/&amp;gt;
+                           &amp;lt;/gmd:function&amp;gt;
+                        &amp;lt;/gmd:CI_OnlineResource&amp;gt;
+                     &amp;lt;/gmd:onlineResource&amp;gt;
+                  &amp;lt;/gmd:CI_Contact&amp;gt;
+              &amp;lt;/gmd:contactInfo&amp;gt;
+              &amp;lt;gmd:role&amp;gt;
+                  &amp;lt;gmd:CI_RoleCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode&amp;quot;
+                                   codeListValue=&amp;quot;pointOfContact&amp;quot;/&amp;gt;
+              &amp;lt;/gmd:role&amp;gt;
+            &amp;lt;/gmd:CI_ResponsibleParty&amp;gt;
+          &amp;lt;/gmd:pointOfContact&amp;gt;
+          &amp;lt;gmd:graphicOverview&amp;gt;
+            &amp;lt;gmd:MD_BrowseGraphic&amp;gt;
+              &amp;lt;gmd:fileName&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;http://sdi.eea.europa.eu/public/catalogue-graphic-overview/c8ecdabf-2e71-4d0b-b27d-9d409ce8cb6f.png&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:fileName&amp;gt;
+            &amp;lt;/gmd:MD_BrowseGraphic&amp;gt;
+          &amp;lt;/gmd:graphicOverview&amp;gt;
+          &amp;lt;gmd:descriptiveKeywords&amp;gt;
+            &amp;lt;gmd:MD_Keywords&amp;gt;
+              &amp;lt;gmd:keyword&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;Land use&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:keyword&amp;gt;
+              &amp;lt;gmd:thesaurusName&amp;gt;
+                  &amp;lt;gmd:CI_Citation&amp;gt;
+                     &amp;lt;gmd:title&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;GEMET - INSPIRE themes, version 1.0&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:title&amp;gt;
+                     &amp;lt;gmd:date&amp;gt;
+                        &amp;lt;gmd:CI_Date&amp;gt;
+                           &amp;lt;gmd:date&amp;gt;
+                              &amp;lt;gco:Date&amp;gt;2008-06-01&amp;lt;/gco:Date&amp;gt;
+                           &amp;lt;/gmd:date&amp;gt;
+                           &amp;lt;gmd:dateType&amp;gt;
+                              &amp;lt;gmd:CI_DateTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode&amp;quot;
+                                                   codeListValue=&amp;quot;publication&amp;quot;/&amp;gt;
+                           &amp;lt;/gmd:dateType&amp;gt;
+                        &amp;lt;/gmd:CI_Date&amp;gt;
+                     &amp;lt;/gmd:date&amp;gt;
+                  &amp;lt;/gmd:CI_Citation&amp;gt;
+              &amp;lt;/gmd:thesaurusName&amp;gt;
+            &amp;lt;/gmd:MD_Keywords&amp;gt;
+          &amp;lt;/gmd:descriptiveKeywords&amp;gt;
+          &amp;lt;gmd:descriptiveKeywords&amp;gt;
+            &amp;lt;gmd:MD_Keywords&amp;gt;
+              &amp;lt;gmd:keyword&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;urban area&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:keyword&amp;gt;
+              &amp;lt;gmd:keyword&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;land use&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:keyword&amp;gt;
+              &amp;lt;gmd:thesaurusName&amp;gt;
+                  &amp;lt;gmd:CI_Citation&amp;gt;
+                     &amp;lt;gmd:title&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;GEMET - Concepts, version 3.0&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:title&amp;gt;
+                     &amp;lt;gmd:date&amp;gt;
+                        &amp;lt;gmd:CI_Date&amp;gt;
+                           &amp;lt;gmd:date&amp;gt;
+                              &amp;lt;gco:Date&amp;gt;2011-07-13&amp;lt;/gco:Date&amp;gt;
+                           &amp;lt;/gmd:date&amp;gt;
+                           &amp;lt;gmd:dateType&amp;gt;
+                              &amp;lt;gmd:CI_DateTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode&amp;quot;
+                                                   codeListValue=&amp;quot;publication&amp;quot;/&amp;gt;
+                           &amp;lt;/gmd:dateType&amp;gt;
+                        &amp;lt;/gmd:CI_Date&amp;gt;
+                     &amp;lt;/gmd:date&amp;gt;
+                  &amp;lt;/gmd:CI_Citation&amp;gt;
+              &amp;lt;/gmd:thesaurusName&amp;gt;
+            &amp;lt;/gmd:MD_Keywords&amp;gt;
+          &amp;lt;/gmd:descriptiveKeywords&amp;gt;
+          &amp;lt;gmd:descriptiveKeywords&amp;gt;
+            &amp;lt;gmd:MD_Keywords&amp;gt;
+              &amp;lt;gmd:keyword&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;Spain&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:keyword&amp;gt;
+              &amp;lt;gmd:keyword&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;Santander&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:keyword&amp;gt;
+              &amp;lt;gmd:type&amp;gt;
+                  &amp;lt;gmd:MD_KeywordTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode&amp;quot;
+                                          codeListValue=&amp;quot;place&amp;quot;/&amp;gt;
+              &amp;lt;/gmd:type&amp;gt;
+            &amp;lt;/gmd:MD_Keywords&amp;gt;
+          &amp;lt;/gmd:descriptiveKeywords&amp;gt;
+          &amp;lt;gmd:resourceConstraints&amp;gt;
+            &amp;lt;gmd:MD_Constraints&amp;gt;
+              &amp;lt;gmd:useLimitation&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;EEA standard re-use policy: unless otherwise indicated, re-use of content on the EEA website for commercial or non-commercial purposes is permitted free of charge, provided that the source is acknowledged (http://www.eea.europa.eu/legal/copyright). Copyright holder: Directorate-General Enterprise and Industry.&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:useLimitation&amp;gt;
+            &amp;lt;/gmd:MD_Constraints&amp;gt;
+          &amp;lt;/gmd:resourceConstraints&amp;gt;
+          &amp;lt;gmd:resourceConstraints&amp;gt;
+            &amp;lt;gmd:MD_LegalConstraints&amp;gt;
+              &amp;lt;gmd:accessConstraints&amp;gt;
+                  &amp;lt;gmd:MD_RestrictionCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_RestrictionCode&amp;quot;
+                                          codeListValue=&amp;quot;otherRestrictions&amp;quot;/&amp;gt;
+              &amp;lt;/gmd:accessConstraints&amp;gt;
+              &amp;lt;gmd:otherConstraints&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;no limitations&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:otherConstraints&amp;gt;
+            &amp;lt;/gmd:MD_LegalConstraints&amp;gt;
+          &amp;lt;/gmd:resourceConstraints&amp;gt;
+          &amp;lt;gmd:spatialRepresentationType&amp;gt;
+            &amp;lt;gmd:MD_SpatialRepresentationTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_SpatialRepresentationTypeCode&amp;quot;
+                                                  codeListValue=&amp;quot;vector&amp;quot;/&amp;gt;
+          &amp;lt;/gmd:spatialRepresentationType&amp;gt;
+          &amp;lt;gmd:spatialResolution&amp;gt;
+            &amp;lt;gmd:MD_Resolution&amp;gt;
+              &amp;lt;gmd:equivalentScale&amp;gt;
+                  &amp;lt;gmd:MD_RepresentativeFraction&amp;gt;
+                     &amp;lt;gmd:denominator&amp;gt;
+                        &amp;lt;gco:Integer&amp;gt;10000&amp;lt;/gco:Integer&amp;gt;
+                     &amp;lt;/gmd:denominator&amp;gt;
+                  &amp;lt;/gmd:MD_RepresentativeFraction&amp;gt;
+              &amp;lt;/gmd:equivalentScale&amp;gt;
+            &amp;lt;/gmd:MD_Resolution&amp;gt;
+          &amp;lt;/gmd:spatialResolution&amp;gt;
+          &amp;lt;gmd:language&amp;gt;
+            &amp;lt;gmd:LanguageCode codeList=&amp;quot;http://www.loc.gov/standards/iso639-2/&amp;quot; codeListValue=&amp;quot;eng&amp;quot;/&amp;gt;
+          &amp;lt;/gmd:language&amp;gt;
+          &amp;lt;gmd:topicCategory&amp;gt;
+            &amp;lt;gmd:MD_TopicCategoryCode&amp;gt;society&amp;lt;/gmd:MD_TopicCategoryCode&amp;gt;
+          &amp;lt;/gmd:topicCategory&amp;gt;
+          &amp;lt;gmd:extent&amp;gt;
+            &amp;lt;gmd:EX_Extent&amp;gt;
+              &amp;lt;gmd:geographicElement&amp;gt;
+                  &amp;lt;gmd:EX_GeographicBoundingBox&amp;gt;
+                     &amp;lt;gmd:westBoundLongitude&amp;gt;
+                        &amp;lt;gco:Decimal&amp;gt;-4.015566&amp;lt;/gco:Decimal&amp;gt;
+                     &amp;lt;/gmd:westBoundLongitude&amp;gt;
+                     &amp;lt;gmd:eastBoundLongitude&amp;gt;
+                        &amp;lt;gco:Decimal&amp;gt;-3.6115434&amp;lt;/gco:Decimal&amp;gt;
+                     &amp;lt;/gmd:eastBoundLongitude&amp;gt;
+                     &amp;lt;gmd:southBoundLatitude&amp;gt;
+                        &amp;lt;gco:Decimal&amp;gt;43.245655&amp;lt;/gco:Decimal&amp;gt;
+                     &amp;lt;/gmd:southBoundLatitude&amp;gt;
+                     &amp;lt;gmd:northBoundLatitude&amp;gt;
+                        &amp;lt;gco:Decimal&amp;gt;43.49501&amp;lt;/gco:Decimal&amp;gt;
+                     &amp;lt;/gmd:northBoundLatitude&amp;gt;
+                  &amp;lt;/gmd:EX_GeographicBoundingBox&amp;gt;
+              &amp;lt;/gmd:geographicElement&amp;gt;
+            &amp;lt;/gmd:EX_Extent&amp;gt;
+          &amp;lt;/gmd:extent&amp;gt;
+          &amp;lt;gmd:extent&amp;gt;
+            &amp;lt;gmd:EX_Extent&amp;gt;
+              &amp;lt;gmd:temporalElement&amp;gt;
+                  &amp;lt;gmd:EX_TemporalExtent&amp;gt;
+                     &amp;lt;gmd:extent&amp;gt;
+                        &amp;lt;gml:TimePeriod gml:id=&amp;quot;d28e322a1049886&amp;quot;&amp;gt;
+                           &amp;lt;gml:beginPosition&amp;gt;2006-10-13&amp;lt;/gml:beginPosition&amp;gt;
+                           &amp;lt;gml:endPosition&amp;gt;2006-10-13&amp;lt;/gml:endPosition&amp;gt;
+                        &amp;lt;/gml:TimePeriod&amp;gt;
+                     &amp;lt;/gmd:extent&amp;gt;
+                  &amp;lt;/gmd:EX_TemporalExtent&amp;gt;
+              &amp;lt;/gmd:temporalElement&amp;gt;
+            &amp;lt;/gmd:EX_Extent&amp;gt;
+          &amp;lt;/gmd:extent&amp;gt;
+        &amp;lt;/gmd:MD_DataIdentification&amp;gt;
+      &amp;lt;/gmd:identificationInfo&amp;gt;
+      &amp;lt;gmd:distributionInfo&amp;gt;
+        &amp;lt;gmd:MD_Distribution&amp;gt;
+          &amp;lt;gmd:distributionFormat&amp;gt;
+            &amp;lt;gmd:MD_Format&amp;gt;
+              &amp;lt;gmd:name&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;SHP&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:name&amp;gt;
+              &amp;lt;gmd:version gco:nilReason=&amp;quot;missing&amp;quot;&amp;gt;
+                  &amp;lt;gco:CharacterString/&amp;gt;
+              &amp;lt;/gmd:version&amp;gt;
+            &amp;lt;/gmd:MD_Format&amp;gt;
+          &amp;lt;/gmd:distributionFormat&amp;gt;
+          &amp;lt;gmd:transferOptions&amp;gt;
+            &amp;lt;gmd:MD_DigitalTransferOptions&amp;gt;
+              &amp;lt;gmd:onLine&amp;gt;
+                  &amp;lt;gmd:CI_OnlineResource&amp;gt;
+                     &amp;lt;gmd:linkage&amp;gt;
+                        &amp;lt;gmd:URL&amp;gt;http://www.eea.europa.eu/data-and-maps/data/ds_resolveuid/9df69b925454fd267512ea65898dbbdc&amp;lt;/gmd:URL&amp;gt;
+                     &amp;lt;/gmd:linkage&amp;gt;
+                     &amp;lt;gmd:protocol&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;WWW:LINK-1.0-http--link&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:protocol&amp;gt;
+                     &amp;lt;gmd:description&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;GMES Urban Atlas download page&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:description&amp;gt;
+                     &amp;lt;gmd:function&amp;gt;
+                        &amp;lt;gmd:CI_OnLineFunctionCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode&amp;quot;
+                                                   codeListValue=&amp;quot;download&amp;quot;/&amp;gt;
+                     &amp;lt;/gmd:function&amp;gt;
+                  &amp;lt;/gmd:CI_OnlineResource&amp;gt;
+              &amp;lt;/gmd:onLine&amp;gt;
+            &amp;lt;/gmd:MD_DigitalTransferOptions&amp;gt;
+          &amp;lt;/gmd:transferOptions&amp;gt;
+        &amp;lt;/gmd:MD_Distribution&amp;gt;
+      &amp;lt;/gmd:distributionInfo&amp;gt;
+      &amp;lt;gmd:dataQualityInfo&amp;gt;
+        &amp;lt;gmd:DQ_DataQuality&amp;gt;
+          &amp;lt;gmd:scope&amp;gt;
+            &amp;lt;gmd:DQ_Scope&amp;gt;
+              &amp;lt;gmd:level&amp;gt;
+                  &amp;lt;gmd:MD_ScopeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode&amp;quot;
+                                    codeListValue=&amp;quot;dataset&amp;quot;/&amp;gt;
+              &amp;lt;/gmd:level&amp;gt;
+            &amp;lt;/gmd:DQ_Scope&amp;gt;
+          &amp;lt;/gmd:scope&amp;gt;
+          &amp;lt;gmd:report&amp;gt;
+            &amp;lt;gmd:DQ_DomainConsistency&amp;gt;
+              &amp;lt;gmd:result&amp;gt;
+                  &amp;lt;gmd:DQ_ConformanceResult&amp;gt;
+                     &amp;lt;gmd:specification&amp;gt;
+                        &amp;lt;gmd:CI_Citation&amp;gt;
+                           &amp;lt;gmd:title&amp;gt;
+                              &amp;lt;gco:CharacterString&amp;gt;Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services&amp;lt;/gco:CharacterString&amp;gt;
+                           &amp;lt;/gmd:title&amp;gt;
+                           &amp;lt;gmd:date&amp;gt;
+                              &amp;lt;gmd:CI_Date&amp;gt;
+                                 &amp;lt;gmd:date&amp;gt;
+                                    &amp;lt;gco:Date&amp;gt;2010-12-08&amp;lt;/gco:Date&amp;gt;
+                                 &amp;lt;/gmd:date&amp;gt;
+                                 &amp;lt;gmd:dateType&amp;gt;
+                                    &amp;lt;gmd:CI_DateTypeCode codeList=&amp;quot;http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode&amp;quot;
+                                                         codeListValue=&amp;quot;publication&amp;quot;/&amp;gt;
+                                 &amp;lt;/gmd:dateType&amp;gt;
+                              &amp;lt;/gmd:CI_Date&amp;gt;
+                           &amp;lt;/gmd:date&amp;gt;
+                        &amp;lt;/gmd:CI_Citation&amp;gt;
+                     &amp;lt;/gmd:specification&amp;gt;
+                     &amp;lt;gmd:explanation&amp;gt;
+                        &amp;lt;gco:CharacterString&amp;gt;See the referenced specification&amp;lt;/gco:CharacterString&amp;gt;
+                     &amp;lt;/gmd:explanation&amp;gt;
+                     &amp;lt;gmd:pass&amp;gt;
+                        &amp;lt;gco:Boolean&amp;gt;true&amp;lt;/gco:Boolean&amp;gt;
+                     &amp;lt;/gmd:pass&amp;gt;
+                  &amp;lt;/gmd:DQ_ConformanceResult&amp;gt;
+              &amp;lt;/gmd:result&amp;gt;
+            &amp;lt;/gmd:DQ_DomainConsistency&amp;gt;
+          &amp;lt;/gmd:report&amp;gt;
+          &amp;lt;gmd:lineage&amp;gt;
+            &amp;lt;gmd:LI_Lineage&amp;gt;
+              &amp;lt;gmd:statement&amp;gt;
+                  &amp;lt;gco:CharacterString&amp;gt;Earth Observation (EO) Data used:
+                      * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)&amp;lt;/gco:CharacterString&amp;gt;
+              &amp;lt;/gmd:statement&amp;gt;
+            &amp;lt;/gmd:LI_Lineage&amp;gt;
+          &amp;lt;/gmd:lineage&amp;gt;
+        &amp;lt;/gmd:DQ_DataQuality&amp;gt;
+      &amp;lt;/gmd:dataQualityInfo&amp;gt;
+    &amp;lt;/gmd:MD_Metadata&amp;gt;&lt;/ns2:OriginalRepresentation&gt;&lt;ns2:CompletenessIndicator&gt;100.0&lt;/ns2:CompletenessIndicator&gt;&lt;/ns2:Resource&gt;</str>
+    <long name="_version_">1486999733610217472</long></doc>
+</result>
+</response>

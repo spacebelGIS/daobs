@@ -1,20 +1,16 @@
 package org.daobs.tasks.validation.inspire;
 
-import org.apache.camel.Exchange;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.zip.GZIPOutputStream;
 
 
 /**
@@ -34,6 +30,39 @@ public class OnlineServiceValidatorClient {
         return this;
     }
 
+    boolean dontGenerateLayerPreviews = true;
+
+
+    public boolean isDontGenerateLayerPreviews() {
+        return dontGenerateLayerPreviews;
+    }
+
+    public void setDontGenerateLayerPreviews(boolean dontGenerateLayerPreviews) {
+        this.dontGenerateLayerPreviews = dontGenerateLayerPreviews;
+    }
+
+
+    boolean dontGenerateHtmlFiles = true;
+
+
+    public boolean isDontGenerateHtmlFiles() {
+        return dontGenerateHtmlFiles;
+    }
+
+    public void setDontGenerateHtmlFiles(boolean dontGenerateHtmlFiles) {
+        this.dontGenerateHtmlFiles = dontGenerateHtmlFiles;
+    }
+
+    boolean dontProbeDataResourceLocators = true;
+
+    public boolean isDontProbeDataResourceLocators() {
+        return dontProbeDataResourceLocators;
+    }
+
+    public void setDontProbeDataResourceLocators(boolean dontProbeDataResourceLocators) {
+        this.dontProbeDataResourceLocators = dontProbeDataResourceLocators;
+    }
+
     OnlineServiceValidatorClient() {
     }
 
@@ -45,35 +74,51 @@ public class OnlineServiceValidatorClient {
     public ValidationReport validate(String resourceDescriptorText) throws UnsupportedEncodingException, MalformedURLException {
         return validate(resourceDescriptorText, null);
     }
+    public ValidationReport validate(String resourceDescriptorText, boolean zipContent) throws UnsupportedEncodingException, MalformedURLException {
+        return validate(resourceDescriptorText, null);
+    }
 
     public ValidationReport validate(File resourceDescriptorFile) throws UnsupportedEncodingException, MalformedURLException {
         return validate(null, resourceDescriptorFile);
 
     }
 
-    private ValidationReport validate(String resourceDescriptorText, File resourceDescriptorFile) throws UnsupportedEncodingException, MalformedURLException {
+    private ValidationReport validate(
+            String resourceDescriptorText,
+            File resourceDescriptorFile) throws MalformedURLException {
         HttpResponse retVal = null;
 
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+
         ValidationReport report = new ValidationReport();
         URL validatorUrl = new URL(this.inspireResourceTesterURL);
         HttpPost httpPost = new HttpPost(this.inspireResourceTesterURL);
         httpPost.addHeader("Accept", "application/xml");
 
-        MultipartEntity reqEntity = new MultipartEntity();
+        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder
+                .create()
+                .addTextBody("dontGenerateLayerPreviews",
+                        String.valueOf(this.dontGenerateLayerPreviews))
+                .addTextBody("dontGenerateHtmlFiles",
+                        String.valueOf(this.dontGenerateHtmlFiles))
+                .addTextBody("dontProbeDataResourceLocators",
+                        String.valueOf(this.dontProbeDataResourceLocators));
+
         if (resourceDescriptorFile != null) {
-            FileBody dataFile = new FileBody(resourceDescriptorFile);
-            reqEntity.addPart("uploadedFile", dataFile);
+            multipartEntityBuilder.addBinaryBody(
+                    "uploadedFile",
+                    resourceDescriptorFile);
+        }
+        if (resourceDescriptorText != null) {
+            // For text/plain mode use
+            multipartEntityBuilder.addTextBody("resourceRepresentation", resourceDescriptorText);
         }
 
-        if (resourceDescriptorText != null) {
-            StringBody stringPart = new StringBody(resourceDescriptorText);
-            reqEntity.addPart("resourceRepresentation", stringPart);
-        }
-        httpPost.setEntity(reqEntity);
+        httpPost.setEntity(multipartEntityBuilder.build());
 
         try {
             report.start();
+
             retVal = httpClient.execute(httpPost);
         } catch (ClientProtocolException ex) {
             report.setInfo(ex.getMessage());
@@ -89,7 +134,6 @@ public class OnlineServiceValidatorClient {
         return report;
     }
 
-
     private void getResponse(HttpResponse validatorResponse,
                                         ValidationReport report) {
         try {
@@ -98,7 +142,6 @@ public class OnlineServiceValidatorClient {
             //HTTP STATUS CODE 400 (Bad Request)           - the representation sent was not understood at all
             //HTTP STATUS CODE 500 (Internal server error) - a serious system error has occurred
             int responseStatusCode = validatorResponse.getStatusLine().getStatusCode();
-            System.out.println(responseStatusCode + ": " + validatorResponse.getStatusLine().getReasonPhrase());
             report.setHTTPStatus(responseStatusCode);
 
             if (responseStatusCode == 201) {
@@ -119,7 +162,6 @@ public class OnlineServiceValidatorClient {
 
                 //XML representation of the validation report or of the resource metadata if no issues were found
                 String xml = org.apache.commons.io.IOUtils.toString(validatorResponse.getEntity().getContent(), "UTF-8");
-                System.out.println(xml);
                 report.setReport(xml);
             }
         } catch (IOException ex) {
