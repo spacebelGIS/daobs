@@ -167,8 +167,9 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                     indicatorResults.put(indicator.getId(), result);
                 } catch (ArithmeticException e1) {
                     e1.printStackTrace();
-                    String message = String.format("  Arithmetic exception. Check expression or " +
+                    String message = String.format("  Arithmetic exception. Check expression (%s) or " +
                                     "parameter values. Error is %s.",
+                            indicator.getExpression(),
                             e1.getMessage());
                     logger.log(Level.WARNING, message);
                     indicator.setStatus(message);
