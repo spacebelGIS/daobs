@@ -248,7 +248,6 @@
           <!-- Backup response as XML file-->
           <cm:to uri="file:csw/get-records-response/?fileName=$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <!-- Index in Solr -->
-          <!--<cm:to uri="http4://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl&amp;throwExceptionOnFailure=false" />-->
           <cm:to uri="direct:indexDocuments"/>
         </cm:multicast>
       </cm:split>
@@ -264,7 +263,7 @@
       <cm:log message="Ending at $simple{header.harvesterEndTime}"
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
-      <cm:log message="Ellapsed time $simple{header.harvesterBeginTime} - $simple{header.harvesterBeginTime}"
+      <cm:log message="Ellapsed time $simple{header.harvesterEndTime} - $simple{header.harvesterBeginTime}"
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
 
@@ -277,7 +276,7 @@
       </cm:description>
       <cm:from uri="direct:indexDocuments"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>http://{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl</cm:simple>
+        <cm:simple>{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata-iso19139.xsl</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
       <!-- Camel Solr component can't be used to set the
