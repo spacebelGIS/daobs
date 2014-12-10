@@ -1,4 +1,8 @@
 target/
+harvesters/csw-harvester/csw/
+harvesters/csw-harvester/logs/
+tasks/validation-checker/tmp/
+tasks/validation-checker/logs/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -6,3 +10,4 @@ pom.xml.next
 release.properties
 *.iml
 .idea
+rebel.xml
