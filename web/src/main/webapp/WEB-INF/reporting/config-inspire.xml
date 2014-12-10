@@ -99,26 +99,26 @@
     <!-- Indicator MDi2 (Conformity of metadata) -->
     <daobs:variable id="MDv21">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:i</daobs:query>
-      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isValid:true +inspireAnnex:i</daobs:query>
+      <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv22">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:ii</daobs:query>
-      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isValid:true +inspireAnnex:ii</daobs:query>
+      <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv23">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:iii</daobs:query>
-      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isValid:true +inspireAnnex:iii</daobs:query>
+      <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv24">
       <daobs:name xml:lang="en">Number of spatial data services that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:service) +inspireConformMetadata:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
-      <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
+      <daobs:query>+(resourceType:service) +isValid:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
 
@@ -127,19 +127,19 @@
     <!-- INSPIRE DSi2 (Conformity of spatial data sets) -->
     <daobs:variable id="DSv21">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex I that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:i +inspireConformResource:true</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isValid:true +inspireAnnex:i +inspireConformResource:true</daobs:query>
       <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv22">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex II that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:ii +inspireConformResource:true</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isValid:true +inspireAnnex:ii +inspireConformResource:true</daobs:query>
       <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv23">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex III that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireConformMetadata:true +inspireAnnex:iii +inspireConformResource:true</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isValid:true +inspireAnnex:iii +inspireConformResource:true</daobs:query>
       <daobs:comment>TODO: Metadata are not validated yet. So this value should be 0.</daobs:comment>
     </daobs:variable>
 
@@ -174,7 +174,7 @@
 
     <daobs:variable id="NSv41">
       <daobs:name xml:lang="en">Number of conformant discovery network services</daobs:name>
-      <daobs:comment>Not implemented yet.</daobs:comment>
+      <daobs:comment>TODO: Using INSPIRE validator ? Not implemented yet.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv42">
       <daobs:name xml:lang="en">Number of conformant view network services</daobs:name>
@@ -196,7 +196,7 @@
 
     <daobs:variable id="NSv31">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the discovery services</daobs:name>
-      <daobs:comment>Not implemented yet.</daobs:comment>
+      <daobs:comment>TODO: From AI. Not implemented yet.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv32">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the view services</daobs:name>
