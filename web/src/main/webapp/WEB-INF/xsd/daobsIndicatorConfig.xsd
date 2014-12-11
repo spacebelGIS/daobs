@@ -48,7 +48,7 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="indicators">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="daobs:indicator"/>
       </xs:sequence>
@@ -58,13 +58,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="daobs:name"/>
-        <xs:element ref="daobs:query"/>
+        <xs:element ref="daobs:query" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="daobs:format" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="daobs:value" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="daobs:status" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="daobs:comment" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="default" use="optional" type="xs:double"/>
       <xs:attribute name="error" use="optional" type="xs:boolean"/>
     </xs:complexType>
   </xs:element>
@@ -90,7 +91,29 @@
   </xs:element>
   <xs:element name="value" type="xs:string"/>
   <xs:element name="format" type="xs:string"/>
-  <xs:element name="query" type="xs:string"/>
+  <xs:element name="query">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="statsField" use="optional" type="xs:string"/>
+          <xs:attribute name="stats" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="min"/>
+                <xs:enumeration value="max"/>
+                <xs:enumeration value="count"/>
+                <xs:enumeration value="countDistinct"/>
+                <xs:enumeration value="missing"/>
+                <xs:enumeration value="mean"/>
+                <xs:enumeration value="sum"/>
+                <xs:enumeration value="stddev"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="expression" type="xs:string"/>
   <xs:element name="comment" type="xs:string"/>
   <xs:element name="status" type="xs:string"/>
@@ -113,4 +136,5 @@
       <xs:field xpath="@id"></xs:field>
     </xs:keyref>-->
   </xs:element>
+  
 </xs:schema>
