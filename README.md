@@ -41,14 +41,24 @@ mvn tomcat7:run-war
 Access the home page from http://localhost:8983/solr.
 
 
+## Other building options
 
-## Building the application in debug mode
+### Building the application in debug mode
 
 For developpers, the application could be built in debug mode in order to have the banana project installed without Javascript minification. For this disable the production profile:
 
 ```
 mvn clean install -P\!production
 ```
+
+### Building the application without test
+
+The tests rely on some third party application (eg. INSPIRE validator). It may be useful to build the application without testing:
+
+```
+mvn clean install -DskipTests
+```
+
 
 ## Search engine architecture
 
@@ -166,7 +176,7 @@ Manually indexing INSPIRE monitoring reporting:
 ```
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u daobs:daobspass -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
