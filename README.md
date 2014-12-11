@@ -41,6 +41,15 @@ mvn tomcat7:run-war
 Access the home page from http://localhost:8983/solr.
 
 
+
+## Building the application in debug mode
+
+For developpers, the application could be built in debug mode in order to have the banana project installed without Javascript minification. For this disable the production profile:
+
+```
+mvn clean install -P\!production
+```
+
 ## Search engine architecture
 
 
