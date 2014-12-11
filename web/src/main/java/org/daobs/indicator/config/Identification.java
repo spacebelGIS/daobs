@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{http://daobs.org}title"/>
- *         &lt;element ref="{http://daobs.org}author"/>
- *         &lt;element ref="{http://daobs.org}url"/>
+ *         &lt;element ref="{http://daobs.org}author" minOccurs="0"/>
+ *         &lt;element ref="{http://daobs.org}url" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -40,9 +40,9 @@ public class Identification {
 
     @XmlElement(namespace = "http://daobs.org", required = true)
     protected Title title;
-    @XmlElement(namespace = "http://daobs.org", required = true)
+    @XmlElement(namespace = "http://daobs.org")
     protected String author;
-    @XmlElement(namespace = "http://daobs.org", required = true)
+    @XmlElement(namespace = "http://daobs.org")
     protected String url;
 
     /**

@@ -23,13 +23,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{http://daobs.org}name"/>
- *         &lt;element ref="{http://daobs.org}query"/>
+ *         &lt;element ref="{http://daobs.org}query" minOccurs="0"/>
  *         &lt;element ref="{http://daobs.org}format" minOccurs="0"/>
  *         &lt;element ref="{http://daobs.org}value" minOccurs="0"/>
  *         &lt;element ref="{http://daobs.org}status" minOccurs="0"/>
  *         &lt;element ref="{http://daobs.org}comment" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
+ *       &lt;attribute name="default" type="{http://www.w3.org/2001/XMLSchema}double" />
  *       &lt;attribute name="error" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -52,8 +53,8 @@ public class Variable {
 
     @XmlElement(namespace = "http://daobs.org", required = true)
     protected Name name;
-    @XmlElement(namespace = "http://daobs.org", required = true)
-    protected String query;
+    @XmlElement(namespace = "http://daobs.org")
+    protected Query query;
     @XmlElement(namespace = "http://daobs.org")
     protected String format;
     @XmlElement(namespace = "http://daobs.org")
@@ -66,6 +67,8 @@ public class Variable {
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
     protected String id;
+    @XmlAttribute(name = "default")
+    protected Double _default;
     @XmlAttribute(name = "error")
     protected Boolean error;
 
@@ -98,10 +101,10 @@ public class Variable {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Query }
      *     
      */
-    public String getQuery() {
+    public Query getQuery() {
         return query;
     }
 
@@ -110,10 +113,10 @@ public class Variable {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Query }
      *     
      */
-    public void setQuery(String value) {
+    public void setQuery(Query value) {
         this.query = value;
     }
 
@@ -235,6 +238,30 @@ public class Variable {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the default property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
+     */
+    public Double getDefault() {
+        return _default;
+    }
+
+    /**
+     * Sets the value of the default property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
+     */
+    public void setDefault(Double value) {
+        this._default = value;
     }
 
     /**

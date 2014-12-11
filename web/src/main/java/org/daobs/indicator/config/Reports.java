@@ -70,5 +70,4 @@ public class Reports {
     public void addReporting(Reporting reporting) {
         getReporting().add(reporting);
     }
-
 }

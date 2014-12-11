@@ -26,7 +26,6 @@ public class ObjectFactory {
 
     private final static QName _Author_QNAME = new QName("http://daobs.org", "author");
     private final static QName _Expression_QNAME = new QName("http://daobs.org", "expression");
-    private final static QName _Query_QNAME = new QName("http://daobs.org", "query");
     private final static QName _Status_QNAME = new QName("http://daobs.org", "status");
     private final static QName _Format_QNAME = new QName("http://daobs.org", "format");
     private final static QName _Value_QNAME = new QName("http://daobs.org", "value");
@@ -97,6 +96,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Query }
+     * 
+     */
+    public Query createQuery() {
+        return new Query();
+    }
+
+    /**
      * Create an instance of {@link Indicators }
      * 
      */
@@ -144,15 +151,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://daobs.org", name = "expression")
     public JAXBElement<String> createExpression(String value) {
         return new JAXBElement<String>(_Expression_QNAME, String.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://daobs.org", name = "query")
-    public JAXBElement<String> createQuery(String value) {
-        return new JAXBElement<String>(_Query_QNAME, String.class, null, value);
     }
 
     /**
