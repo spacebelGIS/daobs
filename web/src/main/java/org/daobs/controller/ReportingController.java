@@ -107,6 +107,7 @@ public class ReportingController {
      * @param request
      * @param reporting
      * @param territory
+     * @param fq Filter query to be applied on top of the territory filter
      * @return
      * @throws IOException
      */

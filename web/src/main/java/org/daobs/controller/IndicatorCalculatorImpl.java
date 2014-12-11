@@ -5,10 +5,7 @@ import de.congrace.exp4j.ExpressionBuilder;
 import de.congrace.exp4j.UnknownFunctionException;
 import de.congrace.exp4j.UnparsableExpressionException;
 import org.daobs.index.SolrRequestBean;
-import org.daobs.indicator.config.Indicator;
-import org.daobs.indicator.config.Parameter;
-import org.daobs.indicator.config.Reporting;
-import org.daobs.indicator.config.Variable;
+import org.daobs.indicator.config.*;
 import org.w3c.dom.Document;
 
 import javax.xml.bind.JAXBContext;
@@ -94,14 +91,41 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             logger.log(java.util.logging.Level.FINE,
                     String.format("  Expression '%s'.", variable.getQuery())
             );
-            long numFound;
-            if (variable.getQuery() != null) {
-                numFound = SolrRequestBean.getNumFound(variable.getQuery(), filterQuery);
+            Double statValue;
+            Double defaultValue = variable.getDefault();
+            Query query = variable.getQuery();
+            if (query != null) {
+                // 2 cases here:
+                // a) Simple query and the number of records found are returned
+                // b) Query with stats
+
+                String statsField = query.getStatsField();
+                if (statsField != null) {
+                    statValue = SolrRequestBean.getStats(
+                            variable.getQuery().getValue(),
+                            filterQuery,
+                            statsField,
+                            query.getStats());
+                } else {
+                    statValue = SolrRequestBean.getNumFound(
+                            variable.getQuery().getValue(),
+                            filterQuery);
+                }
+
                 logger.log(java.util.logging.Level.FINE,
-                        String.format("  Results '%s'.", numFound)
+                        String.format("  Results '%s'.", statValue)
                 );
-                indicatorResults.put(variable.getId(), Long.valueOf(numFound).doubleValue());
-                variable.setValue(numFound + "");
+                if (statValue != null) {
+                    indicatorResults.put(variable.getId(), statValue);
+                    variable.setValue(statValue + "");
+                } else if (defaultValue != null) {
+                    logger.log(java.util.logging.Level.FINE,
+                            String.format("  Set to default value '%s'.", defaultValue)
+                    );
+                    indicatorResults.put(variable.getId(), defaultValue);
+                    variable.setValue(defaultValue + "");
+                }
+
             } else {
                 variable.setStatus("No query defined.");
             }
