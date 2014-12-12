@@ -61,10 +61,36 @@ public class DataImportTests extends AbstractSolrDaobsTestCase {
 
         assertU(response);
         assertU(commit());
-        assertQ("test document was correctly committed", req("q", "*:*")
+        assertQ("test metadata document was correctly indexed", req("q", "*:*")
                 , "//result[@numFound='1']"
                 , "//str[@name='id'][.='81aea739-4d21-427d-bec4-082cb64b825b']"
+                , "//str[@name='metadataIdentifier'][.='81aea739-4d21-427d-bec4-082cb64b825b']"
+                , "//str[@name='resourceTitle'][.='Urban Atlas - Spain - Santander']"
+                , "//str[@name='resourceAbstract'][.='The Urban Atlas is providing pan-European comparable land use and land cover data for Large Urban Zones with more than 100.000 inhabitants as defined by the Urban Audit. Urban Atlas mission is to provide high-resolution hotspot mapping of changes in urban spaces and indicators for users such as city governments, the European Environment Agency (EEA) and European Commission departments.']"
+                , "//str[@name='documentType'][.='metadata']"
+                , "//str[@name='documentStandard'][.='iso19139']"
+                , "//str[@name='territory'][.='']"
+                , "//str[@name='harvesterId'][.='']"
+                , "//date[@name='dateStamp'][.='2014-12-09T08:52:17Z']"
+                , "//str[@name='mainLanguage'][.='eng']"
+                , "//arr[@name='resourceType']/str[.='dataset']"
+                , "//arr[@name='publicationDateForResource']/str[.='2010-05-28']"
+                , "//arr[@name='creationDateForResource']/str[.='2010-05-28']"
+                // not stored , "//arr[@name='presentationForm']/str[.='2010']"
+                // not stored , "//arr[@name='publicationMonthForResource']/str[.='2010-05']"
+                , "//arr[@name='spatialRepresentationType']/str[.='vector']"
+                , "//arr[@name='overviewUrl']/str[.='http://sdi.eea.europa.eu/public/catalogue-graphic-overview/c8ecdabf-2e71-4d0b-b27d-9d409ce8cb6f.png']"
+                , "//arr[@name='resourceLanguage']/str[.='eng']"
+                , "//arr[@name='inspireTheme_syn']/str[.='Land use']"
+//                , "//arr[@name='inspireTheme']/str[.='Land use']"
+                , "//arr[@name='inspireAnnex']/str[.='iii']"
+                , "//int[@name='numberOfInspireTheme'][.='1']"
+
         );
+        // harvestedDate
+        // presentationForm
+        // otherLanguage
+        // Contact
     }
 
 }
