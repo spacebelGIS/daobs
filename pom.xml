@@ -71,6 +71,11 @@
         <artifactId>solr-solrj</artifactId>
         <version>${solr.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.solr</groupId>
+        <artifactId>solr-test-framework</artifactId>
+        <version>${solr.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>net.sf.saxon</groupId>
@@ -107,6 +112,11 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
       </dependency>
 

@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:srv="http://www.isotc211.org/2005/srv"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>E9A24665-97EF-3613-1CF5-8B0C64D96222
+    </gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/"
+                      codeListValue="dut">Nederlands
+    </gmd:LanguageCode>
+  </gmd:language>
+  <gmd:characterSet>
+    <gmd:MD_CharacterSetCode
+            codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_CharacterSetCode"
+            codeListValue="utf8"/>
+  </gmd:characterSet>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode
+            codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_ScopeCode"
+            codeListValue="service"/>
+  </gmd:hierarchyLevel>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:organisationName>
+        <gco:CharacterString>TNO Geologische Dienst Nederland
+        </gco:CharacterString>
+      </gmd:organisationName>
+      <gmd:positionName>
+        <gco:CharacterString>Metadata auteur</gco:CharacterString>
+      </gmd:positionName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:phone>
+            <gmd:CI_Telephone>
+              <gmd:voice>
+                <gco:CharacterString>+31 (0)888664775</gco:CharacterString>
+              </gmd:voice>
+              <gmd:facsimile>
+                <gco:CharacterString/>
+              </gmd:facsimile>
+            </gmd:CI_Telephone>
+          </gmd:phone>
+          <gmd:address>
+            <gmd:CI_Address>
+              <gmd:deliveryPoint>
+                <gco:CharacterString>Princetonlaan 6</gco:CharacterString>
+              </gmd:deliveryPoint>
+              <gmd:city>
+                <gco:CharacterString>Utrecht</gco:CharacterString>
+              </gmd:city>
+              <gmd:administrativeArea>
+                <gco:CharacterString>Utrecht</gco:CharacterString>
+              </gmd:administrativeArea>
+              <gmd:postalCode>
+                <gco:CharacterString>3584 CB</gco:CharacterString>
+              </gmd:postalCode>
+              <gmd:country>
+                <gco:CharacterString>Nederland</gco:CharacterString>
+              </gmd:country>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString>info@dinoloket.nl</gco:CharacterString>
+              </gmd:electronicMailAddress>
+            </gmd:CI_Address>
+          </gmd:address>
+          <gmd:onlineResource>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>www.dinoloket.nl</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onlineResource>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode
+                codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode"
+                codeListValue="pointOfContact"/>
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <!-- set by exporter -->
+    <gco:Date>2011-10-28</gco:Date>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19119</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>Nederlandse metadata profiel op ISO 19119 v1.1 voor
+      services
+    </gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:identificationInfo>
+    <srv:SV_ServiceIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <!-- copied from metadata (required) -->
+            <gco:CharacterString>GeoTOP - lagenmodel 02 Formatie van Naaldwijk,
+              Laagpakket van Schoorl
+            </gco:CharacterString>
+          </gmd:title>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <!-- set by exporter -->
+                <gco:Date>2010-04-01</gco:Date>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode
+                        codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode"
+                        codeListValue="creation"/>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <!--  copied from metadata (required) -->
+        <gco:CharacterString>GeoTOP is een gedetailleerd driedimensionaal (3D)
+          model van de ondergrond van Nederland, waaraan sinds 2006 wordt
+          gewerkt. In GeoTOP wordt de ondergrond onderverdeeld in miljoenen
+          gridcellen (voxels) van 100 bij 100 meter met een dikte van een halve
+          meter. Elke gridcel bevat informatie over stratigrafie, lithologie en
+          de onzekerheid omtrent hun voorkomen. Het GeoTOP model is op dit
+          moment gereed voor de provincies Zeeland en Zuid-Holland. Binnen het
+          GeoTOP-werkproces zijn een aantal producten vervaardigd die snel en
+          eenvoudig een duidelijk beeld geven van bepaalde facetten van de
+          ondergrond. Deze producten zijn onderverdeeld in vier thema's: 1)
+          geologische verspreidingskaarten, 2) cumulatieve dikte kaarten van
+          lithologie in het Holocene pakket, 3) horizontale doorsneden van de
+          geologie, lithologie en cumulatieve dikte van zand, veen of kleiige
+          voorkomen 4) kaarten met een specifieke toepassing. De kaarten van het
+          lagenmodel Formatie van Naaldwijk, Laagpakket van Schoorl beschrijven
+          voor de Formatie van Naaldwijk, Laagpakket van Schoorl de boringen, de
+          verbreidingen en de verspreiding en de onzekerheid in zowel
+          horizontale als verticale richting. Het lagenmodel is een tweeenhalf
+          dimensionaal model opgebouwd uit een stapeling van geologische vlakken
+          en dient als basis om het stratigrafische model van GeoTOP te maken.
+          In het lagenmodel wordt de top en basis van stratigrafische eenheden
+          weergegeven, gebaseerd op de interpretatie van boringen uit de DINO
+          database. Deze vlakken worden gebruikt bij het berekenen van het
+          driedimensionaal model GeoTOP. De producten binnen het lagenmodel
+          Formatie van Naaldwijk, Laagpakket van Schoorl bestaan uit 1)
+          boringen, 2) verbreidingen 3) top, basis en dikte in gridcellen van
+          100 bij 100 meter en 4) standaard deviatie van de top en basis in
+          gridcellen van 100 bij 100 meter. In de boringen staan alle boringen
+          waarin Formatie van Naaldwijk, Laagpakket van Schoorl voorkomt met
+          informatie over de diepteligging van deze laag en of deze laag
+          doorboord is. In de verbreidingskaarten wordt het gebied weergegeven
+          waarin Laagpakket van Schoorl kan voorkomen. Buiten de verbreiding,
+          dus buiten de kustzone, komt deze formatie niet voor. De verbreiding
+          is bepaald aan de hand van geologische kaarten. De kaarten van de
+          bovenkant (top) en onderkant (basis) van Laagpakket van Schoorl zijn
+          weergegeven in meters t.o.v. NAP. De dikte, weergegeven in meters, kan
+          lokaal oplopen tot meer dan 40 meter. In de kaarten van de standaard
+          deviatie worden van de bovenkant (top) en onderkant (basis) van
+          Laagpakket van Schoorl de standaard afwijkingen weergegeven.
+        </gco:CharacterString>
+      </gmd:abstract>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString>TNO Geologische Dienst Nederland
+            </gco:CharacterString>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString>info@dinoloket.nl</gco:CharacterString>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+              <gmd:onlineResource>
+                <gmd:CI_OnlineResource>
+                  <gmd:linkage>
+                    <gmd:URL>http://www.dinoloket.nl</gmd:URL>
+                  </gmd:linkage>
+                </gmd:CI_OnlineResource>
+              </gmd:onlineResource>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode"
+                             codeListValue="custodian"/>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:graphicOverview>
+        <!--  replaced by metadata (optional) -->
+        <gmd:MD_BrowseGraphic>
+          <gmd:fileName>
+            <gco:CharacterString>
+              http://www.gdngeoservices.nl/wms/dinomap/csw/preview/M11M0789
+            </gco:CharacterString>
+          </gmd:fileName>
+        </gmd:MD_BrowseGraphic>
+      </gmd:graphicOverview>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Ondiepe geologie</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Dieptekaart</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Dieptekaart</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Diktekaart</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Boringen</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Formatie</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>infoMapAccessService</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>humanGeographicViewer</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Bodem</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>GEMET - INSPIRE themes, version 1.0
+                </gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2008-06-01</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode
+                            codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+                            codeListValue="publication">publication
+                    </gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>Geen gebruiksbeperkingen</gco:CharacterString>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:accessConstraints>
+            <gmd:MD_RestrictionCode
+                    codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_RestrictionCode"
+                    codeListValue="otherRestrictions"/>
+          </gmd:accessConstraints>
+          <gmd:otherConstraints>
+            <gco:CharacterString>Geen beperkingen</gco:CharacterString>
+          </gmd:otherConstraints>
+          <gmd:otherConstraints>
+            <gco:CharacterString>
+              http://creativecommons.org/publicdomain/mark/1.0/deed.nl
+            </gco:CharacterString>
+          </gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints>
+        <gmd:MD_SecurityConstraints>
+          <gmd:classification>
+            <gmd:MD_ClassificationCode
+                    codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_ClassificationCode"
+                    codeListValue="unclassified">Vrij toegankelijk
+            </gmd:MD_ClassificationCode>
+          </gmd:classification>
+        </gmd:MD_SecurityConstraints>
+      </gmd:resourceConstraints>
+      <srv:serviceType>
+        <gco:LocalName>view</gco:LocalName>
+      </srv:serviceType>
+      <srv:serviceTypeVersion>
+        <gco:CharacterString>1.1</gco:CharacterString>
+      </srv:serviceTypeVersion>
+      <srv:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>3.341</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>4.8700</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>51.1700</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>52.2000</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+        </gmd:EX_Extent>
+      </srv:extent>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Boringen binnen verbreiding
+          </gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Boringen buiten verbreiding
+          </gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Verbreiding</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Verbreiding raster</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Top</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Dikte</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Basis</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">St.Dev. Top</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">St.Dev. Basis</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Maaiveld</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Goeree</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Zeeland</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Zuid-Holland</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Kaartbladen</gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:coupledResource>
+        <!-- replaced by exporter -->
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString>GetMap</gco:CharacterString>
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString>4124d24a-b549-4b21-8125-37c41b01de64
+            </gco:CharacterString>
+          </srv:identifier>
+          <gco:ScopedName codeSpace="NL.TNO">Eenvoudige topografie
+          </gco:ScopedName>
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:couplingType>
+        <srv:SV_CouplingType
+                codeList="http://www.isotc211.org/2005/iso19119/resources/Codelist/gmxCodelists.xml#SV_CouplingType"
+                codeListValue="tight"/>
+      </srv:couplingType>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <!-- replaced by exporter -->
+          <srv:operationName>
+            <gco:CharacterString>GetCapabilities</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList
+                    codeList="http://www.isotc211.org/2005/iso19119/resources/Codelist/gmxCodelists.xml#DCPList"
+                    codeListValue="WebServices"/>
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.gdngeoservices.nl/wms/dinomap/M11M0789
+                </gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <!-- replaced by exporter -->
+      <srv:operatesOn uuidref="ddf87610-2724-11e2-81c1-0800200c9a66"
+                      xlink:href="http://www.gdngeoservices.nl/excat-inspire/csw?Service=CSW&amp;Request=GetRecordById&amp;Version=2.0.2&amp;id=7D35598D-DFBF-C64D-0F1A-92A80A45EB14&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full"
+                      xlink:type="simple"/>
+    </srv:SV_ServiceIdentification>
+  </gmd:identificationInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <!--  replaced by exporter -->
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.gdngeoservices.nl/wms/dinomap/M11M0789
+                </gmd:URL>
+              </gmd:linkage>
+              <gmd:protocol>
+                <gco:CharacterString>OGC:WMS</gco:CharacterString>
+              </gmd:protocol>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode
+                    codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_ScopeCode"
+                    codeListValue="service"/>
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+          <gmd:DQ_ConformanceResult>
+            <gmd:specification>
+              <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>VERORDENING (EU) Nr. 1089/2010 VAN DE
+                  COMMISSIE van
+                  23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van
+                  het Europees
+                  Parlement en de Raad betreffende de interoperabiliteit van
+                  verzamelingen
+                  ruimtelijke gegevens en van diensten met betrekking tot
+                  ruimtelijke
+                  gegevens
+                </gco:CharacterString>
+              </gmd:title>
+              <gco:Date>2010-12-08</gco:Date>
+                
+              </gmd:CI_Citation>
+              <gmd:explanation>
+                <gco:CharacterString>Nadere uitleg bij het al dan niet volledig
+                  voldoen
+                  aan de verordening
+                </gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>false</gco:Boolean>
+              </gmd:pass>
+            </gmd:specification>
+          </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>VERORDENING (EU) Nr. 1089/2010 VAN DE
+                      COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn
+                      2007/2/EG van het Europees Parlement en de Raad betreffende de
+                      interoperabiliteit van verzamelingen ruimtelijke gegevens en
+                      van diensten met betrekking tot ruimtelijke gegevens
+                    </gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date>2011-03-30</gco:Date>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode
+                          codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode"
+                          codeListValue="publication"/>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                </gmd:CI_Citation>
+                <gmd:explanation>
+                  <gco:CharacterString>Metadata is conform specificatie
+                  </gco:CharacterString>
+                </gmd:explanation>
+                <gmd:pass>
+                  <gco:Boolean>true</gco:Boolean>
+                </gmd:pass>
+              </gmd:specification>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>Technical Guidance for the
+                      implementation
+                      of INSPIRE View Services version 3.0
+                    </gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date>2011-03-30</gco:Date>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode
+                                codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode"
+                                codeListValue="publication"/>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                </gmd:CI_Citation>
+              </gmd:specification>
+              <gmd:explanation>
+                <gco:CharacterString>Voldoet volledig</gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>false</gco:Boolean>
+              </gmd:pass>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+</gmd:MD_Metadata>

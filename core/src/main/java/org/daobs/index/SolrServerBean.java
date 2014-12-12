@@ -42,6 +42,11 @@ public class SolrServerBean implements InitializingBean {
         return server;
     }
 
+    public SolrServerBean setServer(SolrServer server) {
+        this.server = server;
+        return this;
+    }
+
     /**
      * Connect to the Solr server, ping the server
      * to check connection and set the instance.
@@ -106,8 +111,9 @@ public class SolrServerBean implements InitializingBean {
      *
      * @param solrServerUrl The Solr server URL
      */
-    public void setSolrServerUrl(String solrServerUrl) {
+    public SolrServerBean setSolrServerUrl(String solrServerUrl) {
         this.solrServerUrl = solrServerUrl;
+        return this;
     }
 
     /**
@@ -122,8 +128,9 @@ public class SolrServerBean implements InitializingBean {
      *
      * @param solrServerCore The Solr core to connect to
      */
-    public void setSolrServerCore(String solrServerCore) {
+    public SolrServerBean setSolrServerCore(String solrServerCore) {
         this.solrServerCore = solrServerCore;
+        return this;
     }
 
     /**
@@ -138,8 +145,9 @@ public class SolrServerBean implements InitializingBean {
      *
      * @param solrServerUsername    The Solr server credentials username
      */
-    public void setSolrServerUsername(String solrServerUsername) {
+    public SolrServerBean setSolrServerUsername(String solrServerUsername) {
         this.solrServerUsername = solrServerUsername;
+        return this;
     }
 
     /**
@@ -154,7 +162,8 @@ public class SolrServerBean implements InitializingBean {
      *
      * @param solrServerPassword    The Solr server credentials password
      */
-    public void setSolrServerPassword(String solrServerPassword) {
+    public SolrServerBean setSolrServerPassword(String solrServerPassword) {
         this.solrServerPassword = solrServerPassword;
+        return this;
     }
 }
