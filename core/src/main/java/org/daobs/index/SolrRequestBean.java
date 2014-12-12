@@ -9,6 +9,7 @@ import org.apache.solr.client.solrj.request.FieldAnalysisRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.AnalysisResponseBase;
 import org.apache.solr.client.solrj.response.FieldAnalysisResponse;
+import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.AnalysisParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -59,7 +60,7 @@ public class SolrRequestBean {
      * @param query The query
      * @return
      */
-    public static long getNumFound(String query, String... filterQuery) {
+    public static Double getNumFound(String query, String... filterQuery) {
         try {
             SolrQuery solrQuery = new SolrQuery();
             solrQuery.setQuery(query);
@@ -72,12 +73,57 @@ public class SolrRequestBean {
             SolrServer solrServer = serverBean.getServer();
 
             QueryResponse solrResponse = solrServer.query(solrQuery);
-            return solrResponse.getResults().getNumFound();
+            return (double)solrResponse.getResults().getNumFound();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return null;
     }
+
+
+    public static Double getStats(String query, String[] filterQuery, String statsField, String stats) {
+        try {
+            SolrQuery solrQuery = new SolrQuery();
+            solrQuery.setQuery(query);
+            if (filterQuery != null) {
+                solrQuery.setFilterQueries(filterQuery);
+            }
+            solrQuery.setRows(0);
+            solrQuery.setGetFieldStatistics(true);
+            solrQuery.setGetFieldStatistics(statsField);
+
+            SolrServerBean serverBean = SolrServerBean.get();
+            SolrServer solrServer = serverBean.getServer();
+
+            QueryResponse solrResponse = solrServer.query(solrQuery);
+            FieldStatsInfo fieldStatsInfo = solrResponse.getFieldStatsInfo().get(statsField);
+
+            if (fieldStatsInfo != null) {
+                if ("min".equals(stats)) {
+                    return (Double)fieldStatsInfo.getMin();
+                } else if ("max".equals(stats)) {
+                    return (Double)fieldStatsInfo.getMax();
+                } else if ("count".equals(stats)) {
+                    return fieldStatsInfo.getCount().doubleValue();
+                } else if ("missing".equals(stats)) {
+                    return fieldStatsInfo.getMissing().doubleValue();
+                } else if ("mean".equals(stats)) {
+                    return (Double)fieldStatsInfo.getMean();
+                } else if ("sum".equals(stats)) {
+                    return (Double) fieldStatsInfo.getSum();
+                } else if ("stddev".equals(stats)) {
+                    return fieldStatsInfo.getStddev();
+                } else if ("countDistinct".equals(stats)) {
+                    return fieldStatsInfo.getCountDistinct().doubleValue();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     /**
      * Analyze a field and a value against the index phase
      * and return the first value generated
@@ -171,4 +217,5 @@ public class SolrRequestBean {
             return fieldValue;
         }
     }
+
 }
