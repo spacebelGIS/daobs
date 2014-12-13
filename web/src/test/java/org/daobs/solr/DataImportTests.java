@@ -30,34 +30,8 @@ public class DataImportTests extends AbstractSolrDaobsTestCase {
     @Test
     public void testXSLTMetadataImport() throws Exception {
 
-        File file = new File(Thread.currentThread()
-                .getContextClassLoader()
-                .getResource("metadata_basic.xml").toURI());
-        String xml = Files.toString(file, Charsets.UTF_8);
-
-
-        Map<String, String> args = new HashMap<String, String>();
-        args.put(CommonParams.TR, "metadata-iso19139.xsl");
-        args.put(UpdateParams.ASSUME_CONTENT_TYPE, "application/xml");
-
-        SolrCore core = h.getCore();
-        LocalSolrQueryRequest req =
-                new LocalSolrQueryRequest(core, new MapSolrParams(args));
-        ArrayList<ContentStream> streams = new ArrayList<ContentStream>();
-        streams.add(new ContentStreamBase.StringStream(xml));
-        req.setContentStreams(streams);
-        SolrQueryResponse rsp = new SolrQueryResponse();
-
-        UpdateRequestHandler handler = new UpdateRequestHandler();
-        handler.init(new NamedList<String>());
-        handler.handleRequestBody(req, rsp);
-
-        StringWriter sw = new StringWriter(32000);
-        QueryResponseWriter responseWriter = core.getQueryResponseWriter(req);
-        responseWriter.write(sw, req, rsp);
-        req.close();
-
-        String response = sw.toString();
+        String fileToLoad = "metadata_basic.xml";
+        String response = loadMetadata(fileToLoad);
 
         assertU(response);
         assertU(commit());
@@ -105,6 +79,72 @@ public class DataImportTests extends AbstractSolrDaobsTestCase {
         // presentationForm
         // otherLanguage
         // Contact
+    }
+
+    /**
+     * Load an ISO19139 document.
+     *
+     * @param fileToLoad
+     * @return
+     * @throws Exception
+     */
+    private String loadMetadata(String fileToLoad) throws Exception {
+        String xsltTransformation = "metadata-iso19139.xsl";
+        return loadData(fileToLoad, xsltTransformation);
+    }
+
+    /**
+     * Load an INSPIRE reporting or ancillary information.
+     *
+     * @param fileToLoad
+     * @return
+     * @throws Exception
+     */
+    private String loadReporting(String fileToLoad) throws Exception {
+        String xsltTransformation = "inspire-monitoring-reporting.xsl";
+        return loadData(fileToLoad, xsltTransformation);
+    }
+
+    /**
+     * Load an XML document to Solr using an XSLT transformation
+     * which has to be define in the Solr core configuration (see conf/xslt/).
+     *
+     * @param fileToLoad The XML file name to load.
+     * @param xsltTransformation The XSLT name to use.
+     *
+     * @return  The Solr response.
+     *
+     * @throws Exception
+     */
+    private String loadData(String fileToLoad, String xsltTransformation) throws Exception {
+        File file = new File(Thread.currentThread()
+                .getContextClassLoader()
+                .getResource(fileToLoad).toURI());
+
+        String xml = Files.toString(file, Charsets.UTF_8);
+
+        Map<String, String> args = new HashMap<String, String>();
+        args.put(CommonParams.TR, xsltTransformation);
+        args.put(UpdateParams.ASSUME_CONTENT_TYPE, "application/xml");
+
+        SolrCore core = h.getCore();
+        LocalSolrQueryRequest req =
+                new LocalSolrQueryRequest(core, new MapSolrParams(args));
+        ArrayList<ContentStream> streams = new ArrayList<ContentStream>();
+        streams.add(new ContentStreamBase.StringStream(xml));
+        req.setContentStreams(streams);
+        SolrQueryResponse rsp = new SolrQueryResponse();
+
+        UpdateRequestHandler handler = new UpdateRequestHandler();
+        handler.init(new NamedList<String>());
+        handler.handleRequestBody(req, rsp);
+
+        StringWriter sw = new StringWriter(32000);
+        QueryResponseWriter responseWriter = core.getQueryResponseWriter(req);
+        responseWriter.write(sw, req, rsp);
+        req.close();
+
+        return sw.toString();
     }
 
 }
