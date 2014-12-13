@@ -84,10 +84,24 @@ public class DataImportTests extends AbstractSolrDaobsTestCase {
                 , "//arr[@name='inspireTheme_syn']/str[.='Land use']"
 //                , "//arr[@name='inspireTheme']/str[.='Land use']"
                 , "//arr[@name='inspireAnnex']/str[.='iii']"
+                , "//arr[@name='tag']/str[.='urban area']"
+                , "//arr[@name='tag']/str[.='Land use']"
+                , "//arr[@name='tag']/str[.='Spain']"
+//                , "//arr[@name='geoTag']/str[.='Spain']"
+                , "//arr[@name='topic']/str[.='society']"
+                , "//arr[@name='coordinateSystem']/str[.='http://www.opengis.net/def/crs/EPSG/0/4936']"
+                , "//arr[@name='accessConstraints']/str[.='otherRestrictions']"
+                , "//arr[@name='otherConstraints']/str[.='no limitations']"
+                , "//arr[@name='useLimitation']/str[.='EEA standard re-use policy: unless otherwise indicated, re-use of content on the EEA website for commercial or non-commercial purposes is permitted free of charge, provided that the source is acknowledged (http://www.eea.europa.eu/legal/copyright). Copyright holder: Directorate-General Enterprise and Industry.']"
+                , "//arr[@name='resolutionScaleDenominator']/str[.='10000']"
                 , "//int[@name='numberOfInspireTheme'][.='1']"
+                , "//arr[@name='inspireConformResource']/bool[.='true']"
+                , "//arr[@name='lineage']/str[.='Earth Observation (EO) Data used: * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)']"
 
         );
         // harvestedDate
+        // constraintClassification
+        // resolutionDistance
         // presentationForm
         // otherLanguage
         // Contact

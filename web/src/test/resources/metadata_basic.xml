@@ -409,8 +409,7 @@
       <gmd:lineage>
         <gmd:LI_Lineage>
           <gmd:statement>
-            <gco:CharacterString>Earth Observation (EO) Data used:
-              * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)</gco:CharacterString>
+            <gco:CharacterString>Earth Observation (EO) Data used: * Spot 5 2,50 m - 50322620610131130401B7 (PS) (Date: 2006/10/13)</gco:CharacterString>
           </gmd:statement>
         </gmd:LI_Lineage>
       </gmd:lineage>

@@ -26,7 +26,7 @@
               indent="no"
               omit-xml-declaration="yes" />
 
-  <xsl:variable name="harvester" as="element()"
+  <xsl:variable name="harvester" as="element()?"
                 select="/harvestedContent/harvester"/>
 
   <xsl:variable name="dateFormat" as="xs:string"
@@ -283,6 +283,7 @@
 
             <xsl:for-each
                     select="gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString">
+              <!-- TODO: Add geotag on place keyword -->
               <field name="tag"><xsl:value-of select="text()"/></field>
             </xsl:for-each>
 
@@ -421,10 +422,11 @@
 
 
 
-
-          <field name="lineage"><xsl:value-of select="gmd:dataQualityInfo/*/
+          <xsl:for-each select="gmd:dataQualityInfo/*/
                                   gmd:lineage/gmd:LI_Lineage/
-                                    gmd:statement/gco:CharacterString"/></field>
+                                    gmd:statement/gco:CharacterString[. != '']">
+            <field name="lineage"><xsl:value-of select="."/></field>
+          </xsl:for-each>
 
 
           <!-- Service/dataset relation. Create document for the association.
