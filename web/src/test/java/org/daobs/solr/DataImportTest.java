@@ -25,7 +25,9 @@ import java.util.Map;
 /**
  *
  */
-public class DataImportTests extends AbstractSolrDaobsTestCase {
+public class DataImportTest extends AbstractSolrDaobsTestCase {
+
+
 
     @Test
     public void testXSLTMetadataImport() throws Exception {
@@ -79,6 +81,20 @@ public class DataImportTests extends AbstractSolrDaobsTestCase {
         // presentationForm
         // otherLanguage
         // Contact
+    }
+
+
+    @Test
+    public void testXSLTINSPIREReportingImport() throws Exception {
+        String fileToLoad = "inspire_indicators.xml";
+        String response = loadReporting(fileToLoad);
+
+        assertU(response);
+        assertU(commit());
+        assertQ("test reporting document was correctly indexed", req("q", "documentType:indicator")
+                , "//result[@numFound='86']");
+
+
     }
 
     /**

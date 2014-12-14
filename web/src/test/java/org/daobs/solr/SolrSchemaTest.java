@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  *
  */
-public class SolrSchemaTests extends AbstractSolrDaobsTestCase {
+public class SolrSchemaTest extends AbstractSolrDaobsTestCase {
 
     @Test
     public void testThatNoResultsAreReturned() throws SolrServerException {
