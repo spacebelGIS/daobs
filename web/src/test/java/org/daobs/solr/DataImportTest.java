@@ -91,10 +91,51 @@ public class DataImportTest extends AbstractSolrDaobsTestCase {
 
         assertU(response);
         assertU(commit());
-        assertQ("test reporting document was correctly indexed", req("q", "documentType:indicator")
+        assertQ("test reporting document was correctly indexed",
+                req("q", "documentType:indicator")
                 , "//result[@numFound='86']");
+    }
 
 
+    @Test
+    public void testXSLTINSPIREAncillaryInformationImport() throws Exception {
+        String fileToLoad = "inspire_indicators_with_ai.xml";
+        String response = loadReporting(fileToLoad);
+
+        assertU(response);
+        assertU(commit());
+        assertQ("test ancillary information was correctly indexed",
+                req("q", "documentType:ai")
+                , "//result[@numFound='7']");
+
+        assertQ("test ancillary information user requests on each service types " +
+                        "were correctly indexed at service type level",
+                req("q", "id:\"aiuserRequestview2013-12-31T12:00:00Zfi\"")
+                , "//result[@numFound='1']"
+                , "//str[@name='territory'][.='fi']"
+                , "//str[@name='indicatorName'][.='userRequestview']"
+                , "//date[@name='reportingDateSubmission'][.='2014-06-05T12:00:00Z']"
+                , "//date[@name='reportingDate'][.='2013-12-31T12:00:00Z']"
+                , "//str[@name='reportingYear'][.='2013']"
+                , "//double[@name='indicatorValue'][.='1000.0']"
+        );
+
+        assertQ("test ancillary information user requests on each service types " +
+                        "were correctly indexed at record level",
+                req("q", "indicatorName:userRequestdiscovery*")
+                , "//result[@numFound='2']"
+        );
+
+        assertQ("test ancillary information on actual / relevant area were correctly indexed",
+                req("q", "id:\"aiactualArea2013-12-31T12:00:00ZfiBB\"")
+                , "//result[@numFound='1']"
+                , "//str[@name='territory'][.='fi']"
+                , "//str[@name='indicatorName'][.='actualArea']"
+                , "//date[@name='reportingDateSubmission'][.='2014-06-05T12:00:00Z']"
+                , "//date[@name='reportingDate'][.='2013-12-31T12:00:00Z']"
+                , "//str[@name='reportingYear'][.='2013']"
+                , "//double[@name='indicatorValue'][.='1000.0']"
+        );
     }
 
     /**
