@@ -244,17 +244,22 @@
             <!-- TODO: create specific INSPIRE template or mode -->
             <!-- INSPIRE themes
 
-            Select the first thesaurus name only as some records
+            Select the first thesaurus title because some records
             may contains many even if invalid.
+
             Also get the first title at it may happen that a record
             have more than one.
+
+            Select any thesaurus having the title containing "INSPIRE themes".
+            Some records have "GEMET-INSPIRE themes" eg. sk:ee041534-b8f3-4683-b9dd-9544111a0712
+            Some other "GEMET - INSPIRE themes"
             -->
             <xsl:for-each
                     select="gmd:descriptiveKeywords
                        /gmd:MD_Keywords[contains(
                          gmd:thesaurusName[1]/gmd:CI_Citation/
                            gmd:title[1]/gco:CharacterString/text(),
-                           'GEMET - INSPIRE themes')]
+                           'INSPIRE themes')]
                       /gmd:keyword/gco:CharacterString">
 
               <xsl:variable name="inspireTheme" as="xs:string"
