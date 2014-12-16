@@ -41,6 +41,12 @@ mvn tomcat7:run-war
 Access the home page from http://localhost:8983/solr.
 
 
+### Configure security
+
+Administration pages are accessible only to non anonymous users.
+
+By default, only one user is defined with username "admin" and password "admin". To add more user, configuration is made in WEB-INF/config-security-ba.xml.
+
 ## Other building options
 
 ### Building the application in debug mode
@@ -160,14 +166,14 @@ find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u username:password -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 
 or 
 
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
@@ -176,7 +182,7 @@ Manually indexing INSPIRE monitoring reporting:
 ```
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u daobs:daobspass -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
@@ -184,12 +190,12 @@ Manually dropped all records:
 ```
 curl http://localhost:8983/solr/data/update \
     --data '<delete><query>documentType:*</query></delete>' \
-    -u username:password \
+    -u admin:admin \
     -H 'Content-type:text/xml; charset=utf-8'
 
 curl http://localhost:8983/solr/data/update \
     --data '<commit/>' \
-    -u username:password \
+    -u admin:admin \
     -H 'Content-type:text/xml; charset=utf-8'
 ```
 
