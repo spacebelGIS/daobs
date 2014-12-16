@@ -21,6 +21,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -94,6 +95,7 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             Double statValue;
             Double defaultValue = variable.getDefault();
             Query query = variable.getQuery();
+            String format = variable.getNumberFormat();
             if (query != null) {
                 // 2 cases here:
                 // a) Simple query and the number of records found are returned
@@ -116,14 +118,16 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                         String.format("  Results '%s'.", statValue)
                 );
                 if (statValue != null) {
+                    String valueAsText = formatValue(statValue, format);
                     indicatorResults.put(variable.getId(), statValue);
-                    variable.setValue(statValue + "");
+                    variable.setValue(valueAsText);
                 } else if (defaultValue != null) {
                     logger.log(java.util.logging.Level.FINE,
                             String.format("  Set to default value '%s'.", defaultValue)
                     );
+                    String valueAsText = formatValue(defaultValue, format);
                     indicatorResults.put(variable.getId(), defaultValue);
-                    variable.setValue(defaultValue + "");
+                    variable.setValue(valueAsText);
                 }
 
             } else {
@@ -146,6 +150,7 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             double result;
             ExpressionBuilder expressionBuilder = null;
             String expression = indicator.getExpression();
+            String format = indicator.getNumberFormat();
             if (expression == null) {
                 String message = String.format("  Null expression for indicator '%s'. " +
                                 "Check the reporting configuration file.",
@@ -168,8 +173,9 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                         );
                         param.setStatus("undefined");
                     } else {
+                        String valueAsText = formatValue(paramValue, format);
                         param.setStatus("set");
-                        param.setValue(paramValue + "");
+                        param.setValue(valueAsText);
                         expressionBuilder.withVariable(
                                 param.getId(),
                                 paramValue
@@ -197,7 +203,8 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             if (e != null) {
                 try {
                     result = e.calculate();
-                    indicator.setValue(result + "");
+                    String valueAsText = formatValue(result, format);
+                    indicator.setValue(valueAsText);
                     indicatorResults.put(indicator.getId(), result);
                 } catch (ArithmeticException e1) {
                     e1.printStackTrace();
@@ -212,6 +219,15 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
         }
 
         return null;
+    }
+
+    private String formatValue(Double statValue, String format) {
+        String valueAsText = statValue + "";
+        if (format != null) {
+            DecimalFormat df = new DecimalFormat(format);
+            valueAsText = df.format(statValue);
+        }
+        return valueAsText;
     }
 
     @Override

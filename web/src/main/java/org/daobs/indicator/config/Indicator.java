@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{http://daobs.org}comment" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
+ *       &lt;attribute name="numberFormat" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="error" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -70,6 +71,8 @@ public class Indicator {
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
     protected String id;
+    @XmlAttribute(name = "numberFormat")
+    protected String numberFormat;
     @XmlAttribute(name = "error")
     protected Boolean error;
 
@@ -263,6 +266,30 @@ public class Indicator {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the numberFormat property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNumberFormat() {
+        return numberFormat;
+    }
+
+    /**
+     * Sets the value of the numberFormat property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNumberFormat(String value) {
+        this.numberFormat = value;
     }
 
     /**

@@ -66,6 +66,7 @@
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
       <xs:attribute name="default" use="optional" type="xs:double"/>
+      <xs:attribute name="numberFormat" use="optional" type="xs:string"/>
       <xs:attribute name="error" use="optional" type="xs:boolean"/>
     </xs:complexType>
   </xs:element>
@@ -81,6 +82,7 @@
         <xs:element ref="daobs:comment" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
       <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="numberFormat" use="optional" type="xs:string"/>
       <xs:attribute name="error" use="optional" type="xs:boolean"/>
     </xs:complexType>
   </xs:element>

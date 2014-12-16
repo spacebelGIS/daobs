@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
  *       &lt;attribute name="default" type="{http://www.w3.org/2001/XMLSchema}double" />
+ *       &lt;attribute name="numberFormat" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="error" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -69,6 +70,8 @@ public class Variable {
     protected String id;
     @XmlAttribute(name = "default")
     protected Double _default;
+    @XmlAttribute(name = "numberFormat")
+    protected String numberFormat;
     @XmlAttribute(name = "error")
     protected Boolean error;
 
@@ -262,6 +265,30 @@ public class Variable {
      */
     public void setDefault(Double value) {
         this._default = value;
+    }
+
+    /**
+     * Gets the value of the numberFormat property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNumberFormat() {
+        return numberFormat;
+    }
+
+    /**
+     * Sets the value of the numberFormat property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNumberFormat(String value) {
+        this.numberFormat = value;
     }
 
     /**
