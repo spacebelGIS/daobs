@@ -145,8 +145,18 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             Calculable e = null;
             double result;
             ExpressionBuilder expressionBuilder = null;
+            String expression = indicator.getExpression();
+            if (expression == null) {
+                String message = String.format("  Null expression for indicator '%s'. " +
+                                "Check the reporting configuration file.",
+                        indicator.getId());
+                logger.log(Level.WARNING, message);
+                indicator.setStatus(message);
+                continue;
+            }
+
             try {
-                expressionBuilder = new ExpressionBuilder(indicator.getExpression());
+                expressionBuilder = new ExpressionBuilder(expression);
                 for (Parameter param : indicator.getParameters().getParameter()) {
                     Double paramValue = indicatorResults.get(param.getId());
 

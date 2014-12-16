@@ -503,8 +503,8 @@
       </daobs:parameters>
     </daobs:indicator>
     <daobs:indicator id="NSi22">
-      <daobs:name></daobs:name>
       <daobs:name>%age of spatial data sets for which a download service exists</daobs:name>
+      <daobs:expression>NSv22 / DSv_Num</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv22"/>
         <daobs:parameter id="DSv_Num"/>
@@ -619,9 +619,9 @@
 
     <daobs:indicator id="NSi32">
       <daobs:name xml:lang="en">Average number of requests per view services</daobs:name>
-      <daobs:expression>NSi32 / NSv_NumViewServ</daobs:expression>
+      <daobs:expression>NSv32 / NSv_NumViewServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi32"/>
+        <daobs:parameter id="NSv32"/>
         <daobs:parameter id="NSv_NumViewServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
@@ -629,29 +629,29 @@
 
     <daobs:indicator id="NSi33">
       <daobs:name xml:lang="en">Average number of requests per download services</daobs:name>
-      <daobs:expression>NSi33 / NSv_NumDownServ</daobs:expression>
+      <daobs:expression>NSv33 / NSv_NumDownlServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi33"/>
-        <daobs:parameter id="NSv_NumDownServ"/>
+        <daobs:parameter id="NSv33"/>
+        <daobs:parameter id="NSv_NumDownlServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
     </daobs:indicator>
 
     <daobs:indicator id="NSi34">
       <daobs:name xml:lang="en">Average number of requests per transformation services</daobs:name>
-      <daobs:expression>NSi34 / NSv_NumTransServ</daobs:expression>
+      <daobs:expression>NSv34 / NSv_NumTransfServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi34"/>
-        <daobs:parameter id="NSv_NumTransServ"/>
+        <daobs:parameter id="NSv34"/>
+        <daobs:parameter id="NSv_NumTransfServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
     </daobs:indicator>
 
     <daobs:indicator id="NSi35">
       <daobs:name xml:lang="en">Average number of requests per invoke services</daobs:name>
-      <daobs:expression>NSi35 / NSv_NumInvkServ</daobs:expression>
+      <daobs:expression>NSv35 / NSv_NumInvkServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi35"/>
+        <daobs:parameter id="NSv35"/>
         <daobs:parameter id="NSv_NumInvkServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
@@ -682,9 +682,9 @@
 
     <daobs:indicator id="NSi42">
       <daobs:name xml:lang="en">%age of conformant view services</daobs:name>
-      <daobs:expression>NSi42 / NSv_NumViewServ</daobs:expression>
+      <daobs:expression>NSv42 / NSv_NumViewServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi42"/>
+        <daobs:parameter id="NSv42"/>
         <daobs:parameter id="NSv_NumViewServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
@@ -692,29 +692,29 @@
 
     <daobs:indicator id="NSi43">
       <daobs:name xml:lang="en">%age of conformant download services</daobs:name>
-      <daobs:expression>NSi43 / NSv_NumDownServ</daobs:expression>
+      <daobs:expression>NSv43 / NSv_NumDownlServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi43"/>
-        <daobs:parameter id="NSv_NumDownServ"/>
+        <daobs:parameter id="NSv43"/>
+        <daobs:parameter id="NSv_NumDownlServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
     </daobs:indicator>
 
     <daobs:indicator id="NSi44">
       <daobs:name xml:lang="en">%age of conformant transformation services</daobs:name>
-      <daobs:expression>NSi44 / NSv_NumTransServ</daobs:expression>
+      <daobs:expression>NSv44 / NSv_NumTransfServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi44"/>
-        <daobs:parameter id="NSv_NumTransServ"/>
+        <daobs:parameter id="NSv44"/>
+        <daobs:parameter id="NSv_NumTransfServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
     </daobs:indicator>
 
     <daobs:indicator id="NSi45">
       <daobs:name xml:lang="en">%age of conformant invoke services</daobs:name>
-      <daobs:expression>NSi45 / NSv_NumInvkServ</daobs:expression>
+      <daobs:expression>NSv45 / NSv_NumInvkServ</daobs:expression>
       <daobs:parameters>
-        <daobs:parameter id="NSi45"/>
+        <daobs:parameter id="NSv45"/>
         <daobs:parameter id="NSv_NumInvkServ"/>
       </daobs:parameters>
       <daobs:comment></daobs:comment>
