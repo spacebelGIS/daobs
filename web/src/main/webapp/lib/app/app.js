@@ -202,10 +202,11 @@
       $scope.preview = function () {
         $scope.overview = false;
         $scope.report = null;
-        var area = $scope.territory && $scope.territory.label;
+        var area = $scope.territory && $scope.territory.label,
+          filterParameter = $scope.filter ? '?fq=' + $scope.filter  : '';
         $http.get(cfg.SERVICES.reporting +
           $scope.reporting.id + '/' +
-          area + '.json').success(function (data) {
+          area + '.json' + filterParameter).success(function (data) {
           setReport(data);
         });
       };

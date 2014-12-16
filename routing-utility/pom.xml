@@ -2,25 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>routing-utility</artifactId>
+  <name>Routing utility</name>
+
   <parent>
     <artifactId>daobs</artifactId>
     <groupId>org.daobs</groupId>
     <version>0.1-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
-
-  <artifactId>daobs-core</artifactId>
-  <name>Core</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-solrj</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
+      <groupId>org.daobs</groupId>
+      <artifactId>routing-deps</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
   </dependencies>
 </project>

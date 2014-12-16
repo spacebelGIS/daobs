@@ -1,8 +1,8 @@
 target/
 harvesters/csw-harvester/csw/
 harvesters/csw-harvester/logs/
-tasks/validation-checker/tmp/
-tasks/validation-checker/logs/
+tasks/*/tmp/
+tasks/*/logs/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

@@ -17,10 +17,10 @@
     <property name="inspireResourceTesterURL" value="${inspire.validator.url}"/>
   </bean>
 
-  <bean id="pagination" class="org.daobs.tasks.validation.inspire.Pagination">
+  <bean id="pagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${records.per.page}"/>
   </bean>
-  <bean id="utility" class="org.daobs.tasks.validation.inspire.Utility"/>
+  <bean id="utility" class="org.daobs.routing.utility.Utility"/>
 
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"

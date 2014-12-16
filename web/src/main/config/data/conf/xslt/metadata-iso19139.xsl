@@ -447,35 +447,35 @@
             <xsl:variable name="relatedTo">
               <xsl:if test="@xlink:href != ''">
                 <xsl:analyze-string select="@xlink:href"
-                                    regex=".*id=([\w-]*).*">
+                                    regex=".*[i|I][d|D]=([\w\-\.]*).*">
                   <xsl:matching-substring>
                     <xsl:value-of select="regex-group(1)"/>
                   </xsl:matching-substring>
                 </xsl:analyze-string>
               </xsl:if>
             </xsl:variable>
-            <field name="recordOperateOn"><xsl:value-of select="$relatedTo"/></field>
+            <xsl:if test="$relatedTo != ''">
+              <field name="recordOperateOn"><xsl:value-of select="$relatedTo"/></field>
 
-            <doc>
-              <field name="id"><xsl:value-of
-                      select="concat('association', $identifier,
-                $associationType, $relatedTo)"/></field>
-              <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
-              <field name="documentType">association</field>
-              <field name="record"><xsl:value-of select="$identifier"/></field>
-              <field name="associationType"><xsl:value-of select="$associationType"/></field>
-              <field name="relatedTo"><xsl:value-of select="$relatedTo"/></field>
-            </doc>
-            <doc>
-              <field name="id"><xsl:value-of
-                      select="concat('association',
-                $associationType, $relatedTo)"/></field>
-              <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
-              <field name="documentType">association2</field>
-              <field name="record"><xsl:value-of select="$identifier"/></field>
-              <field name="associationType"><xsl:value-of select="concat($associationType, $serviceType)"/></field>
-              <field name="relatedTo"><xsl:value-of select="$relatedTo"/></field>
-            </doc>
+              <doc>
+                <field name="id"><xsl:value-of
+                        select="concat('association', $identifier,
+                  $associationType, $relatedTo)"/></field>
+                <field name="documentType">association</field>
+                <field name="record"><xsl:value-of select="$identifier"/></field>
+                <field name="associationType"><xsl:value-of select="$associationType"/></field>
+                <field name="relatedTo"><xsl:value-of select="$relatedTo"/></field>
+              </doc>
+              <doc>
+                <field name="id"><xsl:value-of
+                        select="concat('association',
+                  $associationType, $relatedTo)"/></field>
+                <field name="documentType">association2</field>
+                <field name="record"><xsl:value-of select="$identifier"/></field>
+                <field name="associationType"><xsl:value-of select="concat($associationType, $serviceType)"/></field>
+                <field name="relatedTo"><xsl:value-of select="$relatedTo"/></field>
+              </doc>
+            </xsl:if>
           </xsl:for-each>
         </doc>
 

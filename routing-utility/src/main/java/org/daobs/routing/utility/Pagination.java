@@ -1,4 +1,4 @@
-package org.daobs.tasks.validation.inspire;
+package org.daobs.routing.utility;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Really simple pagination utility.
  *
- * TODO: Move to a more generic place
  *
  * Created by francois on 10/12/14.
  */

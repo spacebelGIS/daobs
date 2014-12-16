@@ -3,16 +3,17 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.daobs.harvester</groupId>
-  <artifactId>csw-harvester</artifactId>
+  <groupId>org.daobs.tasks</groupId>
+  <artifactId>service-dataset-indexer</artifactId>
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
-  <name>Harvester / CSW</name>
+
+  <name>Background task / Service and dataset link indexer</name>
   <url></url>
 
   <parent>
-    <groupId>org.daobs.harvester</groupId>
-    <artifactId>harvester</artifactId>
+    <artifactId>task</artifactId>
+    <groupId>org.daobs.tasks</groupId>
     <version>0.1-SNAPSHOT</version>
   </parent>
 
@@ -38,10 +39,16 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
     <defaultGoal>install</defaultGoal>
+
     <plugins>
       <!-- allows the route to be ran via 'mvn camel:run' -->
       <plugin>
