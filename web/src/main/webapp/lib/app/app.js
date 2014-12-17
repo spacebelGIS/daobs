@@ -20,24 +20,26 @@
     }
   });
 
-  app.config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        controller: 'HomeCtrl',
-        templateUrl: 'lib/app/partials/home.html'
-      })
-      .when('/reporting', {
-        controller: 'ReportingCtrl',
-        templateUrl: 'lib/app/partials/reporting.html'
-      })
-      .when('/harvesting', {
-        controller: 'HarvestingCtrl',
-        templateUrl: 'lib/app/partials/harvesting.html'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+	  app.config(function($routeProvider) {
+		$routeProvider.when('/', {
+			controller : 'HomeCtrl',
+			templateUrl : 'lib/app/partials/home.html'
+		}).when('/reporting', {
+			controller : 'ReportingCtrl',
+			templateUrl : 'lib/app/partials/reporting/generate.html'
+		}).when('/reporting/manage', {
+			controller : 'ReportingCtrl',
+			templateUrl : 'lib/app/partials/reporting/manage.html'
+		}).when('/reporting/submit', {
+			controller : 'ReportingCtrl',
+			templateUrl : 'lib/app/partials/reporting/submit.html'
+		}).when('/harvesting', {
+			controller : 'HarvestingCtrl',
+			templateUrl : 'lib/app/partials/harvesting.html'
+		}).otherwise({
+			redirectTo : '/'
+		});
+	});
 
 
   app.controller('RootController', [
@@ -80,7 +82,8 @@
       $scope.navClass = function (page) {
         var path = $location.path().replace('/', '');
         $scope.currentRoute = path || 'home';
-        return page.replace('#/', '') === $scope.currentRoute ? 'active' : '';
+        return page.replace('#/', '') === $scope.currentRoute
+        	|| $scope.currentRoute.indexOf(page.replace('#/', '') + "/") === 0 ? 'active' : '';
       };
 
       $scope.startIntro = function () {
@@ -215,5 +218,10 @@
       $scope.$watch('territory', function () {
         $scope.report = null;
       });
+      
+      $scope.isActive = function(hash) {
+    	  return location.hash.indexOf("#/" + hash) === 0 
+    	  	&& location.hash.indexOf("#/" + hash + "/") !== 0 ;
+      }
     }]);
 }());
