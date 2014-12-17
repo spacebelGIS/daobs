@@ -143,7 +143,7 @@ Harvesting is multithreaded on endpoint basis. By default, configuration is 11 t
 
 
 
-### Indexing records and indicators
+### Indexing records
 
 Metadata records and indicators could be manually loaded using Solr API by importing XML files.
 
@@ -177,6 +177,10 @@ for f in *.xml; do
 done
 ```
 
+
+### Indexing INSPIRE indicators
+
+
 Manually indexing INSPIRE monitoring reporting (reporting could also contains ancillary information):
 
 ```
@@ -200,8 +204,6 @@ curl http://localhost:8983/solr/data/update \
 ```
 
 
-### Indexing ISO19139 records
-
 
 
 ## Analysis tasks
@@ -210,12 +212,27 @@ A set of background tasks could be triggered on the content of the index and imp
 
 ### Validation task
 
+#### Process
+
 A two steps validation task is defined:
 
 * XML Schema validation
 * INSPIRE validator (http://inspire-geoportal.ec.europa.eu/validator2/#)
 
-The results and details of the validation process are stored in the index.
+The results and details of the validation process are stored in the index:
+
+* For INSPIRE validation:
+ * isValid: Boolean
+ * validDate: Date of validation
+ * validReport: XML report returned by the validation service
+ * validInfo: Text information about the status
+* For XML Schema validation:
+ * isSchemaValid: Boolean
+ * schemaValidDate: The date of validation
+ * schemaValidReport: XSD validation report
+
+
+#### Run the task
 
 To trigger the validation:
 
@@ -225,6 +242,46 @@ mvn camel:run
 ```
 
 By default, the task validates all records which have not been validated before (ie. +documentType:metadata -isValid:[* TO *]). A custom set of records could be validated by changing the solr.select.filter in the config.properties file.
+
+
+### Services and data sets link
+
+#### Process
+
+A data sets may be accessible through a view and/or download services. This type of relation is defined at the service metadata level using the operatesOn element:
+
+* link using the data sets metadata record UUID:
+
+```
+<srv:operatesOn uuidref="81aea739-4d21-427d-bec4-082cb64b825b"/>
+```
+
+* link using a GetRecordById request:
+```
+<srv:operatesOn uuidref="BDML_NATURES_FOND"
+                xlink:href="http://services.data.shom.fr/csw/ISOAP?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;Id=81aea739-4d21-427d-bec4-082cb64b825b"/>
+```
+
+Both type of links are supported. The GetRecordById takes priority. The data sets metadata record identifier is extracted from the GetRecordById request.
+
+
+
+This task analyze all available services in the index and update associated data sets by adding the following fields:
+
+* recordOperatedByType: Contains the type of all services operating the data sets (eg. view, download)
+* recordOperatedBy: Contains the identifier of all services operating the data sets. Note: it does not provide information that this service is a download service. User need to get the service record to get this details.
+
+
+#### Run the task
+
+To trigger the validation:
+
+```
+cd tasks/service-dataset-indexer
+mvn camel:run
+```
+
+By default, the task analyze all services.
 
 
 ## Loading dashboards
