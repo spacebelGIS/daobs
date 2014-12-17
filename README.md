@@ -177,7 +177,7 @@ for f in *.xml; do
 done
 ```
 
-Manually indexing INSPIRE monitoring reporting:
+Manually indexing INSPIRE monitoring reporting (reporting could also contains ancillary information):
 
 ```
 for f in *.xml; do
