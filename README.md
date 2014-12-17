@@ -20,7 +20,7 @@ The guide for user installing and configuring the application.
 * Java 7
 * Maven 3
 
-## Installing the application
+## Build the application
 
 Clone and compile the application:
 
@@ -31,7 +31,12 @@ mvn clean install
 ```
 
 
-Starting web application:
+## Run the application
+
+2 options:
+
+* Deploy the WAR file in a servlet container (eg. tomcat).
+* Start the web application using maven:
 
 ```
 cd web
@@ -40,6 +45,7 @@ mvn tomcat7:run-war
 
 Access the home page from http://localhost:8983/solr.
 
+## Configuration
 
 ### Configure security
 
@@ -47,9 +53,9 @@ Administration pages are accessible only to non anonymous users.
 
 By default, only one user is defined with username "admin" and password "admin". To add more user, configuration is made in WEB-INF/config-security-ba.xml.
 
-## Other building options
+### Other build options
 
-### Building the application in debug mode
+#### Building the application in debug mode
 
 For developpers, the application could be built in debug mode in order to have the banana project installed without Javascript minification. For this disable the production profile:
 
@@ -57,7 +63,7 @@ For developpers, the application could be built in debug mode in order to have t
 mvn clean install -P\!production
 ```
 
-### Building the application without test
+#### Building the application without test
 
 The tests rely on some third party application (eg. INSPIRE validator). It may be useful to build the application without testing:
 
@@ -74,13 +80,12 @@ mvn clean install -DskipTests
 * one for storing metadata records and indicators
 
 
-## Importing metadata records or indicators
+## Importing data
  
 2 types of information can be loaded into the system:
 
 * Metadata records following the standard for metadata on geographic information ISO19139/119
 * Indicators in [INSPIRE monitoring reporting format](http://inspire-geoportal.ec.europa.eu/monitoringreporting/monitoring.xsd)
-
 
 
 ### Harvesting records
@@ -143,7 +148,7 @@ Harvesting is multithreaded on endpoint basis. By default, configuration is 11 t
 
 
 
-### Indexing records
+### Indexing ISO19139 records
 
 Metadata records and indicators could be manually loaded using Solr API by importing XML files.
 
@@ -284,7 +289,8 @@ mvn camel:run
 By default, the task analyze all services.
 
 
-## Loading dashboards
+## Dashboard
+
 
 Access the dashboard page, click load and choose dashboard configuration from the list. 
 If no dashboards are available sample dashboard are available here: dashboard/src/app/dashboards
@@ -295,8 +301,7 @@ If no dashboards are available sample dashboard are available here: dashboard/sr
 
 
 
-
-## Configuring reports
+## Reporting
 
 Report configuration is made web/src/main/webapp/WEB-INF/reporting.
 One or more configuration file can be created in this folder. The file name should follow the pattern "config-<report_id>.xml".
