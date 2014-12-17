@@ -16,7 +16,8 @@
       harvesterConfig: '/solr/daobs/harvester.json',
       reportingConfig: '/solr/daobs/reporting.json',
       reporting: '/solr/daobs/reporting/',
-      dashboardBaseURL: '/solr/dashboard/#/dashboard/solr/'
+      dashboardBaseURL: '/solr/dashboard/#/dashboard/solr/',
+      solrAdmin: '/solr/admin.html'
     }
   });
 
@@ -33,6 +34,10 @@
       .when('/harvesting', {
         controller: 'HarvestingCtrl',
         templateUrl: 'lib/app/partials/harvesting.html'
+      })
+      .when('/logout', {
+        controller: 'LogoutCtrl',
+        templateUrl: 'lib/app/partials/home.html'
       })
       .otherwise({
         redirectTo: '/'
@@ -73,6 +78,12 @@
         title: 'Admin console',
         icon: 'glyphicon-cog',
         url: 'admin.html'
+      }, {
+        id: 'logout',
+        text: 'Logout',
+        title: 'Logout',
+        icon: 'glyphicon-user',
+        url: '#/logout'
       }];
 
       // Change class based on route path
@@ -96,6 +107,27 @@
       }
     }]);
 
+  app.controller('LogoutCtrl', ['$scope', '$http', 'cfg',
+    function ($scope, $http, cfg) {
+      // IE (1st check for IE11, 2on for previous versions)
+      if ((Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) || (window.ActiveXObject)) {
+        try {
+          document.execCommand("ClearAuthenticationCache");
+          window.location.href = cfg.SERVICES.root;
+        } catch (exception) {}
+      // Other browsers
+      } else {
+          var xmlhttp = new XMLHttpRequest();
+          // page with logout message somewhere in not protected directory
+          xmlhttp.open("GET", cfg.SERVICES.solrAdmin, true, "logout", (new Date()).getTime().toString());
+          xmlhttp.send("");
+          xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4) {
+              window.location.href = cfg.SERVICES.root;
+            }
+          }
+      }
+    }]);
 
   /**
    * Controller for home page displaying dashboards
