@@ -434,7 +434,20 @@
           </xsl:for-each>
 
 
+          <xsl:for-each select="gmd:distributionInfo/*">
+            <xsl:for-each select="gmd:distributionFormat/*/gmd:name/gco:CharacterString">
+              <field name="format"><xsl:value-of select="."/></field>
+            </xsl:for-each>
+
+            <xsl:for-each select="gmd:transferOptions/*/
+                                    gmd:onLine/*[gmd:linkage/gmd:URL != '']">
+              <field name="linkUrl"><xsl:value-of select="gmd:linkage/gmd:URL"/></field>
+              <!-- TODO add link field to contains URL, name and protocol -->
+            </xsl:for-each>
+          </xsl:for-each>
+
           <!-- Service/dataset relation. Create document for the association.
+          Note: not used for indicators anymore
            This could be used to retrieve :
           {!child of=documentType:metadata}+documentType:metadata +id:9940c446-6fd4-4ab3-a4de-7d0ee028a8d1
           {!child of=documentType:metadata}+documentType:metadata +resourceType:service +serviceType:view
