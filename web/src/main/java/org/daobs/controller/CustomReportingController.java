@@ -17,6 +17,22 @@ import java.util.*;
 @Controller
 public class CustomReportingController {
 
+    // TODO: config should move to configuration file
+    public static final String SPATIALDATASETS_QUERY_URL = "/data/select?" +
+            "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)+%%2Bterritory:%s&" +
+            "start=0&rows=%d&" +
+            "fl=metadataIdentifier,resourceTitle,inspireAnnex,inspireTheme,inspireConformResource,recordOperatedByType";
+
+    public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
+            "q=%%2BdocumentType:metadata+%%2BresourceType:service+%%2Bterritory:%s&" +
+            "start=0&rows=%d&" +
+            "fl=metadataIdentifier,resourceTitle,inspireAnnex,inspireTheme,inspireConformResource,serviceType,linkUrl";
+
+    public static final List<String> BOOLEAN_PARAMETERS = new ArrayList<>(
+            Arrays.asList("withRowData")
+    );
+
+
     /**
      * Generate report
      * TODO: provide custom XSLT as parameter
@@ -33,7 +49,14 @@ public class CustomReportingController {
             method = RequestMethod.GET)
     public ModelAndView generateMonitoring(HttpServletRequest request,
                                            @RequestParam Map<String,String> allRequestParams,
-                                           @PathVariable(value = "reporting") String reporting)
+                                           @PathVariable(value = "reporting") String reporting,
+                                           @RequestParam(
+                                                   value = "withRowData",
+                                                   required = false) Boolean withRowData,
+                                           @RequestParam(
+                                                   value = "rows",
+                                                   defaultValue = "10000",
+                                                   required = false) int rows)
             throws IOException {
         IndicatorCalculatorImpl indicatorCalculator =
                 ReportingController.generateReporting(request, reporting, null, true);
@@ -41,9 +64,8 @@ public class CustomReportingController {
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
         model.addObject("xmlSource", indicatorCalculator.toSource());
 
-        model.addObject("parameters", allRequestParams);
+        addRequestParametersToModel(allRequestParams, model);
 
-        // TODO: Add global info
         return model;
     }
 
@@ -82,16 +104,51 @@ public class CustomReportingController {
                                            @PathVariable(value = "reporting") String reporting,
                                            @PathVariable(value = "territory") String territory)
             throws IOException {
-        final List<String> booleanParameters =
-                new ArrayList<String>(
-                        Arrays.asList("withRowData")
-                );
 
         IndicatorCalculatorImpl indicatorCalculator =
                 ReportingController.generateReporting(request, reporting, territory, true);
+
+
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
         model.addObject("xmlSource", indicatorCalculator.toSource());
+        // Add path parameters
+        if (territory != null) {
+            model.addObject("territory", territory);
+        }
 
+        addRequestParametersToModel(allRequestParams, model);
+
+        addRowDataToModel(withRowData, rows, territory, model);
+
+        return model;
+    }
+
+    private void addRowDataToModel(Boolean withRowData, int rows, String territory, ModelAndView model) {
+        // Handle defaults for boolean
+        if (withRowData == null) {
+            withRowData = false;
+        }
+        model.addObject("withRowData", withRowData);
+
+        // Grab data sets and services to later
+        // build the raw data section
+        if (withRowData) {
+            Node spatialDataSets = SolrRequestBean.query(
+                    String.format(
+                            SPATIALDATASETS_QUERY_URL,
+                            territory, rows));
+            model.addObject("spatialDataSets", spatialDataSets);
+
+
+            Node spatialDataServices = SolrRequestBean.query(
+                    String.format(
+                            SPATIALDATASERVICE_QUERY_URL,
+                            territory, rows));
+            model.addObject("spatialDataServices", spatialDataServices);
+        }
+    }
+
+    private void addRequestParametersToModel(Map<String, String> allRequestParams, ModelAndView model) {
         // Add all request parameters to the model
         // in order to have them as XSL parameters in the view.
         Iterator iterator = allRequestParams.entrySet().iterator();
@@ -99,43 +156,11 @@ public class CustomReportingController {
             Map.Entry<String, String> parameter = (Map.Entry<String, String>) iterator.next();
             String parameterName = parameter.getKey();
             Object parameterValue = (String)parameter.getValue();
-            if (booleanParameters.contains(parameterName)) {
+            if (BOOLEAN_PARAMETERS.contains(parameterName)) {
                 parameterValue = Boolean.parseBoolean((String)parameterValue);
             }
             model.addObject(parameterName, parameterValue);
         }
-
-        // Add path parameters
-        if (territory != null) {
-            model.addObject("territory", territory);
-        }
-
-        if (withRowData == null) {
-            withRowData = false;
-        }
-        model.addObject("withRowData", withRowData);
-        if (withRowData) {
-            // TODO: config should move to configuration file
-            Node spatialDataSets = SolrRequestBean.query(
-                    String.format(
-                            "/data/select?" +
-                                    "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)+%%2Bterritory:%s&" +
-                                    "start=0&rows=%d&" +
-                                    "fl=metadataIdentifier,resourceTitle,inspireAnnex,inspireTheme,inspireConformResource,recordOperatedByType",
-                            territory, rows));
-            model.addObject("spatialDataSets", spatialDataSets);
-
-
-            Node spatialDataServices = SolrRequestBean.query(
-                    String.format(
-                            "/data/select?" +
-                                    "q=%%2BdocumentType:metadata+%%2BresourceType:service+%%2Bterritory:%s&" +
-                                    "start=0&rows=%d&" +
-                                    "fl=metadataIdentifier,resourceTitle,inspireAnnex,inspireTheme,inspireConformResource,serviceType,linkUrl",
-                            territory, rows));
-            model.addObject("spatialDataServices", spatialDataServices);
-        }
-        return model;
     }
 
 }

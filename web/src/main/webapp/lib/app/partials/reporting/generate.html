@@ -1,12 +1,12 @@
 <div data-ng-include="'lib/app/partials/reporting.html'"></div>
 <h3 data-translate="">Generate reporting</h3>
 <form class="form-horizontal" role="form">
-  <div class="form-group" id="ds-report-choose">
-    <label for="ds-report-field" class="col-sm-2 control-label">Choose reporting</label>
-    <div class="col-sm-10">
+  <div class="row">
+    <div class="col-sm-8">
 
-      <div class="row">
-        <div class="col-lg-12">
+      <div class="form-group" id="ds-report-choose">
+        <label for="ds-report-field" class="col-sm-2 control-label">Choose reporting</label>
+        <div class="col-sm-10">
           <div class="input-group">
             <select id="ds-report-field" class="form-control"
                     data-ng-model="reporting"
@@ -21,61 +21,92 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="form-group" id="ds-reportarea-choose">
-    <label for="ds-reportarea-field" class="col-sm-2 control-label">Choose reporting area</label>
-    <div class="col-sm-10">
-      <select id="ds-reportarea-field"
-              class="form-control"
-              data-ng-model="territory"
-              data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
-      </select>
-    </div>
-  </div>
-  <div class="form-group" id="ds-query-filter">
-    <label for="ds-reportarea-field" class="col-sm-2 control-label">Query filter</label>
-    <div class="col-sm-10">
-      <input id="ds-query-filter"
-             data-ng-model="filter"
-             class="form-control"/>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button id="ds-btn-report-preview"
-              type="submit"
-              class="btn btn-primary"
-              data-ng-disabled="!territory"
-              data-ng-click="preview()">Preview</button>
-      <div class="btn-group">
-        <button id="ds-btn-report-dwn"
-                type="button"
-                class="btn btn-default dropdown-toggle"
-                data-ng-disabled="!territory"
-                data-toggle="dropdown">
-          <span data-translate="">Download</span> <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li><a target="_blank"
-                 data-ng-href="/solr/daobs/reporting/{{reporting.id}}/{{territory.label}}.json">JSON</a></li>
-          <li><a target="_blank"
-                 data-ng-href="/solr/daobs/reporting/{{reporting.id}}/{{territory.label}}.xml">XML</a></li>
-          <li><a target="_blank"
-                 data-ng-href="/solr/daobs/reporting/custom/{{reporting.id}}/{{territory.label}}">INSPIRE monitoring reporting</a></li>
-          <li><a target="_blank"
-                 data-ng-href="/solr/daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?withRowData=true">INSPIRE monitoring reporting (with row data)</a></li>
-        </ul>
+      <div class="form-group" id="ds-reportarea-choose">
+        <label for="ds-reportarea-field" class="col-sm-2 control-label">Choose reporting area</label>
+        <div class="col-sm-10">
+          <select id="ds-reportarea-field"
+                  class="form-control"
+                  data-ng-model="territory"
+                  data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
+          </select>
+        </div>
       </div>
-      <button id="ds-btn-report-submit"
-              type="submit"
-              class="btn btn-default"
-              data-ng-disabled="!territory"
-              data-ng-click="submit()"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Not available yet!">Submit</button>
+      <div class="form-group" id="ds-query-filter">
+        <label for="ds-reportarea-field" class="col-sm-2 control-label">Query filter</label>
+        <div class="col-sm-10">
+          <input id="ds-query-filter"
+                 data-ng-model="filter"
+                 class="form-control"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <fieldset>
+        <legend data-translate="">Contact details</legend>
+        <div class="form-group" id="ds-org-filter">
+          <label for="ds-org-field" class="col-sm-2 control-label">Organization</label>
+          <div class="col-sm-10">
+            <input id="ds-org-field"
+                   data-ng-model="organizationName"
+                   class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group" id="ds-email-filter">
+          <label for="ds-email-field" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-10">
+            <input id="ds-email-field"
+                   type="email"
+                   data-ng-model="email"
+                   class="form-control"/>
+          </div>
+        </div>
+        <p class="help-block">Contact informations are required when
+          generating INSPIRE reporting to indicate report contact.</p>
+      </fieldset>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button id="ds-btn-report-preview"
+                  type="submit"
+                  class="btn btn-primary"
+                  data-ng-disabled="!territory"
+                  data-ng-click="preview()">Preview</button>
+          <div class="btn-group">
+            <button id="ds-btn-report-dwn"
+                    type="button"
+                    class="btn btn-default dropdown-toggle"
+                    data-ng-disabled="!territory"
+                    data-toggle="dropdown">
+              <span data-translate="">Download</span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a target="_blank"
+                     data-ng-href="/solr/daobs/reporting/{{reporting.id}}/{{territory.label}}.json"
+                     data-translate="">JSON</a></li>
+              <li><a target="_blank"
+                     data-ng-href="/solr/daobs/reporting/{{reporting.id}}/{{territory.label}}.xml"
+                     data-translate="">XML</a></li>
+              <li><a target="_blank"
+                     data-ng-href="/solr/daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?organizationName={{organizationName}}&email={{email}}"
+                     data-translate="">INSPIRE monitoring reporting</a></li>
+              <li><a target="_blank"
+                     data-ng-href="/solr/daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?withRowData=true&organizationName={{organizationName}}&email={{email}}"
+                     data-translate="">INSPIRE monitoring reporting (with row data)</a></li>
+            </ul>
+          </div>
+          <button id="ds-btn-report-submit"
+                  type="submit"
+                  class="btn btn-default"
+                  data-ng-disabled="!territory"
+                  data-ng-click="submit()"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Not available yet!">Submit</button>
+        </div>
+      </div>
     </div>
   </div>
 
