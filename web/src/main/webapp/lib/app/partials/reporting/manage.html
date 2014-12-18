@@ -1,70 +1,63 @@
 <div data-ng-include="'lib/app/partials/reporting.html'"></div>
-<h1 data-translate="">Manage Reporting</h1>
 
-<form class="form-horizontal" role="form">
-  <div class="form-group" id="ds-report-choose">
-    <label for="ds-report-field" class="col-sm-2 control-label">Choose reporting</label>
-    <div class="col-sm-10">
-
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="input-group">
-            <select id="ds-report-field" class="form-control"
-                    data-ng-model="reporting"
-                    data-ng-options="value.id for (key, value) in reportingConfig | orderBy: 'id'">
-            </select>
-            <div class="input-group-btn">
-              <button type="submit"
-                      id="ds-report-view"
-                      class="btn btn-default"
-                      data-ng-click="getReportDetails()">View report rules</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="form-group" id="ds-reportarea-choose">
-    <label for="ds-reportarea-field" class="col-sm-2 control-label">Choose reporting area</label>
-    <div class="col-sm-10">
-      <select id="ds-reportarea-field"
-              class="form-control"
-              data-ng-model="territory"
-              data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
-      </select>
-    </div>
-  </div>
-  <div class="form-group" id="ds-query-filter">
-    <label for="ds-reportarea-field" class="col-sm-2 control-label">Query filter</label>
-    <div class="col-sm-10">
-      <input id="ds-query-filter"
-             data-ng-model="filter"
-             class="form-control"/>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button id="ds-btn-report-preview"
+<div class="col-sm-6" data-ng-controller="SearchIndicatorCtrl">
+	<h3 data-translate="">Manage Reporting</h3>
+	<form class="form-horizontal" role="form">
+		<div class="form-group" id="mr-reportarea-choose">
+			<label for="mr-reportarea-field" class="col-sm-2 control-label">Choose
+				reporting area</label>
+			<div class="col-sm-10">
+				<select id="mr-reportarea-field" class="form-control"
+					data-ng-model="indicatorTerritory"
+					data-ng-selected="value.selected"
+					data-ng-options="value.label for (key, value) in listOfIndicatorTerritory | orderBy:'label'">
+				</select>
+			</div>
+		</div>		
+		<div class="form-group" id="mr-reportyear-choose">
+			<label for=",r-reportyear-field" class="col-sm-2 control-label">Choose
+				reporting year</label>
+			<div class="col-sm-10">
+				<select id="mr-reportyear-field" class="form-control"
+					data-ng-model="reportingYear"
+					data-ng-selected="value.selected"
+					data-ng-options="value.label for (key, value) in listOfReportingYear | orderBy:'label'">
+				</select>
+			</div>
+		</div>	
+        <button id="mr-btn-report-drop"
               type="submit"
-              class="btn btn-primary"
-              data-ng-disabled="!territory"
-              data-ng-click="preview()">Drop</button>
-    </div>
-  </div>
-</form>
+              class="btn btn-default"
+              data-ng-disabled="{{indicators.length > 0}}"
+              data-ng-click="drop()"
+              data-placement="bottom"
+              title="Not available yet!">Drop</button>
+        <div id="drop-submit-message" class="{{dropSubmitStyle}}">{{dropSubmitMessage}}</div>
+              
+	</form>
+	<div id='indicators' >
+	  <h4 data-ng-show="indicators.length > 0">Truncated preview list ({{indicators.length}} elements in total)</h4>
 
-<div class="col-sm-6" id='ds-latest-dashboard' data-ng-controller="HomeCtrl">
-    <h3>Latest dashboards</h3>
-    <div class="list-group">
-      <a href="#"
-         class="list-group-item"
-         data-ng-repeat="dashboard in dashboards"
-         data-ng-class="{active: hover}"
-         data-ng-mouseenter="hover = true"
-         data-ng-mouseleave="hover = false"
-         data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
-        {{dashboard.title}}
-      </a>
-    </div>
-  </div>
+      <div class="list-group">
+	  <span class="list-group-item"
+			data-ng-repeat="indicator in indicators"
+			data-ng-class="{active: hover}" data-ng-mouseenter="hover = true"
+			data-ng-mouseleave="hover = false"
+			data-ng-click="alert('ola ke ase')"
+			data-ng-show="$index < 5">
+			 [{{indicator.indicatorType}}] {{indicator.indicatorName}} </span>
+	</div>
+</div>
+</div>
+<div class="col-sm-6" id='ds-latest-dashboard'
+	data-ng-controller="HomeCtrl">
+	<h3>Latest dashboards</h3>
+	<div class="list-group">
+		<a href="#" class="list-group-item"
+			data-ng-repeat="dashboard in dashboards"
+			data-ng-class="{active: hover}" data-ng-mouseenter="hover = true"
+			data-ng-mouseleave="hover = false"
+			data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
+			{{dashboard.title}} </a>
+	</div>
+</div>
