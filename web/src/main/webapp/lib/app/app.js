@@ -16,6 +16,7 @@
       harvesterConfig: '/solr/daobs/harvester.json',
       reportingConfig: '/solr/daobs/reporting.json',
       reporting: '/solr/daobs/reporting/',
+      reportingSubmit: '/solr/data/update/xslt',
       dashboardBaseURL: '/solr/dashboard/#/dashboard/solr/'
     }
   });
