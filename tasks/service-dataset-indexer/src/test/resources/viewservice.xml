@@ -87,7 +87,7 @@
          <gmd:citation>
             <gmd:CI_Citation>
                <gmd:title>
-                  <gco:CharacterString>Service de visualisation cartographique (WMS ) des données Cartorisque</gco:CharacterString>
+                  <gco:CharacterString>Service de visualisation cartographique (WMS ) des données Cartorisque. Jelly</gco:CharacterString>
                </gmd:title>
                <gmd:date>
                   <gmd:CI_Date>
@@ -244,7 +244,7 @@
             </gmd:MD_SecurityConstraints>
          </gmd:resourceConstraints>
          <srv:serviceType>
-            <gco:LocalName codeSpace="www.w3c.org">OGC:WMS</gco:LocalName>
+            <gco:LocalName codeSpace="www.w3c.org">view</gco:LocalName>
          </srv:serviceType>
          <srv:serviceTypeVersion>
             <gco:CharacterString>1.1.1</gco:CharacterString>
@@ -333,6 +333,7 @@
             </srv:SV_OperationMetadata>
          </srv:containsOperations>
          <srv:operatesOn uuidref="e10c15e0-2325-11dc-9b4f-00166f237fc8"/>
+         <srv:operatesOn uuidref="81aea739-4d21-427d-bec4-082cb64b825b"/>
       </srv:SV_ServiceIdentification>
   </gmd:identificationInfo>
   <gmd:distributionInfo>

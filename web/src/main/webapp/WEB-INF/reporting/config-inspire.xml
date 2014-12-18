@@ -160,18 +160,21 @@
     <!-- INSPIRE NSi2 (Accessibility of data sets through view or download services) -->
     <daobs:variable id="NSv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a view service exists</daobs:name>
-      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:dataset +recordOperatedByType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <!--<daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment></daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv22" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a download service exists</daobs:name>
-      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:dataset +recordOperatedByType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <!--<daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment></daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="NSv23" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a view and download service exists</daobs:name>
-      <daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:viewAndDownload +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:dataset +recordOperatedByType:view +recordOperatedByType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <!--<daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:viewAndDownload +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>TODO: Not implemented yet.</daobs:comment>
     </daobs:variable>
 
