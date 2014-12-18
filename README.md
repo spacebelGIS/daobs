@@ -127,7 +127,7 @@ Example:
 Harvesting records from a CSW end-point:
 
 ```
-cd harvesters
+cd harvesters/csw-harvester
 mvn camel:run
 ```
 
