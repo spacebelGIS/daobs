@@ -26,10 +26,12 @@
   <xsl:param name="reportingDate" select="current-dateTime()"/>
 
   <!-- TODO: What is the organization. Use user session information ?  -->
-  <xsl:param name="organisationName" select="''"/>
-  <xsl:param name="email" select="'you@organisation.org'"/>
+  <xsl:param name="organizationName" select="''" as="xs:string"/>
+  <xsl:param name="email" select="''" as="xs:string"/>
 
-
+  <xsl:param name="withRowData" select="true()" as="xs:boolean"/>
+  <xsl:param name="spatialDataSets" as="node()?"/>
+  <xsl:param name="spatialDataServices" as="node()?"/>
 
   <xsl:variable name="dateFormat" as="xs:string"
                 select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z'"/>
@@ -37,7 +39,6 @@
 
   <xsl:template match="/">
 
-    <xsl:message>##<xsl:value-of select="$territory"/></xsl:message>
     <ns2:Monitoring xmlns:ns2="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring
@@ -49,7 +50,7 @@
       </documentYear>
       <memberState><xsl:value-of select="upper-case($territory)"/></memberState>
       <MonitoringMD>
-        <organizationName><xsl:value-of select="$organisationName"/></organizationName>
+        <organizationName><xsl:value-of select="$organizationName"/></organizationName>
         <email><xsl:value-of select="$email"/></email>
         <monitoringDate>
           <year><xsl:value-of select="format-dateTime($reportingDate, '[Y0001]')"/></year>
@@ -180,6 +181,154 @@
           </SdsConformant>
         </SdsConformantIndicators>
       </Indicators>
+
+      <xsl:if test="$withRowData = true()">
+        <xsl:message><xsl:copy-of select="$spatialDataServices"/></xsl:message>
+        <RowData>
+          <xsl:apply-templates mode="SpatialDataServiceFactory" select="$spatialDataServices/result/doc"/>
+          <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
+        </RowData>
+      </xsl:if>
     </ns2:Monitoring>
+  </xsl:template>
+
+
+  <!-- Convert a Solr document to a spatial data service -->
+  <xsl:template mode="SpatialDataServiceFactory"
+                match="doc"
+                as="node()">
+    <SpatialDataService>
+      <!-- gmd:identificationInfo[1]/*[1]/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString -->
+      <name><xsl:value-of select="str[@name='resourceTitle']/text()"/></name>
+
+      <!-- TODO -->
+      <respAuthority></respAuthority>
+
+      <uuid><xsl:value-of select="str[@name='metadataIdentifier']/text()"/></uuid>
+
+      <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
+
+      <MdServiceExistence>
+        <mdConformity><xsl:value-of select="str[@name = 'inspireConformResource']/text()"/></mdConformity>
+
+        <!-- The metadata record was harvested using CSW -->
+        <discoveryAccessibility>true</discoveryAccessibility>
+
+        <!-- TODO Definition ? <discoveryAccessibilityUuid></discoveryAccessibilityUuid>-->
+      </MdServiceExistence>
+
+      <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
+      <xsl:for-each select="arr[@name = 'linkUrl']/str">
+        <NetworkService>
+          <!-- TODO: Here we could ping the service and set the value ? -->
+          <directlyAccessible></directlyAccessible>
+
+          <!-- All online resources are taken into account,
+          we should maybe restrict it ? TODO: improve -->
+          <URL><xsl:value-of select="text()"/></URL>
+
+          <!-- -1 indicate unkown. Maybe some methodology
+          could be adopted to populate the value in the
+          metadata record ? -->
+          <userRequest>-1</userRequest>
+
+          <!-- TODO: definition ? -->
+          <nnConformity></nnConformity>
+
+          <NnServiceType><xsl:value-of select="$serviceType"/></NnServiceType>
+        </NetworkService>
+      </xsl:for-each>
+    </SpatialDataService>
+  </xsl:template>
+
+
+
+  <xsl:template mode="SpatialDataSetFactory"
+                match="doc"
+                as="node()">
+    <SpatialDataSet>
+      <name><xsl:value-of select="str[@name='resourceTitle']/text()"/></name>
+
+      <!-- TODO Which contact should be retrieved from the metadata ?
+      Only one -->
+      <respAuthority></respAuthority>
+
+      <uuid><xsl:value-of select="str[@name='metadataIdentifier']/text()"/></uuid>
+
+      <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
+
+      <!-- Coverage is mandatory but will probably
+      be removed in the future. Empty element returned
+      by default. -->
+      <Coverage>
+        <relevantArea></relevantArea>
+        <actualArea></actualArea>
+      </Coverage>
+
+
+      <MdDataSetExistence>
+        <IRConformity>
+          <!-- This conformity for the resource or the metadata ? -->
+          <structureCompliance><xsl:value-of select="str[@name='inspireConformResource']/text()"/></structureCompliance>
+        </IRConformity>
+        <MdAccessibility>
+          <!-- Uuids are for each services operating the resource ?
+          They could be multiple in some situation ? TODO ? -->
+
+          <xsl:variable name="recordOperatedByType" select="arr[@name = 'recordOperatedByType']"/>
+
+          <!-- The record was harvested -->
+          <discovery>true</discovery>
+          <!-- ... but we don't have the UUID of the CSW service -->
+          <discoveryUuid></discoveryUuid>
+
+          <view><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0)
+                                      then true() else false()"/></view>
+          <!--TODO <viewUuid></viewUuid>-->
+          <download><xsl:value-of select="if (count($recordOperatedByType[str = 'download']) > 0)
+                                          then true() else false()"/></download>
+          <!--TODO <downloadUuid></downloadUuid>-->
+          <viewDownload><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
+                                                  count($recordOperatedByType[str = 'download']) > 0)
+                                              then true() else false()"/></viewDownload>
+        </MdAccessibility>
+      </MdDataSetExistence>
+    </SpatialDataSet>
+  </xsl:template>
+
+
+  <xsl:template mode="InspireAnnexAndThemeFactory"
+                match="doc"
+                as="node()">
+
+    <!-- TODO: we need to dispatch themes according to annexes
+       which is not available as such in the index.
+       hierarchical facet may help for that ?
+
+       The XSD also list some code equivalent to themes:
+        <xs:enumeration value="statisticalUnits"/>
+        <xs:enumeration value="buildings"/>
+        <xs:enumeration value="soil"/>
+        <xs:enumeration value="landUse"/>
+
+       This version is not in the index nor in the metadata record.
+       Another type of synonmys maybe ?
+       -->
+    <xsl:variable name="inspireThemes"
+                  select="arr[@name = 'inspireTheme']/str"/>
+    <xsl:variable name="inspireAnnexes"
+                  select="arr[@name = 'inspireAnnex']/str[text() = 'i' or text() = 'ii' or text() = 'iii']"/>
+    <Themes>
+      <!-- For the time being put all themes in each annex -->
+      <xsl:for-each select="$inspireThemes">
+        <xsl:variable name="theme" select="text()" as="xs:string?"/>
+
+        <xsl:for-each select="$inspireAnnexes">
+          <xsl:element name="Annex{upper-case(text())}">
+            <xsl:value-of select="$theme"/>
+          </xsl:element>
+        </xsl:for-each>
+      </xsl:for-each>
+    </Themes>
   </xsl:template>
 </xsl:stylesheet>

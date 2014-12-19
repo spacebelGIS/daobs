@@ -152,6 +152,9 @@
   <field name="contactForResource" type="string" stored="true" indexed="false" multiValued="true"/>
 
   <field name="presentationForm" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="format" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="link" type="string" stored="true" indexed="false" multiValued="true" docValues="true"/>
+  <field name="linkUrl" type="string" stored="true" indexed="false" multiValued="true" docValues="true"/>
 
   <field name="tag" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="topic" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>

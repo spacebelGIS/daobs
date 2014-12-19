@@ -384,7 +384,7 @@
         $scope.overview = false;
         $scope.report = null;
         var area = $scope.territory && $scope.territory.label,
-          filterParameter = $scope.filter ? '?fq=' + $scope.filter  : '';
+          filterParameter = $scope.filter ? '?fq=' + $scope.filter  : '?';
         $http.get(cfg.SERVICES.reporting +
           $scope.reporting.id + '/' +
           area + '.json' + filterParameter).success(function (data) {
