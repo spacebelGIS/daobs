@@ -1,0 +1,15 @@
+#ds-report-choose .error, .drop-submit-message.error {
+	color: red;
+	font-weight: bold;
+	width: 50%;
+}
+
+#ds-report-choose .success, .drop-submit-message.success {
+	color: #266F21;
+	font-weight: bold;
+	width: 50%;
+}
+
+body > nav.navbar {
+	margin-bottom: 3px;
+}
