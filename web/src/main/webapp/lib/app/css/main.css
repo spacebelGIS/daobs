@@ -10,10 +10,6 @@
 	width: 50%;
 }
 
-body > nav.navbar {
-	margin-bottom: 3px;
-}
-
 body > nav[role="navigation"] {
 	border-radius: 0px;
 }
