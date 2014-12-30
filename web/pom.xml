@@ -242,7 +242,7 @@
                 </resource>
                 <!-- Copy configuration files -->
                 <resource>
-                  <directory>${project.basedir}/src/main/config</directory>
+                  <directory>${project.basedir}/src/main/${solr.core.directory}</directory>
                   <targetPath>${project.build.directory}/${solr.core.directory}</targetPath>
                 </resource>
               </resources>
