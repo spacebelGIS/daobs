@@ -15,7 +15,7 @@
   only this bridge bean -->
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="config.properties"/>
+    <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
   <bean id="cswHarvester" class="org.daobs.harvester.CswHarvester">
@@ -35,6 +35,9 @@
           id="csw"
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
+
+    <!--<cm:jmxAgent id="agent" mbeanObjectDomainName="org.daobs"/>-->
+
     <cm:onException>
       <cm:exception>org.apache.camel.component.http4.HttpOperationFailedException</cm:exception>
       <cm:continued>
@@ -56,7 +59,7 @@
 
     <cm:route id="route-csw-init">
       <!--<cm:from uri="timer://start?repeatCount=1"/>-->
-      <cm:from uri="file:src/main/resources/?fileName=config-harvesters.xml&amp;noop=true&amp;consumer.delay=100000"/>
+      <cm:from uri="file:{{csw.config.folder}}?fileName=$simple{property.csw.config.filename}&amp;noop=true&amp;consumer.delay=100000"/>
       <cm:log message="Loading harvesters configuration ..."
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>

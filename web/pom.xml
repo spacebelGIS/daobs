@@ -154,6 +154,19 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!--
+    Add CSW harvester module in the webapp
+    <dependency>
+      <groupId>org.daobs.harvester</groupId>
+      <artifactId>csw-harvester</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>net.sf.saxon</groupId>
+          <artifactId>Saxon-HE</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>-->
   </dependencies>
   <build>
     <finalName>solr</finalName>
@@ -235,7 +248,23 @@
               </resources>
             </configuration>
           </execution>
-
+          <execution>
+            <id>copy-webapp-config</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/solr/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/webResources</directory>
+                  <filtering>true</filtering>
+                  <targetPath>${project.build.directory}/solr</targetPath>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
 

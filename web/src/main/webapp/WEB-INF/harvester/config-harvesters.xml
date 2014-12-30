@@ -1,20 +1,13 @@
 <daobs:harvesters xmlns:daobs="http://daobs.org">
-  <!--
-  FIXME: this file is duplicated from the harvester module.
-  List of CSW endpoints
+  <!-- List of CSW endpoints
   from http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/ -->
 
+
   <daobs:harvester>
-    <daobs:territory>be</daobs:territory>
-    <daobs:folder>be/geobru</daobs:folder>
-    <daobs:name>GeoCatalogue de la Région de Bruxelles-Capitale</daobs:name>
-    <daobs:url>http://geobru.irisnet.be/geonetwork/srv/fre/csw</daobs:url>
-  </daobs:harvester>
-  <daobs:harvester>
-  <daobs:territory>cz</daobs:territory>
-  <daobs:folder>cz</daobs:folder>
-  <daobs:name>Czech republic INSPIRE metadata catalogue</daobs:name>
-  <daobs:url>http://geoportal.gov.cz/php/micka/csw/index.php</daobs:url>
+    <daobs:territory>cz</daobs:territory>
+    <daobs:folder>cz</daobs:folder>
+    <daobs:name>Czech republic INSPIRE metadata catalogue</daobs:name>
+    <daobs:url>http://geoportal.gov.cz/php/micka/csw/index.php</daobs:url>
   </daobs:harvester>
   <daobs:harvester>
     <daobs:territory>fr</daobs:territory>
@@ -201,22 +194,19 @@
     <daobs:name>Nationaal GeoRegister</daobs:name>
     <daobs:url>http://nationaalgeoregister.nl/geonetwork/srv/dut/inspire</daobs:url>
   </daobs:harvester>
+
+
   <daobs:harvester>
-    <daobs:territory>no</daobs:territory>
-    <daobs:folder>no</daobs:folder>
-    <daobs:name>Geonorge - National CSW service for Norway</daobs:name>
-    <daobs:url>http://www.geonorge.no/geonetwork/srv/nor/csw-inspire</daobs:url>
-  </daobs:harvester>
+    <daobs:territory>lu</daobs:territory>
+    <daobs:folder>lu</daobs:folder>
+    <daobs:name>INSPIRE Geoportal CSW of the Grand-Duchy of Luxembourg</daobs:name>
+    <daobs:url>http://inspire.geoportail.lu/geoportal/csw</daobs:url>
+  </daobs:harvester>-->
+
   <daobs:harvester>
     <daobs:territory>pl</daobs:territory>
     <daobs:folder>pl</daobs:folder>
     <daobs:name>Geoportal - Polska Usługa WyszukiwaniaINSPIRE</daobs:name>
     <daobs:url>http://mapy.geoportal.gov.pl/wss/service/CSWINSP/guest/CSWStartup</daobs:url>
-  </daobs:harvester>
-  <daobs:harvester>
-    <daobs:territory>pt</daobs:territory>
-    <daobs:folder>pt</daobs:folder>
-    <daobs:name>INSPIRE-PT Catalog Service</daobs:name>
-    <daobs:url>http://cgpr.igeo.pt/catalogo-inspire-pt/services/csw?</daobs:url>
   </daobs:harvester>
 </daobs:harvesters>

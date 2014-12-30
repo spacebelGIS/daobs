@@ -14,6 +14,8 @@
   <ctx:annotation-config/>
   <ctx:component-scan base-package="org.daobs.controller"/>
 
+  <import resource="classpath*:**/camel-context.xml" />
+
   <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
   <bean id="contentNegocationManager"
@@ -41,7 +43,7 @@
         class="org.daobs.index.SolrServerBean">
     <property name="solrServerUrl" value="${solr.server.url}"/>
     <property name="solrServerCore" value="${solr.server.core}"/>
-    <property name="solrServerUsername" value="${solr.server.username}"/>
+    <property name="solrServerUsername" value="${solr.server.user}"/>
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
 
