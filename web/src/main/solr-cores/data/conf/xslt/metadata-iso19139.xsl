@@ -5,12 +5,12 @@
   xmlns:gco="http://www.isotc211.org/2005/gco"
   xmlns:srv="http://www.isotc211.org/2005/srv"
   xmlns:gmx="http://www.isotc211.org/2005/gmx"
+  xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:gml="http://www.opengis.net/gml" 
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:ns3="http://www.w3.org/2001/SMIL20/" 
   xmlns:ns9="http://www.w3.org/2001/SMIL20/Language" 
-  xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" 
   xmlns:dct="http://purl.org/dc/terms/" 
   xmlns:ogc="http://www.opengis.net/ogc" 
   xmlns:ows="http://www.opengis.net/ows" 
@@ -96,7 +96,40 @@
       <!-- For any ISO19139 records in the input XML document
       Some records from IS do not have record identifier. Ignore them.
       -->
-      <xsl:variable name="records" select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString != '']"/>
+      <xsl:variable name="records"
+                    select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString != '']"/>
+
+
+      <!-- Check number of records returned and reported -->
+      <xsl:message>======================================================</xsl:message>
+      <xsl:message>DEBUG: <xsl:value-of select="//csw:SearchResults/@numberOfRecordsReturned"/> record(s) returned in CSW response.</xsl:message>
+      <xsl:message>DEBUG: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
+
+      <!-- Report error on record with null UUID -->
+      <xsl:variable name="recordsWithNullUUID"
+                    select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString = ''
+                            or not(gmd:fileIdentifier)]"/>
+      <xsl:variable name="numberOfRecordsWithNullUUID"
+                    select="count($recordsWithNullUUID)"/>
+
+      <xsl:if test="$numberOfRecordsWithNullUUID > 0">
+        <xsl:message>WARNING: <xsl:value-of select="$numberOfRecordsWithNullUUID"/> record(s) with null UUID.</xsl:message>
+        <xsl:message><xsl:copy-of select="$recordsWithNullUUID"/></xsl:message>
+      </xsl:if>
+
+
+      <!-- Check duplicates -->
+      <xsl:for-each select="$records">
+        <xsl:variable name="identifier" as="xs:string"
+                      select="gmd:fileIdentifier/gco:CharacterString[. != '']"/>
+        <xsl:variable name="numberOfRecordWithThatUUID"
+                      select="count(../*[gmd:fileIdentifier/gco:CharacterString = $identifier])"/>
+        <xsl:if test="$numberOfRecordWithThatUUID > 1">
+          <xsl:message>WARNING: <xsl:value-of select="$numberOfRecordWithThatUUID"/> record(s) having UUID '<xsl:value-of select="$identifier"/>' in that set.</xsl:message>
+        </xsl:if>
+      </xsl:for-each>
+
+
 
       <xsl:for-each select="$records">
         <!-- Main variables for the document -->
@@ -146,10 +179,17 @@
 
           <!-- Indexing record information -->
           <!-- # Date -->
-          <!-- TODO improve date formatting maybe using Joda parser -->
-          <xsl:for-each select="gmd:dateStamp/*">
+          <!-- TODO improve date formatting maybe using Joda parser
+          Select first one because some records have 2 dates !
+          eg. fr-784237539-bdref20100101-0105
+          -->
+          <xsl:for-each select="gmd:dateStamp/*[text() != '' and position() = 1]">
             <field name="dateStamp">
-              <xsl:value-of select="if (name() = 'gco:Date' or string-length(.) = 10)
+              <xsl:value-of select="if (name() = 'gco:Date' and string-length(.) = 4)
+                                    then concat(., '-01-01T00:00:00Z')
+                                    else if (name() = 'gco:Date' and string-length(.) = 7)
+                                    then concat(., '-01T00:00:00Z')
+                                    else if (name() = 'gco:Date' or string-length(.) = 10)
                                     then concat(., 'T00:00:00Z')
                                     else (
                                       if (ends-with(., 'Z'))
@@ -201,7 +241,7 @@
                 <xsl:value-of select="gmd:title/gco:CharacterString/text()"/>
               </field>
 
-              <xsl:for-each select="gmd:date/gmd:CI_Date">
+              <xsl:for-each select="gmd:date/gmd:CI_Date[gmd:date/*/text() != '']">
                 <xsl:variable name="dateType"
                               select="gmd:dateType/gmd:CI_DateTypeCode/@codeListValue"
                               as="xs:string?"/>
@@ -511,7 +551,7 @@
          TODO: Some countries are using uuidref to store
          resource identifier and not metadata identifier. -->
         <xsl:for-each select="gmd:identificationInfo/srv:SV_ServiceIdentification/srv:operatesOn">
-          <xsl:message>## child record <xsl:value-of select="@xlink:href"/> </xsl:message>
+          <!--<xsl:message>## child record <xsl:value-of select="@xlink:href"/> </xsl:message>-->
 
           <!--
           uuiref store resource identifier and not metadata identifier.
@@ -527,7 +567,7 @@
               </xsl:analyze-string>
             </xsl:if>
           </xsl:variable>
-          <xsl:message>## child record <xsl:value-of select="$relatedTo"/> </xsl:message>
+          <!--<xsl:message>## child record <xsl:value-of select="$relatedTo"/> </xsl:message>-->
 
           <xsl:choose>
             <xsl:when test="$relatedTo">
