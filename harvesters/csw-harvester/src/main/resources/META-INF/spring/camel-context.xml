@@ -68,16 +68,16 @@
         <cm:xpath>//daobs:harvester</cm:xpath>
         <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
         <cm:setHeader headerName="harvesterUrl">
-          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:url</cm:xpath>
+          <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:url)</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterTerritory">
-          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:territory</cm:xpath>
+          <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:territory)</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterFolder">
-          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:folder</cm:xpath>
+          <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:folder)</cm:xpath>
         </cm:setHeader>
         <cm:setHeader headerName="harvesterName">
-          <cm:xpath resultType="java.lang.String">daobs:harvester/daobs:name</cm:xpath>
+          <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:name)</cm:xpath>
         </cm:setHeader>
         <cm:choice>
           <cm:when>
@@ -145,11 +145,16 @@
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>${header.harvesterUrl}</cm:simple>
       </cm:setHeader>
-      <!-- The polish CSW looks to filter on user agent name
-      and camel was not having any response body for obscure reason? -->
+      <!--
+      The pl CSW looks to filter on user agent name
+      and camel was not having any response body for obscure reason?
+      Same for lv node which is filtering if User-Agent is set.
+      In some case, it needs to be removed or activated.
+      TODO: Add configuration option at node level.
+
       <cm:setHeader headerName="User-Agent">
         <cm:constant>daobs/0.0.1</cm:constant>
-      </cm:setHeader>
+      </cm:setHeader>-->
       <cm:to uri="http4://csw.server.url"/>
       <!--<cm:log message="${body}"
               loggingLevel="DEBUG"
