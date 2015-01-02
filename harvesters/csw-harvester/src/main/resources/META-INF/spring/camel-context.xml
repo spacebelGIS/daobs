@@ -151,10 +151,10 @@
       Same for lv node which is filtering if User-Agent is set.
       In some case, it needs to be removed or activated.
       TODO: Add configuration option at node level.
-
+      -->
       <cm:setHeader headerName="User-Agent">
         <cm:constant>daobs/0.0.1</cm:constant>
-      </cm:setHeader>-->
+      </cm:setHeader>
       <cm:to uri="http4://csw.server.url"/>
       <!--<cm:log message="${body}"
               loggingLevel="DEBUG"
