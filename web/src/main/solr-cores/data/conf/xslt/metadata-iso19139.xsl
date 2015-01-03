@@ -35,6 +35,10 @@
   <xsl:variable name="separator" as="xs:string"
                 select="'|'"/>
 
+  <!-- To avoid Document contains at least one immense term
+  in field="resourceAbstract" (whose UTF8 encoding is longer
+  than the max length 32766. -->
+  <xsl:variable name="maxFieldLength" select="32000" as="xs:int"/>
 
   <xsl:variable name="eu10892010">
     <en>Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services</en>
@@ -254,7 +258,9 @@
             </xsl:for-each>
 
             <field name="resourceAbstract">
-              <xsl:value-of select="gmd:abstract/gco:CharacterString/text()"/>
+              <xsl:value-of select="substring(
+                    normalize-space(gmd:abstract/gco:CharacterString/text()),
+                    $maxFieldLength)"/>
             </field>
 
 
@@ -596,9 +602,10 @@
 
     <!-- Select the first child which should be a CI_ResponsibleParty.
     Some records contains more than one CI_ResponsibleParty which is
-    not valid and they will be ignored. -->
+    not valid and they will be ignored.
+     Same for organisationName eg. de:b86a8604-bf78-480f-a5a8-8edff5586679 -->
     <xsl:variable name="organisationName"
-                  select="*[1]/gmd:organisationName/(gco:CharacterString|gmx:Anchor)"
+                  select="*[1]/gmd:organisationName[1]/(gco:CharacterString|gmx:Anchor)"
                   as="xs:string*"/>
 
     <xsl:variable name="role"
