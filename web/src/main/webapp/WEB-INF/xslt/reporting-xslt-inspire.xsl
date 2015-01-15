@@ -218,14 +218,14 @@
       </MdServiceExistence>
 
       <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
-      <xsl:for-each select="arr[@name = 'linkUrl']/str">
+      <xsl:for-each select="distinct-values(arr[@name = 'linkUrl']/str/text())">
         <NetworkService>
           <!-- TODO: Here we could ping the service and set the value ? -->
           <directlyAccessible></directlyAccessible>
 
           <!-- All online resources are taken into account,
           we should maybe restrict it ? TODO: improve -->
-          <URL><xsl:value-of select="text()"/></URL>
+          <URL><xsl:value-of select="."/></URL>
 
           <!-- -1 indicate unkown. Maybe some methodology
           could be adopted to populate the value in the
