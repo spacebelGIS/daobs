@@ -38,7 +38,7 @@
   <!-- To avoid Document contains at least one immense term
   in field="resourceAbstract" (whose UTF8 encoding is longer
   than the max length 32766. -->
-  <xsl:variable name="maxFieldLength" select="32000" as="xs:int"/>
+  <xsl:variable name="maxFieldLength" select="32000" as="xs:integer"/>
 
   <xsl:variable name="eu10892010">
     <en>Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services</en>
