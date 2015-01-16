@@ -125,7 +125,7 @@
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
   <field name="metadataIdentifier" type="string" indexed="true" stored="true" multiValued="false"/>
-  <field name="harvesterId" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
+  <field name="harvesterId" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="harvestedDate" type="date" stored="true" indexed="true" multiValued="true"/>
   <field name="dateStamp" type="date" stored="true" indexed="true" multiValued="false"/>
   <field name="mainLanguage" type="string" stored="true" indexed="true" multiValued="false" docValues="true"/>
@@ -172,9 +172,11 @@
   <field name="schemaValidDate" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="schemaValidReport" type="string" stored="true" indexed="false" multiValued="false"/>
 
-  <!-- Field to store validation status agains a remote validation service
+  <!-- Field to store validation status with a remote validation service
   eg. INSPIRE validation service -->
   <field name="isValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
+  <field name="isAboveThreshold" type="boolean" stored="true" indexed="true" multiValued="false"/>
+  <field name="completenessIndicator" type="double" stored="true" indexed="true" multiValued="false"/>
   <field name="validDate" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="validReport" type="string" stored="true" indexed="false" multiValued="false"/>
   <field name="validInfo" type="string" stored="true" indexed="false" multiValued="false"/>

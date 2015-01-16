@@ -145,7 +145,7 @@
           <DSv_Num1><xsl:value-of select="//daobs:variable[@id='DSv_Num1']/daobs:value"/></DSv_Num1>
           <DSv_Num2><xsl:value-of select="//daobs:variable[@id='DSv_Num2']/daobs:value"/></DSv_Num2>
           <DSv_Num3><xsl:value-of select="//daobs:variable[@id='DSv_Num3']/daobs:value"/></DSv_Num3>
-          <DSv_Num><xsl:value-of select="//daobs:variable[@id='DSv_Num']/daobs:value"/></DSv_Num>
+          <DSv_Num><xsl:value-of select="//daobs:indicator[@id='DSv_Num']/daobs:value"/></DSv_Num>
           <SDSv_Num><xsl:value-of select="//daobs:variable[@id='SDSv_Num']/daobs:value"/></SDSv_Num>
           <NSv_NumDiscServ><xsl:value-of select="//daobs:variable[@id='NSv_NumDiscServ']/daobs:value"/></NSv_NumDiscServ>
           <NSv_NumViewServ><xsl:value-of select="//daobs:variable[@id='NSv_NumViewServ']/daobs:value"/></NSv_NumViewServ>
@@ -214,17 +214,28 @@
         <!-- The metadata record was harvested using CSW -->
         <discoveryAccessibility>true</discoveryAccessibility>
 
-        <!-- TODO Definition ? <discoveryAccessibilityUuid></discoveryAccessibilityUuid>-->
+        <!-- TODO Definition ?
+        Metadata record of the CSW service
+        <discoveryAccessibilityUuid></discoveryAccessibilityUuid>-->
       </MdServiceExistence>
 
       <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
       <xsl:for-each select="distinct-values(arr[@name = 'linkUrl']/str/text())">
         <NetworkService>
-          <!-- TODO: Here we could ping the service and set the value ? -->
+          <!-- TODO: Here we could ping the service and set the value ?
+          Usage restriction in the metadata record ?
+          -->
           <directlyAccessible></directlyAccessible>
 
           <!-- All online resources are taken into account,
-          we should maybe restrict it ? TODO: improve -->
+          we should maybe restrict it ? TODO: improve
+
+          Resource Locator for data sets and dataset series
+          - a link to a web with further instructions
+          - a link to a service capabilities document
+          - a link to the service WSDL document (SOAP Binding)
+          - a link to a client application that directly accesses the service
+          -->
           <URL><xsl:value-of select="."/></URL>
 
           <!-- -1 indicate unkown. Maybe some methodology
@@ -232,7 +243,9 @@
           metadata record ? -->
           <userRequest>-1</userRequest>
 
-          <!-- TODO: definition ? -->
+          <!-- TODO: definition ?
+          No available for the time being. Require a validator.
+          -->
           <nnConformity></nnConformity>
 
           <NnServiceType><xsl:value-of select="$serviceType"/></NnServiceType>

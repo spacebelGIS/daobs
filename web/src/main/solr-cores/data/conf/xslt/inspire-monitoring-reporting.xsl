@@ -51,7 +51,9 @@
         <field name="documentType">indicator</field>
         <field name="indicatorType"><xsl:value-of select="$indicatorType"/></field>
         <field name="indicatorName"><xsl:value-of select="$indicatorIdentifier"/></field>
-        <field name="indicatorValue"><xsl:value-of select="text()"/></field>
+        <xsl:if test="text() != ''">
+          <field name="indicatorValue"><xsl:value-of select="text()"/></field>
+        </xsl:if>
         <field name="territory"><xsl:value-of select="$reportingTerritory"/></field>
         <field name="reportingDateSubmission"><xsl:value-of select="$reportingDateSubmission"/></field>
         <field name="reportingDate"><xsl:value-of select="$reportingDate"/></field>
@@ -86,7 +88,9 @@
               $reportingDate, $reportingTerritory)"/></field>
       <field name="documentType">ai</field>
       <field name="indicatorName"><xsl:value-of select="$indicatorIdentifier"/></field>
-      <field name="indicatorValue"><xsl:value-of select="text()"/></field>
+      <xsl:if test="text() != ''">
+        <field name="indicatorValue"><xsl:value-of select="text()"/></field>
+      </xsl:if>
       <field name="territory"><xsl:value-of select="$reportingTerritory"/></field>
       <field name="reportingDateSubmission"><xsl:value-of select="$reportingDateSubmission"/></field>
       <field name="reportingDate"><xsl:value-of select="$reportingDate"/></field>
@@ -105,7 +109,9 @@
               $reportingDate, $reportingTerritory, ../../uuid/text())"/></field>
       <field name="documentType">ai</field>
       <field name="indicatorName"><xsl:value-of select="$indicatorIdentifier"/></field>
-      <field name="indicatorValue"><xsl:value-of select="text()"/></field>
+      <xsl:if test="text() != ''">
+        <field name="indicatorValue"><xsl:value-of select="text()"/></field>
+      </xsl:if>
       <field name="territory"><xsl:value-of select="$reportingTerritory"/></field>
       <field name="reportingDateSubmission"><xsl:value-of select="$reportingDateSubmission"/></field>
       <field name="reportingDate"><xsl:value-of select="$reportingDate"/></field>
