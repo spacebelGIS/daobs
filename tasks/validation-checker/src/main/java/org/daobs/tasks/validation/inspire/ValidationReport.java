@@ -13,13 +13,30 @@ import java.util.regex.Pattern;
  */
 public class ValidationReport {
 
-    ValidationReport() {
+    ValidationReport(double threshold) {
+        this.threshold = threshold;
     }
 
     /**
      * The validation status.
      */
     boolean status;
+
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    private double threshold = 100.0;
+
+    public boolean isAboveThreshold() {
+        return isAboveThreshold;
+    }
+
+    private boolean isAboveThreshold;
 
     /**
      * HTTP status code
@@ -138,6 +155,7 @@ public class ValidationReport {
             if (matcher.find()) {
                 String completeness = matcher.group(1);
                 this.completenessIndicator = Double.parseDouble(completeness);
+                this.isAboveThreshold = this.completenessIndicator >= this.threshold;
             }
         } catch (Exception e) {
             e.printStackTrace();

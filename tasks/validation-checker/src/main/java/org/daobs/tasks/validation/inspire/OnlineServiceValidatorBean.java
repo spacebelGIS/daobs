@@ -22,6 +22,16 @@ public class OnlineServiceValidatorBean {
         this.inspireResourceTesterURL = inspireResourceTesterURL;
     }
 
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    private double threshold;
+
     /**
      * Get the input message body and validate
      * it against the INSPIRE validation service.
@@ -35,7 +45,8 @@ public class OnlineServiceValidatorBean {
         String xml = exchange.getIn().getBody(String.class);
 
         ValidationReport report = null;
-        OnlineServiceValidatorClient validatorClient = new OnlineServiceValidatorClient(this.inspireResourceTesterURL);
+        OnlineServiceValidatorClient validatorClient =
+                new OnlineServiceValidatorClient(this.inspireResourceTesterURL, threshold);
 
         try {
             report = validatorClient.validate(xml);

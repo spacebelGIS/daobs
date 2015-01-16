@@ -42,6 +42,16 @@ public class OnlineServiceValidatorClient {
     }
 
 
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    private double threshold = 100.0;
+
     boolean dontGenerateHtmlFiles = true;
 
 
@@ -66,8 +76,9 @@ public class OnlineServiceValidatorClient {
     OnlineServiceValidatorClient() {
     }
 
-    OnlineServiceValidatorClient(String inspireResourceTesterURL) {
+    OnlineServiceValidatorClient(String inspireResourceTesterURL, double threshold) {
         this.inspireResourceTesterURL = inspireResourceTesterURL;
+        this.threshold = threshold;
     }
 
 
@@ -90,7 +101,7 @@ public class OnlineServiceValidatorClient {
 
         HttpClient httpClient = HttpClientBuilder.create().build();
 
-        ValidationReport report = new ValidationReport();
+        ValidationReport report = new ValidationReport(threshold);
         URL validatorUrl = new URL(this.inspireResourceTesterURL);
         HttpPost httpPost = new HttpPost(this.inspireResourceTesterURL);
         httpPost.addHeader("Accept", "application/xml");
