@@ -41,34 +41,40 @@
 
     <daobs:variable id="SDSv_Num" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+resourceType:service</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>Only services having an INSPIRE annex are took into account. We may harvest records related to no annex.</daobs:comment>
     </daobs:variable>
 
 
     <daobs:variable id="NSv_NumDiscServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of discovery services</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:discovery</daobs:query>
+      <daobs:query>+resourceType:service +inspireServiceType:discovery</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:discovery</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumViewServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of view services</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:view</daobs:query>
+      <daobs:query>+resourceType:service +inspireServiceType:view</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:view</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumDownlServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of download services</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:download</daobs:query>
+      <daobs:query>+resourceType:service +inspireServiceType:download</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:download</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumInvkServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of invoke services</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:invoke</daobs:query>
+      <daobs:query>+resourceType:service +inspireServiceType:invoke</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:invoke</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumTransfServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of transformation services</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:transformation</daobs:query>
+      <daobs:query>+resourceType:service +inspireServiceType:transformation</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:transformation</daobs:query>-->
     </daobs:variable>
 
 
@@ -92,7 +98,8 @@
 
     <daobs:variable id="MDv14" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services that have metadata</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+resourceType:service</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
     </daobs:variable>
 
 
@@ -117,7 +124,8 @@
 
     <daobs:variable id="MDv24" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:service) +isAboveThreshold:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+(resourceType:service) +isAboveThreshold:true</daobs:query>
+      <!--<daobs:query>+(resourceType:service) +isAboveThreshold:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
@@ -152,7 +160,8 @@
     </daobs:variable>
     <daobs:variable id="NSv12" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services with metadata for which a discovery service exists</daobs:name>
-      <daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+resourceType:service</daobs:query>
+      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to SDSv_Num).</daobs:comment>
     </daobs:variable>
 
