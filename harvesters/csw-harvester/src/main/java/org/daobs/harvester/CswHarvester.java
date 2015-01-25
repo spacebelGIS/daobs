@@ -137,11 +137,16 @@ public class CswHarvester {
     }
 
     public Config initialize(@Header("harvesterUrl") String identifier,
-                             @Header("harvesterFilter") Document filter) {
+                             @Header("harvesterFilter") Document filter,
+                             @Header("harvesterNbRecordsPerPage") int nbRecordsPerPage) {
 
         log.info(String.format("Initializing configuration for %s.", identifier));
         Config config = new Config();
-        config.setMaxRecords(maxRecords);
+        if (nbRecordsPerPage != -1) {
+            config.setMaxRecords(nbRecordsPerPage);
+        } else {
+            config.setMaxRecords(maxRecords);
+        }
         config.setRecordsFilter(filter.getFirstChild());
         harvesters.put(identifier, config);
         return config;
@@ -262,7 +267,7 @@ public class CswHarvester {
         Config config = getConfig(identifier);
         return buildGetRecordsQuery(config.getRecordsFilter(),
                 false,
-                page * maxRecords + 1,
-                maxRecords);
+                page * config.getMaxRecords() + 1,
+                config.getMaxRecords());
     }
 }

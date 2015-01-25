@@ -73,6 +73,9 @@
         <cm:setHeader headerName="harvesterTerritory">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:territory)</cm:xpath>
         </cm:setHeader>
+        <cm:setHeader headerName="harvesterNbRecordsPerPage">
+          <cm:xpath resultType="java.lang.String">if (daobs:harvester/daobs:nbOfRecordsPerPage) then normalize-space(daobs:harvester/daobs:nbOfRecordsPerPage) else -1</cm:xpath>
+        </cm:setHeader>
         <cm:setHeader headerName="harvesterFolder">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:folder)</cm:xpath>
         </cm:setHeader>
@@ -99,7 +102,7 @@
         </cm:setHeader>
 
 
-        <cm:log message="Harvesting node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory}) at '$simple{header.harvesterURL}'"
+        <cm:log message="Harvesting node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory}) at '$simple{header.harvesterURL}' [Number of records requested per page in config: $simple{header.harvesterNbRecordsPerPage}]"
                 loggingLevel="INFO"
                 logName="org.daobs.harvester.CswHarvester"/>
         <cm:log message="CSW filter is $simple{header.harvesterFilter}"
