@@ -297,7 +297,7 @@ A data sets may be accessible through a view and/or download services. This type
 * link using a GetRecordById request:
 ```
 <srv:operatesOn uuidref="BDML_NATURES_FOND"
-                xlink:href="http://services.data.shom.fr/csw/ISOAP?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;Id=81aea739-4d21-427d-bec4-082cb64b825b"/>
+                xlink:href="http://services.data.shom.fr/csw/ISOAP?service=CSW&version=2.0.2&request=GetRecordById&Id=81aea739-4d21-427d-bec4-082cb64b825b"/>
 ```
 
 Both type of links are supported. The GetRecordById takes priority. The data sets metadata record identifier is extracted from the GetRecordById request.
@@ -342,6 +342,7 @@ One or more configuration file can be created in this folder. The file name shou
 A report is created from a set of variables and indicators. Variables are defined using query expressions to be computed by the search engine. Indicators are created from mathematical expressions based on variables.
 
 
+TODO: Add more doc on how to configure indicators.
 
 
 
