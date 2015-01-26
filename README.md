@@ -36,7 +36,9 @@ mvn clean install
 2 options:
 
 * Deploy the WAR file in a servlet container (eg. tomcat).
-* Start the web application using maven:
+* Start the web application using maven.
+
+### Using maven
 
 ```
 cd web
@@ -46,7 +48,7 @@ mvn tomcat7:run-war
 Access the home page from http://localhost:8983/solr.
 
 
-## Run the application from the WAR file
+### Deploy WAR file
 
 Deploy the WAR file in Tomcat (or any Java container). Set the solr.solr.home system property which define the location of the Solr index.
 
@@ -111,7 +113,8 @@ mvn clean install -DskipTests
 
 #### Harvester configuration
 
-An harvester engine provides the capability to harvest metadata records from discovery service (CSW end-point). The list of nodes to harvest is configured in src/main/resources/config-harvester.xml.
+An harvester engine provides the capability to harvest metadata records from discovery service (CSW end-point).
+The list of nodes to harvest is configured in harvester/csw-harvester/src/main/resources/WEB-INF/harvester/config-harvester.xml.
 
 
 The configuration parameters are:
@@ -214,6 +217,11 @@ for f in *.xml; do
 done
 ```
 
+
+
+## Removing documents
+
+
 Manually dropped all records:
 ```
 curl http://localhost:8983/solr/data/update \
@@ -226,6 +234,10 @@ curl http://localhost:8983/solr/data/update \
     -u admin:admin \
     -H 'Content-type:text/xml; charset=utf-8'
 ```
+
+The search query could be adapted to restrict to a subset of documents:
+* reportingYear:2014 for removing reporting for 2014
+
 
 
 
