@@ -5,7 +5,7 @@
   xmlns:solr="java:org.daobs.index.SolrRequestBean"
   xmlns:saxon="http://saxon.sf.net/"
   extension-element-prefixes="saxon"
-  exclude-result-prefixes="xs"
+  exclude-result-prefixes="#all"
   version="2.0">
   
   <xsl:variable name="reportingYear" select="/monitoring:Monitoring/documentYear/year"/>
