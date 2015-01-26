@@ -244,7 +244,8 @@
 	    	        } while (i < facet.length);
 	    	      });
       }
-      
+
+
       $scope.drop = function() {
     	  var territory = null;
           if($scope.indicatorTerritory && $scope.indicatorTerritory.value) {
