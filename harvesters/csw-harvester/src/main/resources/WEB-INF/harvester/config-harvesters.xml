@@ -1,8 +1,41 @@
 <daobs:harvesters xmlns:daobs="http://daobs.org"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:noNamespaceSchemaLocation="../../daobsHarvesterConfig.xsd">
-  <!-- List of CSW endpoints
-  from http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/ -->
+
+
+  <!-- Configuration example with all options -->
+  <!--<daobs:harvester>
+    <daobs:uuid>0000</daobs:uuid>
+    <daobs:territory>test</daobs:territory>
+    <daobs:folder>test</daobs:folder>
+    <daobs:name>Test</daobs:name>
+    <daobs:url>http://localhost:8080/geonetwork/srv/eng/csw</daobs:url>
+    <daobs:filter>
+      <ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">
+        <ogc:PropertyIsEqualTo>
+          <ogc:PropertyName>anyText</ogc:PropertyName>
+          <ogc:Literal>soil</ogc:Literal>
+        </ogc:PropertyIsEqualTo>
+      </ogc:Filter>
+    </daobs:filter>
+    <daobs:nbOfRecordsPerPage>5</daobs:nbOfRecordsPerPage>
+    <daobs:pointOfTruthURLPattern>http://localhost:8080/geonetwork?uuid={{uuid}}</daobs:pointOfTruthURLPattern>
+    <daobs:serviceMetadata>http://localhost:8080/geonetwork/srv/eng/csw?service=CSW&amp;request=GetRecordById&amp;id=000</daobs:serviceMetadata>
+  </daobs:harvester>
+  -->
+
+  <!--
+  List of CSW endpoints from
+  http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/
+  -->
+
+  <daobs:harvester>
+    <daobs:territory>nl</daobs:territory>
+    <daobs:folder>nl</daobs:folder>
+    <daobs:name>Nationaal Georegister (BeheerPDOK)</daobs:name>
+    <daobs:url>http://www.nationaalgeoregister.nl/geonetwork/srv/dut/inspire</daobs:url>
+  </daobs:harvester>
+
   <daobs:harvester>
     <daobs:territory>lv</daobs:territory>
     <daobs:folder>lv-lgia</daobs:folder>
@@ -41,14 +74,6 @@
         </ogc:PropertyIsNotEqualTo>
       </ogc:Filter>
     </daobs:filter>
-  </daobs:harvester>
-
-  <daobs:harvester>
-    <daobs:territory>nl</daobs:territory>
-    <daobs:folder>nl</daobs:folder>
-    <daobs:name>Nationaal Georegister (BeheerPDOK)</daobs:name>
-    <daobs:url>http://www.nationaalgeoregister.nl:/geonetwork/srv/dut/inspire
-    </daobs:url>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -173,6 +198,7 @@
       Environmental Information Agency)
     </daobs:name>
     <daobs:url>http://geoportal.gov.cz/php/micka/inspire/index.php</daobs:url>
+    <daobs:nbOfRecordsPerPage>50</daobs:nbOfRecordsPerPage>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -184,6 +210,7 @@
     <daobs:url>
       https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/de/csw202
     </daobs:url>
+    <daobs:nbOfRecordsPerPage>10</daobs:nbOfRecordsPerPage>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -280,8 +307,8 @@
     <daobs:territory>fr</daobs:territory>
     <daobs:folder>fr</daobs:folder>
     <daobs:name>Geocatalogue Catalogue Server INSPIRE (BRGM)</daobs:name>
-    <daobs:url>http://www.geocatalogue.fr/api-public/inspire/servicesRest?
-    </daobs:url>
+    <daobs:url>http://www.geocatalogue.fr/api-public/inspire/servicesRest</daobs:url>
+    <daobs:nbOfRecordsPerPage>50</daobs:nbOfRecordsPerPage>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -307,6 +334,7 @@
       Ośrodek Dokumentacji Geodezyjnej i Kartograficznej)
     </daobs:name>
     <daobs:url>http://mapy.geoportal.gov.pl/wss/service/CSWINSP/guest/CSWStartup</daobs:url>
+    <daobs:nbOfRecordsPerPage>50</daobs:nbOfRecordsPerPage>
   </daobs:harvester>
 
 </daobs:harvesters>
