@@ -59,7 +59,7 @@
 
     <cm:route id="route-csw-init">
       <!--<cm:from uri="timer://start?repeatCount=1"/>-->
-      <cm:from uri="file:{{csw.config.folder}}?fileName=$simple{property.csw.config.filename}&amp;noop=true&amp;consumer.delay=100000"/>
+      <cm:from uri="file:{{csw.config.folder}}?fileName=$simple{property.csw.config.filename}&amp;noop=true&amp;delay=1000000000"/>
       <cm:log message="Loading harvesters configuration ..."
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
