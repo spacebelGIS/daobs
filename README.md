@@ -45,6 +45,25 @@ mvn tomcat7:run-war
 
 Access the home page from http://localhost:8983/solr.
 
+
+## Run the application from the WAR file
+
+Deploy the WAR file in Tomcat (or any Java container). Set the solr.solr.home system property which define the location of the Solr index.
+
+Example: For Tomcat set it in the catalina.sh file
+
+```
+export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/home/francois/dev/daobs/web/target/solr-cores"
+```
+
+Access the home page from http://localhost:8983/solr.
+
+
+TODO: Test to rename the webapp name and explain any configuration required.
+
+
+
+
 ## Configuration
 
 ### Configure security
