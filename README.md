@@ -262,6 +262,8 @@ The results and details of the validation process are stored in the index:
  * validDate: Date of validation
  * validReport: XML report returned by the validation service
  * validInfo: Text information about the status
+ * completenessIndicator: Completeness indicator reported by the validation tool
+ * isAboveThreshold: Boolean. Set to true if the completeness indicator is above a value defined in the validation task configuration
 * For XML Schema validation:
  * isSchemaValid: Boolean
  * schemaValidDate: The date of validation
