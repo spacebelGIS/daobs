@@ -160,7 +160,7 @@ Manually index XML records:
 for f in *.xml; do
   echo "importing '$f' file..";
   curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" \
-     -u username:password \
+     -u admin:admin \
      -H "Content-Type: text/xml; charset=utf-8" \
      --data-binary @$f
 done
