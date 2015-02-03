@@ -51,9 +51,9 @@ public class AbstractSolrDaobsTestCase
 
 
         // TODO: Fix path
-        String configFilePath = new FileSystemResource("/home/francois/dev/daobs/web/src/main/config/data/conf/solrconfig.xml").getPath();
-        String schemaFilePath = new FileSystemResource("/home/francois/dev/daobs/web/src/main/config/data/conf/schema.xml").getPath();
-        String solrHome = new FileSystemResource("/home/francois/dev/daobs/web/src/main/config/").getPath();
+        String configFilePath = new FileSystemResource("/home/francois/dev/daobs/web/src/main/solr-cores/data/conf/solrconfig.xml").getPath();
+        String schemaFilePath = new FileSystemResource("/home/francois/dev/daobs/web/src/main/solr-cores/data/conf/schema.xml").getPath();
+        String solrHome = new FileSystemResource("/home/francois/dev/daobs/web/src/main/solr-cores/").getPath();
 
 
 
