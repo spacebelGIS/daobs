@@ -46,7 +46,7 @@ public class DashboardLoader {
      */
     public Map<String, List<String>> load(String directory, String fileFilter) {
         if (fileFilter.contains("..")) {
-            throw new SecurityException("No dashboard can be loaded when the file matching pattern contains '..'.")
+            throw new SecurityException("No dashboard can be loaded when the file matching pattern contains '..'.");
         }
 
         List<String> fileNames = new ArrayList<>();
@@ -67,7 +67,6 @@ public class DashboardLoader {
                                     e.getMessage()));
                 }
             }
-        } catch (IOException ex) {
         } catch (Exception e) {
             e.printStackTrace();
         }
