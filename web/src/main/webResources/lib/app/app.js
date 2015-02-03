@@ -7,18 +7,18 @@
    * @type {module|*}
    */
   var app = angular.module('daobs', ['ngRoute']);
-
+  var context = '${webapp.context}';
   app.constant('cfg', {
     'SERVICES': {
-      root: '/solr',
-      dashboardCore: '/solr/dashboard',
-      dataCore: '/solr/data',
-      harvesterConfig: '/solr/daobs/harvester.json',
-      reportingConfig: '/solr/daobs/reporting.json',
-      reporting: '/solr/daobs/reporting/',
-      reportingSubmit: '/solr/data/update/xslt',
-      dashboardBaseURL: '/solr/dashboard/#/dashboard/solr/',
-      solrAdmin: '/solr/admin.html'
+      root: context,
+      dashboardCore: context + 'dashboard',
+      dataCore: context + 'data',
+      harvesterConfig: context + 'daobs/harvester.json',
+      reportingConfig: context + 'daobs/reporting.json',
+      reporting: context + 'daobs/reporting/',
+      reportingSubmit: context + 'data/update/xslt',
+      dashboardBaseURL: context + 'dashboard/#/dashboard/solr/',
+      solrAdmin: context + 'admin.html'
     }
   });
 
@@ -313,6 +313,7 @@
       $http.get(cfg.SERVICES.harvesterConfig).success(function (data) {
         $scope.harvesterConfig = data.harvester;
       });
+
     }]);
 
 

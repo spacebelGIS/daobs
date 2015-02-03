@@ -1,0 +1,33 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/security
+  http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+  <http>
+    <!-- Solr admin -->
+    <intercept-url pattern='/admin.html*' access='ROLE_ADMIN'/>
+
+    <!-- Solr services -->
+    <intercept-url pattern='/data/admin/*' access='ROLE_ADMIN'/>
+    <intercept-url pattern='/data/update/*' access='ROLE_ADMIN'/>
+
+    <!-- Controllers -->
+    <intercept-url pattern='/*/reporting*' access='ROLE_ADMIN'/>
+    <intercept-url pattern='/*/harvester*' access='ROLE_ADMIN'/>
+
+    <http-basic />
+  </http>
+
+  <authentication-manager>
+    <authentication-provider>
+      <user-service>
+        <user name="${webapp.username}"
+              password="${webapp.password}"
+              authorities="ROLE_ADMIN" />
+      </user-service>
+    </authentication-provider>
+  </authentication-manager>
+
+</beans:beans>

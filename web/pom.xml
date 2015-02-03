@@ -260,7 +260,6 @@
                 <resource>
                   <directory>${project.basedir}/src/main/webResources</directory>
                   <filtering>true</filtering>
-                  <targetPath>${project.build.directory}/solr</targetPath>
                 </resource>
               </resources>
             </configuration>
@@ -295,11 +294,12 @@
           <contextReloadable>true</contextReloadable>
           <!-- http port -->
           <port>${solr.server.port}</port>
+          <!--<ajpPort>${solr.server.port.ajp}</ajpPort>-->
+          <!--<ajpProtocol>org.apache.coyote.ajp.AjpProtocol</ajpProtocol>-->
           <!-- application path always starts with /-->
-          <path>/solr</path>
+          <path>/</path>
           <!-- optional path to a context file
           <contextFile>${tomcatContextXml}</contextFile>-->
-          <!-- optional system propoerties you want to add -->
           <systemProperties>
             <solr.solr.home>${solr.solr.home}</solr.solr.home>
           </systemProperties>

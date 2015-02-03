@@ -45,7 +45,7 @@ cd web
 mvn tomcat7:run-war
 ```
 
-Access the home page from http://localhost:8983/solr.
+Access the home page from http://localhost:8983.
 
 
 ### Deploy WAR file
@@ -55,10 +55,10 @@ Deploy the WAR file in Tomcat (or any Java container). Set the solr.solr.home sy
 Example: For Tomcat set it in the catalina.sh file
 
 ```
-export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/home/francois/dev/daobs/web/target/solr-cores"
+export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/usr/solr-cores"
 ```
 
-Access the home page from http://localhost:8983/solr.
+Access the home page from http://localhost:8983.
 
 
 TODO: Test to rename the webapp name and explain any configuration required.
@@ -181,7 +181,7 @@ Manually index XML records:
 # Load file in current directory
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" \
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" \
      -u admin:admin \
      -H "Content-Type: text/xml; charset=utf-8" \
      --data-binary @$f
@@ -193,14 +193,14 @@ find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 
 or 
 
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
@@ -213,7 +213,7 @@ Manually indexing INSPIRE monitoring reporting (reporting could also contains an
 ```
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/solr/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
@@ -224,12 +224,12 @@ done
 
 Manually dropped all records:
 ```
-curl http://localhost:8983/solr/data/update \
+curl http://localhost:8983/data/update \
     --data '<delete><query>documentType:*</query></delete>' \
     -u admin:admin \
     -H 'Content-type:text/xml; charset=utf-8'
 
-curl http://localhost:8983/solr/data/update \
+curl http://localhost:8983/data/update \
     --data '<commit/>' \
     -u admin:admin \
     -H 'Content-type:text/xml; charset=utf-8'
@@ -332,12 +332,21 @@ If no dashboards are available sample dashboard are available here: dashboard/sr
 * INSPIRE-Dashboard: Home page
 * default: Monitoring reporting 2013 dashboard
 
+By default no dashboard are loaded.
+
+User can load a set of dashboards using the /daobs/samples/dashboard service.
+
+Eg. http://localhost:8983/daobs/samples/dashboard/INSPIRE.json will load all INSPIRE specific dashboards.
+
+2 sets of dashboards are available:
+* INSPIRE* about INSPIRE monitoring
+* CATALOG* for dashboards on harvested records.
 
 
 ## Reporting
 
 Report configuration is made web/src/main/webapp/WEB-INF/reporting.
-One or more configuration file can be created in this folder. The file name should follow the pattern "config-<report_id>.xml".
+One or more configuration file can be created in this folder. The file name should follow the pattern "config-{{report_id}}.xml".
 
 A report is created from a set of variables and indicators. Variables are defined using query expressions to be computed by the search engine. Indicators are created from mathematical expressions based on variables.
 

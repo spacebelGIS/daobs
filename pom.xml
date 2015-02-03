@@ -244,6 +244,23 @@
 
 
   <properties>
+    <!-- The web applicatin name. Could be run
+    as root context using "/" or using a custom
+    name eg. "dashboard". -->
+    <webapp.context>/</webapp.context>
+
+    <!-- The public URL of the web application.
+    This is used by all services requesting the
+    Solr instance. eg. Harvesters. -->
+    <webapp.url>http://localhost:8983</webapp.url>
+
+    <!-- Default username and password. This
+    set the values in Spring security file and
+    in services needing authentication against
+    the Solr instance. eg. Harvesters. -->
+    <webapp.username>admin</webapp.username>
+    <webapp.password>admin</webapp.password>
+
     <solr.version>4.10.0</solr.version>
 
     <guava.version>17.0</guava.version>
