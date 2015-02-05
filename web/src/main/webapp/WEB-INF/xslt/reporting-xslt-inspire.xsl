@@ -183,7 +183,7 @@
       </Indicators>
 
       <xsl:if test="$withRowData = true()">
-        <xsl:message><xsl:copy-of select="$spatialDataServices"/></xsl:message>
+        <!--<xsl:message><xsl:copy-of select="$spatialDataServices"/></xsl:message>-->
         <RowData>
           <xsl:apply-templates mode="SpatialDataServiceFactory" select="$spatialDataServices/result/doc"/>
           <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
@@ -201,8 +201,7 @@
       <!-- gmd:identificationInfo[1]/*[1]/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString -->
       <name><xsl:value-of select="str[@name='resourceTitle']/text()"/></name>
 
-      <!-- TODO -->
-      <respAuthority></respAuthority>
+      <xsl:call-template name="respAuthorityFactory"/>
 
       <uuid><xsl:value-of select="str[@name='metadataIdentifier']/text()"/></uuid>
 
@@ -262,9 +261,7 @@
     <SpatialDataSet>
       <name><xsl:value-of select="str[@name='resourceTitle']/text()"/></name>
 
-      <!-- TODO Which contact should be retrieved from the metadata ?
-      Only one -->
-      <respAuthority></respAuthority>
+      <xsl:call-template name="respAuthorityFactory"/>
 
       <uuid><xsl:value-of select="str[@name='metadataIdentifier']/text()"/></uuid>
 
@@ -308,6 +305,32 @@
       </MdDataSetExistence>
     </SpatialDataSet>
   </xsl:template>
+
+
+  <xsl:template name="respAuthorityFactory">
+    <!-- OrganisationName of one of the IdentificationInfo/pointOfContact,
+           First check if Custodian available, then Owner, then pointOfContact,
+           then the first one of the list.
+           -->
+    <xsl:variable name="custodian"
+                  select="arr[@name='custodianOrgForResource']/str[1]/text()"/>
+    <xsl:variable name="owner"
+                  select="arr[@name='ownerOrgForResource']/str[1]/text()"/>
+    <xsl:variable name="pointOfContact"
+                  select="arr[@name='pointOfContactOrgForResource']/str[1]/text()"/>
+    <xsl:variable name="default"
+                  select="arr[@name='OrgForResource']/str[1]/text()"/>
+    <respAuthority>
+      <xsl:value-of select="if ($custodian != '')
+        then $custodian
+        else if ($owner != '')
+        then $owner
+        else if ($pointOfContact != '')
+        then $pointOfContact
+        else $default"/>
+    </respAuthority>
+  </xsl:template>
+
 
 
   <xsl:template mode="InspireAnnexAndThemeFactory"
