@@ -19,6 +19,7 @@ The guide for user installing and configuring the application.
 * Git
 * Java 7
 * Maven 3
+* A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE9+ should be also supported.
 
 ## Build the application
 
