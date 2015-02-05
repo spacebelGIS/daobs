@@ -16,7 +16,35 @@
     </div>
   </div>
   <div class="col-sm-6" id='ds-latest-dashboard'>
-    <h3>Latest dashboards</h3>
+    <h3>Latest dashboards
+      <!-- Single button -->
+      <div class="btn-group">
+        <button type="button"
+                class="btn btn-link dropdown-toggle"
+                data-toggle="dropdown" aria-expanded="false"
+                title="Load or reload default dashboards">
+          <i class="glyphicon glyphicon-cog"></i>&nbsp;
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li data-ng-repeat="item in listOfDashboardToLoad">
+            <a href=""
+               data-ng-click="loadDashboard(item.fileName)">{{item.label}}</a></li>
+        </ul>
+      </div>
+    </h3>
+
+    <p class="alert alert-warning" data-ng-if="dashboards.length === 0">
+      There is no dashboard available.<br/>
+
+      <a class="btn btn-primary"
+         data-ng-repeat="item in listOfDashboardToLoad"
+         data-ng-click="loadDashboard(item.fileName)">
+        <i class="glyphicon glyphicon-plus"></i>&nbsp;
+        <span>{{item.label}}</span>
+      </a>
+    </p>
+
     <div class="list-group">
       <a href="#"
          class="list-group-item"
@@ -27,6 +55,14 @@
          data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
         {{dashboard.title}}
       </a>
+    </div>
+
+
+    <div data-ng-hide="dashboardsLoaded == null">
+      <h3>Dashboard loaded</h3>
+      <ul>
+        <li data-ng-repeat="d in dashboardsLoaded.success">{{d}}</li>
+      </ul>
     </div>
   </div>
 </div>

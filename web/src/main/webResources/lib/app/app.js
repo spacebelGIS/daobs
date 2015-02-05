@@ -16,6 +16,7 @@
       harvesterConfig: context + 'daobs/harvester.json',
       reportingConfig: context + 'daobs/reporting.json',
       reporting: context + 'daobs/reporting/',
+      samples: context + 'daobs/samples/',
       reportingSubmit: context + 'data/update/xslt',
       dashboardBaseURL: context + 'dashboard/#/dashboard/solr/',
       solrAdmin: context + 'admin.html'
@@ -145,6 +146,14 @@
   app.controller('HomeCtrl', ['$scope', '$http', 'cfg',
     function ($scope, $http, cfg) {
       $scope.dashboards = null;
+      $scope.dashboardsLoaded = null;
+      $scope.listOfDashboardToLoad = [{
+        label: 'Add INSPIRE monitoring dashboards',
+        fileName: 'INSPIRE'
+      },{
+        label: 'Add metadata dashboards',
+        fileName: 'CATALOG'
+      }];
 
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
@@ -152,6 +161,16 @@
           '/select?q=title:*&wt=json&rows=20&sort=title asc').
           success(function (data) {
             $scope.dashboards = data.response.docs;
+          });
+      };
+
+      $scope.loadDashboard = function (type) {
+        $scope.dashboardsLoaded = null;
+        return $http.get(cfg.SERVICES.samples +
+        '/dashboard/' + type + '.json').
+          success(function (data) {
+            $scope.dashboardsLoaded = data;
+            init();
           });
       };
 
