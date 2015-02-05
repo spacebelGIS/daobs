@@ -272,6 +272,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
+          <warName>${war.name}</warName>
           <webResources>
             <resource>
               <directory>${project.basedir}/../dashboard/target/web</directory>
@@ -293,7 +294,7 @@
         <configuration>
           <contextReloadable>true</contextReloadable>
           <!-- http port -->
-          <port>${solr.server.port}</port>
+          <port>${webapp.port}</port>
           <!--<ajpPort>${solr.server.port.ajp}</ajpPort>-->
           <!--<ajpProtocol>org.apache.coyote.ajp.AjpProtocol</ajpProtocol>-->
           <!-- application path always starts with /-->
@@ -314,8 +315,6 @@
     </plugins>
   </build>
   <properties>
-    <solr.server.port>8983</solr.server.port>
-    <solr.server.stopport>9966</solr.server.stopport>
     <solr.core.directory>solr-cores</solr.core.directory>
     <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
   </properties>

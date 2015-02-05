@@ -48,9 +48,25 @@ mvn tomcat7:run-war
 Access the home page from http://localhost:8983.
 
 
-### Deploy WAR file
+### Build a custom WAR file
 
-Deploy the WAR file in Tomcat (or any Java container). Set the solr.solr.home system property which define the location of the Solr index.
+In order to build a custom WAR file, update the pom.xml following properties:
+* war.name
+* webapp.context
+* webapp.url
+
+Run the following command line and copy the WAR which is built in web/target/{{war.name}}.war.
+```
+mvn clean install
+```
+
+
+### Deploy a WAR file
+
+Deploy the WAR file in Tomcat (or any Java container).
+
+Set the solr.solr.home system property which define the location of the Solr index.
+
 
 Example: For Tomcat set it in the catalina.sh file
 
@@ -58,11 +74,13 @@ Example: For Tomcat set it in the catalina.sh file
 export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/usr/solr-cores"
 ```
 
+Copy the default core configuration (web/src/main/solr-cores folder to the solr.solr.home folder.
+
+Run the container.
+
 Access the home page from http://localhost:8983.
 
-
-TODO: Test to rename the webapp name and explain any configuration required.
-
+If the Solr URL needs to be updated, look into the WEB-INF/config.properties file.
 
 
 

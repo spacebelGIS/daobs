@@ -244,7 +244,11 @@
 
 
   <properties>
-    <!-- The web applicatin name. Could be run
+    <!-- The WAR file name when building the
+    application -->
+    <war.name>daobs</war.name>
+
+    <!-- The web application name. Could be run
     as root context using "/" or using a custom
     name eg. "dashboard". -->
     <webapp.context>/</webapp.context>
@@ -252,7 +256,9 @@
     <!-- The public URL of the web application.
     This is used by all services requesting the
     Solr instance. eg. Harvesters. -->
-    <webapp.url>http://localhost:8983</webapp.url>
+    <webapp.protocol>http</webapp.protocol>
+    <webapp.port>8983</webapp.port>
+    <webapp.url>${webapp.protocol}://localhost:${webapp.port}</webapp.url>
 
     <!-- Default username and password. This
     set the values in Spring security file and
