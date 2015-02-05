@@ -297,7 +297,7 @@
           <!--<ajpPort>${solr.server.port.ajp}</ajpPort>-->
           <!--<ajpProtocol>org.apache.coyote.ajp.AjpProtocol</ajpProtocol>-->
           <!-- application path always starts with /-->
-          <path>/</path>
+          <path>${webapp.context}</path>
           <!-- optional path to a context file
           <contextFile>${tomcatContextXml}</contextFile>-->
           <systemProperties>

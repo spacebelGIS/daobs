@@ -7,7 +7,7 @@
    * @type {module|*}
    */
   var app = angular.module('daobs', ['ngRoute']);
-  var context = '${webapp.context}';
+  var context = '${webapp.context}/';
   app.constant('cfg', {
     'SERVICES': {
       root: context,

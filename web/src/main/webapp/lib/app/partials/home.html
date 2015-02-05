@@ -23,7 +23,7 @@
                 class="btn btn-link dropdown-toggle"
                 data-toggle="dropdown" aria-expanded="false"
                 title="Load or reload default dashboards">
-          <i class="glyphicon glyphicon-cog"></i>&nbsp;
+          <i class="glyphicon glyphicon-plus"></i>&nbsp;
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
@@ -37,7 +37,7 @@
     <p class="alert alert-warning" data-ng-if="dashboards.length === 0">
       There is no dashboard available.<br/>
 
-      <a class="btn btn-primary"
+      <a class="btn btn-primary btn-block"
          data-ng-repeat="item in listOfDashboardToLoad"
          data-ng-click="loadDashboard(item.fileName)">
         <i class="glyphicon glyphicon-plus"></i>&nbsp;
