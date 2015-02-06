@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.daobs.tasks</groupId>
-  <artifactId>service-dataset-indexer</artifactId>
+  <artifactId>daobs-tasks-service-dataset-indexer</artifactId>
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
 
@@ -12,7 +12,7 @@
   <url></url>
 
   <parent>
-    <artifactId>task</artifactId>
+    <artifactId>daobs-task</artifactId>
     <groupId>org.daobs.tasks</groupId>
     <version>0.1-SNAPSHOT</version>
   </parent>
@@ -20,12 +20,12 @@
   <dependencies>
     <dependency>
       <groupId>org.daobs</groupId>
-      <artifactId>routing-utility</artifactId>
+      <artifactId>daobs-routing-utility</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.daobs</groupId>
-      <artifactId>logging-deps</artifactId>
+      <artifactId>daobs-logging-deps</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>

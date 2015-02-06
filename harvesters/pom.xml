@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.daobs.harvester</groupId>
-  <artifactId>harvester</artifactId>
+  <artifactId>daobs-harvester</artifactId>
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Harvesters</name>

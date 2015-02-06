@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.daobs</groupId>
-  <artifactId>web</artifactId>
+  <artifactId>daobs-web</artifactId>
   <name>Solr and web application</name>
   <packaging>war</packaging>
   <version>0.1-SNAPSHOT</version>
@@ -15,19 +15,42 @@
 
   <profiles>
     <profile>
-      <id>dev</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <build.profile.id>dev</build.profile.id>
-      </properties>
+      <id>with-harvester</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.daobs.harvester</groupId>
+          <artifactId>daobs-harvester-csw</artifactId>
+          <version>${project.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>net.sf.saxon</groupId>
+              <artifactId>Saxon-HE</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>with-tasks</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.daobs.tasks</groupId>
+          <artifactId>daobs-tasks-service-dataset-indexer</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.daobs.tasks</groupId>
+          <artifactId>daobs-tasks-validation-checker</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
   <dependencies>
     <dependency>
       <groupId>org.daobs</groupId>
-      <artifactId>logging-deps</artifactId>
+      <artifactId>daobs-logging-deps</artifactId>
       <version>0.1-SNAPSHOT</version>
       <type>pom</type>
     </dependency>
@@ -153,26 +176,9 @@
       <artifactId>daobs-core</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <!--
-    Add CSW harvester module in the webapp
-    <dependency>
-      <groupId>org.daobs.harvester</groupId>
-      <artifactId>csw-harvester</artifactId>
-      <version>0.1-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>net.sf.saxon</groupId>
-          <artifactId>Saxon-HE</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>-->
   </dependencies>
   <build>
     <finalName>solr</finalName>
-    <filters>
-      <filter>${project.basedir}/profiles/${build.profile.id}/config.properties</filter>
-    </filters>
     <resources>
       <resource>
         <filtering>true</filtering>
@@ -180,37 +186,6 @@
       </resource>
     </resources>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0-alpha-2</version>
-        <configuration>
-          <files>
-            <!-- Properties are read from profile specific property file -->
-            <file>${project.basedir}/profiles/${build.profile.id}/config.properties</file>
-          </files>
-        </configuration>
-        <executions>
-          <!-- Load properties for the default lifecycle -->
-          <execution>
-            <id>default-lifecycle-properties</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-          </execution>
-          <!-- Load properties for the clean lifecycle -->
-          <execution>
-            <id>clean-lifecycle-properties</id>
-            <phase>pre-clean</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-
       <plugin>
         <!-- Copy Solr cores and config to the build directory.
         This folder is the solr.solr.home directory.

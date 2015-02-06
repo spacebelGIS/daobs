@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.daobs</groupId>
-  <artifactId>routing-deps</artifactId>
+  <artifactId>daobs-routing-deps</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Dependency for Camel</name>

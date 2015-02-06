@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.daobs.harvester</groupId>
-  <artifactId>csw-harvester</artifactId>
+  <artifactId>daobs-harvester-csw</artifactId>
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Harvester / CSW</name>
@@ -12,19 +12,19 @@
 
   <parent>
     <groupId>org.daobs.harvester</groupId>
-    <artifactId>harvester</artifactId>
+    <artifactId>daobs-harvester</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>org.daobs</groupId>
-      <artifactId>routing-utility</artifactId>
+      <artifactId>daobs-routing-utility</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.daobs</groupId>
-      <artifactId>logging-deps</artifactId>
+      <artifactId>daobs-logging-deps</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>
@@ -65,7 +65,6 @@
           </execution>
         </executions>
       </plugin>
-
       <!-- allows the route to be ran via 'mvn camel:run' -->
       <plugin>
         <groupId>org.apache.camel</groupId>

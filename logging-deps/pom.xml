@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.daobs</groupId>
-  <artifactId>logging-deps</artifactId>
+  <artifactId>daobs-logging-deps</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Dependency for logging</name>
