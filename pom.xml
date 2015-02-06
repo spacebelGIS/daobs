@@ -63,9 +63,10 @@
       </dependency>
       <dependency>
         <groupId>net.sf.saxon</groupId>
-        <artifactId>Saxon-HE</artifactId>
-        <version>${saxon.he.version}</version>
+        <artifactId>saxon-xpath</artifactId>
+        <version>${saxon-xpath.version}</version>
       </dependency>
+
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -141,21 +142,6 @@
         <scope>test</scope>
       </dependency>
 
-<!--
-      <dependency>
-        <groupId>org.daobs</groupId>
-        <artifactId>logging-deps</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-      </dependency>
-
-      <dependency>
-        <groupId>org.daobs</groupId>
-        <artifactId>routing-deps</artifactId>
-        <version>0.1-SNAPSHOT</version>
-        <type>pom</type>
-      </dependency>-->
-
       <dependency>
         <groupId>org.daobs</groupId>
         <artifactId>daobs-routing-utility</artifactId>
@@ -168,15 +154,8 @@
   <!-- Needed for Saxon dependency -->
   <repositories>
     <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <id>core-maven-repo</id>
-      <name>GeoNetwork remote repository</name>
-      <url>https://raw.githubusercontent.com/geonetwork/core-maven-repo/master</url>
+      <id>pentaho-releases</id>
+      <url>http://repository.pentaho.org/artifactory/repo/</url>
     </repository>
   </repositories>
 
@@ -276,9 +255,9 @@
 
     <guava.version>17.0</guava.version>
 
-    <saxon.version>9.1.0.8b-patch</saxon.version>
-    <saxon.he.version>9.5.1-6</saxon.he.version>
-    <saxon-dom.version>9.1.0.8b</saxon-dom.version>
+    <saxon.version>9.1.0.8</saxon.version>
+    <saxon-dom.version>9.1.0.8</saxon-dom.version>
+    <saxon-xpath.version>9.1.0.8</saxon-xpath.version>
 
     <spring.version>4.0.7.RELEASE</spring.version>
     <spring-security.version>3.2.5.RELEASE</spring-security.version>
