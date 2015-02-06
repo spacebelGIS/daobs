@@ -56,10 +56,26 @@
 
     </cm:onException>
 
-
-    <cm:route id="route-csw-init">
-      <!--<cm:from uri="timer://start?repeatCount=1"/>-->
+    <cm:route id="route-csw-start-from-config-file">
+      <cm:description>
+        Start the harvester by loading the configuration file in the
+        config folder
+      </cm:description>
       <cm:from uri="file:{{csw.config.folder}}?fileName=$simple{property.csw.config.filename}&amp;noop=true&amp;delay=1000000000"/>
+      <cm:to uri="direct:route-start-csw-harvesting"/>
+    </cm:route>
+
+    <cm:route id="route-csw-start-from-task-folder">
+      <cm:description>
+        Start the harvester when a config file is dropped in the
+        tasks folder
+      </cm:description>
+      <cm:from uri="file:{{csw.config.folder}}tasks?delay=10000"/>
+      <cm:to uri="direct:route-start-csw-harvesting"/>
+    </cm:route>
+
+    <cm:route id="route-start-csw-harvesting">
+      <cm:from uri="direct:route-start-csw-harvesting"/>
       <cm:log message="Loading harvesters configuration ..."
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
@@ -260,6 +276,7 @@
           <cm:to uri="file:csw/get-records-response/?fileName=$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <!-- Index in Solr -->
           <cm:to uri="direct:indexDocuments"/>
+          <!--<cm:to uri="direct:websocketLog"/>-->
         </cm:multicast>
       </cm:split>
 
@@ -278,6 +295,7 @@
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
 
+      <!--<cm:to uri="direct:websocketLog"/>-->
     </cm:route>
 
 
@@ -338,6 +356,14 @@
         <cm:simple>{{solr.delete.filter}}</cm:simple>
       </cm:setBody>
       <cm:to uri="solr://{{solr.server.url}}"/>
+    </cm:route>
+
+
+    <cm:route id="websocket-log">
+      <cm:from uri="direct:websocketLog"/>
+      <!--<cm:from uri="websocket://harvester"/>-->
+      <!--<cm:log message=">>> Message received from WebSocket Client : ${body}"/>-->
+      <cm:to uri="websocket://harvester-csw-log?sendToAll=true"/>
     </cm:route>
   </cm:camelContext>
 </beans>
