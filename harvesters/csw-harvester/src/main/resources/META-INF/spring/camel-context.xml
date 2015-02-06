@@ -359,11 +359,11 @@
     </cm:route>
 
 
-    <cm:route id="websocket-log">
+    <!--<cm:route id="websocket-log">
       <cm:from uri="direct:websocketLog"/>
-      <!--<cm:from uri="websocket://harvester"/>-->
-      <!--<cm:log message=">>> Message received from WebSocket Client : ${body}"/>-->
+      &lt;!&ndash;<cm:from uri="websocket://harvester"/>&ndash;&gt;
+      &lt;!&ndash;<cm:log message=">>> Message received from WebSocket Client : ${body}"/>&ndash;&gt;
       <cm:to uri="websocket://harvester-csw-log?sendToAll=true"/>
-    </cm:route>
+    </cm:route>-->
   </cm:camelContext>
 </beans>
