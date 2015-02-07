@@ -1,6 +1,7 @@
 package org.daobs.solr.samples.loader;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -20,10 +21,9 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple dashboard loader
@@ -49,7 +49,6 @@ public class DashboardLoader {
             throw new SecurityException("No dashboard can be loaded when the file matching pattern contains '..'.");
         }
 
-        List<String> fileNames = new ArrayList<>();
         Map<String, List<String>> report = new HashMap<>();
         report.put("success", new ArrayList<String>());
         report.put("errors", new ArrayList<String>());
@@ -125,5 +124,42 @@ public class DashboardLoader {
 
     public void setSolrServerUrl(String solrServerUrl) {
         this.solrServerUrl = solrServerUrl;
+    }
+
+
+    /**
+     * Sample dashboard file format should be
+     */
+    public static final String dashboardSampleFilePattern = "([A-Z]*)-.*.json";
+    private static final Pattern p = Pattern.compile(dashboardSampleFilePattern);
+
+    /**
+     * Browse the folder for resources and return a sorted list of values.
+     *
+     * @param directory
+     * @param aggregateByFilePattern
+     * @return
+     */
+    public Set<String> getListOfResources(String directory, boolean aggregateByFilePattern) {
+        Set<String> listOfDashboards = new TreeSet<>();
+        try (DirectoryStream<Path> directoryStream =
+                     Files.newDirectoryStream(Paths.get(directory))) {
+            for (Path path : directoryStream) {
+                String fileName = path.toFile().getName();
+                if (aggregateByFilePattern) {
+                    Matcher matcher = p.matcher(fileName);
+                    while (matcher.find()) {
+                        if (!Strings.isNullOrEmpty(matcher.group(1))) {
+                            listOfDashboards.add(matcher.group(1));
+                        }
+                    }
+                } else {
+                    listOfDashboards.add(fileName);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listOfDashboards;
     }
 }

@@ -148,13 +148,7 @@
     function ($scope, $http, cfg) {
       $scope.dashboards = null;
       $scope.dashboardsLoaded = null;
-      $scope.listOfDashboardToLoad = [{
-        label: 'Add INSPIRE monitoring dashboards',
-        fileName: 'INSPIRE'
-      },{
-        label: 'Add metadata dashboards',
-        fileName: 'CATALOG'
-      }];
+      $scope.listOfDashboardToLoad = null;
 
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
@@ -163,12 +157,17 @@
           success(function (data) {
             $scope.dashboards = data.response.docs;
           });
+
+        $http.get(cfg.SERVICES.samples + '/dashboardType.json').
+          success(function (data) {
+            $scope.listOfDashboardToLoad = data;
+          });
       };
 
       $scope.loadDashboard = function (type) {
         $scope.dashboardsLoaded = null;
-        return $http.get(cfg.SERVICES.samples +
-        '/dashboard/' + type + '.json').
+        return $http.put(cfg.SERVICES.samples +
+        '/dashboard/' + type + '*.json').
           success(function (data) {
             $scope.dashboardsLoaded = data;
             init();

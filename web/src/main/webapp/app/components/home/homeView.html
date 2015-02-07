@@ -1,0 +1,85 @@
+<div class="row">
+  <div class="col-sm-6">
+
+
+    <div class="jumbotron">
+      <p>{{'homeInfo' | translate}}</p>
+      <p><a class="btn btn-primary btn-lg" role="button"
+              href="dashboard">
+        <i class="glyphicon glyphicon-stats"></i>
+        <span data-translate="">viewDashboard</span>
+      </a></p>
+    </div>
+
+
+  </div>
+  <div class="col-sm-6" id='ds-latest-dashboard'>
+
+    <h3>
+      <span data-translate="">latestDashboard</span>
+      <div class="btn-group">
+        <button type="button"
+                class="btn btn-link dropdown-toggle"
+                data-toggle="dropdown" aria-expanded="false"
+                title="Load or reload default dashboards">
+          <i class="glyphicon glyphicon-plus"></i>&nbsp;
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li role="presentation"
+              class="dropdown-header"
+              data-translate="">chooseATypeOfDashboardToLoad</li>
+          <li data-ng-repeat="item in listOfDashboardToLoad">
+            <a href=""
+               data-ng-click="loadDashboard(item)">{{item}}</a></li>
+        </ul>
+      </div>
+    </h3>
+
+
+    <p class="alert alert-warning"
+       role="alert"
+       data-ng-if="dashboards.length === 0">
+      <button type="button" class="close"
+              data-dismiss="alert"
+              aria-label="{{'close' | translate}}">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong data-translate="">noDashboard</strong>
+    </p>
+
+
+    <ul class="list-group">
+      <li class="list-group-item"
+          data-ng-repeat="dashboard in dashboards">
+        <a href=""
+           data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
+          {{dashboard.title}}
+        </a>
+        <button class="btn btn-link btn-sm pull-right"
+                data-ng-click="removeDashboard(dashboard.id)">
+          <i class="glyphicon glyphicon-remove text-danger"></i>
+        </button>
+      </li>
+    </ul>
+
+
+    <div class="alert alert-info"
+       role="alert"
+       data-ng-if="dashboardsLoaded !== null">
+      <button type="button" class="close"
+              data-dismiss="alert"
+              aria-label="{{'close' | translate}}">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+      <h3 data-translate=""
+          data-translate-values="{number: {{dashboardsLoaded.success.length}}}">
+        dashboardLoaded
+      </h3>
+      <ul>
+        <li data-ng-repeat="d in dashboardsLoaded.success">{{d}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
