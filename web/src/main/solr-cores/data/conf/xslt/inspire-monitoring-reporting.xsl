@@ -7,7 +7,9 @@
   extension-element-prefixes="saxon"
   exclude-result-prefixes="#all"
   version="2.0">
-  
+
+  <xsl:import href="constant.xsl"/>
+
   <xsl:variable name="reportingYear" select="/monitoring:Monitoring/documentYear/year"/>
   <xsl:variable name="reportingTerritory" select="/monitoring:Monitoring/memberState"/>
 
@@ -34,12 +36,29 @@
     '-12-31T12:00:00Z')"/>
   <xsl:template match="/">
     <add>
-      <xsl:apply-templates select="//Indicators/*|
+      <xsl:apply-templates select="//MonitoringMD|//Indicators/*|
                 //RowData/SpatialDataService/NetworkService/userRequest|
                 //RowData/SpatialDataSet/Coverage/(relevantArea|actualArea)"/>
     </add>
   </xsl:template>
-  
+
+  <xsl:template match="MonitoringMD">
+    <doc>
+      <field name="id"><xsl:value-of
+              select="concat('monitoring', $reportingTerritory, $reportingDate)"/></field>
+      <field name="documentType">monitoring</field>
+      <field name="territory"><xsl:value-of select="$reportingTerritory"/></field>
+      <field name="reportingDateSubmission"><xsl:value-of select="$reportingDateSubmission"/></field>
+      <field name="reportingDate"><xsl:value-of select="$reportingDate"/></field>
+      <field name="reportingYear"><xsl:value-of select="$reportingYear"/></field>
+      <field name="contact">{
+          "org": "<xsl:value-of select="replace(organizationName,
+                                        $doubleQuote, $escapedDoubleQuote)"/>",
+          "email": "<xsl:value-of select="email"/>"
+      }</field>
+    </doc>
+  </xsl:template>
+
   <xsl:template match="Indicators/*">
     <xsl:variable name="indicatorType" select="local-name()"/>
     <xsl:for-each select="descendant::*[count(*) = 0 and text() != '']">
