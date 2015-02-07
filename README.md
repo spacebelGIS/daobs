@@ -227,7 +227,7 @@ done
 ### Indexing INSPIRE indicators
 
 
-Manually indexing INSPIRE monitoring reporting (reporting could also contains ancillary information):
+Manually indexing INSPIRE monitoring:
 
 ```
 for f in *.xml; do
@@ -235,6 +235,15 @@ for f in *.xml; do
   curl "http://localhost:8983/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
+
+To import monitoring with ancillary information:
+```
+for f in *.xml; do
+  echo "importing '$f' file..";
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=inspire-monitoring-reporting-with-ai.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+done
+```
+
 
 
 
