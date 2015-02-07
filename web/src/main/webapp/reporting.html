@@ -3,12 +3,12 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title>Daobs</title>
-  <link rel="stylesheet" href="lib/intro.js/introjs.min.css"/>
-  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="lib/app/css/main.css"/>
+  <link rel="stylesheet" href="assets/libs/intro.js/introjs.min.css"/>
+  <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="assets/css/main.css"/>
 </head>
 <body data-ng-controller="RootController"
-      data-ng-cloak>
+      data-ng-cloak="">
   <nav class="navbar navbar-inverse " role="navigation">
     <div class="container-fluid">
       <div class="collapse navbar-collapse">
@@ -16,10 +16,10 @@
           <li data-ng-repeat="link in navLinks"
               data-ng-class="navClass('{{link.url}}')">
             <a href="{{link.url}}"
-                    title="{{link.title}}"
+                    title="{{(link.id + 'Title') | translate}}"
                     id="ds-menu-{{link.id}}">
               <i class="glyphicon" data-ng-class="link.icon"></i>
-              {{link.text}}
+              {{link.id | translate}}
             </a>
           </li>
           <li>
@@ -36,19 +36,22 @@
     </p>
   </div>
 
-  <script src="lib/jquery/jquery-2.1.1.min.js"></script>
+  <script src="assets/libs/jquery/jquery-2.1.1.min.js"></script>
 
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>-->
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-resource.min.js"></script>-->
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.min.js"></script>-->
+  <script src="assets/libs/angular/angular.min.js" language="JavaScript"></script>
+  <script src="assets/libs/angular/angular-route.min.js" language="JavaScript"></script>
+  <script src="assets/libs/angular/angular-route.min.js" language="JavaScript"></script>
+  <script src="assets/libs/angular/angular-translate.min.js" language="JavaScript"></script>
+  <script src="assets/libs/angular/angular-translate-loader-static-files.min.js" language="JavaScript"></script>
 
-  <script src="lib/angular/angular.min.js" language="JavaScript"></script>
-  <script src="lib/angular/angular-route.min.js" language="JavaScript"></script>
-  <script src="lib/angular/angular-resource.min.js" language="JavaScript"></script>
+  <script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/libs/intro.js/intro.min.js"></script>
 
-  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="lib/intro.js/intro.min.js"></script>
-  <script src="lib/app/app.js"></script>
-  <script src="lib/app/directives/reportUpload.js"></script>
+  <script src="app/shared/solr/solrModule.js"></script>
+  <script src="app/shared/solr/solrConfig.js"></script>
+  <script src="app/shared/solr/solrService.js"></script>
+  <script src="app/app.module.js"></script>
+  <script src="app/app.route.js"></script>
+  <script src="app/shared/reportUpload.js"></script>
 </body>
 </html>

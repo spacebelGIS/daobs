@@ -137,7 +137,8 @@
       };
 
       $scope.removeDashboard = function (id) {
-        return solrService.delete('id:"' + id + '"', 'dashboard').success(
+        var documentFilter = id ? 'id:"' + id + '"' : '*:*';
+        return solrService.delete(documentFilter, 'dashboard').success(
           init
         );
       };
