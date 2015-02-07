@@ -56,6 +56,8 @@
                                         $doubleQuote, $escapedDoubleQuote)"/>",
           "email": "<xsl:value-of select="email"/>"
       }</field>
+      <!-- TODO: Add parameter -->
+      <field name="isOfficial">true</field>
     </doc>
   </xsl:template>
 

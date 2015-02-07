@@ -107,7 +107,7 @@
   <field name="reportingYear" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="territory" type="string" indexed="true" stored="true" multiValued="false"/>
 
-
+  <field name="isOfficial" type="boolean" stored="true" indexed="true" multiValued="false"/>
 
   <field name="associationType" type="string" indexed="true" stored="true" multiValued="false"/>
   <field name="record" type="string" indexed="true" stored="true" multiValued="false"/>
