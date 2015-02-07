@@ -1,0 +1,22 @@
+<div id="monitoring"
+     data-ng-controller="MonitoringCtrl">
+	<ul class="nav nav-tabs">
+
+    <!-- Action menu -->
+		<li role="reporting"
+        data-ng-class="{'active':isActive('monitoring/manage')}">
+      <a href="#/monitoring/manage"
+         data-translate="">monitoringInfo</a></li>
+		<li role="reporting"
+        data-ng-class="{'active':isActive('monitoring/create')}">
+      <a href="#/monitoring/create"
+         data-translate="">createMonitoring</a></li>
+		<li role="reporting"
+        data-ng-class="{'active':isActive('monitoring/submit')}">
+      <a href="#/monitoring/submit"
+         data-translate="">submitMonitoring</a></li>
+	</ul>
+
+  <div data-ng-include="'/app/components/monitoring/partial/' + section + 'View.html' ">
+  </div>
+</div>

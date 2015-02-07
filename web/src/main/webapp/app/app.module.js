@@ -43,7 +43,7 @@
       }, {
         id: 'monitoring',
         icon: 'glyphicon-list-alt',
-        url: '#/reporting'
+        url: '#/monitoring/manage'
       }, {
         id: 'harvesting',
         icon: 'glyphicon-download-alt',

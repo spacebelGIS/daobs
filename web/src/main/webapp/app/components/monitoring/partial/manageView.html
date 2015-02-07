@@ -1,0 +1,89 @@
+<div class="row" data-ng-controller="MonitoringInfoCtrl">
+  <div class="col-md-2">
+    <br/>
+
+    <!-- Single button -->
+    <div class="btn-group"
+         data-ng-class="listOfTerritory.length === 0 ? 'disabled' : ''">
+      <button type="button" class="btn btn-default dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false">
+        <i class="glyphicon glyphicons-filter"></i>
+        <span data-translate="">addTerritoryFilter</span>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li role="presentation"
+            class="dropdown-header"
+            data-translate="">chooseATerritoryToFilterOn</li>
+        <li><a href=""
+               data-ng-click="filterOnTerritory(null)"
+               data-translate="">noFilter</a>
+        </li>
+        <li data-ng-repeat="t in monitoringFacet.territory">
+          <a href=""
+             data-ng-click="filterOnTerritory(t)">{{t.label}}</a>
+        </li>
+      </ul>
+    </div>
+
+    <p data-ng-show="territory !== null">
+      <h2>{{territory.label}}</h2>
+
+      <h4>{{territory.count}} <span data-translate="">records</span>.</h4>
+    </p>
+    <p data-ng-hide="territory" data-translate="">
+      noTerritoryFilter
+    </p>
+  </div>
+  <div class="col-md-10">
+    <br/>
+    <table class="table table-striped">
+      <tr>
+        <th data-translate="">monitoringYear</th>
+        <th data-translate="">monitoringDate</th>
+        <th data-translate="">monitoringTerritory</th>
+        <th data-translate="">monitoringOrg</th>
+        <th></th>
+        <th>
+          <a class="btn btn-link"
+               href="" role="button"
+               title="removeAllMonitoring"
+               data-ng-show="listOfMonitoring.length"
+               data-ng-mouseenter="monitoringDanger = true"
+               data-ng-mouseleave="monitoringDanger = false"
+               data-ng-click="removeMonitoring()">
+            <i class="glyphicon glyphicon-remove text-danger"></i>
+          </a>
+        </th>
+      </tr>
+      <tr data-ng-repeat="m in listOfMonitoring"
+          data-ng-class="monitoringDanger ? 'danger' : ''">
+        <td><strong>{{m.reportingYear}}</strong></td>
+        <td title="{{m.reportingDate}}">{{m.reportingDate | fromNow}}</td>
+        <td>{{m.territory}}</td>
+        <td>
+          <ul>
+            <li data-ng-repeat="c in m.contact">
+              <a href="mailto:{{c.email}}">{{c.org}}</a>
+            </li>
+          </ul>
+        </td>
+        <td>
+          <a class="btn btn-link"
+             href="" role="button"
+             data-ng-click="openMonitoring(m)">
+            <i class="glyphicon glyphicon-eye-open"></i>
+          </a>
+        </td>
+        <td>
+          <a class="btn btn-link"
+             href="" role="button"
+             data-ng-click="removeMonitoring(m)">
+            <i class="glyphicon glyphicon-remove text-danger"></i>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
