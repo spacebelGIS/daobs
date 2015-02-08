@@ -1,17 +1,58 @@
-<h3 data-translate="">Submit Reporting</h3>
-<form
-			class="form-horizontal"
-			role="form"
-			report-upload="">
-	<div class="form-group">
-		<label for="ds-report-upload"
-					 class="col-sm-2 control-label">Select INSPIRE monitoring reporting XML file</label>
-		<div class="col-sm-10">
-			<input id="ds-report-upload" type="file"/>
-			<div id="reporting-submit-message"
-					 class="{{reportingSubmitStyle}}">{{reportingSubmitMessage}}</div>
-			<button class="btn btn-primary"
-							data-ng-click="submitINSPIREReporting()">Submit</button>
-		</div>
-	</div>
-</form>
+<div class="row" data-ng-controller="MonitoringSubmitCtrl">
+  <div class="col-md-2">
+    <br/>
+    <p class="alert alert-info" data-translate="">monitoringSubmitPage</p>
+
+  </div>
+  <div class="col-md-10">
+    <br/>
+    <!-- Check for FormData API -->
+    <form
+          class="form"
+          role="form">
+      <div class="form-group">
+        <label for="ds-report-upload"
+               class="control-label"
+               data-translate="">chooseMonitoringFile</label>
+        <input id="ds-report-upload"
+               data-file-model="monitoringFile"
+               type="file"/>
+        <p class="help-block"
+           data-translate="">monitoringFileHelp</p>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input data-ng-model="isOfficial" type="checkbox"/>
+          <span data-translate="">isOfficial</span>
+        </label>
+        <p class="help-block"
+           data-translate="">isOfficialHelp</p>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input data-ng-model="withRowData" type="checkbox"/>
+          <span data-translate="">indexRowData</span>
+        </label>
+        <p class="help-block"
+           data-translate="">indexRowDataHelp</p>
+      </div>
+
+      <button class="btn btn-primary"
+              data-ng-disabled="monitoringFile === undefined"
+              data-ng-click="uploadMonitoring()">
+        <i class="glyphicon glyphicon-upload"></i>&nbsp;
+        <span data-translate="">submitMonitoring</span>
+      </button>
+    </form>
+
+    <br/>
+    <div class="alert alert-success"
+         data-ng-show="isUploadOk !== null"
+         data-ng-class="isUploadOk ? 'alert-success' : 'alert-danger'">
+      {{monitoringSubmitMessage}}
+    </div>
+
+  </div>
+</div>

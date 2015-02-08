@@ -3,7 +3,7 @@
     <br/>
     <ul>
       <li data-ng-repeat="(key, value) in monitoringFacet">
-        {{key}}
+        {{key | translate}}
         <ul>
           <li data-ng-repeat="v in value">
             <a href="" data-ng-click="setMonitoringFilter(key, v.label)">
@@ -19,7 +19,7 @@
       </li>
     </ul>
 
-    <p class="alert alert-info">monitoringInfoPage</p>
+    <p class="alert alert-info" data-translate="">monitoringInfoPage</p>
   </div>
   <div class="col-md-10">
     <br/>
@@ -27,8 +27,9 @@
       <tr>
         <th data-translate="">monitoringYear</th>
         <th data-translate="">monitoringDate</th>
-        <th data-translate="">monitoringTerritory</th>
-        <th data-translate="">monitoringOrg</th>
+        <th data-translate="">territory</th>
+        <th data-translate="">org</th>
+        <th></th>
         <th></th>
         <th>
           <a class="btn btn-link"
@@ -53,7 +54,7 @@
                  data-ng-model="monitoringFilter.territory"
                  autofocus="">
         </th>
-        <th colspan="3"></th>
+        <th colspan="4"></th>
       </tr>
       <tr data-ng-repeat="m in listOfMonitoring | filter:monitoringFilter"
           data-ng-class="monitoringDanger ? 'danger' : ''">
@@ -72,6 +73,15 @@
              href="" role="button"
              data-ng-click="openMonitoring(m)">
             <i class="glyphicon glyphicon-eye-open"></i>
+          </a>
+        </td>
+        <td>
+          <a class="btn btn-link"
+             href="" role="button"
+             title="{{'isOfficial' | translate}}"
+             data-ng-class="m.isOfficial ? '' : 'disabled'"
+             data-ng-click="setAsOfficialMonitoring(m)">
+            <i class="glyphicon glyphicon-pushpin"></i>
           </a>
         </td>
         <td>

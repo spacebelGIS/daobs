@@ -1,7 +1,7 @@
 <div class="row" data-ng-controller="MonitoringCreateCtrl">
   <div class="col-md-2">
     <br/>
-    <p class="alert alert-info">monitoringInfoPage</p>
+    <p class="alert alert-info" data-translate="">monitoringCreationPage</p>
   </div>
   <div class="col-md-10">
     <br/>
@@ -54,7 +54,9 @@
         </div>
         <div class="col-sm-5">
           <fieldset data-ng-show="reporting.id === 'inspire'">
-            <legend data-translate="">contactDetails</legend>
+            <legend>
+              <i class="glyphicon glyphicon-user"></i>&nbsp;
+              <span data-translate="">contactDetails</legend>
             <div class="form-group" id="ds-org-filter">
               <label for="ds-org-field"
                      class="col-sm-4 control-label">org</label>
@@ -156,11 +158,11 @@
             <th>
               <input class="form-control"
                      data-ng-model="reportConfigSearch.id"
-                     autofocus="autofocus">
+                     autofocus="autofocus"/>
             </th>
             <th colspan="2">
               <input class="form-control"
-                     data-ng-model="reportConfigSearch.$">
+                     data-ng-model="reportConfigSearch.$"/>
             </th>
           </tr>
           <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
@@ -207,11 +209,14 @@
             <th data-translate="">value</th>
           </tr>
           <tr>
-            <th colspan="3">
+            <th>
               <input class="form-control"
-                     data-ng-model="reportSearch.$"
-                     autofocus="autofocus"
-                     placeholder="{{'filter'}}">
+                     data-ng-model="reportSearch.id"
+                     autofocus="autofocus"/>
+            </th>
+            <th colspan="2">
+              <input class="form-control"
+                     data-ng-model="reportSearch.$"/>
             </th>
           </tr>
           <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch">

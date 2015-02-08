@@ -28,14 +28,7 @@
   app.controller('MonitoringCtrl', ['$scope', '$http', '$routeParams',
     'cfg',
     function ($scope, $http, $routeParams, cfg) {
-      $scope.listOfTerritory = [];
-      $scope.territory = null;
-      $scope.reporting = null;
       $scope.section = $routeParams.section;
-
-
-
-
 
       $scope.isActive = function(hash) {
         return location.hash.indexOf("#/" + hash) === 0
@@ -44,7 +37,42 @@
     }]);
 
 
+  /**
+   * Controller for general information about
+   * current monitoring.
+   */
+  app.controller('MonitoringInfoCtrl', [
+    '$scope', '$http', 'cfg', 'solrService', 'monitoringService',
+    function ($scope, $http, cfg, solrService, monitoringService) {
+      $scope.listOfMonitoring = null;
+      $scope.monitoringFacet = null;
+      $scope.monitoringFilter = {};
 
+      var init = function () {
+        monitoringService.loadMonitoring().then(function (response) {
+          $scope.listOfMonitoring = response.monitoring;
+          $scope.monitoringFacet = response.facet;
+        });
+      };
+
+      $scope.setMonitoringFilter = function (field, value) {
+        $scope.monitoringFilter[field] = value;
+      };
+
+      $scope.removeMonitoring = function (m) {
+        // TODO: Handle oops
+        monitoringService.removeMonitoring(m).then(
+          function() {
+            init();
+          });
+      };
+
+      $scope.setAsOfficialMonitoring = function (m) {
+        alert('not supported yet');
+      }
+
+      init();
+    }]);
 
   /**
    * Controller for general information about
@@ -139,35 +167,38 @@
 
 
   /**
-   * Controller for general information about
-   * current monitoring.
+   * Controller for submit new monitoring.
    */
-  app.controller('MonitoringInfoCtrl', [
-    '$scope', '$http', 'cfg', 'solrService', 'monitoringService',
-    function ($scope, $http, cfg, solrService, monitoringService) {
-      $scope.listOfMonitoring = null;
-      $scope.monitoringFacet = null;
-      $scope.monitoringFilter = {};
+  app.controller('MonitoringSubmitCtrl', [
+    '$scope', '$http', '$translate', 'cfg', 'monitoringService',
+    function ($scope, $http, $translate, cfg, monitoringService) {
+      $scope.isUploadOk = null;
+      $scope.isOfficial = false;
+      $scope.withRowData = false;
+      $scope.monitoringFile = null;
 
-      var init = function () {
-        monitoringService.loadMonitoring().then(function (response) {
-          $scope.listOfMonitoring = response.monitoring;
-          $scope.monitoringFacet = response.facet;
-        });
-      };
+      $scope.uploadMonitoring = function(){
+        $scope.isUploadOk = null;
 
-      $scope.setMonitoringFilter = function (field, value) {
-        $scope.monitoringFilter[field] = value;
-      };
-
-      $scope.removeMonitoring = function (m) {
-        // TODO: Handle oops
-        monitoringService.removeMonitoring(m).then(
-          function() {
-            init();
+        monitoringService.uploadMonitoring(
+          $scope.monitoringFile,
+          $scope.isOfficial,
+          $scope.withRowData
+        ).then(function(data){
+            $scope.isUploadOk = true;
+            $translate('monitoringSubmitSuccess', {
+              filename: $scope.monitoringFile.name
+            }).then(function (translation) {
+              $scope.monitoringSubmitMessage = translation;
+            });
+          }, function(response){
+            $scope.isUploadOk = false;
+            $translate('monitoringSubmitError', {
+                filename: $scope.monitoringFile.name
+              }).then(function (translation) {
+                $scope.monitoringSubmitMessage = translation;
+              });
           });
-      };
-
-      init();
-    }]);
+      }
+  }]);
 }());

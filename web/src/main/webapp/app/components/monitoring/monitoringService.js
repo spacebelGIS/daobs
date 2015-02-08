@@ -59,6 +59,34 @@
             return deferred.promise;
           },
           /**
+           * Upload a monitoring.
+           *
+           * @param file
+           * @param isOfficial Flag the monitoring as an official one
+           * @param withRowData Index also row data section
+           *  (only applies to INSPIRE monitoring)
+           * @returns {promise.promise|jQuery.promise|d.promise|promise|
+           *  h.promise|qFactory.Deferred.promise|*}
+           */
+          uploadMonitoring: function (file, isOfficial, withRowData) {
+            var deferred = $q.defer(),
+              fd = new FormData(),
+              uploadUrl = cfg.SERVICES.reportingSubmit +
+                '?commit=true&tr=inspire-monitoring-reporting' +
+                (withRowData ? '-with-ai' : '') +
+                '.xsl&isOfficial=' + isOfficial;
+            fd.append('file', file);
+            $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function (data) {
+              deferred.resolve(data);
+            }).error(function (data) {
+              deferred.reject(data);
+            });
+            return deferred.promise;
+          },
+          /**
            * Remove monitoring and related indicators.
            *
            * @param m MUST contains a reportingDate and territory which
