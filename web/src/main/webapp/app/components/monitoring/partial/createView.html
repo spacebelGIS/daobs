@@ -1,217 +1,244 @@
-<h3 data-translate="">Generate reporting</h3>
-<form class="form-horizontal" role="form">
-  <div class="row">
-    <div class="col-sm-8">
+<div class="row" data-ng-controller="MonitoringCreateCtrl">
+  <div class="col-md-2">
+    <br/>
+    <p class="alert alert-info">monitoringInfoPage</p>
+  </div>
+  <div class="col-md-10">
+    <br/>
+    <form class="form-horizontal" role="form">
+      <div class="row">
+        <div class="col-sm-7">
 
-      <div class="form-group" id="ds-report-choose">
-        <label for="ds-report-field" class="col-sm-2 control-label">Choose reporting</label>
-        <div class="col-sm-10">
-          <div class="input-group">
-            <select id="ds-report-field" class="form-control"
-                    data-ng-model="reporting"
-                    data-ng-options="value.id for (key, value) in reportingConfig | orderBy: 'id'">
-            </select>
-            <div class="input-group-btn">
-              <button type="submit"
-                      id="ds-report-view"
-                      class="btn btn-default"
-                      data-ng-click="getReportDetails()">View report rules</button>
+          <div class="form-group" id="ds-report-choose">
+            <label for="ds-report-field"
+                   class="col-sm-2 control-label"
+                   data-translate="">chooseMonitoring</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <select id="ds-report-field" class="form-control"
+                        data-ng-model="reporting"
+                        data-ng-options="value.id for (key, value) in reportingConfig | orderBy: 'id'">
+                </select>
+                <div class="input-group-btn">
+                  <button type="submit"
+                          id="ds-report-view"
+                          class="btn btn-default"
+                          data-ng-click="getReportDetails()"
+                          data-translate="">viewRules</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" id="ds-reportarea-choose">
+            <label for="ds-reportarea-field"
+                   class="col-sm-2 control-label"
+                    data-translate="">chooseTerritory</label>
+            <div class="col-sm-10">
+              <select id="ds-reportarea-field"
+                      class="form-control"
+                      data-ng-model="territory"
+                      data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="ds-query-filter">
+            <label for="ds-reportarea-field"
+                   class="col-sm-2 control-label"
+                   data-translate="">customFilter</label>
+            <div class="col-sm-10">
+              <input id="ds-query-filter"
+                     data-ng-model="filter"
+                     class="form-control"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <fieldset data-ng-show="reporting.id === 'inspire'">
+            <legend data-translate="">contactDetails</legend>
+            <div class="form-group" id="ds-org-filter">
+              <label for="ds-org-field"
+                     class="col-sm-4 control-label">org</label>
+              <div class="col-sm-8">
+                <input id="ds-org-field"
+                       data-ng-model="organizationName"
+                       class="form-control"/>
+              </div>
+            </div>
+            <div class="form-group" id="ds-email-filter">
+              <label for="ds-email-field"
+                     class="col-sm-4 control-label"
+                     data-translate="">email</label>
+              <div class="col-sm-8">
+                <input id="ds-email-field"
+                       type="email"
+                       data-ng-model="email"
+                       class="form-control"/>
+              </div>
+            </div>
+            <p class="help-block" data-translate="">inspireMonitoringInstructions</p>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button id="ds-btn-report-preview"
+                      type="submit"
+                      class="btn btn-primary"
+                      data-ng-disabled="!territory"
+                      data-ng-click="preview()">
+                <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
+                <span data-translate="">preview</span>
+              </button>
+              <div class="btn-group">
+                <button id="ds-btn-report-dwn"
+                        type="button"
+                        class="btn btn-default dropdown-toggle"
+                        data-ng-disabled="!territory"
+                        data-toggle="dropdown">
+                  <i class="glyphicon glyphicon-download-alt"></i>&nbsp;
+                  <span data-translate="">download</span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li data-ng-show="reporting.id === 'inspire'">
+                    <a target="_blank"
+                         data-ng-href="daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?organizationName={{organizationName}}&email={{email}}"
+                         data-translate="">inspireMonitoringFormat</a></li>
+                  <li data-ng-show="reporting.id === 'inspire'">
+                    <a target="_blank"
+                         data-ng-href="daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?withRowData=true&organizationName={{organizationName}}&email={{email}}"
+                         data-translate="">inspireMonitoringFormatWithRowData</a></li>
+                  <li><a target="_blank"
+                         data-ng-href="daobs/reporting/{{reporting.id}}/{{territory.label}}.xml"
+                         data-translate="">XML</a></li>
+                  <li><a target="_blank"
+                         data-ng-href="daobs/reporting/{{reporting.id}}/{{territory.label}}.json"
+                         data-translate="">JSON</a></li>
+                </ul>
+              </div>
+              <button id="ds-btn-report-submit"
+                      type="submit"
+                      class="btn btn-default disabled"
+                      data-ng-click="submit()"
+                      data-toggle="tooltip"
+                      data-placement="bottom">
+                <i class="glyphicon glyphicon-time"></i>&nbsp;
+                <span data-translate="">schedule</button>
             </div>
           </div>
         </div>
       </div>
-      <div class="form-group" id="ds-reportarea-choose">
-        <label for="ds-reportarea-field" class="col-sm-2 control-label">Choose reporting area</label>
-        <div class="col-sm-10">
-          <select id="ds-reportarea-field"
-                  class="form-control"
-                  data-ng-model="territory"
-                  data-ng-options="value.label for (key, value) in listOfTerritory | orderBy:'label'">
-          </select>
+
+      <div data-ng-show="report != null && overview"
+           id="ds-report-results">
+        <h2 data-translate=""
+            data-translate-values="{title: '{{report.identification.title.content}}'}">
+          monitoringTitle
+        </h2>
+
+        <p data-ng-show="report.identification.url"
+           data-translate=""
+                data-translate-values="{url: '{{report.identification.url}}'}">
+          monitoringUrlLink
+        </p>
+        <div class="alert alert-info" data-translate="">
+          monitoringHelp
         </div>
+
+        <table class="table table-striped">
+          <tr>
+            <th></th>
+            <th data-translate="">name</th>
+            <th data-translate="">definition</th>
+          </tr>
+          <tr>
+            <th>
+              <input class="form-control"
+                     data-ng-model="reportConfigSearch.id"
+                     autofocus="autofocus">
+            </th>
+            <th colspan="2">
+              <input class="form-control"
+                     data-ng-model="reportConfigSearch.$">
+            </th>
+          </tr>
+          <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
+            <td>{{v.id}}</td>
+            <td><strong>{{v.name.content}}</strong></td>
+            <td>
+              <p>
+                {{v.comment}}
+              </p>
+
+              <samp data-ng-show="v.query">
+                {{v.query.value}}
+              </samp>
+              <ul data-ng-show="v.query.stats != null6  ">
+                <li><label data-translate="">Statistics field</label> {{v.query.statsField}}</li>
+                <li><label data-translate="">Type</label> {{v.query.stats}}</li>
+              </ul>
+              <samp>
+                {{v.expression}}
+              </samp>
+            </td>
+          </tr>
+        </table>
       </div>
-      <div class="form-group" id="ds-query-filter">
-        <label for="ds-reportarea-field" class="col-sm-2 control-label">Query filter</label>
-        <div class="col-sm-10">
-          <input id="ds-query-filter"
-                 data-ng-model="filter"
-                 class="form-control"/>
+
+      <div data-ng-show="report != null && overview == false">
+        <h2 data-translate=""
+                data-translate-values="{
+                title: '{{report.identification.title.content}}',
+                territory: '{{territory.label}}',
+                count: '{{territory.count}}'}">
+          monitoringDetails</h2>
+
+
+        <div class="alert alert-info"
+             data-translate="">
+          monitoringContentInfo
         </div>
+
+        <table class="table table-striped">
+          <tr>
+            <th></th>
+            <th data-translate="">name</th>
+            <th data-translate="">value</th>
+          </tr>
+          <tr>
+            <th colspan="3">
+              <input class="form-control"
+                     data-ng-model="reportSearch.$"
+                     autofocus="autofocus"
+                     placeholder="{{'filter'}}">
+            </th>
+          </tr>
+          <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch">
+            <td>{{v.id}}</td>
+            <td title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
+              {{v.name.content}}
+              <div class="alert alert-danger"
+                   data-ng-show="v.status.indexOf('Error')"
+                   role="alert">
+                <strong data-ng-show="v.comment">{{v.comment}}</strong>
+                <p>{{v.status}}</p>
+                <span data-ng-show="v.parameters" data-translate="">parameters</span>
+                <ul>
+                  <li data-ng-repeat="p in v.parameters.parameter">
+                    {{p.id}}
+                    <span data-ng-show="p.status === 'set'">{{p.status}} with value {{p.value}}</span>
+                    <span data-ng-show="p.status === 'undefined'">{{p.status}}</span>
+                  </li>
+                </ul>
+              </div>
+            </td>
+            <td>{{v.value}}</td>
+            <td></td>
+          </tr>
+        </table>
+
       </div>
-    </div>
-    <div class="col-sm-4">
-      <fieldset>
-        <legend data-translate="">Contact details</legend>
-        <div class="form-group" id="ds-org-filter">
-          <label for="ds-org-field" class="col-sm-2 control-label">Organization</label>
-          <div class="col-sm-10">
-            <input id="ds-org-field"
-                   data-ng-model="organizationName"
-                   class="form-control"/>
-          </div>
-        </div>
-        <div class="form-group" id="ds-email-filter">
-          <label for="ds-email-field" class="col-sm-2 control-label">Email</label>
-          <div class="col-sm-10">
-            <input id="ds-email-field"
-                   type="email"
-                   data-ng-model="email"
-                   class="form-control"/>
-          </div>
-        </div>
-        <p class="help-block">Contact informations are required when
-          generating INSPIRE reporting to indicate report contact.</p>
-      </fieldset>
-    </div>
+    </form>
   </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button id="ds-btn-report-preview"
-                  type="submit"
-                  class="btn btn-primary"
-                  data-ng-disabled="!territory"
-                  data-ng-click="preview()">Preview</button>
-          <div class="btn-group">
-            <button id="ds-btn-report-dwn"
-                    type="button"
-                    class="btn btn-default dropdown-toggle"
-                    data-ng-disabled="!territory"
-                    data-toggle="dropdown">
-              <span data-translate="">Download</span> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a target="_blank"
-                     data-ng-href="daobs/reporting/{{reporting.id}}/{{territory.label}}.json"
-                     data-translate="">JSON</a></li>
-              <li><a target="_blank"
-                     data-ng-href="daobs/reporting/{{reporting.id}}/{{territory.label}}.xml"
-                     data-translate="">XML</a></li>
-              <li><a target="_blank"
-                     data-ng-href="daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?organizationName={{organizationName}}&email={{email}}"
-                     data-translate="">INSPIRE monitoring reporting</a></li>
-              <li><a target="_blank"
-                     data-ng-href="daobs/reporting/custom/{{reporting.id}}/{{territory.label}}?withRowData=true&organizationName={{organizationName}}&email={{email}}"
-                     data-translate="">INSPIRE monitoring reporting (with row data)</a></li>
-            </ul>
-          </div>
-          <button id="ds-btn-report-submit"
-                  type="submit"
-                  class="btn btn-default"
-                  data-ng-disabled="!territory"
-                  data-ng-click="submit()"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title="Not available yet!">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div data-ng-show="report != null && overview"
-       id="ds-report-results">
-
-    <h2 data-translate="">Report rules for
-      <strong>{{report.identification.title.content}}</strong></h2>
-
-    <p data-ng-show="report.identification.url">
-      More information at
-      <a href="{{report.identification.url}}">{{report.identification.url}}</a>
-    </p>
-    <div class="alert alert-info" data-translate="">
-      A report is created from a set of variables and indicators.
-      Variables are defined using query expressions to be computed by the search engine.
-      Indicators are created from mathematical expressions based on variables.
-    </div>
-
-    <table class="table table-striped">
-      <tr>
-        <th></th>
-        <th data-translate="">Name</th>
-        <th data-translate="">Definition</th>
-      </tr>
-      <tr>
-        <th colspan="3">
-          <input class="form-control"
-                 data-ng-model="reportConfigSearch.$"
-                 autofocus="autofocus"
-                 placeholder="{{'filter'}}">
-        </th>
-      </tr>
-      <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
-        <td>{{v.id}}</td>
-        <td><strong>{{v.name.content}}</strong></td>
-        <td>
-          <p>
-            {{v.comment}}
-          </p>
-
-          <samp data-ng-show="v.query">
-            {{v.query.value}}
-          </samp>
-          <ul data-ng-show="v.query.stats != null6  ">
-            <li><label data-translate="">Statistics field</label> {{v.query.statsField}}</li>
-            <li><label data-translate="">Type</label> {{v.query.stats}}</li>
-          </ul>
-          <samp>
-            {{v.expression}}
-          </samp>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <div data-ng-show="report != null && overview == false">
-    <h2 data-translate="">Report on
-      <strong>{{report.identification.title.content}}</strong>
-      generated for <strong>{{territory.label}}</strong>
-      based on <strong>{{territory.count}} record(s)</strong></h2>
-
-
-    <div class="alert alert-info" data-translate="">
-      The table below shows the list of variables and indicators computed
-      for the selected area. It may also reports any errors encountered
-      during computation.
-    </div>
-
-    <table class="table table-striped">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <th colspan="3">
-          <input class="form-control"
-                 data-ng-model="reportSearch.$"
-                 autofocus="autofocus"
-                 placeholder="{{'filter'}}">
-        </th>
-      </tr>
-      <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch">
-        <td>{{v.id}}</td>
-        <td title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
-          {{v.name.content}}
-          <div class="alert alert-danger"
-               data-ng-show="v.status.indexOf('Error')"
-               role="alert">
-            <strong data-ng-show="v.comment">{{v.comment}}</strong>
-            <p>{{v.status}}</p>
-            <span data-ng-show="v.parameters">Parameters:</span>
-            <ul>
-              <li data-ng-repeat="p in v.parameters.parameter">
-                {{p.id}}
-                <span data-ng-show="p.status === 'set'">{{p.status}} with value {{p.value}}</span>
-                <span data-ng-show="p.status === 'undefined'">{{p.status}}</span>
-              </li>
-            </ul>
-          </div>
-        </td>
-        <td>{{v.value}}</td>
-        <td></td>
-      </tr>
-    </table>
-
-  </div>
-</form>
+</div>
