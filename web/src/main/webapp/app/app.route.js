@@ -16,10 +16,6 @@
         .when('/', {
           controller: 'HomeCtrl',
           templateUrl: 'app/components/home/homeView.html'
-        }).when('/monitoring', {
-          templateUrl : 'app/components/monitoring/monitoringView.html'
-        }).when('/monitoring/:section', {
-          templateUrl : 'app/components/monitoring/monitoringView.html'
         }).when('/harvesting', {
           controller: 'HarvestingCtrl',
           templateUrl: 'app/components/harvest/harvestView.html'
