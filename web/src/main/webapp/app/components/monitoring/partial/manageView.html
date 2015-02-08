@@ -1,9 +1,24 @@
 <div class="row" data-ng-controller="MonitoringInfoCtrl">
   <div class="col-md-2">
     <br/>
-
-    <!-- Single button -->
-    <div class="btn-group"
+    <ul>
+      <li data-ng-repeat="(key, value) in monitoringFacet">
+        {{key}}
+        <ul>
+          <li data-ng-repeat="v in value">
+            <a href="" data-ng-click="setMonitoringFilter(key, v.label)">
+            {{v.label | translate}} ({{v.count}})
+            </a>
+          </li>
+          <li>
+            <a href="" data-ng-click="setMonitoringFilter(key, '')">
+              {{'noFilter' | translate}}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+<!--    <div class="btn-group"
          data-ng-class="listOfTerritory.length === 0 ? 'disabled' : ''">
       <button type="button" class="btn btn-default dropdown-toggle"
               data-toggle="dropdown"
@@ -34,7 +49,7 @@
     </p>
     <p data-ng-hide="territory" data-translate="">
       noTerritoryFilter
-    </p>
+    </p>-->
   </div>
   <div class="col-md-10">
     <br/>
@@ -57,7 +72,20 @@
           </a>
         </th>
       </tr>
-      <tr data-ng-repeat="m in listOfMonitoring"
+      <tr>
+        <th>
+          <input class="form-control"
+                 data-ng-model="monitoringFilter.reportingYear">
+        </th>
+        <th/>
+        <th>
+          <input class="form-control"
+                 data-ng-model="monitoringFilter.territory"
+                 autofocus="">
+        </th>
+        <th colspan="3"></th>
+      </tr>
+      <tr data-ng-repeat="m in listOfMonitoring | filter:monitoringFilter"
           data-ng-class="monitoringDanger ? 'danger' : ''">
         <td><strong>{{m.reportingYear}}</strong></td>
         <td title="{{m.reportingDate}}">{{m.reportingDate | fromNow}}</td>

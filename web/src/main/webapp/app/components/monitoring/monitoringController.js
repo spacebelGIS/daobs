@@ -124,6 +124,7 @@
     function ($scope, $http, cfg, solrService, monitoringService) {
       $scope.listOfMonitoring = null;
       $scope.monitoringFacet = null;
+      $scope.monitoringFilter = {};
 
       //$scope.listOfIndicatorTerritory = [];
       //$scope.listOfReportingYear = [];
@@ -139,6 +140,10 @@
         });
       };
 
+      $scope.setMonitoringFilter = function (field, value) {
+        $scope.monitoringFilter[field] = value;
+      };
+
       $scope.removeMonitoring = function (m) {
         // TODO: Handle oops
         monitoringService.removeMonitoring(m).then(
@@ -146,6 +151,7 @@
             init();
           });
       };
+
 
 
       //

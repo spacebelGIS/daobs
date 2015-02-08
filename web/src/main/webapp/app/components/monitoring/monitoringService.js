@@ -21,7 +21,7 @@
               success(function (data) {
                 var listOfMonitoring = data.response.docs,
                   facets = data.facet_counts.facet_fields,
-                  facetArray = [];
+                  facetArray = {};
 
                 // Convert JSON encoded fields in response.
                 angular.forEach(listOfMonitoring,
