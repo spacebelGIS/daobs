@@ -14,11 +14,9 @@
 
       $routeProvider
         .when('/', {
-          controller: 'HomeCtrl',
           templateUrl: 'app/components/home/homeView.html'
         }).when('/harvesting', {
-          controller: 'HarvestingCtrl',
-          templateUrl: 'app/components/harvest/harvestView.html'
+          templateUrl: 'app/components/harvester/harvesterView.html'
         }).when('/logout', {
           controller: 'LogoutCtrl',
           templateUrl: 'app/components/home/homeView.html'

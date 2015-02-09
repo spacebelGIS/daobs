@@ -25,14 +25,13 @@
    * TODO:
    * * submit report
    */
-  app.controller('MonitoringCtrl', ['$scope', '$http', '$routeParams',
-    'cfg',
-    function ($scope, $http, $routeParams, cfg) {
+  app.controller('MonitoringCtrl', ['$scope', '$routeParams',
+    function ($scope, $routeParams) {
       $scope.section = $routeParams.section;
 
-      $scope.isActive = function(hash) {
+      $scope.isActive = function (hash) {
         return location.hash.indexOf("#/" + hash) === 0
-          && location.hash.indexOf("#/" + hash + "/") !== 0 ;
+          && location.hash.indexOf("#/" + hash + "/") !== 0;
       }
     }]);
 
@@ -152,11 +151,6 @@
           setReport(data);
         });
       };
-
-      //$scope.filterOnTerritory = function (t) {
-      //  $scope.territory = t;
-      //}
-      //
       // Reset report on territory changes
       $scope.$watch('territory', function () {
         $scope.report = null;
@@ -172,33 +166,48 @@
   app.controller('MonitoringSubmitCtrl', [
     '$scope', '$http', '$translate', 'cfg', 'monitoringService',
     function ($scope, $http, $translate, cfg, monitoringService) {
-      $scope.isUploadOk = null;
       $scope.isOfficial = false;
       $scope.withRowData = false;
-      $scope.monitoringFile = null;
+      $scope.isSubmitting = false;
+      $scope.monitoringFiles = [];
+      $scope.responseMessages = [];
+
+      var listOfDeffered;
+      function addMessage (text, name) {
+        $translate(text, {
+          filename: name
+        }).then(function (translation) {
+          $scope.responseMessages.push({
+            label: translation,
+            success: true
+          });
+          $scope.isSubmitting =
+            $scope.responseMessages.length !== listOfDeffered.length;
+        });
+      };
 
       $scope.uploadMonitoring = function(){
-        $scope.isUploadOk = null;
+        if ($scope.monitoringFiles.length === 0) {
+          return;
+        }
 
-        monitoringService.uploadMonitoring(
-          $scope.monitoringFile,
+        $scope.isSubmitting = true;
+        $scope.responseMessages = [];
+        listOfDeffered = [];
+
+        listOfDeffered = monitoringService.uploadMonitoring(
+          $scope.monitoringFiles,
           $scope.isOfficial,
           $scope.withRowData
-        ).then(function(data){
-            $scope.isUploadOk = true;
-            $translate('monitoringSubmitSuccess', {
-              filename: $scope.monitoringFile.name
-            }).then(function (translation) {
-              $scope.monitoringSubmitMessage = translation;
-            });
+        );
+
+        angular.forEach(listOfDeffered, function (item) {
+          item.promise.then(function(data){
+            addMessage('monitoringSubmitSuccess', item.file.name);
           }, function(response){
-            $scope.isUploadOk = false;
-            $translate('monitoringSubmitError', {
-                filename: $scope.monitoringFile.name
-              }).then(function (translation) {
-                $scope.monitoringSubmitMessage = translation;
-              });
+            addMessage('monitoringSubmitError', item.file.name);
           });
+        });
       }
   }]);
 }());

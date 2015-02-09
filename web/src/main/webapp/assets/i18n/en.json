@@ -42,7 +42,7 @@
   "monitoringDetails": "Report on <strong>{{title}}</strong> generated for <strong>{{territory}}</strong> based on <strong>{{count}} record(s)</strong>",
   "submitMonitoring": "Submit monitoring",
   "monitoringFileHelp": "Only INSPIRE monitoring XML format is currently supported.",
-  "chooseMonitoringFile": "Choose monitoring file",
+  "chooseMonitoringFile": "Choose or drop here monitoring files",
   "isOfficial": "Is official",
   "isOfficialHelp": "Flag this monitoring as an official one.",
   "indexRowData": "Index row data",
@@ -58,5 +58,7 @@
   "monitoringDate": "Date",
   "monitoringSubmitSuccess": "Monitoring {{filename}} imported.",
   "monitoringSubmitError": "Error occurred while importing monitoring {{filename}}.",
-  "monitoringSubmitPage": "Upload here monitoring to use them in dashboards."
+  "monitoringSubmitPage": "Upload here monitoring to later use them in dashboards.",
+  "noMonitoringAvailable": "No monitoring available",
+  "harvesterConfigPage": "Configure harvester here."
 }

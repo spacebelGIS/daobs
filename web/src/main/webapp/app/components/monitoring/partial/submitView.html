@@ -10,13 +10,17 @@
     <form
           class="form"
           role="form">
-      <div class="form-group">
+      <div class="form-group" data-file-drop-zone="monitoringFiles">
         <label for="ds-report-upload"
                class="control-label"
                data-translate="">chooseMonitoringFile</label>
         <input id="ds-report-upload"
-               data-file-model="monitoringFile"
+               data-file-model="monitoringFiles"
+               multiple="multiple"
                type="file"/>
+        <ul>
+          <li data-ng-repeat="file in monitoringFiles">{{file.name}} ({{file.type}})</li>
+        </ul>
         <p class="help-block"
            data-translate="">monitoringFileHelp</p>
       </div>
@@ -40,18 +44,28 @@
       </div>
 
       <button class="btn btn-primary"
-              data-ng-disabled="monitoringFile === undefined"
+              data-ng-disabled="monitoringFiles === undefined || isSubmitting"
               data-ng-click="uploadMonitoring()">
         <i class="glyphicon glyphicon-upload"></i>&nbsp;
         <span data-translate="">submitMonitoring</span>
+        <span data-ng-show="isSubmitting">
+          {{responseMessages.length}} / {{monitoringFiles.length}}
+        </span>
+      </button>
+
+      <button class="btn btn-default"
+              type="reset"
+              data-ng-click="monitoringFiles = []">
+        <i class="glyphicon glyphicon-remove"></i>
       </button>
     </form>
 
     <br/>
-    <div class="alert alert-success"
-         data-ng-show="isUploadOk !== null"
-         data-ng-class="isUploadOk ? 'alert-success' : 'alert-danger'">
-      {{monitoringSubmitMessage}}
+    <div class="alert"
+         data-ng-repeat="m in responseMessages"
+         data-ng-show="responseMessages.length > 0"
+         data-ng-class="m.success ? 'alert-success' : 'alert-danger'">
+      {{m.label}}
     </div>
 
   </div>

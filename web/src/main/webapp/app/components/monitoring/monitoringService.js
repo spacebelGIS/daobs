@@ -65,26 +65,32 @@
            * @param isOfficial Flag the monitoring as an official one
            * @param withRowData Index also row data section
            *  (only applies to INSPIRE monitoring)
-           * @returns {promise.promise|jQuery.promise|d.promise|promise|
-           *  h.promise|qFactory.Deferred.promise|*}
+           * @returns Array of promise
            */
-          uploadMonitoring: function (file, isOfficial, withRowData) {
-            var deferred = $q.defer(),
+          uploadMonitoring: function (files, isOfficial, withRowData) {
+            var listOfDeffered = [],
               fd = new FormData(),
               uploadUrl = cfg.SERVICES.reportingSubmit +
                 '?commit=true&tr=inspire-monitoring-reporting' +
                 (withRowData ? '-with-ai' : '') +
                 '.xsl&isOfficial=' + isOfficial;
-            fd.append('file', file);
-            $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function (data) {
-              deferred.resolve(data);
-            }).error(function (data) {
-              deferred.reject(data);
+
+            angular.forEach(files, function (file) {
+              var deferred = $q.defer();
+              fd.append('file', file);
+
+              $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+              }).success(function (data) {
+                deferred.resolve(data);
+              }).error(function (data) {
+                deferred.reject(data);
+              });
+
+              listOfDeffered.push({file: file, promise: deferred.promise});
             });
-            return deferred.promise;
+            return listOfDeffered;
           },
           /**
            * Remove monitoring and related indicators.

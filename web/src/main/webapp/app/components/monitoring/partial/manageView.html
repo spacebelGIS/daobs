@@ -1,7 +1,7 @@
 <div class="row" data-ng-controller="MonitoringInfoCtrl">
   <div class="col-md-2">
     <br/>
-    <ul>
+    <ul data-ng-show="listOfMonitoring.length > 0">
       <li data-ng-repeat="(key, value) in monitoringFacet">
         {{key | translate}}
         <ul>
@@ -23,7 +23,12 @@
   </div>
   <div class="col-md-10">
     <br/>
-    <table class="table table-striped">
+    <p data-ng-show="listOfMonitoring.length === 0"
+       class="alert alert-info"
+       data-translate="">
+      noMonitoringAvailable
+    </p>
+    <table class="table table-striped" data-ng-show="listOfMonitoring.length > 0">
       <tr>
         <th data-translate="">monitoringYear</th>
         <th data-translate="">monitoringDate</th>
