@@ -4,7 +4,7 @@
 
   app.constant('solrConfig',
     {
-      url: 'http://localhost:8983/',
+      url: '${webapp.rootUrl}',
       core: ''
     });
 }());

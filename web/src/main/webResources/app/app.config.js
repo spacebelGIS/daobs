@@ -2,8 +2,7 @@
   "use strict";
   var app =  angular.module('daobs');
 
-  var context = '${webapp.context}' === '/' ?
-    '${webapp.context}' : '${webapp.context}/';
+  var context = '${webapp.rootUrl}';
 
   app.constant('cfg', {
     'SERVICES': {

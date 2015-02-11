@@ -19,7 +19,7 @@ The guide for user installing and configuring the application.
 * Git
 * Java 7
 * Maven 3
-* A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE9+ should be also supported.
+* A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE10+ should be also supported.
 
 ## Build the application
 
@@ -51,15 +51,24 @@ Access the home page from http://localhost:8983.
 
 ### Build a custom WAR file
 
-In order to build a custom WAR file, update the pom.xml following properties:
+In order to build a custom WAR file, update the following properties which are defined in the root pom.xml:
 * war.name
 * webapp.context
 * webapp.url
+* webapp.username
+* webapp.password
+
 
 Run the following command line and copy the WAR which is built in web/target/{{war.name}}.war.
 ```
-mvn clean install
+mvn clean install -Dwebapp.context=/dashboard \
+                  -Dwebapp.rootUrl=/dashboard/ \
+                  -Dwebapp.url=http://app.org.net \
+                  -Dwebapp.username=admin \
+                  -Dwebapp.password=secret
 ```
+
+
 
 
 ### Deploy a WAR file

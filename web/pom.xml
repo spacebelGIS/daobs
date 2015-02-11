@@ -274,21 +274,14 @@
           <contextReloadable>true</contextReloadable>
           <!-- http port -->
           <port>${webapp.port}</port>
-          <!--<ajpPort>${solr.server.port.ajp}</ajpPort>-->
-          <!--<ajpProtocol>org.apache.coyote.ajp.AjpProtocol</ajpProtocol>-->
           <!-- application path always starts with /-->
           <path>${webapp.context}</path>
-          <!-- optional path to a context file
-          <contextFile>${tomcatContextXml}</contextFile>-->
+
           <systemProperties>
             <solr.solr.home>${solr.solr.home}</solr.solr.home>
           </systemProperties>
           <!-- if you want to use test dependencies rather than only runtime -->
           <useTestClasspath>false</useTestClasspath>
-          <!-- optional if you want to add some extra directories into the classloader -->
-          <!--<additionalClasspathDirs>
-            <additionalClasspathDir>${project.basedir}/../dashboard/target/web</additionalClasspathDir>
-          </additionalClasspathDirs>-->
         </configuration>
       </plugin>
     </plugins>

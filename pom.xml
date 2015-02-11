@@ -234,8 +234,13 @@
 
     <!-- The web application name. Could be run
     as root context using "/" or using a custom
-    name eg. "dashboard". -->
-    <webapp.context>/</webapp.context>
+    name eg. "/dashboard". -->
+    <webapp.context>/dashboard</webapp.context>
+    <!-- Url path of the application.
+     if webapp.context is "/", webapp.rootUrl is "/"
+     if webapp.context is "/dashboard", webapp.rootUrl is "/dashboard/"
+     -->
+    <webapp.rootUrl>/</webapp.rootUrl>
 
     <!-- The public URL of the web application.
     This is used by all services requesting the

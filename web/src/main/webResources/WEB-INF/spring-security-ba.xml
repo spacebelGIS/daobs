@@ -12,6 +12,8 @@
     <!-- Solr services -->
     <intercept-url pattern='/data/admin/*' access='ROLE_ADMIN'/>
     <intercept-url pattern='/data/update/*' access='ROLE_ADMIN'/>
+    <intercept-url pattern='/dashboard/admin/*' access='ROLE_ADMIN'/>
+    <intercept-url pattern='/dashboard/update/*' access='ROLE_ADMIN'/>
 
     <!-- Controllers -->
     <intercept-url pattern='/*/reporting*' access='ROLE_ADMIN'/>

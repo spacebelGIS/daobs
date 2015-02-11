@@ -2,18 +2,22 @@
   "use strict";
   var app = angular.module('daobs');
 
-  app.config(['$routeProvider',
-    function ($routeProvider) {
+  app.config(['$routeProvider', 'cfg',
+    function ($routeProvider, cfg) {
       $routeProvider.when('/monitoring', {
-        templateUrl : 'app/components/monitoring/monitoringView.html'
+        templateUrl : cfg.SERVICES.root +
+          'app/components/monitoring/monitoringView.html'
       }).when('/monitoring/:section', {
-        templateUrl : 'app/components/monitoring/monitoringView.html'
+        templateUrl : cfg.SERVICES.root +
+          'app/components/monitoring/monitoringView.html'
       }).when('/monitoring/manage', {
         controller : 'MonitoringCtrl',
-        templateUrl : 'app/components/monitoring/reporting/manage.html'
+        templateUrl : cfg.SERVICES.root +
+          'app/components/monitoring/monitoringView.html'
       }).when('/monitoring/submit', {
         controller : 'MonitoringCtrl',
-        templateUrl : 'app/components/monitoring/reporting/submit.html'
+        templateUrl : cfg.SERVICES.root +
+          'app/components/monitoring/monitoringView.html'
       });
     }]);
 
