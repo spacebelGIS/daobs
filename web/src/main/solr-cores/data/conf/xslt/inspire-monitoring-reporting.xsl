@@ -8,7 +8,7 @@
   exclude-result-prefixes="#all"
   version="2.0">
 
-  <xsl:import href="constant.xsl"/>
+  <xsl:include href="constant.xsl"/>
 
   <xsl:variable name="reportingYear" select="/monitoring:Monitoring/documentYear/year"/>
   <xsl:variable name="reportingTerritory" select="/monitoring:Monitoring/memberState"/>
