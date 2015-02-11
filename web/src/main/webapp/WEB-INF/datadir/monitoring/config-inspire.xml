@@ -190,27 +190,27 @@
 
     <daobs:variable id="NSv41" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant discovery network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:discovery +isAboveThreshold:true +inspireConformResource:true</daobs:query>
+      <daobs:query>+resourceType:service +serviceType:discovery +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv42" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant view network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:view +isAboveThreshold:true +inspireConformResource:true</daobs:query>
+      <daobs:query>+resourceType:service +serviceType:view +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv43" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant download network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:download +isAboveThreshold:true +inspireConformResource:true</daobs:query>
+      <daobs:query>+resourceType:service +serviceType:download +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv44" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant transformation network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:transformation +isAboveThreshold:true +inspireConformResource:true</daobs:query>
+      <daobs:query>+resourceType:service +serviceType:transformation +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv45" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant discovery invoke services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:invoke +isAboveThreshold:true +inspireConformResource:true</daobs:query>
+      <daobs:query>+resourceType:service +serviceType:invoke +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
 

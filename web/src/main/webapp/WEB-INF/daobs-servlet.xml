@@ -57,6 +57,11 @@
         class="org.daobs.index.SolrRequestBean"/>
 
 
+  <bean id="harvesterConfigRepository"
+        class="org.daobs.harvester.repository.HarvesterConfigRepository">
+    <property name="configurationFilepath" value="${data.dir}/harvester/config-harvesters.xml"/>
+    <property name="harvestingTasksFolder" value="${data.dir}/harvester/tasks"/>
+  </bean>
 
 
   <bean id="XSLTViewResolver"

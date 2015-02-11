@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class ReportingController {
 
     public static final String INDICATOR_CONFIGURATION_DIR =
-            "WEB-INF/reporting/";
+            "WEB-INF/datadir/monitoring/";
     public static final String INDICATOR_CONFIGURATION_FILE_PREFIX = "config-";
     private static final String INDICATOR_CONFIGURATION_ID_MATCHER =
             INDICATOR_CONFIGURATION_FILE_PREFIX + "(.*).xml";

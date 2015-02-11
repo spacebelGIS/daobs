@@ -1,26 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://daobs.org" xmlns:ogc="http://www.opengis.net/ogc" xmlns:daobs="http://daobs.org">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://daobs.org"
+           xmlns:ogc="http://www.opengis.net/ogc"
+           xmlns:daobs="http://daobs.org">
   <xs:element name="harvesters">
+    <xs:annotation>
+      <xs:documentation>
+        A set of harvester configuration.
+      </xs:documentation>
+    </xs:annotation>
     <xs:complexType>
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="daobs:harvester"/>
       </xs:sequence>
     </xs:complexType>
+    <xs:key name="harvester-url-key">
+      <xs:selector xpath="daobs:harvester"/>
+      <xs:field xpath="daobs:url"/>
+    </xs:key>
   </xs:element>
   <xs:element name="harvester">
     <xs:complexType>
       <xs:sequence>
+        <xs:element ref="daobs:uuid"/>
         <xs:element ref="daobs:territory"/>
         <xs:element ref="daobs:folder"/>
         <xs:element ref="daobs:name"/>
         <xs:element ref="daobs:url"/>
         <xs:element minOccurs="0" ref="daobs:filter"/>
+        <xs:element minOccurs="0" ref="daobs:nbOfRecordsPerPage">
+          <xs:annotation>
+            <xs:documentation>
+              If not provided, the harvester config parameter is used.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="daobs:pointOfTruthURLPattern"/>
+        <xs:element ref="daobs:serviceMetadata"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="territory" type="xs:NCName"/>
-  <xs:element name="folder" type="xs:string"/>
-  <xs:element name="name" type="xs:string"/>
-  <xs:element name="url" type="xs:anyURI"/>
-  <xs:element name="filter" type="xs:anyType"/>  
+  <xs:element name="uuid" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>
+        Unique identifier for the harvester. A good practice
+        is to use here the identifier of the metadata
+        record corresponding to the discovery service.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="territory" type="xs:NCName">
+    <xs:annotation>
+      <xs:documentation>
+        A "territory" identifier which allows to group records
+        from different harvesters in the same group. It could be
+        a country code, a region code. Usually, this key is
+        something that can't be extracted from the metadata records.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="folder" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>
+        A folder name which is used to store harvested records.
+        The CSW GetRecords responses are saved in that folder with
+        a file name based on the following pattern:
+
+        {{YYYYMMDD}}-{{pageNumberStartingAt0}}.xml
+
+        It could be the same value as territory if there is no
+        need to make distinction between harvesters.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="name" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>
+        The name of the harvested node.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="url" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+        The URL of the CSW server without parameters like SERVICE,
+        REQUEST, VERSION.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="filter" type="xs:anyType">
+    <xs:annotation>
+      <xs:documentation>
+        An extra filter to be applied to the GetRecords query
+        to select a subset of records in the harvested node.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="nbOfRecordsPerPage" type="xs:int">
+    <xs:annotation>
+      <xs:documentation>
+        The number of records per page to be harvested.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pointOfTruthURLPattern" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+        URL pattern which could provide an hyperlink to a webpage
+        pointing to the metadata record in HTML or XML or other formats.
+        The URL MUST contains a flag {{uuid}} to be substituted
+        by the record identifier.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="serviceMetadata" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+        A URL pointing to the metadata record of the service
+        endpoint.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
 </xs:schema>

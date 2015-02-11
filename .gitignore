@@ -11,3 +11,6 @@ release.properties
 *.iml
 .idea
 rebel.xml
+web/csw/
+web/logs/
+web/overlays/

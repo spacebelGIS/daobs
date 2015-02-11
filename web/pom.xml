@@ -278,6 +278,7 @@
           <path>${webapp.context}</path>
 
           <systemProperties>
+            <daobs.data.dir>${data.dir}</daobs.data.dir>
             <solr.solr.home>${solr.solr.home}</solr.solr.home>
           </systemProperties>
           <!-- if you want to use test dependencies rather than only runtime -->

@@ -29,6 +29,10 @@ public class ObjectFactory {
     private final static QName _Territory_QNAME = new QName("http://daobs.org", "territory");
     private final static QName _Folder_QNAME = new QName("http://daobs.org", "folder");
     private final static QName _Name_QNAME = new QName("http://daobs.org", "name");
+    private final static QName _NbOfRecordsPerPage_QNAME = new QName("http://daobs.org", "nbOfRecordsPerPage");
+    private final static QName _PointOfTruthURLPattern_QNAME = new QName("http://daobs.org", "pointOfTruthURLPattern");
+    private final static QName _Uuid_QNAME = new QName("http://daobs.org", "uuid");
+    private final static QName _ServiceMetadata_QNAME = new QName("http://daobs.org", "serviceMetadata");
     private final static QName _Filter_QNAME = new QName("http://daobs.org", "filter");
     private final static QName _Url_QNAME = new QName("http://daobs.org", "url");
 
@@ -81,6 +85,42 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://daobs.org", name = "name")
     public JAXBElement<String> createName(String value) {
         return new JAXBElement<String>(_Name_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://daobs.org", name = "nbOfRecordsPerPage")
+    public JAXBElement<Integer> createNbOfRecordsPerPage(Integer value) {
+        return new JAXBElement<Integer>(_NbOfRecordsPerPage_QNAME, Integer.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://daobs.org", name = "pointOfTruthURLPattern")
+    public JAXBElement<String> createPointOfTruthURLPattern(String value) {
+        return new JAXBElement<String>(_PointOfTruthURLPattern_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://daobs.org", name = "uuid")
+    public JAXBElement<String> createUuid(String value) {
+        return new JAXBElement<String>(_Uuid_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://daobs.org", name = "serviceMetadata")
+    public JAXBElement<String> createServiceMetadata(String value) {
+        return new JAXBElement<String>(_ServiceMetadata_QNAME, String.class, null, value);
     }
 
     /**

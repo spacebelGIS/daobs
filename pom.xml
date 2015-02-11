@@ -235,7 +235,7 @@
     <!-- The web application name. Could be run
     as root context using "/" or using a custom
     name eg. "/dashboard". -->
-    <webapp.context>/dashboard</webapp.context>
+    <webapp.context>/</webapp.context>
     <!-- Url path of the application.
      if webapp.context is "/", webapp.rootUrl is "/"
      if webapp.context is "/dashboard", webapp.rootUrl is "/dashboard/"
@@ -255,6 +255,8 @@
     the Solr instance. eg. Harvesters. -->
     <webapp.username>admin</webapp.username>
     <webapp.password>admin</webapp.password>
+
+    <data.dir>${project.basedir}/target/solr/WEB-INF/datadir</data.dir>
 
     <solr.version>4.10.0</solr.version>
 

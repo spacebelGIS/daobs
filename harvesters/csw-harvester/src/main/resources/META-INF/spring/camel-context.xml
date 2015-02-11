@@ -56,7 +56,7 @@
 
     </cm:onException>
 
-    <cm:route id="route-csw-start-from-config-file">
+    <cm:route id="route-csw-start-from-config-file" autoStartup="false">
       <cm:description>
         Start the harvester by loading the configuration file in the
         config folder
