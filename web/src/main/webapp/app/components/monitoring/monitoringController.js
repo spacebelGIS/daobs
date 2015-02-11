@@ -65,9 +65,10 @@
       $scope.removeMonitoring = function (m) {
         // TODO: Handle oops
         monitoringService.removeMonitoring(m).then(
-          function() {
+          function () {
             init();
-          });
+          }
+        );
       };
 
       $scope.setAsOfficialMonitoring = function (m) {
@@ -88,6 +89,7 @@
       $scope.rules = null;
       $scope.overview = false;
       $scope.reportingConfig = null;
+      $scope.listOfTerritory = [];
 
       function init() {
         //Get list of territory available
