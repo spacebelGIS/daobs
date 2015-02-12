@@ -14,7 +14,7 @@
   <ctx:annotation-config/>
   <ctx:component-scan base-package="org.daobs.controller"/>
 
-  <import resource="classpath*:**/camel-context.xml" />
+  <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml" />
 
   <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
