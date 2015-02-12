@@ -171,6 +171,10 @@
           <field name="id"><xsl:value-of select="$identifier"/></field>
           <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
 
+          <xsl:for-each select="gmd:metadataStandardName/gco:CharacterString">
+            <field name="standardName"><xsl:value-of select="normalize-space(.)"/></field>
+          </xsl:for-each>
+
           <!-- Harvester details -->
           <field name="territory"><xsl:value-of select="$harvester/territory"/></field>
           <field name="harvesterId"><xsl:value-of select="$harvester/url"/></field>
@@ -231,6 +235,25 @@
             <xsl:with-param name="fieldSuffix" select="''"/>
           </xsl:apply-templates>
 
+          <!-- Indexing all codelist
+
+          Indexing method is:
+          <gmd:accessConstraints>
+            <gmd:MD_RestrictionCode codeListValue="otherRestrictions"
+            is indexed as
+            codelist_accessConstraints:otherRestrictions
+
+            Exclude some useless codelist like
+            Contact role, Date type.
+          -->
+          <xsl:for-each select=".//*[@codeListValue != '' and
+                                name() != 'gmd:CI_RoleCode' and
+                                name() != 'gmd:CI_DateTypeCode' and
+                                name() != 'gmd:LanguageCode'
+                                ]">
+            <field name="codelist_{local-name(..)}"><xsl:value-of select="@codeListValue"/></field>
+          </xsl:for-each>
+
 
           <!-- Indexing resource information
           TODO: Should we support multiple identification in the same record
@@ -243,6 +266,9 @@
             <xsl:for-each select="gmd:citation/gmd:CI_Citation">
               <field name="resourceTitle">
                 <xsl:value-of select="gmd:title/gco:CharacterString/text()"/>
+              </field>
+              <field name="resourceAltTitle">
+                <xsl:value-of select="gmd:alternateTitle/gco:CharacterString/text()"/>
               </field>
 
               <xsl:for-each select="gmd:date/gmd:CI_Date[gmd:date/*/text() != '']">
@@ -273,6 +299,10 @@
 
             <xsl:for-each select="gmd:presentationForm/gmd:CI_PresentationFormCode/@codeListValue[. != '']">
               <field name="presentationForm"><xsl:value-of select="."/></field>
+            </xsl:for-each>
+
+            <xsl:for-each select="gmd:credit/*[. != '']">
+              <field name="resourceCredit"><xsl:value-of select="."/></field>
             </xsl:for-each>
 
 
@@ -319,10 +349,15 @@
               to properly compute one INSPIRE annex.
               -->
               <xsl:if test="position() = 1">
-                <field name="inspireAnnex">
+                <field name="inspireThemeFirst_syn"><xsl:value-of select="text()"/></field>
+                <field name="inspireThemeFirst"><xsl:value-of select="$inspireTheme"/></field>
+                <field name="inspireAnnexForFirstTheme">
                   <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
                 </field>
               </xsl:if>
+              <field name="inspireAnnex">
+                <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
+              </field>
             </xsl:for-each>
 
             <field name="numberOfInspireTheme"><xsl:value-of select="count(gmd:descriptiveKeywords
@@ -332,11 +367,70 @@
                            'GEMET - INSPIRE themes')]
                       /gmd:keyword)"/></field>
 
+
+            <!-- Index all keywords -->
             <xsl:for-each
-                    select="gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString">
-              <!-- TODO: Add geotag on place keyword -->
+                    select="gmd:descriptiveKeywords/gmd:MD_Keywords/
+                              gmd:keyword/gco:CharacterString|
+                            gmd:descriptiveKeywords/gmd:MD_Keywords/
+                              gmd:keyword/gmd:PT_FreeText/gmd:textGroup/
+                                gmd:LocalisedCharacterString">
               <field name="tag"><xsl:value-of select="text()"/></field>
             </xsl:for-each>
+
+            <!-- Index keywords which are of type place -->
+            <xsl:for-each
+                    select="gmd:descriptiveKeywords/gmd:MD_Keywords/
+                              gmd:keyword[gmd:type/gmd:MD_KeywordTypeCode/@codeListValue = 'place']/
+                                gco:CharacterString|
+                            gmd:descriptiveKeywords/gmd:MD_Keywords/
+                              gmd:keyword[gmd:type/gmd:MD_KeywordTypeCode/@codeListValue = 'place']/
+                                gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString">
+              <field name="geotag"><xsl:value-of select="text()"/></field>
+            </xsl:for-each>
+
+
+            <!-- Index all keywords having a specific thesaurus -->
+            <xsl:for-each
+                    select="gmd:descriptiveKeywords/
+                              gmd:MD_Keywords[gmd:thesaurusName]/
+                                gmd:keyword">
+
+              <xsl:variable name="thesaurusName"
+                            select="../gmd:thesaurusName/gmd:CI_Citation/
+                                      gmd:title/gco:CharacterString"/>
+
+              <xsl:variable name="thesaurusId"
+                            select="normalize-space(../gmd:thesaurusName/gmd:CI_Citation/
+                                      gmd:identifier/gmd:MD_Identifier/
+                                        gmd:code/*)"/>
+
+              <xsl:variable name="key">
+                <xsl:choose>
+                  <xsl:when test="$thesaurusId != ''">
+                    <xsl:value-of select="$thesaurusId"/>
+                  </xsl:when>
+                  <!-- Try to build a thesaurus key based on the name
+                  by removing space - to be improved. -->
+                  <xsl:when test="normalize-space($thesaurusName) != ''">
+                    <xsl:value-of select="replace($thesaurusName, ' ', '')"/>
+                  </xsl:when>
+                </xsl:choose>
+              </xsl:variable>
+
+              <xsl:if test="normalize-space($key) != ''">
+                <!-- Index keyword characterString including multilingual ones
+                 and element like gmx:Anchor including the href attribute
+                 which may contains keyword identifier. -->
+                <xsl:for-each select="*[normalize-space() != '']|
+                                      */@xlink:href[normalize-space() != '']|
+                                      gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[normalize-space() != '']">
+                  <field name="thesaurus_{$key}"><xsl:value-of select="normalize-space(.)"/></field>
+                </xsl:for-each>
+              </xsl:if>
+            </xsl:for-each>
+
+
 
             <xsl:for-each select="gmd:topicCategory/gmd:MD_TopicCategoryCode">
               <field name="topic"><xsl:value-of select="."/></field>
@@ -471,12 +565,25 @@
 
 
 
+          <xsl:for-each select="gmd:dataQualityInfo/*">
 
-
-          <xsl:for-each select="gmd:dataQualityInfo/*/
-                                  gmd:lineage/gmd:LI_Lineage/
+            <xsl:for-each select="gmd:lineage/gmd:LI_Lineage/
                                     gmd:statement/gco:CharacterString[. != '']">
-            <field name="lineage"><xsl:value-of select="."/></field>
+              <field name="lineage"><xsl:value-of select="."/></field>
+            </xsl:for-each>
+
+
+            <!-- Indexing measure value -->
+            <xsl:for-each select="gmd:report/*[
+                    normalize-space(gmd:nameOfMeasure/gco:CharacterString) != '']">
+              <xsl:variable name="measureName"
+                            select="normalize-space(gmd:nameOfMeasure/gco:CharacterString)"/>
+              <xsl:variable name="measureValue"
+                            select="normalize-space(gmd:result/gmd:DQ_QuantitativeResult/gmd:value)"/>
+              <xsl:if test="$measureValue != ''">
+                <field name="measure_{$measureName}"><xsl:value-of select="$measureValue"/></field>
+              </xsl:if>
+            </xsl:for-each>
           </xsl:for-each>
 
 
