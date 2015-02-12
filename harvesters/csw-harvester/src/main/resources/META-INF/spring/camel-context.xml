@@ -83,6 +83,9 @@
       <cm:split parallelProcessing="true">
         <cm:xpath>//daobs:harvester</cm:xpath>
         <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
+        <cm:setHeader headerName="harvesterConfig">
+          <cm:xpath resultType="org.w3c.dom.Document">daobs:harvester</cm:xpath>
+        </cm:setHeader>
         <cm:setHeader headerName="harvesterUrl">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:url)</cm:xpath>
         </cm:setHeader>
@@ -269,11 +272,14 @@
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
         <!-- TODO: Add CSW request to the document -->
         <cm:bean ref="harvesterDetailsAgg"
-                 method="doTransform($simple{body}, $simple{header.harvesterUrl}, $simple{header.harvesterTerritory})"/>
+                 method="doTransform($simple{body}, $simple{header.harvesterConfig})"/>
+                 <!--method="doTransform($simple{body}, $simple{header.harvesterUrl}, $simple{header.harvesterTerritory})"/>-->
         <cm:multicast stopOnException="false"
                          parallelProcessing="false">
-          <!-- Backup response as XML file-->
-          <cm:to uri="file:csw/get-records-response/?fileName=$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+          <!-- Backup response as XML file
+          TODO &amp;preMove=inprogress&amp;move=done
+          -->
+          <cm:to uri="file:{{data.dir}}?fileName=harvested_data/csw/$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <!-- Index in Solr -->
           <cm:to uri="direct:indexDocuments"/>
           <!--<cm:to uri="direct:websocketLog"/>-->

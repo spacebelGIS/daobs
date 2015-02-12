@@ -37,7 +37,7 @@
     <daobs:url>http://www.nationaalgeoregister.nl/geonetwork/srv/dut/inspire
     </daobs:url>
     <daobs:pointOfTruthURLPattern>
-      http://www.nationaalgeoregister.nl/geonetwork/?{{uuid}}
+      http://www.nationaalgeoregister.nl/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -49,7 +49,7 @@
     <daobs:url>
       http://www.geocat.ch/geonetwork/srv/ger/csw-liechtenstein-inspire
     </daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www.geocat.ch/geonetwork/?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://www.geocat.ch/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -77,7 +77,7 @@
     <daobs:folder>EL</daobs:folder>
     <daobs:name>ΚΑΤΑΛΟΓΟΣ (Elena)</daobs:name>
     <daobs:url>http://www1.okxe.gr:80/geonetwork/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www1.okxe.gr:80/geonetwork/?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://www1.okxe.gr:80/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -97,7 +97,7 @@
       </ogc:Filter>
     </daobs:filter>
     <daobs:pointOfTruthURLPattern>
-      http://www.paikkatietohakemisto.fi:80/geonetwork/?{{uuid}}
+      http://www.paikkatietohakemisto.fi:80/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -116,7 +116,7 @@
       </ogc:Filter>
     </daobs:filter>
     <daobs:pointOfTruthURLPattern>
-      http://metadata.geopunt.be/zoekdienst/?{{uuid}}
+      http://metadata.geopunt.be/zoekdienst/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -127,7 +127,7 @@
     <daobs:name>(Geodatastyrelsen, Miljøministeriet)</daobs:name>
     <daobs:url>http://www.geodata-info.dk/registrant/srv/en/csw</daobs:url>
     <daobs:pointOfTruthURLPattern>
-      http://www.geodata-info.dk/registrant/?{{uuid}}
+      http://www.geodata-info.dk/registrant/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -139,7 +139,7 @@
       geographic Institute/DG-INSPIRE)
     </daobs:name>
     <daobs:url>http://csw.geo.be/eng/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://csw.geo.be?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://csw.geo.be?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -149,7 +149,7 @@
     <daobs:folder>NO</daobs:folder>
     <daobs:name>Geonorge metadataportal (SKLD)</daobs:name>
     <daobs:url>http://www.geonorge.no/geonetwork/srv/nor/csw-inspire</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www.geonorge.no/geonetwork/?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://www.geonorge.no/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -169,7 +169,7 @@
       </ogc:Filter>
     </daobs:filter>
     <daobs:pointOfTruthURLPattern>
-      http://www.geo.irisnet.be/geonetwork?{{uuid}}
+      http://www.geo.irisnet.be/geonetwork?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -195,7 +195,7 @@
     <daobs:folder>HU</daobs:folder>
     <daobs:name>FÖMI catalog service / FÖMI katalógus szolgáltatás</daobs:name>
     <daobs:url>http://www.geoshop.hu:80/geonetwork/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www.geoshop.hu:80/geonetwork?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://www.geoshop.hu:80/geonetwork?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -206,7 +206,7 @@
     <daobs:name>UK Location Catalogue Publishing Service (Ordnance Survey, GB)
     </daobs:name>
     <daobs:url>http://csw.data.gov.uk/geonetwork/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://csw.data.gov.uk/geonetwork/?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://csw.data.gov.uk/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -233,7 +233,7 @@
     <daobs:name>Pilot kataloškog servera (Otišao)</daobs:name>
     <daobs:url>http://geoportal.nipp.hr/geonetwork/srv/hrv/csw-inspire
     </daobs:url>
-    <daobs:pointOfTruthURLPattern>http://geoportal.nipp.hr/geonetwork?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://geoportal.nipp.hr/geonetwork?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -270,7 +270,7 @@
     </daobs:url>
     <daobs:nbOfRecordsPerPage>10</daobs:nbOfRecordsPerPage>
     <daobs:pointOfTruthURLPattern>
-      https://geometadaten.lfrz.at/at.lfrz.discoveryservices/?{{uuid}}
+      https://geometadaten.lfrz.at/at.lfrz.discoveryservices/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -298,7 +298,7 @@
         </ogc:PropertyIsLike>
       </ogc:Filter>
     </daobs:filter>
-    <daobs:pointOfTruthURLPattern>http://ims.geoportal.de/gdi-de/?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://ims.geoportal.de/gdi-de/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -372,7 +372,7 @@
       </ogc:Filter>
     </daobs:filter>
     <daobs:pointOfTruthURLPattern>
-      http://www.idee.es/csw-inspire-idee/?{{uuid}}
+      http://www.idee.es/csw-inspire-idee/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -402,7 +402,7 @@
     <daobs:folder>SL</daobs:folder>
     <daobs:name>Slovenski Inspire metadata sistem (admin)</daobs:name>
     <daobs:url>http://prostor3.gov.si:80/imps/srv/sl/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://prostor3.gov.si:80/imps/?{{uuid}}
+    <daobs:pointOfTruthURLPattern>http://prostor3.gov.si:80/imps/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
