@@ -20,7 +20,7 @@
             $scope.dashboards = data.response.docs;
           });
 
-        $http.get(cfg.SERVICES.samples + '/dashboardType.json').
+        $http.get(cfg.SERVICES.samples + 'dashboardType.json').
           success(function (data) {
             $scope.listOfDashboardToLoad = data;
           });
