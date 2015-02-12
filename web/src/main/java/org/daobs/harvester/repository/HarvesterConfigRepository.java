@@ -2,9 +2,9 @@ package org.daobs.harvester.repository;
 
 import org.daobs.harvester.config.Harvester;
 import org.daobs.harvester.config.Harvesters;
+import org.daobs.utility.UUIDFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import javax.xml.bind.JAXBContext;
@@ -13,11 +13,11 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * A really simple harvester repository based on the
@@ -70,27 +70,76 @@ public class HarvesterConfigRepository implements InitializingBean {
         return harvesters;
     }
 
-    public synchronized Harvester add(Harvester harvester) {
+    public synchronized Harvester addOrUpdate(Harvester harvester) throws Exception {
         if (harvester != null) {
             String uuid = harvester.getUuid();
             boolean harvesterExist = false;
-            Harvester harvestercheck = null;
+            Harvester harvesterCheck = null;
             if (uuid != null) {
-                harvestercheck = findByUuid(uuid);
-                harvesterExist = harvestercheck != null;
+                harvesterCheck = findByUuid(uuid);
+                harvesterExist = harvesterCheck != null;
             } else {
-                // TODO: Random UUID
-                harvester.setUuid("ADD");
+                harvester.setUuid(UUIDFactory.getNewUUID());
             }
+            accomodate(harvester);
 
-            if (harvesterExist) {
-                harvesters.getHarvester().remove(harvestercheck);
+            List<String> listOfErrors = isValid(harvester);
+            if (listOfErrors.size() == 0) {
+                if (harvesterExist) {
+                    harvesters.getHarvester().remove(harvesterCheck);
+                }
+                harvesters.getHarvester().add(harvester);
+                commit();
+            } else {
+                throw new Exception("Invalid harvester");
             }
-            harvesters.getHarvester().add(harvester);
-            commit();
         }
         return harvester;
     }
+
+    /**
+     *
+     * @param harvester
+     * @return Return list of errors
+     */
+    private List<String> isValid(Harvester harvester) {
+        List<String> listOfErrors = new ArrayList<>();
+        if (harvester.getUuid() == null) {
+            listOfErrors.add("Harvester has no UUID.");
+            return listOfErrors;
+        }
+        if (harvester.getUrl() == null) {
+            listOfErrors.add(String.format("Harvester with UUID '%s' does not have URL.",
+                    harvester.getUuid()));
+        }
+        if (harvester.getFolder() == null) {
+            listOfErrors.add(String.format("Harvester with UUID '%s' does not have folder.",
+                    harvester.getUuid()));
+        }
+        if (harvester.getTerritory() == null) {
+            listOfErrors.add(String.format("Harvester with UUID '%s' does not have territory.",
+                    harvester.getUuid()));
+        }
+        return listOfErrors;
+    }
+
+    /**
+     * Set defaults for an incomplete harvester
+     * <ul>
+     *     <li>territory is set to UUID</li>
+     *     <li>folder is set to territory</li>
+     * </ul>
+     * @param harvester
+     */
+    private void accomodate(Harvester harvester) {
+        if (harvester.getTerritory() == null) {
+            harvester.setTerritory(harvester.getUuid());
+        }
+        if (harvester.getFolder() == null) {
+            harvester.setFolder(harvester.getTerritory());
+        }
+    }
+
 
     public synchronized boolean remove(String harvesterUuid) throws Exception {
         Harvester harvester = findByUuid(harvesterUuid);

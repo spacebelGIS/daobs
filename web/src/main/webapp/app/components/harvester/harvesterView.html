@@ -13,22 +13,72 @@
         <th data-translate="">territory</th>
         <th data-translate="">name</th>
         <th data-translate="">details</th>
-        <th colspan="2">
+        <th/>
+        <th/>
+        <th>
 
           <button class="btn btn-link"
-                  data-ng-click="add(h)"
+                  data-ng-hide="adding"
+                  data-ng-click="adding = true"
                   title="{{'add' | translate}}">
             <i class="glyphicon glyphicon-plus"></i>
           </button>
         </th>
       </tr>
+
+      <tr data-ng-show="adding">
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <form class="form-horizontal">
+            <div class="form-group" data-ng-repeat="(key, value) in harvesterTpl">
+              <label for="field-{{key}}"
+                     class="col-sm-4 control-label">
+                {{key | translate}}</label>
+              <div class="col-sm-8" data-ng-switch="key">
+                <textarea data-ng-switch-when="filter"
+                          type="text" class="form-control"
+                          id="field-{{key}}"
+                          data-ng-model="newHarvester[key]"
+                          placeholder="{{(key + '-placeholder') | translate}}">
+                </textarea>
+
+                <input data-ng-switch-default=""
+                       type="text" class="form-control"
+                       id="field-{{key}}"
+                       data-ng-model="newHarvester[key]"
+                       placeholder="{{(key + '-placeholder') | translate}}">
+                <p class="help-block">{{(key + '-help') | translate}}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default"
+                        data-ng-click="adding = false">
+                  <i class="glyphicon glyphicon-remove"/>&nbsp;
+                  <span data-translate="">cancel</span>
+                </button>
+
+                <button type="submit" class="btn btn-primary"
+                        data-ng-click="add(h)">
+                  <i class="glyphicon glyphicon-save"/>&nbsp;
+                  <span data-translate="">saveHarvester</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+
       <tr>
         <td>
           <input class="form-control"
                  data-ng-model="harvesterSearch.territory"
                  autofocus="">
         </td>
-        <td colspan="4">
+        <td colspan="5">
           <input class="form-control"
                  data-ng-model="harvesterSearch.$"
                  placeholder="{{'filter'}}">
@@ -39,11 +89,9 @@
         <td>{{h.name}}</td>
         <td>
           <ul>
-            <li><span>URL:</span>&nbsp;{{h.url}}</li>
-            <li><span>Folder:</span>&nbsp;{{h.folder}}</li>
-            <li data-ng-show="h.filter">
-              <span>Filter:</span>&nbsp;
-              <code>{{h.filter}}</code>
+            <li data-ng-repeat="(key, value) in h">
+              <span>{{key | translate}}</span>&nbsp;
+              <strong>{{value || 'none'}}</strong>
             </li>
           </ul>
         </td>
@@ -52,6 +100,13 @@
                   data-ng-click="run(h)"
                   title="{{'harvest' | translate}}">
             <i class="glyphicon glyphicon-play"></i>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-link"
+                  data-ng-click="edit(h)"
+                  title="{{'remove' | translate}}">
+            <i class="glyphicon glyphicon-edit"></i>
           </button>
         </td>
         <td>

@@ -43,9 +43,9 @@ public class HarvesterController {
             },
             method = RequestMethod.PUT)
     @ResponseBody
-    public RequestResponse add(@RequestBody Harvester harvester)
-            throws IOException {
-        harvesterConfigRepository.add(harvester);
+    public RequestResponse addOrUpdate(@RequestBody Harvester harvester)
+            throws Exception {
+        harvesterConfigRepository.addOrUpdate(harvester);
         return new RequestResponse("Harvester added", "success");
     }
 

@@ -7,6 +7,19 @@
     function ($scope, $routeParams, harvesterService, cfg) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
+      $scope.adding = false;
+      $scope.harvesterTpl = {
+        territory: null,
+        name: null,
+        url: null,
+        filter: null,
+        folder: null,
+        pointOfTruthURLPattern: null,
+        serviceMetadata: null,
+        nbOfRecordsPerPage: null,
+        uuid: null
+      };
+      $scope.newHarvester = $scope.harvesterTpl;
 
       function init() {
         harvesterService.getAll().success(function (list) {
@@ -14,14 +27,18 @@
         });
       }
 
+      $scope.edit = function (h) {
+        $scope.adding = true;
+        $scope.newHarvester = h;
+        // TODO: Scroll top
+      }
+
       $scope.add = function () {
-        var h = {
-          uuid: 'test',
-          territory: 'titellus',
-          name: 'titellus',
-          url: 'http://titellus.net'
-        };
-        harvesterService.add(h);
+        harvesterService.add($scope.newHarvester).then(function (response) {
+          $scope.adding = false;
+          init();
+          $scope.newHarvester = $scope.harvesterTpl;
+        });
       };
 
       $scope.run = function (h) {
