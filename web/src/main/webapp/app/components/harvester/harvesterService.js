@@ -33,6 +33,25 @@
                 deferred.resolve(data);
               });
             return deferred.promise;
+          },
+          removeRecords : function (h) {
+            var filter = h === undefined ? '' :
+                '+territory:"' + h.territory + '" ' +
+                '+harvesterId:"' + h.url + '"',
+              metadataFilter =
+                '+(documentType:metadata documentType:association) ' + filter,
+              deferred = $q.defer();
+
+
+            solrService.delete(metadataFilter, 'data').success(
+              function (data) {
+                deferred.resolve('Records deleted.');
+              }
+            ).error(function (response) {
+              deferred.reject(response);
+            });
+
+            return deferred.promise;
           }
         };
       }]);

@@ -48,6 +48,9 @@
       $scope.remove = function (h) {
         harvesterService.remove(h).then(init);
       };
+      $scope.removeRecords = function (h) {
+        harvesterService.removeRecords(h).then(init);
+      };
 
       init();
     }]);
