@@ -126,6 +126,7 @@
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
   <field name="metadataIdentifier" type="string" indexed="true" stored="true" multiValued="false"/>
+  <field name="pointOfTruthURL" type="string" indexed="false" stored="true" multiValued="false"/>
   <field name="harvesterId" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="harvestedDate" type="date" stored="true" indexed="true" multiValued="true"/>
   <field name="dateStamp" type="date" stored="true" indexed="true" multiValued="false"/>

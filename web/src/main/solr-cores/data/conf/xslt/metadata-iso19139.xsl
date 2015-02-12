@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:gmd="http://www.isotc211.org/2005/gmd"
-  xmlns:gco="http://www.isotc211.org/2005/gco"
-  xmlns:srv="http://www.isotc211.org/2005/srv"
-  xmlns:gmx="http://www.isotc211.org/2005/gmx"
-  xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:gml="http://www.opengis.net/gml" 
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:ns3="http://www.w3.org/2001/SMIL20/" 
-  xmlns:ns9="http://www.w3.org/2001/SMIL20/Language" 
-  xmlns:dct="http://purl.org/dc/terms/" 
-  xmlns:ogc="http://www.opengis.net/ogc" 
-  xmlns:ows="http://www.opengis.net/ows" 
-  xmlns:gn="http://www.fao.org/geonetwork" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:solr="java:org.daobs.index.SolrRequestBean"
-  xmlns:saxon="http://saxon.sf.net/"
-  extension-element-prefixes="saxon"
-  exclude-result-prefixes="#all"
-  version="2.0">
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                xmlns:gco="http://www.isotc211.org/2005/gco"
+                xmlns:srv="http://www.isotc211.org/2005/srv"
+                xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:daobs="http://daobs.org"
+                xmlns:gml="http://www.opengis.net/gml"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:ns3="http://www.w3.org/2001/SMIL20/"
+                xmlns:ns9="http://www.w3.org/2001/SMIL20/Language"
+                xmlns:dct="http://purl.org/dc/terms/"
+                xmlns:ogc="http://www.opengis.net/ogc"
+                xmlns:ows="http://www.opengis.net/ows"
+                xmlns:gn="http://www.fao.org/geonetwork"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:solr="java:org.daobs.index.SolrRequestBean"
+                xmlns:saxon="http://saxon.sf.net/"
+                extension-element-prefixes="saxon"
+                exclude-result-prefixes="#all"
+                version="2.0">
 
   <xsl:output name="default-serialize-mode"
               indent="no"
               omit-xml-declaration="yes" />
 
   <xsl:variable name="harvester" as="element()?"
-                select="/harvestedContent/harvester"/>
+                select="/harvestedContent/daobs:harvester"/>
+
+  <xsl:variable name="pointOfTruthURLPattern" as="xs:string?"
+                select="normalize-space($harvester/daobs:pointOfTruthURLPattern)"/>
 
   <xsl:variable name="dateFormat" as="xs:string"
                 select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z'"/>
@@ -140,6 +144,8 @@
         <xsl:variable name="identifier" as="xs:string"
                       select="gmd:fileIdentifier/gco:CharacterString[. != '']"/>
 
+
+
         <xsl:variable name="mainLanguage" as="xs:string?"
                       select="gmd:language/gco:CharacterString[normalize-space(.) != '']|
                           gmd:language/gmd:LanguageCode/
@@ -171,16 +177,20 @@
           <field name="id"><xsl:value-of select="$identifier"/></field>
           <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
 
+          <xsl:if test="$pointOfTruthURLPattern != ''">
+            <field name="pointOfTruthURL"><xsl:value-of select="replace($pointOfTruthURLPattern, '\{\{uuid\}\}', $identifier)"/></field>
+          </xsl:if>
+
           <xsl:for-each select="gmd:metadataStandardName/gco:CharacterString">
             <field name="standardName"><xsl:value-of select="normalize-space(.)"/></field>
           </xsl:for-each>
 
           <!-- Harvester details -->
-          <field name="territory"><xsl:value-of select="$harvester/territory"/></field>
-          <field name="harvesterId"><xsl:value-of select="$harvester/url"/></field>
+          <field name="territory"><xsl:value-of select="$harvester/daobs:territory"/></field>
+          <field name="harvesterId"><xsl:value-of select="$harvester/daobs:url"/></field>
           <field name="harvestedDate">
-            <xsl:value-of select="if ($harvester/date)
-                                  then $harvester/date
+            <xsl:value-of select="if ($harvester/daobs:date)
+                                  then $harvester/daobs:date
                                   else format-dateTime(current-dateTime(), $dateFormat)"/>
           </field>
 
