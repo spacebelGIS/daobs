@@ -60,5 +60,6 @@
   "monitoringSubmitError": "Error occurred while importing monitoring {{filename}}.",
   "monitoringSubmitPage": "Upload here monitoring to later use them in dashboards.",
   "noMonitoringAvailable": "No monitoring available",
-  "harvesterConfigPage": "Configure harvester here."
+  "harvesterConfigPage": "Configure harvester here. When starting a harvester, a task is created and will be started in the next {{pollingInterval}}. For the time being, harvester task status can't be monitored",
+  "harvest": "Harvest"
 }

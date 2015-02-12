@@ -1,5 +1,6 @@
 package org.daobs.controller;
 
+import org.daobs.harvester.config.Harvester;
 import org.daobs.harvester.config.Harvesters;
 import org.daobs.harvester.repository.HarvesterConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import java.io.IOException;
 /**
  * Created by francois on 21/10/14.
  */
-
 @Controller
 public class HarvesterController {
 
@@ -43,30 +43,41 @@ public class HarvesterController {
             },
             method = RequestMethod.PUT)
     @ResponseBody
-    public boolean add(HttpServletRequest request)
+    public RequestResponse add(@RequestBody Harvester harvester)
             throws IOException {
-        return false;
+        harvesterConfigRepository.add(harvester);
+        return new RequestResponse("Harvester added", "success");
+    }
+
+    @RequestMapping(value = "/harvester/{uuid}",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            },
+            method = RequestMethod.DELETE)
+    @ResponseBody
+    public RequestResponse remove(
+            @PathVariable(value = "uuid") String harvesterUuid
+    ) throws Exception {
+        harvesterConfigRepository.remove(harvesterUuid);
+        return new RequestResponse("Harvester removed", "success");
     }
 
 
-    @RequestMapping(value = "/harvester/{id}",
+    @RequestMapping(value = "/harvester/{uuid}",
             produces = {
                     MediaType.APPLICATION_XML_VALUE,
                     MediaType.APPLICATION_JSON_VALUE
             },
             method = RequestMethod.GET)
     @ResponseBody
-    public String start(HttpServletRequest request,
-                         @PathVariable(value = "id") String harvesterId,
-                         @RequestParam(
-                                 value = "action",
-                                 required = false) String action
-                         )
+    public RequestResponse run(@PathVariable(value = "uuid") String harvesterUuid,
+                      @RequestParam(
+                             value = "action",
+                             required = false) String action
+                     )
             throws Exception {
-        System.out.println(harvesterId);
-        System.out.println(action);
-        harvesterConfigRepository.start(harvesterId);
-
-        return action;
+        harvesterConfigRepository.start(harvesterUuid);
+        return new RequestResponse("Harvester started", "success");
     }
 }

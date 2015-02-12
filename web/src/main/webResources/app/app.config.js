@@ -9,7 +9,7 @@
       root: context,
       dashboardCore: context + 'dashboard',
       dataCore: context + 'data',
-      harvesterConfig: context + 'daobs/harvester.json',
+      harvester: context + 'daobs/harvester',
       reportingConfig: context + 'daobs/reporting.json',
       reporting: context + 'daobs/reporting/',
       samples: context + 'daobs/samples/',

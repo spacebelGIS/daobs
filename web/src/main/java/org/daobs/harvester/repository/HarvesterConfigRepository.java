@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * A really simple harvester repository based on the
@@ -61,7 +62,7 @@ public class HarvesterConfigRepository implements InitializingBean {
         }
         return true;
     }
-    public boolean reload () {
+    public boolean reload() {
         return loadConfig();
     }
 
@@ -70,13 +71,51 @@ public class HarvesterConfigRepository implements InitializingBean {
     }
 
     public synchronized Harvester add(Harvester harvester) {
+        if (harvester != null) {
+            String uuid = harvester.getUuid();
+            boolean harvesterExist = false;
+            Harvester harvestercheck = null;
+            if (uuid != null) {
+                harvestercheck = findByUuid(uuid);
+                harvesterExist = harvestercheck != null;
+            } else {
+                // TODO: Random UUID
+                harvester.setUuid("ADD");
+            }
 
-        return null;
+            if (harvesterExist) {
+                harvesters.getHarvester().remove(harvestercheck);
+            }
+            harvesters.getHarvester().add(harvester);
+            commit();
+        }
+        return harvester;
     }
 
-    public synchronized boolean remove(String harvesterUuid) {
-
+    public synchronized boolean remove(String harvesterUuid) throws Exception {
+        Harvester harvester = findByUuid(harvesterUuid);
+        if (harvester == null) {
+            throw new Exception(
+                    String.format(
+                            "No harvester with UUID '%s' found. Can't start it.",
+                            harvesterUuid));
+        } else {
+            harvesters.getHarvester().remove(harvester);
+            commit();
+        }
         return false;
+    }
+
+    private synchronized void commit() {
+        JAXBContext jaxbContext = null;
+        try {
+            jaxbContext = JAXBContext.newInstance(Harvesters.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.marshal(harvesters, new File(configurationFilepath));
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        reload();
     }
 
     public synchronized boolean start(String harvesterUuid) throws Exception {
@@ -93,7 +132,6 @@ public class HarvesterConfigRepository implements InitializingBean {
 
         File harvestingConfigFile = new File(buildTaskFileName(harvesterUuid));
         JAXBContext jaxbContext = null;
-
         jaxbContext = JAXBContext.newInstance(Harvesters.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
 
@@ -126,7 +164,7 @@ public class HarvesterConfigRepository implements InitializingBean {
 
     public Harvester findByUuid(String harvesterUuid) {
         for (Harvester harvester : harvesters.getHarvester()) {
-            if (harvester.getUuid().equals(harvesterUuid)) {
+            if (harvesterUuid.equals(harvester.getUuid())) {
                 return harvester;
             }
         }
