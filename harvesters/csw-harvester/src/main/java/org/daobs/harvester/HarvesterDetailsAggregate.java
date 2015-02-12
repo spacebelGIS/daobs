@@ -2,12 +2,15 @@ package org.daobs.harvester;
 
 import org.apache.camel.Body;
 import org.apache.camel.Exchange;
+import org.apache.camel.Header;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
 
 /**
  * Aggregation strategy to combine harvester
@@ -37,27 +40,21 @@ public class HarvesterDetailsAggregate implements
     /**
      * Combine a CSW response with harvester details.
      * @param cswResponse
-     * @param url
-     * @param territory
+     * @param harvesterConfig
      * @return
      */
     public Document doTransform(
             Document cswResponse,
-            String url,
-            String territory) {
+            Document harvesterConfig) {
         try {
             Element root = (Element) cswResponse.createElement("harvestedContent");
             Element cswRecords = (Element)cswResponse.getFirstChild().cloneNode(true);
-            Element harvesterDetails = (Element) cswResponse.createElement("harvester");
-            Element harvesterTerritory = (Element) cswResponse.createElement("territory");
-            harvesterTerritory.setTextContent(territory);
-            Element harvesterUrl = (Element) cswResponse.createElement("url");
-            harvesterUrl.setTextContent(url);
-            harvesterDetails.appendChild(harvesterUrl);
-            harvesterDetails.appendChild(harvesterTerritory);
+            Element harvesterConfigClone = (Element)harvesterConfig.getFirstChild().cloneNode(true);
 
             cswResponse.replaceChild(root, cswResponse.getFirstChild());
-            root.appendChild(harvesterDetails);
+            root.appendChild(
+                    root.getOwnerDocument().importNode(
+                            harvesterConfigClone, true));
             root.appendChild(cswRecords);
             return cswResponse;
         } catch (Exception e) {
