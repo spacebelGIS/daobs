@@ -1,14 +1,12 @@
 package org.daobs.harvester;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Optional;
-import com.google.common.io.Files;
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
-import org.apache.camel.NamedNode;
 import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -18,8 +16,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
