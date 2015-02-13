@@ -6,6 +6,7 @@ import com.google.common.io.Files;
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
 import org.apache.camel.NamedNode;
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
@@ -17,9 +18,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,16 +120,16 @@ public class CswHarvester {
     public CswHarvester() {
         String fileName = "csw-get-records.xml";
         try {
-            getRecordsTemplate = Files.toString(
-                    new ClassPathResource(fileName).getFile(),
-                    Charsets.UTF_8);
+            InputStream stream  = this.getClass().getResourceAsStream("/" + fileName);
+            getRecordsTemplate = IOUtils.toString(stream,
+                            Charsets.UTF_8);
         } catch (IOException e) {
             log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
         }
         String fileNameHits = "csw-get-records-hits.xml";
         try {
-            getRecordsHitsTemplate = Files.toString(
-                    new ClassPathResource(fileNameHits).getFile(),
+            InputStream stream  = this.getClass().getResourceAsStream("/" + fileNameHits);
+            getRecordsHitsTemplate = IOUtils.toString(stream,
                     Charsets.UTF_8);
         } catch (IOException e) {
             log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
