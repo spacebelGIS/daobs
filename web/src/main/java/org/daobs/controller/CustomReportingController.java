@@ -25,7 +25,7 @@ public class CustomReportingController {
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
             "recordOperatedByType," +
-            "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource";
+            "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
             "q=%%2BdocumentType:metadata+%%2BresourceType:service&" +
@@ -34,7 +34,7 @@ public class CustomReportingController {
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
             "serviceType,linkUrl," +
-            "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource";
+            "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final List<String> BOOLEAN_PARAMETERS = new ArrayList<>(
             Arrays.asList("withRowData")

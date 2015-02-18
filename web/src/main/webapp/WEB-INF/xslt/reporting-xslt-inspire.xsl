@@ -213,9 +213,8 @@
         <!-- The metadata record was harvested using CSW -->
         <discoveryAccessibility>true</discoveryAccessibility>
 
-        <!-- TODO Definition ?
-        Metadata record of the CSW service
-        <discoveryAccessibilityUuid></discoveryAccessibilityUuid>-->
+        <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
+        <discoveryAccessibilityUuid><xsl:value-of select="str[@name='harvesterUuid']/text()"/></discoveryAccessibilityUuid>
       </MdServiceExistence>
 
       <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
@@ -289,8 +288,8 @@
 
           <!-- The record was harvested -->
           <discovery>true</discovery>
-          <!-- ... but we don't have the UUID of the CSW service -->
-          <discoveryUuid></discoveryUuid>
+          <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
+          <discoveryUuid><xsl:value-of select="str[@name='harvesterUuid']/text()"/></discoveryUuid>
 
           <view><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0)
                                       then true() else false()"/></view>

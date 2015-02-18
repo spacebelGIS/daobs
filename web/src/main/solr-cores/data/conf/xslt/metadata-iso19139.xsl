@@ -188,6 +188,7 @@
           <!-- Harvester details -->
           <field name="territory"><xsl:value-of select="$harvester/daobs:territory"/></field>
           <field name="harvesterId"><xsl:value-of select="$harvester/daobs:url"/></field>
+          <field name="harvesterUuid"><xsl:value-of select="$harvester/daobs:uuid"/></field>
           <field name="harvestedDate">
             <xsl:value-of select="if ($harvester/daobs:date)
                                   then $harvester/daobs:date
