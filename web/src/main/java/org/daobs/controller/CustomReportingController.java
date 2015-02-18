@@ -19,7 +19,7 @@ public class CustomReportingController {
 
     // TODO: config should move to configuration file
     public static final String SPATIALDATASETS_QUERY_URL = "/data/select?" +
-            "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)+%%2Bterritory:%s&" +
+            "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)+%s&" +
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
@@ -27,7 +27,7 @@ public class CustomReportingController {
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource";
 
     public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
-            "q=%%2BdocumentType:metadata+%%2BresourceType:service+%%2Bterritory:%s&" +
+            "q=%%2BdocumentType:metadata+%%2BresourceType:service+%s&" +
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
@@ -60,17 +60,23 @@ public class CustomReportingController {
                                                    value = "withRowData",
                                                    required = false) Boolean withRowData,
                                            @RequestParam(
+                                                   value = "fq",
+                                                   defaultValue = "",
+                                                   required = false) String fq,
+                                           @RequestParam(
                                                    value = "rows",
                                                    defaultValue = "10000",
                                                    required = false) int rows)
             throws IOException {
         IndicatorCalculatorImpl indicatorCalculator =
-                ReportingController.generateReporting(request, reporting, null, true);
+                ReportingController.generateReporting(request, reporting, fq, true);
 
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
         model.addObject("xmlSource", indicatorCalculator.toSource());
 
         addRequestParametersToModel(allRequestParams, model);
+
+        addRowDataToModel(withRowData, rows, fq, model);
 
         return model;
     }
@@ -104,15 +110,19 @@ public class CustomReportingController {
                                                    value = "withRowData",
                                                    required = false) Boolean withRowData,
                                            @RequestParam(
+                                                   value = "fq",
+                                                   defaultValue = "",
+                                                   required = false) String fq,
+                                           @RequestParam(
                                                    value = "rows",
                                                    defaultValue = "10000",
                                                    required = false) int rows,
                                            @PathVariable(value = "reporting") String reporting,
                                            @PathVariable(value = "territory") String territory)
             throws IOException {
-
+        String filter = fq + " +territory:" + territory;
         IndicatorCalculatorImpl indicatorCalculator =
-                ReportingController.generateReporting(request, reporting, territory, true);
+                ReportingController.generateReporting(request, reporting, filter, true);
 
 
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
@@ -121,15 +131,18 @@ public class CustomReportingController {
         if (territory != null) {
             model.addObject("territory", territory);
         }
+        if (filter != null) {
+            model.addObject("filter", filter);
+        }
 
         addRequestParametersToModel(allRequestParams, model);
 
-        addRowDataToModel(withRowData, rows, territory, model);
+        addRowDataToModel(withRowData, rows, filter, model);
 
         return model;
     }
 
-    private void addRowDataToModel(Boolean withRowData, int rows, String territory, ModelAndView model) {
+    private void addRowDataToModel(Boolean withRowData, int rows, String fq, ModelAndView model) {
         // Handle defaults for boolean
         if (withRowData == null) {
             withRowData = false;
@@ -142,14 +155,14 @@ public class CustomReportingController {
             Node spatialDataSets = SolrRequestBean.query(
                     String.format(
                             SPATIALDATASETS_QUERY_URL,
-                            territory, rows));
+                            fq, rows));
             model.addObject("spatialDataSets", spatialDataSets);
 
 
             Node spatialDataServices = SolrRequestBean.query(
                     String.format(
                             SPATIALDATASERVICE_QUERY_URL,
-                            territory, rows));
+                            fq, rows));
             model.addObject("spatialDataServices", spatialDataServices);
         }
     }

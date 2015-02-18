@@ -90,6 +90,7 @@
       $scope.overview = false;
       $scope.reportingConfig = null;
       $scope.listOfTerritory = [];
+      $scope.filterCount = null;
 
       function init() {
         //Get list of territory available
@@ -107,7 +108,7 @@
               // If it has records
               if (facet[i + 1] > 0) {
                 $scope.listOfTerritory.push({
-                  label: facet[i].toLowerCase(),
+                  label: facet[i],
                   count: facet[i + 1]
                 });
               }
@@ -115,6 +116,27 @@
             } while (i < facet.length);
           });
       };
+
+      function getMatchingRecord() {
+        var fq =
+          ($scope.filter ? $scope.filter  : '') +
+          ($scope.territory ? ' +territory:' + $scope.territory.label  : '');
+        $scope.filterCount = null;
+        $scope.filterError = null;
+
+        $http.get(cfg.SERVICES.dataCore +
+        '/select?q=' +
+        'documentType%3Ametadata&' +
+        'start=0&rows=0&' +
+        'wt=json&indent=true&fq=' + encodeURIComponent(fq)).
+          success(function (data) {
+            $scope.filterCount = data.response.numFound;
+          }).error(function (response) {
+            $scope.filterError = response.error.msg;
+          });
+        };
+      $scope.$watch('filter', getMatchingRecord);
+      $scope.$watch('territory', getMatchingRecord);
 
       // Get the list of monitoring types
       $http.get(cfg.SERVICES.reportingConfig, {cache: true}).
@@ -150,10 +172,11 @@
         $scope.overview = false;
         $scope.report = null;
         var area = $scope.territory && $scope.territory.label,
-          filterParameter = $scope.filter ? '?fq=' + $scope.filter  : '?';
+          filterParameter = $scope.filter ? '?fq=' + encodeURIComponent($scope.filter)  : '?';
         $http.get(cfg.SERVICES.reporting +
-        $scope.reporting.id + '/' +
-        area + '.json' + filterParameter).success(function (data) {
+        $scope.reporting.id +
+        (area ? '/' +  area : '') +
+        '.json' + filterParameter).success(function (data) {
           setReport(data);
         });
       };

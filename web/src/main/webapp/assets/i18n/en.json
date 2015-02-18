@@ -54,6 +54,8 @@
   "createMonitoring": "Create monitoring",
   "monitoringInfoPage": "Here is presented the list of currently available monitoring",
   "monitoringCreationPage": "The following forms provides the capability to create a report based on harvested records.",
+  "matchingRecordsForFilter": "<strong>{{count}} record(s)</strong> matching current filter.",
+  "customFilterHelp": "eg. to select only dataset use '+resourceType:dataset', to select based on point of contact use '+OrgForResource:RIVM'.",
   "monitoringInfo": "Monitoring summary",
   "noFilter": "Clear filter",
   "reportingYear": "Reporting year",

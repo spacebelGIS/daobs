@@ -94,10 +94,14 @@ public class ReportingController {
             method = RequestMethod.GET)
     @ResponseBody
     public Reporting get(HttpServletRequest request,
-                         @PathVariable(value = "reporting") String reporting)
+                         @PathVariable(value = "reporting") String reporting,
+                         @RequestParam(
+                                 value = "fq",
+                                 defaultValue = "",
+                                 required = false) String fq)
             throws IOException {
         IndicatorCalculatorImpl indicatorCalculator =
-                generateReporting(request, reporting, null, false);
+                generateReporting(request, reporting, fq, true);
         return indicatorCalculator.getConfiguration();
     }
 
@@ -120,10 +124,14 @@ public class ReportingController {
     @ResponseBody
     public Reporting get(HttpServletRequest request,
                          @PathVariable(value = "reporting") String reporting,
-                         @PathVariable(value = "territory") String territory)
+                         @PathVariable(value = "territory") String territory,
+                         @RequestParam(
+                                 value = "fq",
+                                 defaultValue = "",
+                                 required = false) String fq)
             throws IOException {
         IndicatorCalculatorImpl indicatorCalculator =
-                generateReporting(request, reporting, territory, true);
+                generateReporting(request, reporting, fq + " +territory:" + territory, true);
         return indicatorCalculator.getConfiguration();
     }
 
@@ -139,7 +147,7 @@ public class ReportingController {
      */
     public static IndicatorCalculatorImpl generateReporting(HttpServletRequest request,
                                                       String reporting,
-                                                      String territory,
+                                                      String fq,
                                                       boolean calculate) throws FileNotFoundException {
         String configurationFilePath =
                 INDICATOR_CONFIGURATION_DIR +
@@ -155,7 +163,7 @@ public class ReportingController {
 
             if (calculate) {
                 // TODO: filter should be more generic
-                indicatorCalculator.computeIndicators("+territory:" + territory);
+                indicatorCalculator.computeIndicators(fq);
             }
             // adds the XML source file to the model so the XsltView can detect
             return indicatorCalculator;
