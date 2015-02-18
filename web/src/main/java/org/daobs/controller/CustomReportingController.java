@@ -19,7 +19,8 @@ public class CustomReportingController {
 
     // TODO: config should move to configuration file
     public static final String SPATIALDATASETS_QUERY_URL = "/data/select?" +
-            "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)+%s&" +
+            "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)&" +
+            "fq=%s&" +
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
@@ -27,7 +28,8 @@ public class CustomReportingController {
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource";
 
     public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
-            "q=%%2BdocumentType:metadata+%%2BresourceType:service+%s&" +
+            "q=%%2BdocumentType:metadata+%%2BresourceType:service&" +
+            "fq=%s&" +
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +

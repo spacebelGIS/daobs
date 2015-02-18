@@ -116,17 +116,17 @@
                 <ul class="dropdown-menu" role="menu">
                   <li data-ng-show="reporting.id === 'inspire'">
                     <a target="_blank"
-                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?organizationName={{organizationName}}&email={{email}}"
+                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&organizationName={{organizationName}}&email={{email}}"
                          data-translate="">inspireMonitoringFormat</a></li>
                   <li data-ng-show="reporting.id === 'inspire'">
                     <a target="_blank"
-                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?withRowData=true&organizationName={{organizationName}}&email={{email}}"
+                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}"
                          data-translate="">inspireMonitoringFormatWithRowData</a></li>
                   <li><a target="_blank"
-                         data-ng-href="daobs/reporting/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}.xml"
+                         data-ng-href="daobs/reporting/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}.xml{{fq ? '?fq=' + fq : ''}}"
                          data-translate="">XML</a></li>
                   <li><a target="_blank"
-                         data-ng-href="daobs/reporting/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}.json"
+                         data-ng-href="daobs/reporting/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}.json{{fq ? '?fq=' + fq : ''}}"
                          data-translate="">JSON</a></li>
                 </ul>
               </div>

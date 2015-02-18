@@ -91,6 +91,7 @@
       $scope.reportingConfig = null;
       $scope.listOfTerritory = [];
       $scope.filterCount = null;
+      $scope.fq = null;
 
       function init() {
         //Get list of territory available
@@ -123,6 +124,7 @@
           ($scope.territory ? ' +territory:' + $scope.territory.label  : '');
         $scope.filterCount = null;
         $scope.filterError = null;
+        $scope.fq = encodeURIComponent(fq);
 
         $http.get(cfg.SERVICES.dataCore +
         '/select?q=' +
