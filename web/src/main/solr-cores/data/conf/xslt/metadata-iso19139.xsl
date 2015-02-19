@@ -296,7 +296,7 @@
 
             <field name="resourceAbstract">
               <xsl:value-of select="substring(
-                    normalize-space(gmd:abstract/gco:CharacterString),
+                    gmd:abstract/gco:CharacterString,
                     0, $maxFieldLength)"/>
             </field>
 
