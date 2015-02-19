@@ -69,7 +69,6 @@
            */
           uploadMonitoring: function (files, isOfficial, withRowData) {
             var listOfDeffered = [],
-              fd = new FormData(),
               uploadUrl = cfg.SERVICES.reportingSubmit +
                 '?commit=true&tr=inspire-monitoring-reporting' +
                 (withRowData ? '-with-ai' : '') +
@@ -77,6 +76,7 @@
 
             angular.forEach(files, function (file) {
               var deferred = $q.defer();
+              var fd = new FormData();
               fd.append('file', file);
 
               $http.post(uploadUrl, fd, {
