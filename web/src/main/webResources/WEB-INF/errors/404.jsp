@@ -4,7 +4,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="/solr/lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${webapp.rootUrl}assets/libs/bootstrap/css/bootstrap.min.css"/>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
@@ -12,7 +12,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/solr/">
+                        <a href="${webapp.rootUrl}">
                             <i class="glyphicon glyphicon-home"></i>
                         </a>
                     </li>
@@ -29,7 +29,7 @@
 
             <p>
                 <a class="btn btn-primary btn-lg btn-block" role="button"
-                        href="/solr/">
+                        href="${webapp.rootUrl}">
                 <i class="glyphicon glyphicon-home"></i>&nbsp;Back to home page
                 </a>
             </p>
