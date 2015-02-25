@@ -7,17 +7,21 @@
 
   <http>
     <!-- Solr admin -->
-    <intercept-url pattern='/admin.html*' access='ROLE_ADMIN'/>
+    <intercept-url pattern="/admin.html*" access="ROLE_ADMIN"/>
 
     <!-- Solr services -->
-    <intercept-url pattern='/data/admin/*' access='ROLE_ADMIN'/>
-    <intercept-url pattern='/data/update/*' access='ROLE_ADMIN'/>
-    <intercept-url pattern='/dashboard/admin/*' access='ROLE_ADMIN'/>
-    <intercept-url pattern='/dashboard/update/*' access='ROLE_ADMIN'/>
+    <!-- Luke used by dashboard app -->
+    <intercept-url pattern="/data/admin/luke" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+
+    <intercept-url pattern="/data/admin/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/data/update/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/dashboard/admin/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/dashboard/update/*" access="ROLE_ADMIN"/>
 
     <!-- Controllers -->
-    <intercept-url pattern='/*/reporting*' access='ROLE_ADMIN'/>
-    <intercept-url pattern='/*/harvester*' access='ROLE_ADMIN'/>
+    <intercept-url pattern="/*/reporting*" method="GET" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    <intercept-url pattern="/*/reporting*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/*/harvester*" access="ROLE_ADMIN"/>
 
     <http-basic />
   </http>
