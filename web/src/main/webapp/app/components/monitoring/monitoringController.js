@@ -83,8 +83,8 @@
    * current monitoring.
    */
   app.controller('MonitoringCreateCtrl', [
-    '$scope', '$http', 'cfg', 'solrService', 'monitoringService',
-    function ($scope, $http, cfg, solrService, monitoringService) {
+    '$scope', '$http', '$location', 'cfg', 'solrService', 'monitoringService',
+    function ($scope, $http, $location, cfg, solrService, monitoringService) {
       $scope.report = null;
       $scope.rules = null;
       $scope.overview = false;
@@ -144,7 +144,24 @@
       $http.get(cfg.SERVICES.reportingConfig, {cache: true}).
         success(function (data) {
           $scope.reportingConfig = data.reporting;
-          $scope.reporting = $scope.reportingConfig[0];
+
+          // If reporting param defined in URL
+          // check if it's available in the
+          // monitoring config and set it.
+          var reportingParam = $location.search().reporting;
+          if (reportingParam) {
+            angular.forEach($scope.reportingConfig, function (item) {
+              if (item.id === reportingParam) {
+                $scope.reporting = item;
+                return;
+              }
+            });
+          }
+
+          // If not, use the first one from the configuration.
+          if (!$scope.reporting) {
+            $scope.reporting = $scope.reportingConfig[0];
+          }
         });
 
 
