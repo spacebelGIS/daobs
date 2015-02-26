@@ -9,7 +9,8 @@
           'app/components/monitoring/monitoringView.html'
       }).when('/monitoring/:section', {
         templateUrl : cfg.SERVICES.root +
-          'app/components/monitoring/monitoringView.html'
+          'app/components/monitoring/monitoringView.html',
+        reloadOnSearch: false
       }).when('/monitoring/manage', {
         controller : 'MonitoringCtrl',
         templateUrl : cfg.SERVICES.root +
@@ -115,7 +116,48 @@
               }
               i = i + 2;
             } while (i < facet.length);
+
+            var territoryParam = $location.search().territory,
+              filterParam = $location.search().filter;
+
+            if (territoryParam) {
+              angular.forEach($scope.listOfTerritory, function (item) {
+                if (item.label === territoryParam) {
+                  $scope.territory = item;
+                }
+              });
+            }
+            if (filterParam) {
+              $scope.filter = filterParam;
+            }
           });
+
+
+
+        // Get the list of monitoring types
+        $http.get(cfg.SERVICES.reportingConfig, {cache: true}).
+          success(function (data) {
+            $scope.reportingConfig = data.reporting;
+
+            // If reporting param defined in URL
+            // check if it's available in the
+            // monitoring config and set it.
+            var reportingParam = $location.search().reporting;
+            if (reportingParam) {
+              angular.forEach($scope.reportingConfig, function (item) {
+                if (item.id === reportingParam) {
+                  $scope.reporting = item;
+                  //return;
+                }
+              });
+            }
+
+            // If not, use the first one from the configuration.
+            if (!$scope.reporting) {
+              $scope.reporting = $scope.reportingConfig[0];
+            }
+          });
+
       };
 
       function getMatchingRecord() {
@@ -137,33 +179,6 @@
             $scope.filterError = response.error.msg;
           });
         };
-      $scope.$watch('filter', getMatchingRecord);
-      $scope.$watch('territory', getMatchingRecord);
-
-      // Get the list of monitoring types
-      $http.get(cfg.SERVICES.reportingConfig, {cache: true}).
-        success(function (data) {
-          $scope.reportingConfig = data.reporting;
-
-          // If reporting param defined in URL
-          // check if it's available in the
-          // monitoring config and set it.
-          var reportingParam = $location.search().reporting;
-          if (reportingParam) {
-            angular.forEach($scope.reportingConfig, function (item) {
-              if (item.id === reportingParam) {
-                $scope.reporting = item;
-                return;
-              }
-            });
-          }
-
-          // If not, use the first one from the configuration.
-          if (!$scope.reporting) {
-            $scope.reporting = $scope.reportingConfig[0];
-          }
-        });
-
 
       function setReport(data) {
         $scope.report = data;
@@ -178,7 +193,7 @@
 
       // View report configuration
       $scope.getReportDetails = function () {
-        $scope.territory = null;
+        //$scope.territory = null;
         $http.get(cfg.SERVICES.reporting +
         $scope.reporting.id + '.json').success(function (data) {
           setReport(data);
@@ -199,11 +214,23 @@
           setReport(data);
         });
       };
-      // Reset report on territory changes
-      $scope.$watch('territory', function () {
-        $scope.report = null;
+      $scope.$watch('reporting', function () {
+        $scope.reporting && $location.search('reporting', $scope.reporting.id);
       });
-
+      // Reset report on territory changes
+      $scope.$watch('territory', function (oldValue, newValue) {
+        $scope.report = null;
+        if (oldValue !== newValue) {
+          $scope.territory && $location.search('territory', $scope.territory.label);
+          getMatchingRecord();
+        }
+      });
+      $scope.$watch('filter', function (oldValue, newValue) {
+        if (oldValue !== newValue) {
+          $scope.filter && $location.search('filter', $scope.filter);
+          getMatchingRecord();
+        }
+      });
       init();
     }]);
 
