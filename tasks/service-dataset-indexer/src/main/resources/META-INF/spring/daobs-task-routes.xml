@@ -61,11 +61,17 @@
 
     <cm:route id="route-task-start" autoStartup="false">
       <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple resultType="java.lang.String">{{task.service-dataset-indexer.filter}}</cm:simple>
+      </cm:setHeader>
       <cm:to uri="direct:task-analyze-start"/>
     </cm:route>
 
     <cm:route id="route-task-jms-start">
       <cm:from uri="activemq:task-analyze"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple resultType="java.lang.String">{{task.service-dataset-indexer.filter}} %2BharvesterId%3A$simple{in.body}</cm:simple>
+      </cm:setHeader>
       <cm:to uri="direct:task-analyze-start"/>
     </cm:route>
 

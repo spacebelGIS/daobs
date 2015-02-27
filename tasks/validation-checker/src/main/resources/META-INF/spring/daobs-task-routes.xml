@@ -62,11 +62,17 @@
 
     <cm:route id="route-task-validate" autoStartup="false">
       <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}}</cm:simple>
+      </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
 
     <cm:route id="route-task-validate-start">
       <cm:from uri="activemq:task-validate"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}} %2BharvesterId%3A$simple{in.body}</cm:simple>
+      </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
 
