@@ -110,6 +110,7 @@
 
       <!-- Check number of records returned and reported -->
       <xsl:message>======================================================</xsl:message>
+      <xsl:message>DEBUG: <xsl:value-of select="$harvester/daobs:url"/>.</xsl:message>
       <xsl:message>DEBUG: <xsl:value-of select="//csw:SearchResults/@numberOfRecordsReturned"/> record(s) returned in CSW response.</xsl:message>
       <xsl:message>DEBUG: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
 
