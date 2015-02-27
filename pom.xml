@@ -113,6 +113,11 @@
         <version>${activemq.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-web</artifactId>
+        <version>${activemq.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.xbean</groupId>
         <artifactId>xbean-spring</artifactId>
         <version>${xbean.version}</version>

@@ -196,7 +196,42 @@
     <servlet-name>SolrConfigRestApi</servlet-name>
     <url-pattern>/config/*</url-pattern>
   </servlet-mapping>
-  
+
+
+
+<!--
+  <context-param>
+    <param-name>org.apache.activemq.brokerURL</param-name>
+    <param-value>tcp://localhost:0</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>org.apache.activemq.embeddedBroker</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
+  <servlet>
+    <servlet-name>AjaxServlet</servlet-name>
+    <servlet-class>org.apache.activemq.web.AjaxServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>MessageServlet</servlet-name>
+    <servlet-class>org.apache.activemq.web.MessageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AjaxServlet</servlet-name>
+    <url-pattern>/amq/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>MessageServlet</servlet-name>
+    <url-pattern>/message/*</url-pattern>
+  </servlet-mapping>
+-->
+
+
   <mime-mapping>
     <extension>.xsl</extension>
     <!-- per http://www.w3.org/TR/2006/PR-xslt20-20061121/ -->

@@ -119,7 +119,7 @@
       <artifactId>spring-webmvc</artifactId>
     </dependency>
 
-    <!-- Spring Security -->
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
@@ -141,6 +141,13 @@
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
     </dependency>
+
+
+    <!--<dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-web</artifactId>
+    </dependency>-->
+
 
     <dependency>
       <groupId>javax.servlet</groupId>
