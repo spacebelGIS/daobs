@@ -24,7 +24,7 @@
   </bean>
 
   <bean id="cswHarvester" class="org.daobs.harvester.CswHarvester">
-    <property name="maxRecords" value="${csw.get.records.max.records}"/>
+    <property name="maxRecords" value="${harvester.csw.getRecords.maxRecords}"/>
   </bean>
 
   <bean id="harvesterDetailsAgg" class="org.daobs.harvester.HarvesterDetailsAggregate"/>
@@ -66,7 +66,7 @@
         Start the harvester by loading the configuration file in the
         config folder
       </cm:description>
-      <cm:from uri="file:{{csw.config.folder}}?fileName=$simple{property.csw.config.filename}&amp;noop=true&amp;delay=1000000000"/>
+      <cm:from uri="file:{{harvester.csw.config.folder}}?fileName=$simple{property.harvester.csw.config.filename}&amp;noop=true&amp;delay=1000000000"/>
       <cm:to uri="direct:route-start-csw-harvesting"/>
     </cm:route>
 
@@ -75,7 +75,7 @@
         Start the harvester when a config file is dropped in the
         tasks folder
       </cm:description>
-      <cm:from uri="file:{{csw.config.folder}}tasks?delay=10000"/>
+      <cm:from uri="file:{{harvester.csw.config.folder}}tasks?delay={{harvester.csw.tasks.delay}}"/>
       <cm:to uri="direct:route-start-csw-harvesting"/>
     </cm:route>
 
@@ -149,10 +149,6 @@
         The numberOfRecordsMatched attribute of the response is
         retrieved.
       </cm:description>
-      <!-- Start once.
-      TODO: Should be cron based.
-      http://camel.apache.org/quartz2.html
-      -->
       <cm:from uri="direct:harvestNode"/>
       <cm:bean ref="cswHarvester" method="initialize"/>
       <cm:log message="Query $simple{header.harvesterUrl} to get numberOfRecordsMatched ..."
@@ -183,10 +179,6 @@
         <cm:constant>daobs/0.0.1</cm:constant>
       </cm:setHeader>
       <cm:to uri="http4://csw.server.url"/>
-      <!--<cm:log message="${body}"
-              loggingLevel="DEBUG"
-              logName="org.daobs.harvester.CswHarvester"/>-->
-      <!--<cm:to uri="file:csw/get-records-response/?fileName=$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-hits.xml&amp;charset=utf-8"/>-->
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
       <cm:choice>
         <cm:when>
@@ -365,7 +357,7 @@
       </cm:choice>
     </cm:route>
 
-    <cm:route id="route-delete">
+    <!--<cm:route id="route-delete">
       <cm:description>
         Delete all records from the index.
 
@@ -376,10 +368,10 @@
         <cm:constant>DELETE_BY_QUERY</cm:constant>
       </cm:setHeader>
       <cm:setBody>
-        <cm:simple>{{solr.delete.filter}}</cm:simple>
+        <cm:simple>{{csw.harvester.delete.filter}}</cm:simple>
       </cm:setBody>
       <cm:to uri="solr://{{solr.server.url}}"/>
-    </cm:route>
+    </cm:route>-->
 
 
     <!--<cm:route id="websocket-log">

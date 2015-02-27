@@ -19,7 +19,7 @@
   </bean>
 
   <bean id="taskPagination" class="org.daobs.routing.utility.Pagination">
-    <property name="recordsPerPage" value="${records.per.page}"/>
+    <property name="recordsPerPage" value="${task.service-dataset-indexer.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
 
@@ -91,7 +91,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select?q={{task.service-dataset-indexer.filter}}&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -113,7 +113,7 @@
               <cm:simple>${bean:taskPagination?method=getStart}</cm:simple>
             </cm:setHeader>
             <cm:setHeader headerName="row">
-              <cm:simple>{{records.per.page}}</cm:simple>
+              <cm:simple>{{task.service-dataset-indexer.records.per.page}}</cm:simple>
             </cm:setHeader>
 
             <cm:log message="Page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row}."
@@ -124,7 +124,7 @@
               <cm:constant>GET</cm:constant>
             </cm:setHeader>
             <cm:setHeader headerName="Exchange.HTTP_URI">
-              <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+              <cm:simple>{{solr.server.url}}/data/select?q={{task.service-dataset-indexer.filter}}&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
             </cm:setHeader>
             <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
             <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -200,11 +200,11 @@
           </add>]]>-->
         </cm:simple>
       </cm:setBody>
-      <cm:to uri="file:tmp/query/?fileName=index-association-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+      <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-association-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
     </cm:route>
 
     <cm:route id="save-association">
-      <cm:from uri="file:tmp/query/?consumer.delay=10000"/>
+      <cm:from uri="file:{{task.service-dataset-indexer.folder}}?consumer.delay={{task.service-dataset-indexer.delay}}"/>
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>

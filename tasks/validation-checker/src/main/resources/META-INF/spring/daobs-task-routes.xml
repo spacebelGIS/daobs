@@ -14,12 +14,12 @@
   </bean>
 
   <bean id="inspireValidationClient" class="org.daobs.tasks.validation.inspire.OnlineServiceValidatorBean">
-    <property name="inspireResourceTesterURL" value="${inspire.validator.url}"/>
-    <property name="threshold" value="${inspire.threshold}"/>
+    <property name="inspireResourceTesterURL" value="${task.validation-checker.inspire.validator.url}"/>
+    <property name="threshold" value="${task.validation-checker.inspire.threshold}"/>
   </bean>
 
   <bean id="pagination" class="org.daobs.routing.utility.Pagination">
-    <property name="recordsPerPage" value="${records.per.page}"/>
+    <property name="recordsPerPage" value="${task.validation-checker.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
 
@@ -97,7 +97,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select?q={{task.validation-checker.filter}}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -116,7 +116,7 @@
           <cm:simple>${bean:pagination?method=getStart}</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="row">
-          <cm:simple>{{records.per.page}}</cm:simple>
+          <cm:simple>{{task.validation-checker.records.per.page}}</cm:simple>
         </cm:setHeader>
 
         <cm:log message="Page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row}."
@@ -127,7 +127,7 @@
           <cm:constant>GET</cm:constant>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+          <cm:simple>{{solr.server.url}}/data/select?q={{task.validation-checker.filter}}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -194,7 +194,7 @@
             </add>]]>
           </cm:simple>
         </cm:setBody>
-        <cm:to uri="file:tmp/query/?fileName=xsd-valid-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+        <cm:to uri="file:{{task.validation-checker.folder}}?fileName=xsd-valid-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
         <cm:doCatch>
           <cm:exception>org.apache.camel.ValidationException</cm:exception>
           <cm:transform>
@@ -222,7 +222,7 @@
             </add>]]>
             </cm:simple>
           </cm:setBody>
-          <cm:to uri="file:tmp/query/?fileName=xsd-invalid-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+          <cm:to uri="file:{{task.validation-checker.folder}}?fileName=xsd-invalid-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
         </cm:doCatch>
         <cm:doFinally>
         </cm:doFinally>
@@ -268,7 +268,7 @@
         <!-- TODO add <field name="validCompleteness" update="set"></field>-->
 
       </cm:setBody>
-      <cm:to uri="file:tmp/query/?fileName=inspire-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+      <cm:to uri="file:{{task.validation-checker.folder}}?fileName=inspire-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
     </cm:route>
 
 
@@ -276,7 +276,7 @@
 
     <cm:route id="save-validation-status">
       <!--<cm:from uri="direct:save-validation-status"/>-->
-      <cm:from uri="file:tmp/query/?consumer.delay=10000"/>
+      <cm:from uri="file:{{task.validation-checker.folder}}?consumer.delay={{task.validation-checker.delay}}"/>
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
