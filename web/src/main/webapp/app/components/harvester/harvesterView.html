@@ -99,33 +99,41 @@
           <button class="btn btn-link"
                   data-ng-click="run(h)"
                   title="{{'harvest' | translate}}">
-            <i class="glyphicon glyphicon-play"></i>
-          </button>
-
+            <i class="glyphicon glyphicon-play"></i>&nbsp;
+            <span data-translate="">harvest</span>
+          </button><br/>
+          <!--<button class="btn btn-link"
+                  data-ng-click="validate(h)"
+                  title="{{'validate' | translate}}">
+            <i class="glyphicon glyphicon-check"></i>&nbsp;
+            <span data-translate="">validate</span>
+          </button><br/>-->
           <a class="btn btn-link"
                   role="button"
                   title="{{'viewRecords' | translate}}"
                   data-ng-href="dashboard/#/dashboard/solr/Statistics%20(with%20record%20details)?q=%2Bterritory:{{h.territory}}">
-            <i class="glyphicon glyphicon-eye-open"></i>
-          </a>
-        </td>
-        <td>
+            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
+            <span data-translate="">viewRecords</span>
+          </a><br/>
           <button class="btn btn-link"
                   data-ng-click="edit(h)"
                   title="{{'configure' | translate}}">
-            <i class="glyphicon glyphicon-edit"></i>
+            <i class="glyphicon glyphicon-edit"></i>&nbsp;
+            <span data-translate="">configure</span>
           </button>
         </td>
         <td>
           <button class="btn btn-link"
                   data-ng-click="remove(h)"
                   title="{{'remove' | translate}}">
-            <i class="glyphicon glyphicon-remove text-danger"></i>
-          </button>
+            <i class="glyphicon glyphicon-remove text-danger"></i>&nbsp;
+            <span data-translate="">removeHarvester</span>
+          </button><br/>
           <button class="btn btn-link"
                   data-ng-click="removeRecords(h)"
                   title="{{'removeRecords' | translate}}">
-            <i class="glyphicon glyphicon-folder-open text-danger"></i>
+            <i class="glyphicon glyphicon-folder-open text-danger"></i>&nbsp;
+            <span data-translate="">removeRecords</span>
           </button>
         </td>
       </tr>
