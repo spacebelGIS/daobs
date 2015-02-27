@@ -10,10 +10,15 @@
 
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="config.properties"/>
+    <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
-  <bean id="pagination" class="org.daobs.routing.utility.Pagination">
+  <bean id="activemq"
+        class="org.apache.activemq.camel.component.ActiveMQComponent">
+    <property name="brokerURL" value="vm://localhost" />
+  </bean>
+
+  <bean id="taskPagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
@@ -27,7 +32,7 @@
           xmlns:gmd="http://www.isotc211.org/2005/gmd"
           xmlns:gco="http://www.isotc211.org/2005/gco"
           xmlns:geoportal="http://inspire.ec.europa.eu/schemas/geoportal/1.0"
-          id="service-dataset-indexer"
+          id="task.service-dataset-indexer"
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
 
@@ -54,9 +59,17 @@
     </cm:onException>
 
 
+    <cm:route id="route-task-start" autoStartup="false">
+      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:to uri="direct:task-analyze-start"/>
+    </cm:route>
 
+    <cm:route id="route-task-jms-start">
+      <cm:from uri="activemq:task-analyze"/>
+      <cm:to uri="direct:task-analyze-start"/>
+    </cm:route>
 
-    <cm:route id="route-get-records">
+    <cm:route id="route-task-analyze">
       <cm:description>
         Query document to index.
 
@@ -64,7 +77,8 @@
 
         Check for all associated datasets.
       </cm:description>
-      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:from uri="direct:task-analyze-start"/>
+
 
       <cm:log message="Background task indexing all service/data sets links ..."
               loggingLevel="INFO"
@@ -73,68 +87,85 @@
 
 
       <!-- Get number of records to validate -->
+      <cm:setHeader headerName="CamelHttpMethod">
+        <cm:constant>GET</cm:constant>
+      </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:setHeader headerName="numberOfRecordsMatched">
-        <cm:xpath resultType="java.lang.String">
-          //result/@numFound
-        </cm:xpath>
-      </cm:setHeader>
-      <cm:log message="$simple{header.numberOfRecordsMatched} services record(s) to index."
-              loggingLevel="INFO"
-              logName="org.daobs.task.ServiceDatasetIndexer"/>
-
-      <cm:split parallelProcessing="false">
-        <cm:method bean="pagination" method="getPages"/>
-        <cm:setHeader headerName="start">
-          <cm:simple>${bean:pagination?method=getStart}</cm:simple>
-        </cm:setHeader>
-        <cm:setHeader headerName="row">
-          <cm:simple>{{records.per.page}}</cm:simple>
-        </cm:setHeader>
-
-        <cm:log message="Page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row}."
-                loggingLevel="INFO"
-                logName="org.daobs.task.ServiceDatasetIndexer"/>
-
-        <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
-        </cm:setHeader>
-        <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-        <cm:split parallelProcessing="true">
-          <cm:xpath>//doc</cm:xpath>
-          <!-- Retrieve UUID from Solr response -->
-          <cm:setHeader headerName="documentIdentifier">
-            <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+      <cm:choice>
+        <cm:when>
+          <cm:xpath>//result[@numFound > 0]</cm:xpath>
+          <cm:setHeader headerName="numberOfRecordsMatched">
+            <cm:xpath resultType="java.lang.String">
+              //result/@numFound
+            </cm:xpath>
           </cm:setHeader>
-          <cm:setHeader headerName="harvesterId">
-            <cm:xpath resultType="java.lang.String">doc/str[@name = 'harvesterId']</cm:xpath>
-          </cm:setHeader>
-          <cm:setHeader headerName="serviceType">
-            <cm:xpath resultType="java.lang.String">doc/arr[@name = 'serviceType']/str/text()</cm:xpath>
-          </cm:setHeader>
-          <!-- Compute filename suffix for saving update queries -->
-          <cm:setHeader headerName="stringToEncrypt">
-            <cm:simple>$simple{header.documentIdentifier}</cm:simple>
-          </cm:setHeader>
-          <cm:setHeader headerName="fileNameSuffix">
-            <cm:simple>bean:utility?method=encrypt</cm:simple>
-          </cm:setHeader>
-
-
-          <cm:log message="Record identifier is '$simple{header.documentIdentifier}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
+          <cm:log message="$simple{header.numberOfRecordsMatched} services record(s) to index."
                   loggingLevel="INFO"
                   logName="org.daobs.task.ServiceDatasetIndexer"/>
 
-          <cm:split parallelProcessing="true">
-            <cm:xpath>doc/arr[@name = 'recordOperateOn']/str[text() != '']/text()</cm:xpath>
-            <cm:to uri="direct:index-association"/>
-          </cm:split>
-        </cm:split>
-      </cm:split>
+          <cm:split parallelProcessing="false">
+            <cm:method bean="taskPagination" method="getPages"/>
+            <cm:setHeader headerName="start">
+              <cm:simple>${bean:taskPagination?method=getStart}</cm:simple>
+            </cm:setHeader>
+            <cm:setHeader headerName="row">
+              <cm:simple>{{records.per.page}}</cm:simple>
+            </cm:setHeader>
 
+            <cm:log message="Page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row}."
+                    loggingLevel="INFO"
+                    logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+            <cm:setHeader headerName="CamelHttpMethod">
+              <cm:constant>GET</cm:constant>
+            </cm:setHeader>
+            <cm:setHeader headerName="Exchange.HTTP_URI">
+              <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+            </cm:setHeader>
+            <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+            <cm:convertBodyTo type="org.w3c.dom.Document"/>
+            <cm:split parallelProcessing="true">
+              <cm:xpath>//doc</cm:xpath>
+              <!-- Retrieve UUID from Solr response -->
+              <cm:setHeader headerName="documentIdentifier">
+                <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
+              </cm:setHeader>
+              <cm:setHeader headerName="harvesterId">
+                <cm:xpath resultType="java.lang.String">doc/str[@name = 'harvesterId']</cm:xpath>
+              </cm:setHeader>
+              <cm:setHeader headerName="serviceType">
+                <cm:xpath resultType="java.lang.String">doc/arr[@name = 'serviceType']/str/text()</cm:xpath>
+              </cm:setHeader>
+              <!-- Compute filename suffix for saving update queries -->
+              <cm:setHeader headerName="stringToEncrypt">
+                <cm:simple>$simple{header.documentIdentifier}</cm:simple>
+              </cm:setHeader>
+              <cm:setHeader headerName="fileNameSuffix">
+                <cm:simple>bean:utility?method=encrypt</cm:simple>
+              </cm:setHeader>
+
+
+              <cm:log message="Record identifier is '$simple{header.documentIdentifier}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
+                      loggingLevel="INFO"
+                      logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+              <cm:split parallelProcessing="true">
+                <cm:xpath>doc/arr[@name = 'recordOperateOn']/str[text() != '']/text()</cm:xpath>
+                <cm:to uri="direct:index-association"/>
+              </cm:split>
+            </cm:split>
+          </cm:split>
+        </cm:when>
+        <cm:otherwise>
+          <cm:log message="No record found. ${body}"
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.ServiceDatasetIndexe"/>
+        </cm:otherwise>
+      </cm:choice>
     </cm:route>
 
 

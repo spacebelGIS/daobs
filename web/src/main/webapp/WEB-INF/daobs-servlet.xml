@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:ctx="http://www.springframework.org/schema/context"
+       xmlns:amq="http://activemq.apache.org/schema/core"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
@@ -9,12 +10,55 @@
           http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context-3.0.xsd
           http://www.springframework.org/schema/mvc
-          http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+          http://www.springframework.org/schema/mvc/spring-mvc.xsd
+          http://activemq.apache.org/schema/core
+          http://activemq.apache.org/schema/core/activemq-core.xsd">
 
   <ctx:annotation-config/>
   <ctx:component-scan base-package="org.daobs.controller"/>
 
-  <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml" />
+  <!--  lets create an embedded ActiveMQ Broker -->
+  <amq:broker useJmx="false" persistent="false">
+    <amq:transportConnectors>
+      <amq:transportConnector uri="tcp://localhost:0" />
+    </amq:transportConnectors>
+  </amq:broker>
+<!--
+  <bean id="jmsConnectionFactory"
+        class="org.apache.activemq.ActiveMQConnectionFactory">
+    <property name="brokerURL" value="tcp://localhost:61616" />
+  </bean>
+
+  <bean id="pooledConnectionFactory"
+        class="org.apache.activemq.pool.PooledConnectionFactory"
+        init-method="start"
+        destroy-method="stop">
+    <property name="maxConnections"
+              value="8" />
+    <property name="connectionFactory"
+              ref="jmsConnectionFactory" />
+  </bean>
+
+  <bean id="jmsConfig"
+        class="org.apache.camel.component.jms.JmsConfiguration">
+    <property name="connectionFactory"
+              ref="pooledConnectionFactory"/>
+    <property name="concurrentConsumers"
+              value="10"/>
+  </bean>
+
+  <bean id="activemq"
+        lazy-init="false"
+        primary="true"
+        class="org.apache.activemq.camel.component.ActiveMQComponent">
+    <property name="configuration"
+              ref="jmsConfig"/>
+  </bean>-->
+
+
+  <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml"/>
+  <import resource="classpath*:META-INF/spring/daobs-task-routes.xml" />
+
 
   <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 

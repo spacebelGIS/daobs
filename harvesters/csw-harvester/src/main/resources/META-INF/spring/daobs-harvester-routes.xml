@@ -18,11 +18,16 @@
     <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
+  <bean id="activemq"
+        class="org.apache.activemq.camel.component.ActiveMQComponent">
+    <property name="brokerURL" value="vm://localhost" />
+  </bean>
+
   <bean id="cswHarvester" class="org.daobs.harvester.CswHarvester">
     <property name="maxRecords" value="${csw.get.records.max.records}"/>
   </bean>
-  <bean id="harvesterDetailsAgg" class="org.daobs.harvester.HarvesterDetailsAggregate">
-  </bean>
+
+  <bean id="harvesterDetailsAgg" class="org.daobs.harvester.HarvesterDetailsAggregate"/>
 
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
@@ -32,7 +37,7 @@
   <cm:camelContext xmlns:ogc="http://www.opengis.net/ogc"
                    xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
                    xmlns:daobs="http://daobs.org"
-          id="csw"
+          id="harvester.csw"
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
 
@@ -301,6 +306,18 @@
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
 
+      <cm:log message="Sending message to task-analyze queue for notification of ending '$simple{header.harvesterName}' ($simple{header.harvesterTerritory})"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+
+      <cm:setBody>
+        <cm:simple>${header.harvesterUrl}</cm:simple>
+      </cm:setBody>
+      <cm:multicast stopOnException="false"
+                    parallelProcessing="true">
+        <cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>
+        <cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>
+      </cm:multicast>
       <!--<cm:to uri="direct:websocketLog"/>-->
     </cm:route>
 

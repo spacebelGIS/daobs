@@ -10,7 +10,7 @@
 
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="config.properties"/>
+    <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
   <bean id="inspireValidationClient" class="org.daobs.tasks.validation.inspire.OnlineServiceValidatorBean">
@@ -32,7 +32,7 @@
           xmlns:gmd="http://www.isotc211.org/2005/gmd"
           xmlns:gco="http://www.isotc211.org/2005/gco"
           xmlns:geoportal="http://inspire.ec.europa.eu/schemas/geoportal/1.0"
-          id="validation-checker"
+          id="task.validation-checker"
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
 
@@ -60,6 +60,17 @@
 
 
 
+    <cm:route id="route-task-validate" autoStartup="false">
+      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:to uri="direct:task-validate-start"/>
+    </cm:route>
+
+    <cm:route id="route-task-validate-start">
+      <cm:from uri="activemq:task-validate"/>
+      <cm:to uri="direct:task-validate-start"/>
+    </cm:route>
+
+
 
     <cm:route id="route-get-non-validated-records">
       <cm:description>
@@ -73,7 +84,7 @@
 
         Check against the XSD.
       </cm:description>
-      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:from uri="direct:task-validate-start"/>
 
       <cm:log message="Background task checking document validation status ..."
               loggingLevel="INFO"
@@ -82,10 +93,14 @@
 
 
       <!-- Get number of records to validate -->
+      <cm:setHeader headerName="CamelHttpMethod">
+        <cm:constant>GET</cm:constant>
+      </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
       <cm:setHeader headerName="numberOfRecordsMatched">
         <cm:xpath resultType="java.lang.String">
           //result/@numFound
@@ -108,10 +123,14 @@
                 loggingLevel="INFO"
                 logName="org.daobs.task.ValidationChecker"/>
 
+        <cm:setHeader headerName="CamelHttpMethod">
+          <cm:constant>GET</cm:constant>
+        </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_URI">
           <cm:simple>{{solr.server.url}}/data/select?q={{solr.select.filter}}&amp;fl={{solr.select.field}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+        <cm:convertBodyTo type="org.w3c.dom.Document"/>
         <cm:split parallelProcessing="true">
           <cm:xpath>//doc</cm:xpath>
           <!-- Retrieve UUID from Solr response -->
@@ -163,7 +182,7 @@
 
       <!-- Check document against an XSD -->
       <cm:doTry>
-        <cm:to uri="validator:file:src/main/resources/schemas/iso19139/schema.xsd?useDom=false"/>
+        <cm:to uri="validator:WEB-INF/xsd/iso19139/schema.xsd?useDom=false"/>
         <cm:setBody>
           <cm:simple>
             <![CDATA[<add commitWithin="10000">

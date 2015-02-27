@@ -107,6 +107,17 @@
         <scope>test</scope>
       </dependency>
 
+      <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-pool</artifactId>
+        <version>${activemq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.xbean</groupId>
+        <artifactId>xbean-spring</artifactId>
+        <version>${xbean.version}</version>
+      </dependency>
+
       <!-- Spring security -->
       <dependency>
         <groupId>org.springframework.security</groupId>
@@ -270,6 +281,9 @@
     <spring-security.version>3.2.5.RELEASE</spring-security.version>
 
     <camel.version>2.14.0</camel.version>
+
+    <activemq.version>5.6.0</activemq.version>
+    <xbean.version>3.18</xbean.version>
 
     <java.version>1.7</java.version>
 
