@@ -332,23 +332,81 @@
 
 
 
+  
+  <xsl:variable name="inspireThemesMap">
+    <map theme="Coordinate reference systems"
+         monitoring="coordinateReferenceSystems" annex="I"/>
+    <map theme="Elevation"
+         monitoring="elevation" annex="II"/>
+    <map theme="Land cover"
+         monitoring="landCover" annex="II"/>
+    <map theme="Orthoimagery"
+         monitoring="orthoimagery" annex="II"/>
+    <map theme="Geology"
+         monitoring="geology" annex="II"/>
+    <map theme="Statistical units"
+         monitoring="statisticalUnits" annex="III"/>
+    <map theme="Buildings"
+         monitoring="buildings" annex="III"/>
+    <map theme="Soil"
+         monitoring="soil" annex="III"/>
+    <map theme="Land use"
+         monitoring="landUse" annex="III"/>
+    <map theme="Human health and safety"
+         monitoring="humanHealthAndSafety" annex="III"/>
+    <map theme="Utility and governmental services"
+         monitoring="utilityAndGovernmentalServices" annex="III"/>
+    <map theme="Geographical grid systems"
+         monitoring="geographicalGridSystems" annex="I"/>
+    <map theme="Environmental monitoring facilities"
+         monitoring="environmentalMonitoringFacilities" annex="III"/>
+    <map theme="Production and industrial facilities"
+         monitoring="productionAndIndustrialFacilities" annex="III"/>
+    <map theme="Agricultural and aquaculture facilities"
+         monitoring="agriculturalAndAquacultureFacilities" annex="III"/>
+    <map theme="Population distribution — demography"
+         monitoring="populationDistributionDemography" annex="III"/>
+    <map theme="Area management/restriction/regulation zones and reporting units"
+         monitoring="areaManagementRestrictionRegulationZonesAndReportingUnits" annex="III"/>
+    <map theme="Natural risk zones"
+         monitoring="naturalRiskZones" annex="III"/>
+    <map theme="Atmospheric conditions"
+         monitoring="atmosphericConditions" annex="III"/>
+    <map theme="Meteorological geographical features"
+         monitoring="meteorologicalGeographicalFeatures" annex="III"/>
+    <map theme="Oceanographic geographical features"
+         monitoring="oceanographicGeographicalFeatures" annex="III"/>
+    <map theme="Sea regions"
+         monitoring="seaRegions" annex="III"/>
+    <map theme="Geographical names"
+         monitoring="geographicalNames" annex="I"/>
+    <map theme="Bio-geographical regions"
+         monitoring="bioGeographicalRegions" annex="III"/>
+    <map theme="Habitats and biotopes"
+         monitoring="habitatsAndBiotopes" annex="III"/>
+    <map theme="Species distribution"
+         monitoring="speciesDistribution" annex="III"/>
+    <map theme="Energy resources"
+         monitoring="energyResources" annex="III"/>
+    <map theme="Mineral resources"
+         monitoring="mineralResources" annex="III"/>
+    <map theme="Administrative units"
+         monitoring="administrativeUnits" annex="I"/>
+    <map theme="Addresses"
+         monitoring="addresses" annex="I"/>
+    <map theme="Cadastral parcels"
+         monitoring="cadastralParcels" annex="I"/>
+    <map theme="Transport networks"
+         monitoring="transportNetworks" annex="I"/>
+    <map theme="Hydrography"
+         monitoring="hydrography" annex="I"/>
+    <map theme="Protected sites"
+         monitoring="protectedSites" annex="I"/>
+  </xsl:variable>
+
   <xsl:template mode="InspireAnnexAndThemeFactory"
                 match="doc"
                 as="node()">
-
-    <!-- TODO: we need to dispatch themes according to annexes
-       which is not available as such in the index.
-       hierarchical facet may help for that ?
-
-       The XSD also list some code equivalent to themes:
-        <xs:enumeration value="statisticalUnits"/>
-        <xs:enumeration value="buildings"/>
-        <xs:enumeration value="soil"/>
-        <xs:enumeration value="landUse"/>
-
-       This version is not in the index nor in the metadata record.
-       Another type of synonmys maybe ?
-       -->
     <xsl:variable name="inspireThemes"
                   select="distinct-values(arr[@name = 'inspireTheme']/str)"/>
     <xsl:variable name="inspireAnnexes"
@@ -357,12 +415,10 @@
       <!-- For the time being put all themes in each annex -->
       <xsl:for-each select="$inspireThemes">
         <xsl:variable name="theme" select="."/>
-
-        <xsl:for-each select="$inspireAnnexes">
-          <xsl:element name="Annex{upper-case(.)}">
-            <xsl:value-of select="$theme"/>
-          </xsl:element>
-        </xsl:for-each>
+        <xsl:variable name="mapping" select="$inspireThemesMap/map[matches(@theme, $theme, 'i')]"/>
+        <xsl:element name="{concat('Annex', $mapping/@annex)}">
+          <xsl:value-of select="$mapping/@monitoring"/>
+        </xsl:element>
       </xsl:for-each>
     </Themes>
   </xsl:template>
