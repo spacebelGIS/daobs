@@ -7,7 +7,7 @@
   <!--<daobs:harvester>
     <daobs:uuid>0000</daobs:uuid>
     <daobs:territory>test</daobs:territory>
-<daobs:folder>test</daobs:folder>
+    <daobs:folder>test</daobs:folder>
     <daobs:name>Test</daobs:name>
     <daobs:url>http://localhost:8080/geonetwork/srv/eng/csw</daobs:url>
     <daobs:filter>
@@ -55,15 +55,6 @@
 
   <daobs:harvester>
     <daobs:uuid>9da7a1e6-101d-4053-9cc9-31e30a89d4fa</daobs:uuid>
-    <daobs:territory>LV</daobs:territory>
-    <daobs:folder>LV-LGIA</daobs:folder>
-    <daobs:name>ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP
-    </daobs:name>
-    <daobs:url>http://kartes.lgia.gov.lv/geoportal/csw</daobs:url>
-  </daobs:harvester>
-
-  <daobs:harvester>
-    <daobs:uuid>28a2acbb-53e2-471e-9472-cd0ec6fd13af</daobs:uuid>
     <daobs:territory>LV</daobs:territory>
     <daobs:folder>LV-LGIA</daobs:folder>
     <daobs:name>ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP
@@ -235,16 +226,6 @@
     </daobs:url>
     <daobs:pointOfTruthURLPattern>http://geoportal.nipp.hr/geonetwork?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
-  </daobs:harvester>
-
-  <daobs:harvester>
-    <daobs:uuid>ad9b5403-3814-49c4-a119-fa44579ffb39</daobs:uuid>
-    <daobs:territory>SK</daobs:territory>
-    <daobs:folder>SK</daobs:folder>
-    <daobs:name>Katalógová služba Národného Geoportálu (Slovenská agentúra
-      životného prostredia)
-    </daobs:name>
-    <daobs:url>http://csw.sazp.sk/</daobs:url>
   </daobs:harvester>
 
   <daobs:harvester>
