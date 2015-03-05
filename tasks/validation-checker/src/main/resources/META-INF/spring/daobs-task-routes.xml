@@ -60,7 +60,7 @@
 
 
 
-    <cm:route id="route-task-validate" autoStartup="false">
+    <cm:route id="route-task-validate" autoStartup="{{task.validation-checker.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
         <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}}</cm:simple>
@@ -68,10 +68,10 @@
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
 
-    <cm:route id="route-task-validate-start">
+    <cm:route id="route-task-validate-start" autoStartup="{{task.validation-checker.startup.jms}}">
       <cm:from uri="activemq:task-validate"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}} %2BharvesterId%3A$simple{in.body}</cm:simple>
+        <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}}+%2BharvesterId%3A$simple{in.body}</cm:simple>
       </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
@@ -132,6 +132,10 @@
         <cm:setHeader headerName="CamelHttpMethod">
           <cm:constant>GET</cm:constant>
         </cm:setHeader>
+        <!-- TODO: Improve that part because the number of records to be validated
+        will change over time if isValid is in the search filter and
+        the paging can't be used as such. It would have been
+        better to grab the set of ids to validate and loop over them. -->
         <cm:setHeader headerName="Exchange.HTTP_URI">
           <cm:simple>{{solr.server.url}}/data/select?q={{task.validation-checker.filter}}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
         </cm:setHeader>
