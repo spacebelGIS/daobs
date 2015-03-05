@@ -21,9 +21,9 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +37,7 @@ public class SolrRequestBean {
     private static String PHASE_INDEX = "index";
     private static String PHASE_QUERY = "query";
     private static String DEFAULT_FILTER_CLASS = "org.apache.lucene.analysis.synonym.SynonymFilter";
+
 
     public static Node query(String query) {
         try {

@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -19,7 +20,9 @@ public class CustomReportingController {
 
     // TODO: config should move to configuration file
     public static final String SPATIALDATASETS_QUERY_URL = "/data/select?" +
-            "q=%%2BdocumentType:metadata+%%2B(resourceType%%3Adataset+resourceType%%3Aseries)&" +
+            "q=%%2BdocumentType%%3Ametadata+" +
+                "%%2B(resourceType%%3Adataset+" +
+                "resourceType%%3Aseries)&" +
             "fq=%s&" +
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
@@ -28,7 +31,7 @@ public class CustomReportingController {
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
-            "q=%%2BdocumentType:metadata+%%2BresourceType:service&" +
+            "q=%%2BdocumentType%%3Ametadata+%%2BresourceType%%3Aservice&" +
             "fq=%s&" +
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
@@ -117,12 +120,12 @@ public class CustomReportingController {
                                                    required = false) String fq,
                                            @RequestParam(
                                                    value = "rows",
-                                                   defaultValue = "10000",
+                                                   defaultValue = "20000",
                                                    required = false) int rows,
                                            @PathVariable(value = "reporting") String reporting,
                                            @PathVariable(value = "territory") String territory)
             throws IOException {
-        String filter = fq + " +territory:" + territory;
+        String filter = URLEncoder.encode(fq + " +territory:" + territory, "UTF-8");
         IndicatorCalculatorImpl indicatorCalculator =
                 ReportingController.generateReporting(request, reporting, filter, true);
 
