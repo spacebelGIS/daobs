@@ -350,16 +350,16 @@
        Another type of synonmys maybe ?
        -->
     <xsl:variable name="inspireThemes"
-                  select="arr[@name = 'inspireTheme']/str"/>
+                  select="distinct-values(arr[@name = 'inspireTheme']/str)"/>
     <xsl:variable name="inspireAnnexes"
-                  select="arr[@name = 'inspireAnnex']/str[text() = 'i' or text() = 'ii' or text() = 'iii']"/>
+                  select="distinct-values(arr[@name = 'inspireAnnex']/str[text() = 'i' or text() = 'ii' or text() = 'iii'])"/>
     <Themes>
       <!-- For the time being put all themes in each annex -->
       <xsl:for-each select="$inspireThemes">
-        <xsl:variable name="theme" select="text()" as="xs:string?"/>
+        <xsl:variable name="theme" select="."/>
 
         <xsl:for-each select="$inspireAnnexes">
-          <xsl:element name="Annex{upper-case(text())}">
+          <xsl:element name="Annex{upper-case(.)}">
             <xsl:value-of select="$theme"/>
           </xsl:element>
         </xsl:for-each>
