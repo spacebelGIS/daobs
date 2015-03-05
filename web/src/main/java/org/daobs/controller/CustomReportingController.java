@@ -125,7 +125,7 @@ public class CustomReportingController {
                                            @PathVariable(value = "reporting") String reporting,
                                            @PathVariable(value = "territory") String territory)
             throws IOException {
-        String filter = URLEncoder.encode(fq + " +territory:" + territory, "UTF-8");
+        String filter = fq + " +territory:" + territory;
         IndicatorCalculatorImpl indicatorCalculator =
                 ReportingController.generateReporting(request, reporting, filter, true);
 
@@ -142,7 +142,8 @@ public class CustomReportingController {
 
         addRequestParametersToModel(allRequestParams, model);
 
-        addRowDataToModel(withRowData, rows, filter, model);
+        // TODO: URL encoding should be done when the HTTP request is made
+        addRowDataToModel(withRowData, rows, URLEncoder.encode(filter, "UTF-8"), model);
 
         return model;
     }
