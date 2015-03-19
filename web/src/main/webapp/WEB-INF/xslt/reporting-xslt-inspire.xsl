@@ -266,11 +266,11 @@
       <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
 
       <!-- Coverage is mandatory but will probably
-      be removed in the future. Empty element returned
+      be removed in the future. 0 value returned
       by default. -->
       <Coverage>
-        <relevantArea></relevantArea>
-        <actualArea></actualArea>
+        <relevantArea>0</relevantArea>
+        <actualArea>0</actualArea>
       </Coverage>
 
 
