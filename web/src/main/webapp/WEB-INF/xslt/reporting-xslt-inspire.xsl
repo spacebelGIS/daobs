@@ -207,7 +207,7 @@
       <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
 
       <MdServiceExistence>
-        <mdConformity><xsl:value-of select="str[@name = 'inspireConformResource']/text()"/></mdConformity>
+        <mdConformity><xsl:value-of select="arr[@name='inspireConformResource']/bool[1]/text()"/></mdConformity>
 
         <!-- The metadata record was harvested using CSW -->
         <discoveryAccessibility>true</discoveryAccessibility>
@@ -277,7 +277,7 @@
       <MdDataSetExistence>
         <IRConformity>
           <!-- This conformity for the resource or the metadata ? -->
-          <structureCompliance><xsl:value-of select="str[@name='inspireConformResource']/text()"/></structureCompliance>
+          <structureCompliance><xsl:value-of select="arr[@name='inspireConformResource']/bool[1]/text()"/></structureCompliance>
         </IRConformity>
         <MdAccessibility>
           <!-- Uuids are for each services operating the resource ?
