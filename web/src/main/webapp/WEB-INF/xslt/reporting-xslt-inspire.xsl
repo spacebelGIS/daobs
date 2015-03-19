@@ -41,8 +41,7 @@
 
     <ns2:Monitoring xmlns:ns2="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring
-                      http://inspire-geoportal.ec.europa.eu/monitoringreporting/monitoring.xsd">
+                    xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring http://dd.eionet.europa.eu/schemas/inspire-monitoring/monitoring.xsd">
       <documentYear>
         <year><xsl:value-of select="format-dateTime($creationDate, '[Y0001]')"/></year>
         <month><xsl:value-of select="format-dateTime($creationDate, '[M01]')"/></month>
