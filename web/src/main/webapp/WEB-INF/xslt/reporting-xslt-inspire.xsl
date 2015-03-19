@@ -415,9 +415,13 @@
       <xsl:for-each select="$inspireThemes">
         <xsl:variable name="theme" select="."/>
         <xsl:variable name="mapping" select="$inspireThemesMap/map[matches(@theme, $theme, 'i')]"/>
-        <xsl:element name="{concat('Annex', $mapping/@annex)}">
-          <xsl:value-of select="$mapping/@monitoring"/>
-        </xsl:element>
+
+        <!-- TODO : For services, get the list of INSPIRE themes from the related datasets -->
+        <xsl:if test="$mapping/@annex != ''">
+          <xsl:element name="{concat('Annex', $mapping/@annex)}">
+            <xsl:value-of select="$mapping/@monitoring"/>
+          </xsl:element>
+        </xsl:if>
       </xsl:for-each>
     </Themes>
   </xsl:template>
