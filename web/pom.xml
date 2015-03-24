@@ -298,7 +298,7 @@
           <port>${webapp.port}</port>
           <!-- application path always starts with /-->
           <path>${webapp.context}</path>
-
+          <uriEncoding>UTF-8</uriEncoding>
           <systemProperties>
             <daobs.data.dir>${data.dir}</daobs.data.dir>
             <solr.solr.home>${solr.solr.home}</solr.solr.home>
