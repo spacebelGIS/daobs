@@ -32,6 +32,26 @@ public class OnlineServiceValidatorBean {
 
     private double threshold;
 
+    boolean probeNetworkServices = false;
+
+    public boolean isProbeNetworkServices() {
+        return probeNetworkServices;
+    }
+
+    public void setProbeNetworkServices(boolean probeNetworkServices) {
+        this.probeNetworkServices = probeNetworkServices;
+    }
+
+    boolean probeDataResourceLocators = false;
+
+    public boolean isProbeDataResourceLocators() {
+        return probeDataResourceLocators;
+    }
+
+    public void setProbeDataResourceLocators(boolean probeDataResourceLocators) {
+        this.probeDataResourceLocators = probeDataResourceLocators;
+    }
+
     /**
      * Get the input message body and validate
      * it against the INSPIRE validation service.
@@ -46,7 +66,10 @@ public class OnlineServiceValidatorBean {
 
         ValidationReport report = null;
         OnlineServiceValidatorClient validatorClient =
-                new OnlineServiceValidatorClient(this.inspireResourceTesterURL, threshold);
+                new OnlineServiceValidatorClient(this.inspireResourceTesterURL,
+                        threshold,
+                        probeDataResourceLocators,
+                        probeNetworkServices);
 
         try {
             report = validatorClient.validate(xml);

@@ -16,6 +16,8 @@
   <bean id="inspireValidationClient" class="org.daobs.tasks.validation.inspire.OnlineServiceValidatorBean">
     <property name="inspireResourceTesterURL" value="${task.validation-checker.inspire.validator.url}"/>
     <property name="threshold" value="${task.validation-checker.inspire.threshold}"/>
+    <property name="probeDataResourceLocators" value="${task.validation-checker.inspire.probeDataResourceLocators}"/>
+    <property name="probeNetworkServices" value="${task.validation-checker.inspire.probeNetworkServices}"/>
   </bean>
 
   <bean id="pagination" class="org.daobs.routing.utility.Pagination">

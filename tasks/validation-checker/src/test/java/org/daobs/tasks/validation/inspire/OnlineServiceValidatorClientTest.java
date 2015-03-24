@@ -3,11 +3,6 @@ package org.daobs.tasks.validation.inspire;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import junit.framework.TestCase;
-import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import java.io.File;
 
@@ -76,6 +71,29 @@ public class OnlineServiceValidatorClientTest extends TestCase {
     }
 
 
+    @org.junit.Test
+    public void testValidateService() throws Exception {
+
+        // Invalid document
+        File file = new File(Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("service.xml").toURI());
+
+        String xml = Files.toString(file, Charsets.UTF_8);
+        validator.setProbeDataResourceLocators(false);
+        validator.setProbeNetworkServices(false);
+        ValidationReport report = validator.validate(xml, false);
+        assertNotNull(report);
+        System.out.println("Service with no probe: " + report.getTotalTimeSeconds());
+
+        validator.setProbeDataResourceLocators(true);
+        validator.setProbeNetworkServices(true);
+        report = validator.validate(xml, false);
+        assertNotNull(report);
+        System.out.println("Service with probe: " + report.getTotalTimeSeconds());
+
+    }
+
     /*@Ignore
     @Test
     public void testValidateZipFile() throws Exception {
@@ -108,7 +126,7 @@ public class OnlineServiceValidatorClientTest extends TestCase {
 
         validator.setDontGenerateHtmlFiles(false);
         validator.setDontGenerateLayerPreviews(false);
-        validator.setDontProbeDataResourceLocators(false);
+        validator.setProbeDataResourceLocators(false);
         report = validator.validate(xml, false);
         System.out.println("Invalid slow: " + report.getTotalTimeSeconds());
 
@@ -120,13 +138,13 @@ public class OnlineServiceValidatorClientTest extends TestCase {
         xml = Files.toString(file, Charsets.UTF_8);
         validator.setDontGenerateHtmlFiles(true);
         validator.setDontGenerateLayerPreviews(true);
-        validator.setDontProbeDataResourceLocators(true);
+        validator.setProbeDataResourceLocators(true);
         report = validator.validate(xml, false);
         System.out.println("Valid fast: " + report.getTotalTimeSeconds());
 
         validator.setDontGenerateHtmlFiles(false);
         validator.setDontGenerateLayerPreviews(false);
-        validator.setDontProbeDataResourceLocators(false);
+        validator.setProbeDataResourceLocators(false);
         report = validator.validate(xml, false);
         System.out.println("Valid slow: " + report.getTotalTimeSeconds());
 

@@ -10,7 +10,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.zip.GZIPOutputStream;
 
 
 /**
@@ -63,14 +62,24 @@ public class OnlineServiceValidatorClient {
         this.dontGenerateHtmlFiles = dontGenerateHtmlFiles;
     }
 
-    boolean dontProbeDataResourceLocators = true;
+    boolean probeNetworkServices = false;
 
-    public boolean isDontProbeDataResourceLocators() {
-        return dontProbeDataResourceLocators;
+    public boolean isProbeNetworkServices() {
+        return probeNetworkServices;
     }
 
-    public void setDontProbeDataResourceLocators(boolean dontProbeDataResourceLocators) {
-        this.dontProbeDataResourceLocators = dontProbeDataResourceLocators;
+    public void setProbeNetworkServices(boolean probeNetworkServices) {
+        this.probeNetworkServices = probeNetworkServices;
+    }
+
+    boolean probeDataResourceLocators = false;
+
+    public boolean isProbeDataResourceLocators() {
+        return probeDataResourceLocators;
+    }
+
+    public void setProbeDataResourceLocators(boolean probeDataResourceLocators) {
+        this.probeDataResourceLocators = probeDataResourceLocators;
     }
 
     OnlineServiceValidatorClient() {
@@ -79,6 +88,16 @@ public class OnlineServiceValidatorClient {
     OnlineServiceValidatorClient(String inspireResourceTesterURL, double threshold) {
         this.inspireResourceTesterURL = inspireResourceTesterURL;
         this.threshold = threshold;
+    }
+
+    OnlineServiceValidatorClient(String inspireResourceTesterURL,
+                                 double threshold,
+                                 boolean probeDataResourceLocators,
+                                 boolean probeNetworkServices) {
+        this.inspireResourceTesterURL = inspireResourceTesterURL;
+        this.threshold = threshold;
+        this.probeDataResourceLocators = probeDataResourceLocators;
+        this.probeNetworkServices = probeNetworkServices;
     }
 
 
@@ -112,8 +131,10 @@ public class OnlineServiceValidatorClient {
                         String.valueOf(this.dontGenerateLayerPreviews))
                 .addTextBody("dontGenerateHtmlFiles",
                         String.valueOf(this.dontGenerateHtmlFiles))
-                .addTextBody("dontProbeDataResourceLocators",
-                        String.valueOf(this.dontProbeDataResourceLocators));
+                .addTextBody("probeNetworkServices",
+                        String.valueOf(this.probeNetworkServices))
+                .addTextBody("probeDataResourceLocators",
+                        String.valueOf(this.probeDataResourceLocators));
 
         if (resourceDescriptorFile != null) {
             multipartEntityBuilder.addBinaryBody(
