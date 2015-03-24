@@ -23,6 +23,8 @@
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
 
+  <bean id="xsltUtility" class="org.daobs.tasks.serviceDatasetIndexer.Utility"/>
+
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
                       logName="daobs.tasks.service-dataset-indexer"
@@ -161,7 +163,10 @@
 
               <cm:split parallelProcessing="true">
                 <cm:xpath resultType="String">doc/arr[@name = 'recordOperateOn']/str[text() != '']</cm:xpath>
-                <cm:to uri="direct:index-association"/>
+                <cm:multicast>
+                  <cm:to uri="direct:index-association"/>
+                  <cm:to uri="direct:index-inspirethemes-in-service"/>
+                </cm:multicast>
               </cm:split>
             </cm:split>
           </cm:split>
@@ -173,7 +178,6 @@
         </cm:otherwise>
       </cm:choice>
     </cm:route>
-
 
 
     <cm:route id="route-index-association">
@@ -209,6 +213,48 @@
       </cm:setBody>
       <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-association-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
     </cm:route>
+
+
+
+
+    <cm:route id="route-index-inspirethemes-in-service">
+      <cm:from uri="direct:index-inspirethemes-in-service"/>
+      <cm:setHeader headerName="beginTime">
+        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="serviceIdentifier">
+        <cm:simple>${header.documentIdentifier}</cm:simple>
+      </cm:setHeader>
+      <cm:log message="Index INSPIRE themes '$simple{header.serviceIdentifier}'..."
+              loggingLevel="INFO"
+              logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+      <!-- Get the INSPIRE themes from the related dataset -->
+      <cm:setHeader headerName="CamelHttpMethod">
+        <cm:constant>GET</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/data/select?q=id:$simple{body}&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+
+      <cm:log message="Data set INSPIRE themes '$simple{body}'"
+              loggingLevel="INFO"
+              logName="org.daobs.task.ServiceDatasetIndexer"/>
+      <!-- Camel XSLT issue with Saxon 8
+      http://camel.465427.n5.nabble.com/camel-xslt-with-saxon-8-7-td5759704.html
+      <cm:to uri="xslt:WEB-INF/xslt/index-service-themes.xsl?saxon=false"/>
+      -->
+      <cm:to uri="bean:xsltUtility?method=transform(*, 'index-service-themes.xsl')"/>
+
+      <cm:log message="XSLT response '$simple{body}'"
+              loggingLevel="INFO"
+              logName="org.daobs.task.ServiceDatasetIndexer"/>
+      <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-themes-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+    </cm:route>
+
+
 
     <cm:route id="save-association">
       <cm:from uri="file:{{task.service-dataset-indexer.folder}}?consumer.delay={{task.service-dataset-indexer.delay}}"/>

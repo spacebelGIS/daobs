@@ -43,18 +43,18 @@
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring http://dd.eionet.europa.eu/schemas/inspire-monitoring/monitoring.xsd">
       <documentYear>
-        <year><xsl:value-of select="format-dateTime($creationDate, '[Y0001]')"/></year>
-        <month><xsl:value-of select="format-dateTime($creationDate, '[M01]')"/></month>
         <day><xsl:value-of select="format-dateTime($creationDate, '[D01]')"/></day>
+        <month><xsl:value-of select="format-dateTime($creationDate, '[M01]')"/></month>
+        <year><xsl:value-of select="format-dateTime($creationDate, '[Y0001]')"/></year>
       </documentYear>
       <memberState><xsl:value-of select="upper-case($territory)"/></memberState>
       <MonitoringMD>
         <organizationName><xsl:value-of select="$organizationName"/></organizationName>
         <email><xsl:value-of select="$email"/></email>
         <monitoringDate>
-          <year><xsl:value-of select="format-dateTime($reportingDate, '[Y0001]')"/></year>
-          <month><xsl:value-of select="format-dateTime($reportingDate, '[M01]')"/></month>
           <day><xsl:value-of select="format-dateTime($reportingDate, '[D01]')"/></day>
+          <month><xsl:value-of select="format-dateTime($reportingDate, '[M01]')"/></month>
+          <year><xsl:value-of select="format-dateTime($reportingDate, '[Y0001]')"/></year>
         </monitoringDate>
         <language><xsl:value-of select="$language"/></language>
       </MonitoringMD>
@@ -293,25 +293,38 @@
           <!-- Is the data set accessible using a view -->
           <xsl:if test="count($recordOperatedByType[str = 'view']) > 0">
             <view>true</view>
-            <!-- Note: the data set may be available in more than one
-            download service. Only the first one reported -->
-            <xsl:comment>Note: the data set may be available in more than one
-              view services. Only the first one reported.</xsl:comment>
+
+
+            <xsl:variable name="nbOfServices"
+                          select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+                    str[1]/text()))"/>
+            <xsl:if test="$nbOfServices > 1">
+              <xsl:comment>Note: the data set is available in
+                <xsl:value-of select="$nbOfServices"/> view services.
+                Only the first one reported.</xsl:comment>
+            </xsl:if>
             <viewUuid>
               <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
-                    str[1]/text()"/></viewUuid>
+                    str[1]/text()"/>
+            </viewUuid>
           </xsl:if>
 
 
           <xsl:if test="count($recordOperatedByType[str = 'download']) > 0">
             <download>true</download>
-            <!-- Note: the data set may be available in more than one
-            download service. Only the first one reported -->
-            <xsl:comment>Note: the data set may be available in more than one
-              download services. Only the first one reported.</xsl:comment>
+
+            <xsl:variable name="nbOfServices"
+                          select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+                    str[1]/text()))"/>
+            <xsl:if test="$nbOfServices > 1">
+              <xsl:comment>Note: the data set is available in
+                <xsl:value-of select="$nbOfServices"/> download services.
+                Only the first one reported.</xsl:comment>
+            </xsl:if>
             <downloadUuid>
               <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
-                    str[1]/text()"/></downloadUuid>
+                    str[1]/text()"/>
+            </downloadUuid>
           </xsl:if>
 
 
