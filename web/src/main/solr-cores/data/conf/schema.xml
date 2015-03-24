@@ -121,7 +121,7 @@
   <field name="recordOperateOn" type="string" indexed="true" stored="true" multiValued="true"/>
   <field name="recordOperatedBy" type="string" indexed="true" stored="true" multiValued="true"/>
   <field name="recordOperatedByType" type="string" indexed="true" stored="true" multiValued="true"/>
-
+  <dynamicField name="recordOperatedByType*" type="string" indexed="true" stored="true" multiValued="true"/>
 
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>

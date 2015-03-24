@@ -290,12 +290,31 @@
           <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
           <discoveryUuid><xsl:value-of select="str[@name='harvesterUuid']/text()"/></discoveryUuid>
 
-          <view><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0)
-                                      then true() else false()"/></view>
-          <!--TODO <viewUuid></viewUuid>-->
-          <download><xsl:value-of select="if (count($recordOperatedByType[str = 'download']) > 0)
-                                          then true() else false()"/></download>
-          <!--TODO <downloadUuid></downloadUuid>-->
+          <!-- Is the data set accessible using a view -->
+          <xsl:if test="count($recordOperatedByType[str = 'view']) > 0">
+            <view>true</view>
+            <!-- Note: the data set may be available in more than one
+            download service. Only the first one reported -->
+            <xsl:comment>Note: the data set may be available in more than one
+              view services. Only the first one reported.</xsl:comment>
+            <viewUuid>
+              <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
+                    str[1]/text()"/></viewUuid>
+          </xsl:if>
+
+
+          <xsl:if test="count($recordOperatedByType[str = 'download']) > 0">
+            <download>true</download>
+            <!-- Note: the data set may be available in more than one
+            download service. Only the first one reported -->
+            <xsl:comment>Note: the data set may be available in more than one
+              download services. Only the first one reported.</xsl:comment>
+            <downloadUuid>
+              <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
+                    str[1]/text()"/></downloadUuid>
+          </xsl:if>
+
+
           <viewDownload><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
                                                   count($recordOperatedByType[str = 'download']) > 0)
                                               then true() else false()"/></viewDownload>

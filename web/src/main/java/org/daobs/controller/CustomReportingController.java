@@ -27,7 +27,7 @@ public class CustomReportingController {
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
-            "recordOperatedByType," +
+            "recordOperatedByType,recordOperatedByTypeview,recordOperatedByTypedownload," +
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
