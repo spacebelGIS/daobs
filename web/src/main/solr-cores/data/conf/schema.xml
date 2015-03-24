@@ -98,7 +98,7 @@
   <field name="document" type="text_general" indexed="false" stored="true" multiValued="false"/>
 
   <field name="documentStandard" type="text_general" indexed="true" stored="true" multiValued="false"/>
-  <field name="standardName" type="text_general" indexed="true" stored="true" multiValued="false"/>
+  <field name="standardName" type="keyword" indexed="true" stored="true" multiValued="false"/>
 
   <field name="indicatorType" type="text_general" indexed="true" stored="true" multiValued="false"/>
   <field name="indicatorName" type="text_general" indexed="true" stored="true" multiValued="false"/>
@@ -176,6 +176,9 @@
   <field name="inspireAnnex_syn" type="managed_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireAnnex" type="only_inspireannex" stored="true" indexed="true" multiValued="true"/>
   <field name="inspireAnnexForFirstTheme" type="only_inspireannex" stored="true" indexed="true" multiValued="false"/>
+
+  <dynamicField name="extra_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <dynamicField name="extra_medsea_*" type="managed_medsea" stored="true" indexed="true" multiValued="true"/>
 
   <!-- Field to store validation against the XSD -->
   <field name="isSchemaValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
@@ -552,6 +555,27 @@
     </analyzer>
   </fieldType>
 
+
+  <!-- MedSea specific / Start-->
+  <fieldType name="managed_medsea"
+             class="solr.TextField"
+             termVectors="false"
+             positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.KeepWordFilterFactory"
+              words="medsea.txt"
+              ignoreCase="true"/>
+      <filter class="solr.ManagedSynonymFilterFactory"
+              managed="medsea"/>
+    </analyzer>
+  </fieldType>
+
+  <!-- MedSea specific / End-->
+
+
+
+
   <!-- A managed field which search for an INSPIRE
   matching themes in english. The input should be one
   of the translation or the skos identifier.
@@ -851,6 +875,12 @@
     <analyzer>
       <tokenizer class="solr.KeywordTokenizerFactory"/>
       <filter class="solr.LowerCaseFilterFactory"/>
+    </analyzer>
+  </fieldType>
+
+  <fieldType name="keyword" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
     </analyzer>
   </fieldType>
 
