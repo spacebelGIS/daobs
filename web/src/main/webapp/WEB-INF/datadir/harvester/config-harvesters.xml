@@ -28,7 +28,6 @@
   List of CSW endpoints from
   http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/
   -->
-
   <daobs:harvester>
     <daobs:uuid>0a8b54e3-a216-43aa-a132-096eb72197cc</daobs:uuid>
     <daobs:territory>NL</daobs:territory>
@@ -60,6 +59,14 @@
     <daobs:name>ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP
     </daobs:name>
     <daobs:url>http://kartes.lgia.gov.lv/geoportal/csw</daobs:url>
+  </daobs:harvester>
+
+  <daobs:harvester>
+    <daobs:uuid>37300ca5-fffc-4214-9a10-34e32ed25b8b</daobs:uuid>
+    <daobs:territory>IT</daobs:territory>
+    <daobs:folder>IT</daobs:folder>
+    <daobs:name>RNDT - Repertorio Nazionale dei Dati Territoriali - Servizio di ricerca</daobs:name>
+    <daobs:url>http://www.rndt.gov.it/RNDT/CSW/POST</daobs:url>
   </daobs:harvester>
 
   <daobs:harvester>
