@@ -106,7 +106,7 @@ By default, only one user is defined with username "admin" and password "admin".
 
 #### Building the application in debug mode
 
-For developpers, the application could be built in debug mode in order to have the banana project installed without Javascript minification. For this disable the production profile:
+For developers, the application could be built in debug mode in order to have the banana project installed without Javascript minification. For this disable the production profile:
 
 ```
 mvn clean install -P\!production
@@ -209,7 +209,7 @@ Manually index XML records:
 # Load file in current directory
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" \
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" \
      -u admin:admin \
      -H "Content-Type: text/xml; charset=utf-8" \
      --data-binary @$f
@@ -221,14 +221,14 @@ find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 
 or 
 
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata-iso19139.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
