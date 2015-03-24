@@ -5,6 +5,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Header;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
@@ -194,17 +195,25 @@ public class CswHarvester {
                                                     this.getRecordsTemplate)));
 
             // Append the optional CSW filter to the query element
-            if (filter != null) {
+            if (filter != null && filter.getFirstChild() != null) {
+                String CSW_NS = "http://www.opengis.net/cat/csw/2.0.2";
+                String OGC_NS = "http://www.opengis.net/ogc";
                 Node children =
                         getRecordsRequest.getDocumentElement()
-                                .getElementsByTagNameNS(
-                                        "http://www.opengis.net/ogc",
-                                        "Filter").item(0);
+                                .getElementsByTagNameNS(CSW_NS,
+                                        "Query").item(0);
                 if (children != null) {
+                    // <csw:Constraint version="1.1.0">
+                    // <Filter xmlns="http://www.opengis.net/ogc"/>
+                    // </csw:Constraint>
+
+                    Element constraintElement = getRecordsRequest.createElementNS("Constraint", CSW_NS);
+                    constraintElement.setAttribute("version", "1.1.0");
+
                     Node filterNode = getRecordsRequest.importNode(filter,true);
-                    Node constraintNode = children.getParentNode();
-                    constraintNode.removeChild(children);
-                    constraintNode.appendChild(filterNode);
+                    Node queryNode = children.getParentNode();
+                    constraintElement.appendChild(filterNode);
+                    queryNode.appendChild(constraintElement);
                 }
             }
 
