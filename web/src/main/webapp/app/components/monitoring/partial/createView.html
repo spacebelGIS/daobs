@@ -70,9 +70,35 @@
             <legend>
               <i class="glyphicon glyphicon-user"></i>&nbsp;
               <span data-translate="">contactDetails</legend>
+            <div class="form-group" id="ds-language-filter">
+              <label for="ds-language-field"
+                     class="col-sm-4 control-label"
+                     data-translate="">language</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <input id="ds-language-field"
+                       data-ng-model="monitoringLanguage"
+                       class="form-control"/>
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-expanded="false">
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                      <li data-ng-repeat="l in listOfLanguages | orderBy:'label'">
+                        <a href="" data-ng-click="setLanguage(l)">
+                          {{l.label}}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="form-group" id="ds-org-filter">
               <label for="ds-org-field"
-                     class="col-sm-4 control-label">org</label>
+                     class="col-sm-4 control-label"
+                     data-translate="">org</label>
               <div class="col-sm-8">
                 <input id="ds-org-field"
                        data-ng-model="organizationName"
@@ -116,11 +142,11 @@
                 <ul class="dropdown-menu" role="menu">
                   <li data-ng-show="reporting.id === 'inspire'">
                     <a target="_blank"
-                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&organizationName={{organizationName}}&email={{email}}"
+                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}"
                          data-translate="">inspireMonitoringFormat</a></li>
                   <li data-ng-show="reporting.id === 'inspire'">
                     <a target="_blank"
-                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}"
+                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}"
                          data-translate="">inspireMonitoringFormatWithRowData</a></li>
                   <li><a target="_blank"
                          data-ng-href="daobs/reporting/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}.xml{{fq ? '?fq=' + fq : ''}}"

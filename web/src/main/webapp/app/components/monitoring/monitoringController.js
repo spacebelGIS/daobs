@@ -93,6 +93,49 @@
       $scope.listOfTerritory = [];
       $scope.filterCount = null;
       $scope.fq = null;
+      $scope.listOfLanguages = [
+        {code: 'bul', label: 'bul'},
+        {code: 'cze', label: 'cze'},
+        {code: 'dan', label: 'dan'},
+        {code: 'dut', label: 'dut'},
+        {code: 'eng', label: 'eng'},
+        {code: 'est', label: 'est'},
+        {code: 'fin', label: 'fin'},
+        {code: 'fre', label: 'fre'},
+        {code: 'ger', label: 'ger'},
+        {code: 'gre', label: 'gre'},
+        {code: 'hrv', label: 'hrv'},
+        {code: 'hun', label: 'hun'},
+        {code: 'ice', label: 'ice'},
+        {code: 'gle', label: 'gle'},
+        {code: 'ita', label: 'ita'},
+        {code: 'lav', label: 'lav'},
+        {code: 'lit', label: 'lit'},
+        {code: 'mlt', label: 'mlt'},
+        {code: 'nor', label: 'nor'},
+        {code: 'pol', label: 'pol'},
+        {code: 'por', label: 'por'},
+        {code: 'rum', label: 'rum'},
+        {code: 'slo', label: 'slo'},
+        {code: 'slv', label: 'slv'},
+        {code: 'spa', label: 'spa'},
+        {code: 'swe', label: 'swe'}
+      ];
+
+      $scope.setLanguage = function(l) {
+        $scope.monitoringLanguage = l.code;
+      };
+
+      function guessLanguage(code) {
+        // Check if the 2 first letters of a language code
+        // match the selected territory
+        for (var i = 0; i < $scope.listOfLanguages.length; i++) {
+          if ($scope.listOfLanguages[i].code.indexOf(code) === 0) {
+            $scope.monitoringLanguage = $scope.listOfLanguages[i].code;
+            break;
+          }
+        }
+      };
 
       function init() {
         //Get list of territory available
@@ -223,6 +266,7 @@
         if (oldValue !== newValue) {
           $scope.territory && $location.search('territory', $scope.territory.label);
           getMatchingRecord();
+          guessLanguage(newValue);
         }
       });
       $scope.$watch('filter', function (oldValue, newValue) {

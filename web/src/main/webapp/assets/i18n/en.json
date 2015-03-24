@@ -42,6 +42,7 @@
   "name": "Name",
   "name-placeholder": "",
   "name-help": "",
+  "language": "Language",
   "value": "Value",
   "parameters": "Parameters:",
   "definition": "Definition",
