@@ -222,7 +222,8 @@
           <!-- TODO: Here we could ping the service and set the value ?
           Usage restriction in the metadata record ?
           -->
-          <directlyAccessible></directlyAccessible>
+          <xsl:comment>By default, directlyAccessible is set to true. Adapt the value for restricted access service.</xsl:comment>
+          <directlyAccessible>true</directlyAccessible>
 
           <!-- All online resources are taken into account,
           we should maybe restrict it ? TODO: improve
@@ -291,41 +292,50 @@
           <discoveryUuid><xsl:value-of select="str[@name='harvesterUuid']/text()"/></discoveryUuid>
 
           <!-- Is the data set accessible using a view -->
-          <xsl:if test="count($recordOperatedByType[str = 'view']) > 0">
-            <view>true</view>
+          <xsl:choose>
+            <xsl:when test="count($recordOperatedByType[str = 'view']) > 0">
+              <view>true</view>
 
-
-            <xsl:variable name="nbOfServices"
-                          select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+              <xsl:variable name="nbOfServices"
+                            select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
                     str[1]/text()))"/>
-            <xsl:if test="$nbOfServices > 1">
-              <xsl:comment>Note: the data set is available in
-                <xsl:value-of select="$nbOfServices"/> view services.
-                Only the first one reported.</xsl:comment>
-            </xsl:if>
-            <viewUuid>
-              <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
+              <xsl:if test="$nbOfServices > 1">
+                <xsl:comment>Note: the data set is available in
+                  <xsl:value-of select="$nbOfServices"/> view services.
+                  Only the first one reported.</xsl:comment>
+              </xsl:if>
+              <viewUuid>
+                <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
                     str[1]/text()"/>
-            </viewUuid>
-          </xsl:if>
+              </viewUuid>
+            </xsl:when>
+            <xsl:otherwise>
+              <view>false</view>
+            </xsl:otherwise>
+          </xsl:choose>
 
 
-          <xsl:if test="count($recordOperatedByType[str = 'download']) > 0">
-            <download>true</download>
+          <xsl:choose>
+            <xsl:when test="count($recordOperatedByType[str = 'download']) > 0">
+              <download>true</download>
 
-            <xsl:variable name="nbOfServices"
-                          select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+              <xsl:variable name="nbOfServices"
+                            select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
                     str[1]/text()))"/>
-            <xsl:if test="$nbOfServices > 1">
-              <xsl:comment>Note: the data set is available in
-                <xsl:value-of select="$nbOfServices"/> download services.
-                Only the first one reported.</xsl:comment>
-            </xsl:if>
-            <downloadUuid>
-              <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
+              <xsl:if test="$nbOfServices > 1">
+                <xsl:comment>Note: the data set is available in
+                  <xsl:value-of select="$nbOfServices"/> download services.
+                  Only the first one reported.</xsl:comment>
+              </xsl:if>
+              <downloadUuid>
+                <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
                     str[1]/text()"/>
-            </downloadUuid>
-          </xsl:if>
+              </downloadUuid>
+            </xsl:when>
+            <xsl:otherwise>
+              <download>true</download>
+            </xsl:otherwise>
+          </xsl:choose>
 
 
           <viewDownload><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
@@ -436,25 +446,22 @@
   </xsl:variable>
 
   <xsl:template mode="InspireAnnexAndThemeFactory"
-                match="doc"
-                as="node()">
+                match="doc">
     <xsl:variable name="inspireThemes"
                   select="distinct-values(arr[@name = 'inspireTheme']/str)"/>
     <xsl:variable name="inspireAnnexes"
                   select="distinct-values(arr[@name = 'inspireAnnex']/str[text() = 'i' or text() = 'ii' or text() = 'iii'])"/>
-    <Themes>
-      <!-- For the time being put all themes in each annex -->
-      <xsl:for-each select="$inspireThemes">
-        <xsl:variable name="theme" select="."/>
-        <xsl:variable name="mapping" select="$inspireThemesMap/map[matches(@theme, $theme, 'i')]"/>
+    <xsl:for-each select="$inspireThemes">
+      <xsl:variable name="theme" select="."/>
+      <xsl:variable name="mapping" select="$inspireThemesMap/map[matches(@theme, $theme, 'i')]"/>
 
-        <!-- TODO : For services, get the list of INSPIRE themes from the related datasets -->
-        <xsl:if test="$mapping/@annex != ''">
+      <xsl:if test="$mapping/@annex != ''">
+        <Themes>
           <xsl:element name="{concat('Annex', $mapping/@annex)}">
             <xsl:value-of select="$mapping/@monitoring"/>
           </xsl:element>
-        </xsl:if>
-      </xsl:for-each>
-    </Themes>
+        </Themes>
+      </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>

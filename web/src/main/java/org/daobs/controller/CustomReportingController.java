@@ -177,6 +177,7 @@ public class CustomReportingController {
         // Add all request parameters to the model
         // in order to have them as XSL parameters in the view.
         Iterator iterator = allRequestParams.entrySet().iterator();
+
         while (iterator.hasNext()) {
             Map.Entry<String, String> parameter = (Map.Entry<String, String>) iterator.next();
             String parameterName = parameter.getKey();
