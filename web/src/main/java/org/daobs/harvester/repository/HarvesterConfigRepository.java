@@ -53,8 +53,10 @@ public class HarvesterConfigRepository implements InitializingBean {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 harvesters = (Harvesters) unmarshaller.unmarshal(configurationFile);
             } else {
-                // TODO: if no file exist initialized an empty configuration file
-                System.out.println("No configuration file available.");
+                System.out.println("No configuration file available. " +
+                        "Creating empty configuration file.");
+                harvesters = new Harvesters();
+                commit();
             }
         } catch (JAXBException e) {
             e.printStackTrace();
