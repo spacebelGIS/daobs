@@ -100,6 +100,17 @@
   </daobs:harvester>
 
   <daobs:harvester>
+    <daobs:uuid>4d1adfec-73a8-4036-a633-c83b6b12fad9</daobs:uuid>
+    <daobs:territory>BE</daobs:territory>
+    <daobs:folder>BE-METAWAL</daobs:folder>
+    <daobs:name>Metawal -  Catalogue pour l'information géographique de Wallonie</daobs:name>
+    <daobs:url>http://metawal.wallonie.be/geonetwork/srv/fre/csw-inspire</daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      http://metawal.wallonie.be/geonetwork/?uuid={{uuid}}
+    </daobs:pointOfTruthURLPattern>
+  </daobs:harvester>
+
+  <daobs:harvester>
     <daobs:uuid>cccfbb63-b713-47ec-962f-bb24ee02fd12</daobs:uuid>
     <daobs:territory>BE</daobs:territory>
     <daobs:folder>BE-GEOPUNT</daobs:folder>
@@ -117,6 +128,7 @@
       http://metadata.geopunt.be/zoekdienst/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
+
 
   <daobs:harvester>
     <daobs:uuid>44133c9a-f551-4fe4-ad83-0b14eff3a1e6</daobs:uuid>
