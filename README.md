@@ -63,7 +63,7 @@ Run the following command line and copy the WAR which is built in web/target/{{w
 ```
 mvn clean install -Dwebapp.context=/dashboard \
                   -Dwebapp.rootUrl=/dashboard/ \
-                  -Dwebapp.url=http://app.org.net \
+                  -Dwebapp.url=http://www.app.org \
                   -Dwebapp.username=admin \
                   -Dwebapp.password=secret
 ```
@@ -73,22 +73,36 @@ mvn clean install -Dwebapp.context=/dashboard \
 
 ### Deploy a WAR file
 
+Create a custom data directory, check that the WEB-INF/config.properties point to this new directory and copy the defaults:
+
+```
+mkdir /usr/dashboard/data
+cp -fr web/target/solr/WEB-INF/datadir/* /usr/dashboard/data/.
+```
+
+
+Copy the default core configuration folder to the solr.solr.home folder.
+
+```
+mkdir /usr/dashboard/core
+cp -fr web/target/solr-cores/* /usr/dashboard/core/.
+```
+
+Set the solr.solr.home system property which define the location of the Solr index. Example: For Tomcat set it in the catalina.sh file.
+
+```
+export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/usr/dashboard/core"
+```
+
 Deploy the WAR file in Tomcat (or any Java container).
 
-Set the solr.solr.home system property which define the location of the Solr index.
-
-
-Example: For Tomcat set it in the catalina.sh file
-
 ```
-export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/usr/solr-cores"
+cp web/target/dashboard.war /usr/local/apache-tomcat/webapps/.
 ```
-
-Copy the default core configuration (web/src/main/solr-cores folder to the solr.solr.home folder.
 
 Run the container.
 
-Access the home page from http://localhost:8983.
+Access the home page from http://localhost:8080/dashboard.
 
 If the Solr URL needs to be updated, look into the WEB-INF/config.properties file.
 
