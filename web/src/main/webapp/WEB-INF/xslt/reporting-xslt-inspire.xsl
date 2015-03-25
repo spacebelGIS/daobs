@@ -198,25 +198,26 @@
                 as="node()">
     <SpatialDataService>
       <!-- gmd:identificationInfo[1]/*[1]/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString -->
-      <name><xsl:value-of select="str[@name='resourceTitle']/text()"/></name>
+      <name><xsl:value-of select="str[@name = 'resourceTitle']/text()"/></name>
 
       <xsl:call-template name="respAuthorityFactory"/>
 
-      <uuid><xsl:value-of select="str[@name='metadataIdentifier']/text()"/></uuid>
+      <uuid><xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/></uuid>
 
       <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
 
       <MdServiceExistence>
-        <mdConformity><xsl:value-of select="arr[@name='inspireConformResource']/bool[1]/text()"/></mdConformity>
+        <mdConformity><xsl:value-of select="bool[@name = 'isAboveThreshold']"/></mdConformity>
 
         <!-- The metadata record was harvested using CSW -->
         <discoveryAccessibility>true</discoveryAccessibility>
 
         <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
-        <discoveryAccessibilityUuid><xsl:value-of select="str[@name='harvesterUuid']/text()"/></discoveryAccessibilityUuid>
+        <discoveryAccessibilityUuid><xsl:value-of select="str[@name = 'harvesterUuid']/text()"/></discoveryAccessibilityUuid>
       </MdServiceExistence>
 
       <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
+      <xsl:variable name="inspireConformResource" select="arr[@name = 'inspireConformResource']/bool[1]"/>
       <xsl:for-each select="distinct-values(arr[@name = 'linkUrl']/str/text())">
         <NetworkService>
           <!-- TODO: Here we could ping the service and set the value ?
@@ -241,10 +242,7 @@
           metadata record ? -->
           <userRequest>-1</userRequest>
 
-          <!-- TODO: definition ?
-          No available for the time being. Require a validator.
-          -->
-          <nnConformity></nnConformity>
+          <nnConformity><xsl:value-of select="$inspireConformResource"/></nnConformity>
 
           <NnServiceType><xsl:value-of select="$serviceType"/></NnServiceType>
         </NetworkService>
@@ -258,11 +256,11 @@
                 match="doc"
                 as="node()">
     <SpatialDataSet>
-      <name><xsl:value-of select="str[@name='resourceTitle']/text()"/></name>
+      <name><xsl:value-of select="str[@name = 'resourceTitle']/text()"/></name>
 
       <xsl:call-template name="respAuthorityFactory"/>
 
-      <uuid><xsl:value-of select="str[@name='metadataIdentifier']/text()"/></uuid>
+      <uuid><xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/></uuid>
 
       <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
 
@@ -276,10 +274,16 @@
 
 
       <MdDataSetExistence>
-        <IRConformity>
-          <!-- This conformity for the resource or the metadata ? -->
-          <structureCompliance><xsl:value-of select="arr[@name='inspireConformResource']/bool[1]/text()"/></structureCompliance>
-        </IRConformity>
+        <!-- This conformity for the metadata -->
+        <xsl:if test="bool[@name = 'isAboveThreshold'] = 'true'">
+          <IRConformity>
+            <!-- This conformity for the resource -->
+            <structureCompliance>
+              <xsl:value-of select="if (arr[@name = 'inspireConformResource']/bool[1] = 'true')
+                                    then 'true' else 'false'"/>
+            </structureCompliance>
+          </IRConformity>
+        </xsl:if>
         <MdAccessibility>
           <!-- Uuids are for each services operating the resource ?
           They could be multiple in some situation ? TODO ? -->
@@ -289,7 +293,7 @@
           <!-- The record was harvested -->
           <discovery>true</discovery>
           <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
-          <discoveryUuid><xsl:value-of select="str[@name='harvesterUuid']/text()"/></discoveryUuid>
+          <discoveryUuid><xsl:value-of select="str[@name = 'harvesterUuid']/text()"/></discoveryUuid>
 
           <!-- Is the data set accessible using a view -->
           <xsl:choose>
@@ -353,13 +357,13 @@
            then the first one of the list.
            -->
     <xsl:variable name="custodian"
-                  select="arr[@name='custodianOrgForResource']/str[1]/text()"/>
+                  select="arr[@name = 'custodianOrgForResource']/str[1]/text()"/>
     <xsl:variable name="owner"
-                  select="arr[@name='ownerOrgForResource']/str[1]/text()"/>
+                  select="arr[@name = 'ownerOrgForResource']/str[1]/text()"/>
     <xsl:variable name="pointOfContact"
-                  select="arr[@name='pointOfContactOrgForResource']/str[1]/text()"/>
+                  select="arr[@name = 'pointOfContactOrgForResource']/str[1]/text()"/>
     <xsl:variable name="default"
-                  select="arr[@name='OrgForResource']/str[1]/text()"/>
+                  select="arr[@name = 'OrgForResource']/str[1]/text()"/>
     <respAuthority>
       <xsl:value-of select="if ($custodian != '')
         then $custodian
