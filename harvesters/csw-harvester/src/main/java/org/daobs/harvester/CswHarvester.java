@@ -207,7 +207,7 @@ public class CswHarvester {
                     // <Filter xmlns="http://www.opengis.net/ogc"/>
                     // </csw:Constraint>
 
-                    Element constraintElement = getRecordsRequest.createElementNS("Constraint", CSW_NS);
+                    Element constraintElement = getRecordsRequest.createElementNS(CSW_NS, "Constraint");
                     constraintElement.setAttribute("version", "1.1.0");
 
                     Node filterNode = getRecordsRequest.importNode(filter,true);
