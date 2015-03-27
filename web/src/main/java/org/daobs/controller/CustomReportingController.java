@@ -1,5 +1,6 @@
 package org.daobs.controller;
 
+import net.sf.saxon.FeatureKeys;
 import org.daobs.index.SolrRequestBean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Node;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.TransformerFactory;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -25,7 +27,7 @@ public class CustomReportingController {
                 "resourceType%%3Aseries)&" +
             "fq=%s&" +
             "start=0&rows=%d&" +
-            "fl=metadataIdentifier,resourceTitle," +
+            "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
             "recordOperatedByType,recordOperatedByTypeview,recordOperatedByTypedownload," +
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
@@ -34,7 +36,7 @@ public class CustomReportingController {
             "q=%%2BdocumentType%%3Ametadata+%%2BresourceType%%3Aservice&" +
             "fq=%s&" +
             "start=0&rows=%d&" +
-            "fl=metadataIdentifier,resourceTitle," +
+            "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
             "serviceType,linkUrl," +
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
@@ -129,6 +131,7 @@ public class CustomReportingController {
         IndicatorCalculatorImpl indicatorCalculator =
                 ReportingController.generateReporting(request, reporting, filter, true);
 
+//        TransformerFactory.setFeature(FeatureKeys.LINE_NUMBERING);
 
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
         model.addObject("xmlSource", indicatorCalculator.toSource());
