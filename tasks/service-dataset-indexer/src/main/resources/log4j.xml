@@ -10,7 +10,7 @@
 
   <appender name="file" class="org.apache.log4j.RollingFileAppender">
     <param name="Threshold" value="ALL" />
-    <param name="File" value="logs/task-service-dataset-indexer.log" />
+    <param name="File" value="logs/daobs-task-service-dataset-indexer.log" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %-5p %10.10X{camel.exchangeId}#%-24.24X{camel.routeId} - %m%n"/>
     </layout>
