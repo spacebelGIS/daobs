@@ -157,12 +157,19 @@
               </cm:setHeader>
 
 
-              <cm:log message="Record identifier is '$simple{header.documentIdentifier}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
+              <cm:log message="Service record identifier is '$simple{header.documentIdentifier}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
                       loggingLevel="INFO"
                       logName="org.daobs.task.ServiceDatasetIndexer"/>
 
               <cm:split parallelProcessing="true">
-                <cm:xpath resultType="String">doc/arr[@name = 'recordOperateOn']/str[text() != '']</cm:xpath>
+                <cm:xpath>doc/arr[@name = 'recordOperateOn']/str</cm:xpath>
+
+                <cm:setBody>
+                  <cm:xpath resultType="java.lang.String">normalize-space(.)</cm:xpath>
+                </cm:setBody>
+                <cm:log message=" * Service '$simple{header.documentIdentifier}' operates on '${body}'."
+                        loggingLevel="INFO"
+                        logName="org.daobs.task.ServiceDatasetIndexer"/>
                 <cm:multicast>
                   <cm:to uri="direct:index-association"/>
                   <cm:to uri="direct:index-inspirethemes-in-service"/>
@@ -225,10 +232,17 @@
       <cm:setHeader headerName="serviceIdentifier">
         <cm:simple>${header.documentIdentifier}</cm:simple>
       </cm:setHeader>
-      <cm:log message="Index INSPIRE themes '$simple{header.serviceIdentifier}'..."
+      <cm:setHeader headerName="datasetIdentifier">
+        <cm:simple>${body}</cm:simple>
+      </cm:setHeader>
+      <cm:log message="Get INSPIRE themes from dataset '$simple{header.datasetIdentifier}' and add them to service '$simple{header.serviceIdentifier}' ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
-
+      <cm:setBody>
+        <cm:groovy>
+          URLEncoder.encode(request.getBody(String.class));
+        </cm:groovy>
+      </cm:setBody>
       <!-- Get the INSPIRE themes from the related dataset -->
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
@@ -239,7 +253,7 @@
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
 
-      <cm:log message="Data set INSPIRE themes '$simple{body}'"
+      <cm:log message="INSPIRE themes for dataset '$simple{header.datasetIdentifier}' are '$simple{body}'."
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
       <!-- Camel XSLT issue with Saxon 8
@@ -248,7 +262,7 @@
       -->
       <cm:to uri="bean:xsltUtility?method=transform(*, 'index-service-themes.xsl')"/>
 
-      <cm:log message="XSLT response '$simple{body}'"
+      <cm:log message="Service '$simple{header.serviceIdentifier}' is about to be updated by request '$simple{body}'"
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
       <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-themes-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>

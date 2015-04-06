@@ -6,7 +6,7 @@
 
   <xsl:template match="/">
     <add commitWithin="10000">
-      <xsl:if test="$serviceidentifier != ''">
+      <xsl:if test="$serviceidentifier != '' and count(//result/doc/arr[@name = 'inspireTheme']/str) > 0">
         <doc>
           <field name="id"><xsl:value-of select="$serviceidentifier"/></field>
           <xsl:for-each select="distinct-values(//result/doc/arr[@name = 'inspireTheme']/str)">
