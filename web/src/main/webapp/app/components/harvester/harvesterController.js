@@ -4,9 +4,9 @@
 
   app.controller('HarvesterConfigCtrl', [
     '$scope', '$routeParams', '$translate',
-    'harvesterService', 'cfg',
+    'harvesterService', 'cfg', 'Notification',
     function ($scope, $routeParams, $translate,
-              harvesterService, cfg) {
+              harvesterService, cfg, Notification) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
       $scope.adding = false;
@@ -24,7 +24,13 @@
       $scope.newHarvester = $scope.harvesterTpl;
 
       $scope.translations = null;
-      $translate(['errorRemovingHarvester', 'errorRemovingHarvesterRecords']).
+      $translate(['errorRemovingHarvester',
+        'errorRemovingHarvesterRecords',
+        'harvesterStarted',
+        'harvesterDeleted',
+        'errorAddingHarvester',
+        'harvesterRecordsDeleted',
+        'errorStartingHarvester']).
         then(function (translations) {
           $scope.translations = translations;
         });
@@ -38,7 +44,7 @@
       $scope.edit = function (h) {
         $scope.adding = true;
         $scope.newHarvester = h;
-        // TODO: Scroll top
+        $('body').scrollTop(0);
       }
 
       $scope.add = function () {
@@ -46,23 +52,44 @@
           $scope.adding = false;
           init();
           $scope.newHarvester = $scope.harvesterTpl;
+        }, function(response) {
+          console.error(response);
+          Notification.error(
+            $scope.translations.errorAddingHarvester + ' ' +
+            response);
         });
       };
 
       $scope.run = function (h) {
-        harvesterService.run(h);
+        harvesterService.run(h).then(function() {
+          Notification.success($scope.translations.harvesterStarted);
+        }, function(response) {
+          console.error(response);
+          Notification.error(
+            $scope.translations.errorStartingHarvester + ' ' +
+            response);
+        });
       };
 
       $scope.remove = function (h) {
-        harvesterService.remove(h).then(init, function (response) {
-          alert($scope.translations.errorRemovingHarvester + ' ' +
+        harvesterService.remove(h).then(function (response) {
+          Notification.success($scope.translations.harvesterDeleted);
+          init();
+        }, function (response) {
+          Notification.error(
+            $scope.translations.errorRemovingHarvester + ' ' +
             response.error.msg);
         });
       };
       $scope.removeRecords = function (h) {
-        harvesterService.removeRecords(h).then(init, function (response) {
-          alert($scope.translations.errorRemovingHarvesterRecords + ' ' +
-          response.error.msg);
+        harvesterService.removeRecords(h).then(function (response) {
+          Notification.success($scope.translations.harvesterRecordsDeleted);
+          init();
+        }, function (response) {
+          console.error(response);
+          Notification.error(
+            $scope.translations.errorRemovingHarvesterRecords + ' ' +
+            response.error.msg);
         })
       };
 

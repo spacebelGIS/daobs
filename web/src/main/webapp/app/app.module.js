@@ -8,7 +8,8 @@
   var app = angular.module('daobs', [
     'ngRoute',
     'pascalprecht.translate',
-    'solr']);
+    'solr',
+    'ui-notification']);
 
   app.controller('RootController', [
     '$scope', '$location', '$http', 'cfg',
