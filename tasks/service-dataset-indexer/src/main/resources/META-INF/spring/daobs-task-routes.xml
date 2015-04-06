@@ -234,7 +234,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q=id:"$simple{body}"&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select?q=id%3A%22$simple{body}%22&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
