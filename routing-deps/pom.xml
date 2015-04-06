@@ -47,6 +47,11 @@
       <artifactId>camel-script</artifactId>
       <version>${camel.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-groovy</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
 
     <!-- Create a specific dep for activemq ?-->
     <dependency>
