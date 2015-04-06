@@ -61,7 +61,8 @@
 
     </cm:onException>
 
-    <cm:route id="route-csw-start-from-config-file" autoStartup="false">
+    <cm:route id="route-csw-start-from-config-file"
+              autoStartup="{{harvester.csw.startup.cli}}">
       <cm:description>
         Start the harvester by loading the configuration file in the
         config folder
@@ -70,7 +71,8 @@
       <cm:to uri="direct:route-start-csw-harvesting"/>
     </cm:route>
 
-    <cm:route id="route-csw-start-from-task-folder">
+    <cm:route id="route-csw-start-from-task-folder"
+              autoStartup="{{harvester.csw.startup.webapp}}">
       <cm:description>
         Start the harvester when a config file is dropped in the
         tasks folder
