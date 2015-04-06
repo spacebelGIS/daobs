@@ -43,6 +43,8 @@
   "name-placeholder": "",
   "name-help": "",
   "language": "Language",
+  "errorRemovingHarvester": "Error while removing harvester.",
+  "errorRemovingHarvesterRecords": "Error while removing harvester records.",
   "value": "Value",
   "parameters": "Parameters:",
   "definition": "Definition",

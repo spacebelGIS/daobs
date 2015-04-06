@@ -3,8 +3,10 @@
   var app = angular.module('daobs');
 
   app.controller('HarvesterConfigCtrl', [
-    '$scope', '$routeParams', 'harvesterService', 'cfg',
-    function ($scope, $routeParams, harvesterService, cfg) {
+    '$scope', '$routeParams', '$translate',
+    'harvesterService', 'cfg',
+    function ($scope, $routeParams, $translate,
+              harvesterService, cfg) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
       $scope.adding = false;
@@ -20,6 +22,12 @@
         uuid: null
       };
       $scope.newHarvester = $scope.harvesterTpl;
+
+      $scope.translations = null;
+      $translate(['errorRemovingHarvester', 'errorRemovingHarvesterRecords']).
+        then(function (translations) {
+          $scope.translations = translations;
+        });
 
       function init() {
         harvesterService.getAll().success(function (list) {
@@ -46,10 +54,16 @@
       };
 
       $scope.remove = function (h) {
-        harvesterService.remove(h).then(init);
+        harvesterService.remove(h).then(init, function (response) {
+          alert($scope.translations.errorRemovingHarvester + ' ' +
+            response.error.msg);
+        });
       };
       $scope.removeRecords = function (h) {
-        harvesterService.removeRecords(h).then(init);
+        harvesterService.removeRecords(h).then(init, function (response) {
+          alert($scope.translations.errorRemovingHarvesterRecords + ' ' +
+          response.error.msg);
+        })
       };
 
       init();

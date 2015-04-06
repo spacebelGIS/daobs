@@ -15,6 +15,8 @@
             $http.get(cfg.SERVICES.harvester + '/' + h.uuid + '?action=start').
               success(function (data) {
                 deferred.resolve(data);
+              }).error(function (response) {
+                deferred.reject(response);
               });
             return deferred.promise;
           },
@@ -23,6 +25,8 @@
             $http.put(cfg.SERVICES.harvester, h).
               success(function (data) {
                 deferred.resolve(data);
+              }).error(function (response) {
+                deferred.reject(response);
               });
             return deferred.promise;
           },
@@ -31,6 +35,8 @@
             $http.delete(cfg.SERVICES.harvester + '/' + h.uuid).
               success(function (data) {
                 deferred.resolve(data);
+              }).error(function (response) {
+                deferred.reject(response);
               });
             return deferred.promise;
           },
