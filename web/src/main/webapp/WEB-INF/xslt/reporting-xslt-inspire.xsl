@@ -151,7 +151,7 @@
           <NSv_NumViewServ><xsl:value-of select="//daobs:variable[@id='NSv_NumViewServ']/daobs:value"/></NSv_NumViewServ>
           <NSv_NumDownServ><xsl:value-of select="//daobs:variable[@id='NSv_NumDownlServ']/daobs:value"/></NSv_NumDownServ>
           <NSv_NumInvkServ><xsl:value-of select="//daobs:variable[@id='NSv_NumInvkServ']/daobs:value"/></NSv_NumInvkServ>
-          <NSv_NumAllServ><xsl:value-of select="//daobs:variable[@id='NSv_NumAllServ']/daobs:value"/></NSv_NumAllServ>
+          <NSv_NumAllServ><xsl:value-of select="//daobs:indicator[@id='NSv_NumAllServ']/daobs:value"/></NSv_NumAllServ>
           <NSv_NumTransfServ><xsl:value-of select="//daobs:indicator[@id='NSv_NumTransfServ']/daobs:value"/></NSv_NumTransfServ>
         </SpatialDataAndService>
         <MetadataConformityIndicators>
@@ -164,7 +164,7 @@
             <MDv21><xsl:value-of select="//daobs:variable[@id='MDv21']/daobs:value"/></MDv21>
             <MDv22><xsl:value-of select="//daobs:variable[@id='MDv22']/daobs:value"/></MDv22>
             <MDv23><xsl:value-of select="//daobs:variable[@id='MDv23']/daobs:value"/></MDv23>
-            <MDv2_DS><xsl:value-of select="//daobs:variable[@id='MDv2_DS']/daobs:value"/></MDv2_DS>
+            <MDv2_DS><xsl:value-of select="//daobs:indicator[@id='MDv2_DS']/daobs:value"/></MDv2_DS>
             <MDv24><xsl:value-of select="//daobs:variable[@id='MDv24']/daobs:value"/></MDv24>
           </MetadataConformity>
         </MetadataConformityIndicators>
