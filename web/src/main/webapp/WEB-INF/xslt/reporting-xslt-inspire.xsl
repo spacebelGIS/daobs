@@ -325,7 +325,7 @@
               <download>true</download>
 
               <xsl:variable name="nbOfServices"
-                            select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+                            select="count(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
                     str[1]/text()))"/>
               <xsl:if test="$nbOfServices > 1">
                 <xsl:comment>Note: the data set is available in
