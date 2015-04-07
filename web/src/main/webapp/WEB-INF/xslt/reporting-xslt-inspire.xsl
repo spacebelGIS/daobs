@@ -319,7 +319,6 @@
             </xsl:otherwise>
           </xsl:choose>
 
-
           <xsl:choose>
             <xsl:when test="count($recordOperatedByType[str = 'download']) > 0">
               <download>true</download>
@@ -338,7 +337,7 @@
               </downloadUuid>
             </xsl:when>
             <xsl:otherwise>
-              <download>true</download>
+              <download>false</download>
             </xsl:otherwise>
           </xsl:choose>
 
