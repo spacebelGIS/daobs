@@ -303,10 +303,12 @@
 
               <xsl:variable name="nbOfServices"
                             select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
-                    str[1]/text()))"/>
+                    str))"/>
               <xsl:if test="$nbOfServices > 1">
                 <xsl:comment>Note: the data set is available in
-                  <xsl:value-of select="$nbOfServices"/> view services.
+                  <xsl:value-of select="$nbOfServices"/> view services
+                  (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+                    str), ', ')"/>').
                   Only the first one reported.</xsl:comment>
               </xsl:if>
               <viewUuid>
@@ -325,10 +327,12 @@
 
               <xsl:variable name="nbOfServices"
                             select="count(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
-                    str[1]/text()))"/>
+                    str))"/>
               <xsl:if test="$nbOfServices > 1">
                 <xsl:comment>Note: the data set is available in
-                  <xsl:value-of select="$nbOfServices"/> download services.
+                  <xsl:value-of select="$nbOfServices"/> download services
+                  (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
+                    str), ', ')"/>').
                   Only the first one reported.</xsl:comment>
               </xsl:if>
               <downloadUuid>
