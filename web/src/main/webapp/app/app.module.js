@@ -33,7 +33,7 @@
       }, {
         id: 'admin',
         icon: 'glyphicon-cog',
-        url: 'admin.html'
+        url: 'admin.html#/data/query'
       }, {
         id: 'signout',
         icon: 'glyphicon-user',
