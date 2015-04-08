@@ -11,9 +11,7 @@
               indent="yes"/>
 
   <!-- Aggregation criteria for searches. Could be null to report
-  on all harvested records. Should be a valid member states code.
-  TODO: Report territory with no data ?
-  -->
+  on all harvested records. Should be a valid member states code. -->
   <xsl:param name="territory" select="''" as="xs:string"/>
 
   <xsl:param name="language" select="'eng'" as="xs:string"/>
@@ -30,9 +28,26 @@
   <xsl:param name="organizationName" select="''" as="xs:string"/>
   <xsl:param name="email" select="''" as="xs:string"/>
 
+  <!-- Add the row data section to the report. -->
   <xsl:param name="withRowData" select="true()" as="xs:boolean"/>
+
+  <!-- Data sets report mode define how the dataset should be reported.
+  Options are:
+  * onlyFirstInspireTheme: if true, only the first INSPIRE theme
+   is reported for a dataset
+  * asManyDatasetsAsInspireThemes: if true, if a dataset contains
+   more than one INSPIRE theme, then the dataset is duplicated
+   for each INSPIRE theme.
+  -->
+  <xsl:param name="datasetMode" select="''" as="xs:string"/>
+
+  <!-- List of datasets for this report. -->
   <xsl:param name="spatialDataSets" as="node()?"/>
+
+  <!-- List of services for this report. -->
   <xsl:param name="spatialDataServices" as="node()?"/>
+
+
 
   <xsl:variable name="dateFormat" as="xs:string"
                 select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z'"/>
@@ -186,7 +201,14 @@
         <!--<xsl:message><xsl:copy-of select="$spatialDataServices"/></xsl:message>-->
         <RowData>
           <xsl:apply-templates mode="SpatialDataServiceFactory" select="$spatialDataServices/result/doc"/>
-          <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
+          <xsl:choose>
+            <xsl:when test="$datasetMode = 'asManyDatasetsAsInspireThemes'">
+              <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </RowData>
       </xsl:if>
     </ns2:Monitoring>
@@ -205,7 +227,13 @@
 
       <uuid><xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/></uuid>
 
-      <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
+      <!-- For services, all INSPIRE themes are reported (and that was also the
+      case in the excel reporting mode. -->
+      <xsl:call-template name="InspireAnnexAndThemeFactory">
+        <xsl:with-param name="inspireThemes"
+                        select="distinct-values(arr[@name = 'inspireTheme']/str)"/>
+      </xsl:call-template>
+
 
       <MdServiceExistence>
         <mdConformity><xsl:value-of select="bool[@name = 'isAboveThreshold']"/></mdConformity>
@@ -263,7 +291,23 @@
 
       <uuid><xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/></uuid>
 
-      <xsl:apply-templates mode="InspireAnnexAndThemeFactory" select="."/>
+      <!-- For dataset the list of INSPIRE themes could be based
+      on the first one only or on all values depending on the datasetMode parameter.
+      Many themes are allowed from the schema point of view but the old way of reporting
+      based on excel was only allowing one INSPIRE theme.
+      -->
+      <xsl:if test="$datasetMode = 'onlyFirstInspireTheme' and
+                    count(distinct-values(arr[@name = 'inspireTheme']/str)) > 1">
+        <xsl:comment>Only the first INSPIRE theme is reported among all
+          (ie. <xsl:value-of select="string-join(distinct-values(arr[@name = 'inspireTheme']/str), ', ')"/>).</xsl:comment>
+      </xsl:if>
+      <xsl:call-template name="InspireAnnexAndThemeFactory">
+        <xsl:with-param name="inspireThemes"
+                      select="if ($datasetMode = 'onlyFirstInspireTheme')
+                              then arr[@name = 'inspireTheme']/str[1]
+                              else distinct-values(arr[@name = 'inspireTheme']/str)"/>
+
+      </xsl:call-template>
 
       <!-- Coverage is mandatory but will probably
       be removed in the future. 0 value returned
@@ -453,12 +497,14 @@
          monitoring="protectedSites" annex="I"/>
   </xsl:variable>
 
-  <xsl:template mode="InspireAnnexAndThemeFactory"
-                match="doc">
-    <xsl:variable name="inspireThemes"
-                  select="distinct-values(arr[@name = 'inspireTheme']/str)"/>
-    <xsl:variable name="inspireAnnexes"
-                  select="distinct-values(arr[@name = 'inspireAnnex']/str[text() = 'i' or text() = 'ii' or text() = 'iii'])"/>
+
+  <!-- From the list of INSPIRE themes build the corresponding
+  reporting fragment based on the map of themes in english,
+  the corresponding monitoring enumeration value and its annex. -->
+  <xsl:template name="InspireAnnexAndThemeFactory">
+    <!-- INSPIRE theme or themes to be used to build the section. -->
+    <xsl:param name="inspireThemes"/>
+
     <xsl:for-each select="$inspireThemes">
       <xsl:variable name="theme" select="."/>
       <xsl:variable name="mapping" select="$inspireThemesMap/map[matches(@theme, $theme, 'i')]"/>
