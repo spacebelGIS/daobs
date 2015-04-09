@@ -200,13 +200,16 @@
       <xsl:if test="$withRowData = true()">
         <!--<xsl:message><xsl:copy-of select="$spatialDataServices"/></xsl:message>-->
         <RowData>
-          <xsl:apply-templates mode="SpatialDataServiceFactory" select="$spatialDataServices/result/doc"/>
+          <xsl:apply-templates mode="SpatialDataServiceFactory"
+                               select="$spatialDataServices/result/doc"/>
           <xsl:choose>
             <xsl:when test="$datasetMode = 'asManyDatasetsAsInspireThemes'">
-              <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
+              <xsl:apply-templates mode="SpatialDataSetFactoryForEachInspireTheme"
+                                   select="$spatialDataSets/result/doc"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:apply-templates mode="SpatialDataSetFactory" select="$spatialDataSets/result/doc"/>
+              <xsl:apply-templates mode="SpatialDataSetFactory"
+                                   select="$spatialDataSets/result/doc"/>
             </xsl:otherwise>
           </xsl:choose>
         </RowData>
@@ -281,9 +284,10 @@
 
 
 
+
+
   <xsl:template mode="SpatialDataSetFactory"
-                match="doc"
-                as="node()">
+                match="doc">
     <SpatialDataSet>
       <name><xsl:value-of select="str[@name = 'resourceTitle']/text()"/></name>
 
@@ -294,8 +298,7 @@
       <!-- For dataset the list of INSPIRE themes could be based
       on the first one only or on all values depending on the datasetMode parameter.
       Many themes are allowed from the schema point of view but the old way of reporting
-      based on excel was only allowing one INSPIRE theme.
-      -->
+      based on excel was only allowing one INSPIRE theme.-->
       <xsl:if test="$datasetMode = 'onlyFirstInspireTheme' and
                     count(distinct-values(arr[@name = 'inspireTheme']/str)) > 1">
         <xsl:comment>Only the first INSPIRE theme is reported among all
@@ -309,97 +312,138 @@
 
       </xsl:call-template>
 
-      <!-- Coverage is mandatory but will probably
-      be removed in the future. 0 value returned
-      by default. -->
-      <Coverage>
-        <relevantArea>0</relevantArea>
-        <actualArea>0</actualArea>
-      </Coverage>
-
-
-      <MdDataSetExistence>
-        <!-- This conformity for the metadata -->
-        <xsl:if test="bool[@name = 'isAboveThreshold'] = 'true'">
-          <IRConformity>
-            <!-- This conformity for the resource -->
-            <structureCompliance>
-              <xsl:value-of select="if (arr[@name = 'inspireConformResource']/bool[1] = 'true')
-                                    then 'true' else 'false'"/>
-            </structureCompliance>
-          </IRConformity>
-        </xsl:if>
-        <MdAccessibility>
-          <!-- Uuids are for each services operating the resource ?
-          They could be multiple in some situation ? TODO ? -->
-
-          <xsl:variable name="recordOperatedByType" select="arr[@name = 'recordOperatedByType']"/>
-
-          <!-- The record was harvested -->
-          <discovery>true</discovery>
-          <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
-          <discoveryUuid><xsl:value-of select="str[@name = 'harvesterUuid']/text()"/></discoveryUuid>
-
-          <!-- Is the data set accessible using a view -->
-          <xsl:choose>
-            <xsl:when test="count($recordOperatedByType[str = 'view']) > 0">
-              <view>true</view>
-
-              <xsl:variable name="nbOfServices"
-                            select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
-                    str))"/>
-              <xsl:if test="$nbOfServices > 1">
-                <xsl:comment>Note: the data set is available in
-                  <xsl:value-of select="$nbOfServices"/> view services
-                  (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypeview']/
-                    str), ', ')"/>').
-                  Only the first one reported.</xsl:comment>
-              </xsl:if>
-              <viewUuid>
-                <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
-                    str[1]/text()"/>
-              </viewUuid>
-            </xsl:when>
-            <xsl:otherwise>
-              <view>false</view>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:choose>
-            <xsl:when test="count($recordOperatedByType[str = 'download']) > 0">
-              <download>true</download>
-
-              <xsl:variable name="nbOfServices"
-                            select="count(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
-                    str))"/>
-              <xsl:if test="$nbOfServices > 1">
-                <xsl:comment>Note: the data set is available in
-                  <xsl:value-of select="$nbOfServices"/> download services
-                  (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
-                    str), ', ')"/>').
-                  Only the first one reported.</xsl:comment>
-              </xsl:if>
-              <downloadUuid>
-                <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
-                    str[1]/text()"/>
-              </downloadUuid>
-            </xsl:when>
-            <xsl:otherwise>
-              <download>false</download>
-            </xsl:otherwise>
-          </xsl:choose>
-
-
-          <viewDownload><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
-                                                  count($recordOperatedByType[str = 'download']) > 0)
-                                              then true() else false()"/></viewDownload>
-        </MdAccessibility>
-      </MdDataSetExistence>
+      <xsl:apply-templates mode="SpatialDataSetDetailsFactory" select="."/>
     </SpatialDataSet>
   </xsl:template>
 
 
-  <xsl:template name="respAuthorityFactory">
+  <!-- Dataset is duplicated as many time as the number of INSPIRE themes -->
+  <xsl:template mode="SpatialDataSetFactoryForEachInspireTheme"
+                match="doc">
+    <xsl:variable name="numberOfInspireThemes"
+                  select="count(distinct-values(arr[@name = 'inspireTheme']/str))"/>
+
+    <xsl:if test="$numberOfInspireThemes > 1">
+      <xsl:comment>This data set contains <xsl:value-of select="$numberOfInspireThemes"/> INSPIRE themes.
+        It was duplicated for each themes.</xsl:comment>
+    </xsl:if>
+    <xsl:variable name="document" select="."/>
+
+
+    <xsl:for-each select="distinct-values(arr[@name = 'inspireTheme']/str)">
+      <SpatialDataSet>
+        <name><xsl:value-of select="$document/str[@name = 'resourceTitle']/text()"/></name>
+
+        <xsl:apply-templates mode="respAuthorityFactory"
+                             select="$document"/>
+
+        <uuid><xsl:value-of select="$document/str[@name = 'metadataIdentifier']/text()"/></uuid>
+
+        <xsl:call-template name="InspireAnnexAndThemeFactory">
+          <xsl:with-param name="inspireThemes"
+                        select="."/>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="SpatialDataSetDetailsFactory"
+                             select="$document"/>
+
+      </SpatialDataSet>
+    </xsl:for-each>
+  </xsl:template>
+
+
+  <xsl:template mode="SpatialDataSetDetailsFactory" match="doc">
+    <!-- Coverage is mandatory but will probably
+          be removed in the future. 0 value returned
+          by default. -->
+    <Coverage>
+      <relevantArea>0</relevantArea>
+      <actualArea>0</actualArea>
+    </Coverage>
+
+
+    <MdDataSetExistence>
+      <!-- This conformity for the metadata -->
+      <xsl:if test="bool[@name = 'isAboveThreshold'] = 'true'">
+        <IRConformity>
+          <!-- This conformity for the resource -->
+          <structureCompliance>
+            <xsl:value-of select="if (arr[@name = 'inspireConformResource']/bool[1] = 'true')
+                                    then 'true' else 'false'"/>
+          </structureCompliance>
+        </IRConformity>
+      </xsl:if>
+      <MdAccessibility>
+        <!-- Uuids are for each services operating the resource ?
+        They could be multiple in some situation ? TODO ? -->
+
+        <xsl:variable name="recordOperatedByType" select="arr[@name = 'recordOperatedByType']"/>
+
+        <!-- The record was harvested -->
+        <discovery>true</discovery>
+        <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
+        <discoveryUuid><xsl:value-of select="str[@name = 'harvesterUuid']/text()"/></discoveryUuid>
+
+        <!-- Is the data set accessible using a view -->
+        <xsl:choose>
+          <xsl:when test="count($recordOperatedByType[str = 'view']) > 0">
+            <view>true</view>
+
+            <xsl:variable name="nbOfServices"
+                          select="count(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+                    str))"/>
+            <xsl:if test="$nbOfServices > 1">
+              <xsl:comment>Note: the data set is available in
+                <xsl:value-of select="$nbOfServices"/> view services
+                (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypeview']/
+                    str), ', ')"/>').
+                Only the first one reported.</xsl:comment>
+            </xsl:if>
+            <viewUuid>
+              <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
+                    str[1]/text()"/>
+            </viewUuid>
+          </xsl:when>
+          <xsl:otherwise>
+            <view>false</view>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count($recordOperatedByType[str = 'download']) > 0">
+            <download>true</download>
+
+            <xsl:variable name="nbOfServices"
+                          select="count(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
+                    str))"/>
+            <xsl:if test="$nbOfServices > 1">
+              <xsl:comment>Note: the data set is available in
+                <xsl:value-of select="$nbOfServices"/> download services
+                (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
+                    str), ', ')"/>').
+                Only the first one reported.</xsl:comment>
+            </xsl:if>
+            <downloadUuid>
+              <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
+                    str[1]/text()"/>
+            </downloadUuid>
+          </xsl:when>
+          <xsl:otherwise>
+            <download>false</download>
+          </xsl:otherwise>
+        </xsl:choose>
+
+
+        <viewDownload><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
+                                                  count($recordOperatedByType[str = 'download']) > 0)
+                                              then true() else false()"/></viewDownload>
+      </MdAccessibility>
+    </MdDataSetExistence>
+  </xsl:template>
+
+
+  <xsl:template name="respAuthorityFactory"
+                mode="respAuthorityFactory" match="doc">
     <!-- OrganisationName of one of the IdentificationInfo/pointOfContact,
            First check if Custodian available, then Owner, then pointOfContact,
            then the first one of the list.
