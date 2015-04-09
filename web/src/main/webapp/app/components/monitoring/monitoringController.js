@@ -298,7 +298,7 @@
         }).then(function (translation) {
           $scope.responseMessages.push({
             label: translation,
-            success: true
+            success: text === 'monitoringSubmitSuccess'
           });
           $scope.isSubmitting =
             $scope.responseMessages.length !== listOfDeffered.length;
