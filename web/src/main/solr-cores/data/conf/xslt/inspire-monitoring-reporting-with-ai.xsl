@@ -2,9 +2,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:monitoring="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
+  xmlns:solr="java:org.daobs.index.SolrRequestBean"
+  xmlns:saxon="http://saxon.sf.net/"
+  extension-element-prefixes="saxon"
   exclude-result-prefixes="#all"
   version="2.0">
-
+  
+  
   <xsl:import href="inspire-monitoring-reporting.xsl"/>
 
   <!-- Ancillary information are extra information not
