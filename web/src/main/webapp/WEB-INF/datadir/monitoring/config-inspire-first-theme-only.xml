@@ -16,7 +16,7 @@
     The reported value may be more than this. -->
     <daobs:variable id="DSv_Num1" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be underestimated
         if the number of spatial data set does not have metadata or if error occurred
         during harvesting.</daobs:comment>
@@ -24,7 +24,7 @@
 
     <daobs:variable id="DSv_Num2" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:ii</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be underestimated
         if the number of spatial data set does not have metadata or if error occurred
         during harvesting.</daobs:comment>
@@ -32,7 +32,7 @@
 
     <daobs:variable id="DSv_Num3" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:iii</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be underestimated
         if the number of spatial data set does not have metadata or if error occurred
         during harvesting.</daobs:comment>
@@ -81,17 +81,17 @@
 
     <daobs:variable id="MDv11" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="MDv12" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:ii</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="MDv13" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:iii</daobs:query>
     </daobs:variable>
 
 
@@ -106,19 +106,19 @@
     <!-- Indicator MDi2 (Conformity of metadata) -->
     <daobs:variable id="MDv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnex:i</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv22" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnex:ii</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:ii</daobs:query>
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv23" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnex:iii</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:iii</daobs:query>
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
@@ -135,30 +135,29 @@
     <!-- INSPIRE DSi2 (Conformity of spatial data sets) -->
     <daobs:variable id="DSv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex I that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnex:i +inspireConformResource:true</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:i +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 1089/2010 report a conform resource.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv22" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex II that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnex:ii +inspireConformResource:true</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:ii +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 1089/2010 report a conform resource.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv23" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex III that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnex:iii +inspireConformResource:true</daobs:query>
+      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:iii +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 1089/2010 report a conform resource.</daobs:comment>
     </daobs:variable>
 
 
     <!-- INSPIRE NSi1 (Accessibility of metadata through discovery services) -->
-    <daobs:variable id="NSv11Old" numberFormat="#">
-      <daobs:name xml:lang="en">Number of spatial data sets with metadata for which a discovery service exists (count a dataset once if having many INSPIRE themes)</daobs:name>
+    <daobs:variable id="NSv11" numberFormat="#">
+      <daobs:name xml:lang="en">Number of spatial data sets with metadata for which a discovery service exists</daobs:name>
       <daobs:query>+(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
       <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to DSv_Num).</daobs:comment>
     </daobs:variable>
-
     <daobs:variable id="NSv12" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services with metadata for which a discovery service exists</daobs:name>
       <daobs:query>+resourceType:service</daobs:query>
@@ -168,7 +167,6 @@
 
 
     <!-- INSPIRE NSi2 (Accessibility of data sets through view or download services) -->
-    <!-- TODO: should be one variable per annex and then sum the variables -->
     <daobs:variable id="NSv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a view service exists</daobs:name>
       <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
@@ -249,32 +247,32 @@
     -->
     <daobs:variable id="DSv11_ActArea" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex I</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnex:i</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv12_ActArea" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex II</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnex:ii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnexForFirstTheme:ii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv13_ActArea" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex III</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnex:iii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnexForFirstTheme:iii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv11_RelArea" default="0.0001" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex I</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnex:i</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv12_RelArea" default="0.0001" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex II</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnex:ii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnexForFirstTheme:ii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv13_RelArea" default="0.0001" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex III</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnex:iii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnexForFirstTheme:iii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
   </daobs:variables>
@@ -282,23 +280,6 @@
 
 
   <daobs:indicators>
-    <!-- Indicator added to take into account all INSPIRE themes of a dataset.
-     In such case, the dataset is duplicated for each themes. So the number
-     of datasets may be lover than the total number for those indicators. -->
-    <daobs:indicator id="NSv11" numberFormat="#">
-      <daobs:name xml:lang="en">Number of spatial data sets with metadata for which a discovery service exists (count a dataset as many time as its INSPIRE themes)</daobs:name>
-      <daobs:expression>MDv11 + MDv12 + MDv13</daobs:expression>
-      <!--<daobs:query>+(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
-      <daobs:parameters>
-        <daobs:parameter id="MDv11"/>
-        <daobs:parameter id="MDv12"/>
-        <daobs:parameter id="MDv13"/>
-      </daobs:parameters>
-      <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to DSv_Num).</daobs:comment>
-    </daobs:indicator>
-
-
-
     <daobs:indicator id="DSv_Num" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for all Annexes</daobs:name>
       <daobs:expression>DSv_Num1 + DSv_Num2 + DSv_Num3</daobs:expression>

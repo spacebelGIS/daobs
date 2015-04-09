@@ -131,7 +131,7 @@ public class CustomReportingController {
         IndicatorCalculatorImpl indicatorCalculator =
                 ReportingController.generateReporting(request, reporting, filter, true);
 
-//        TransformerFactory.setFeature(FeatureKeys.LINE_NUMBERING);
+//        TransformerFactory.setFeature(FeatureKeys.LINE_NUMBERING, true);
 
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
         model.addObject("xmlSource", indicatorCalculator.toSource());
