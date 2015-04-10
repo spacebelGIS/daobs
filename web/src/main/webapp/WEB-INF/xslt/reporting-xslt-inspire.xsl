@@ -142,7 +142,7 @@
           <NSi12><xsl:value-of select="//daobs:indicator[@id='NSi12']/daobs:value"/></NSi12>
           <NSi1><xsl:value-of select="//daobs:indicator[@id='NSi1']/daobs:value"/></NSi1>
           <DiscoveryMetadata>
-            <NSv11><xsl:value-of select="//daobs:variable[@id='NSv11']/daobs:value"/></NSv11>
+            <NSv11><xsl:value-of select="//daobs:*[@id='NSv11']/daobs:value"/></NSv11>
             <NSv12><xsl:value-of select="//daobs:variable[@id='NSv12']/daobs:value"/></NSv12>
           </DiscoveryMetadata>
         </DiscoveryMetadataIndicators>
