@@ -130,9 +130,9 @@
           <MDi14><xsl:value-of select="//daobs:indicator[@id='MDi14']/daobs:value"/></MDi14>
           <MDi1><xsl:value-of select="//daobs:indicator[@id='MDi1']/daobs:value"/></MDi1>
           <MetadataExistence>
-            <MDv11><xsl:value-of select="//daobs:variable[@id='MDv11']/daobs:value"/></MDv11>
-            <MDv12><xsl:value-of select="//daobs:variable[@id='MDv12']/daobs:value"/></MDv12>
-            <MDv13><xsl:value-of select="//daobs:variable[@id='MDv13']/daobs:value"/></MDv13>
+            <MDv11><xsl:value-of select="//daobs:*[@id='MDv11']/daobs:value"/></MDv11>
+            <MDv12><xsl:value-of select="//daobs:*[@id='MDv12']/daobs:value"/></MDv12>
+            <MDv13><xsl:value-of select="//daobs:*[@id='MDv13']/daobs:value"/></MDv13>
             <MDv1_DS><xsl:value-of select="//daobs:indicator[@id='MDv1_DS']/daobs:value"/></MDv1_DS>
             <MDv14><xsl:value-of select="//daobs:variable[@id='MDv14']/daobs:value"/></MDv14>
           </MetadataExistence>
@@ -151,15 +151,15 @@
           <NSi22><xsl:value-of select="//daobs:indicator[@id='NSi22']/daobs:value"/></NSi22>
           <NSi2><xsl:value-of select="//daobs:indicator[@id='NSi2']/daobs:value"/></NSi2>
           <ViewDownloadAccessibility>
-            <NSv21><xsl:value-of select="//daobs:variable[@id='NSv21']/daobs:value"/></NSv21>
-            <NSv22><xsl:value-of select="//daobs:variable[@id='NSv22']/daobs:value"/></NSv22>
-            <NSv23><xsl:value-of select="//daobs:variable[@id='NSv23']/daobs:value"/></NSv23>
+            <NSv21><xsl:value-of select="//daobs:*[@id='NSv21']/daobs:value"/></NSv21>
+            <NSv22><xsl:value-of select="//daobs:*[@id='NSv22']/daobs:value"/></NSv22>
+            <NSv23><xsl:value-of select="//daobs:*[@id='NSv23']/daobs:value"/></NSv23>
           </ViewDownloadAccessibility>
         </ViewDownloadAccessibilityIndicators>
         <SpatialDataAndService>
-          <DSv_Num1><xsl:value-of select="//daobs:variable[@id='DSv_Num1']/daobs:value"/></DSv_Num1>
-          <DSv_Num2><xsl:value-of select="//daobs:variable[@id='DSv_Num2']/daobs:value"/></DSv_Num2>
-          <DSv_Num3><xsl:value-of select="//daobs:variable[@id='DSv_Num3']/daobs:value"/></DSv_Num3>
+          <DSv_Num1><xsl:value-of select="//daobs:*[@id='DSv_Num1']/daobs:value"/></DSv_Num1>
+          <DSv_Num2><xsl:value-of select="//daobs:*[@id='DSv_Num2']/daobs:value"/></DSv_Num2>
+          <DSv_Num3><xsl:value-of select="//daobs:*[@id='DSv_Num3']/daobs:value"/></DSv_Num3>
           <DSv_Num><xsl:value-of select="//daobs:indicator[@id='DSv_Num']/daobs:value"/></DSv_Num>
           <SDSv_Num><xsl:value-of select="//daobs:variable[@id='SDSv_Num']/daobs:value"/></SDSv_Num>
           <NSv_NumDiscServ><xsl:value-of select="//daobs:variable[@id='NSv_NumDiscServ']/daobs:value"/></NSv_NumDiscServ>
@@ -176,9 +176,9 @@
           <MDi24><xsl:value-of select="//daobs:indicator[@id='MDi24']/daobs:value"/></MDi24>
           <MDi2><xsl:value-of select="//daobs:indicator[@id='MDi2']/daobs:value"/></MDi2>
           <MetadataConformity>
-            <MDv21><xsl:value-of select="//daobs:variable[@id='MDv21']/daobs:value"/></MDv21>
-            <MDv22><xsl:value-of select="//daobs:variable[@id='MDv22']/daobs:value"/></MDv22>
-            <MDv23><xsl:value-of select="//daobs:variable[@id='MDv23']/daobs:value"/></MDv23>
+            <MDv21><xsl:value-of select="//daobs:*[@id='MDv21']/daobs:value"/></MDv21>
+            <MDv22><xsl:value-of select="//daobs:*[@id='MDv22']/daobs:value"/></MDv22>
+            <MDv23><xsl:value-of select="//daobs:*[@id='MDv23']/daobs:value"/></MDv23>
             <MDv2_DS><xsl:value-of select="//daobs:indicator[@id='MDv2_DS']/daobs:value"/></MDv2_DS>
             <MDv24><xsl:value-of select="//daobs:variable[@id='MDv24']/daobs:value"/></MDv24>
           </MetadataConformity>
@@ -189,9 +189,9 @@
           <DSi23><xsl:value-of select="//daobs:indicator[@id='DSi23']/daobs:value"/></DSi23>
           <DSi2><xsl:value-of select="//daobs:indicator[@id='DSi2']/daobs:value"/></DSi2>
           <SdsConformant>
-            <DSv21><xsl:value-of select="//daobs:variable[@id='DSv21']/daobs:value"/></DSv21>
-            <DSv22><xsl:value-of select="//daobs:variable[@id='DSv22']/daobs:value"/></DSv22>
-            <DSv23><xsl:value-of select="//daobs:variable[@id='DSv23']/daobs:value"/></DSv23>
+            <DSv21><xsl:value-of select="//daobs:*[@id='DSv21']/daobs:value"/></DSv21>
+            <DSv22><xsl:value-of select="//daobs:*[@id='DSv22']/daobs:value"/></DSv22>
+            <DSv23><xsl:value-of select="//daobs:*[@id='DSv23']/daobs:value"/></DSv23>
             <DSv2><xsl:value-of select="//daobs:indicator[@id='DSv2']/daobs:value"/></DSv2>
           </SdsConformant>
         </SdsConformantIndicators>
