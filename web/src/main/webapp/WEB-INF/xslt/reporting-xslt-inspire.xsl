@@ -501,7 +501,8 @@
          monitoring="productionAndIndustrialFacilities" annex="III"/>
     <map theme="Agricultural and aquaculture facilities"
          monitoring="agriculturalAndAquacultureFacilities" annex="III"/>
-    <map theme="Population distribution — demography"
+    <!--<map theme="Population distribution — demography"-->
+    <map theme="Population distribution.*"
          monitoring="populationDistributionDemography" annex="III"/>
     <map theme="Area management/restriction/regulation zones and reporting units"
          monitoring="areaManagementRestrictionRegulationZonesAndReportingUnits" annex="III"/>
@@ -551,7 +552,7 @@
 
     <xsl:for-each select="$inspireThemes">
       <xsl:variable name="theme" select="."/>
-      <xsl:variable name="mapping" select="$inspireThemesMap/map[matches(@theme, $theme, 'i')]"/>
+      <xsl:variable name="mapping" select="$inspireThemesMap/map[matches($theme, @theme, 'i')]"/>
 
       <xsl:if test="$mapping/@annex != ''">
         <Themes>
