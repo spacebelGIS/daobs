@@ -211,9 +211,8 @@ public class CswHarvester {
                     constraintElement.setAttribute("version", "1.1.0");
 
                     Node filterNode = getRecordsRequest.importNode(filter,true);
-                    Node queryNode = children.getParentNode();
                     constraintElement.appendChild(filterNode);
-                    queryNode.appendChild(constraintElement);
+                    children.appendChild(constraintElement);
                 }
             }
 
