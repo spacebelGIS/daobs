@@ -43,10 +43,12 @@ public class SolrRequestBean {
         try {
             SolrServerBean serverBean = SolrServerBean.get();
             URL url = new URL(serverBean.getSolrServerUrl() + query);
-            String xmlResponse = IOUtils.toString(url);
+            String xmlResponse = IOUtils.toString(url, "UTF-8");
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(xmlResponse));
+            InputSource is = new InputSource(
+                                new ByteArrayInputStream(
+                                        xmlResponse.getBytes("UTF-8")));
             return builder.parse(is).getFirstChild();
         } catch (Exception e) {
             e.printStackTrace();
