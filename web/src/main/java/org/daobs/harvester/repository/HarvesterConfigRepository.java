@@ -1,18 +1,29 @@
 package org.daobs.harvester.repository;
 
+import org.daobs.controller.exception.InvalidHarvesterException;
 import org.daobs.harvester.config.Harvester;
 import org.daobs.harvester.config.Harvesters;
 import org.daobs.utility.UUIDFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,7 +104,8 @@ public class HarvesterConfigRepository implements InitializingBean {
                 harvesters.getHarvester().add(harvester);
                 commit();
             } else {
-                throw new Exception("Invalid harvester");
+                Exception e = new InvalidHarvesterException(listOfErrors);
+                throw e;
             }
         }
         return harvester;
@@ -121,6 +133,20 @@ public class HarvesterConfigRepository implements InitializingBean {
         if (harvester.getTerritory() == null) {
             listOfErrors.add(String.format("Harvester with UUID '%s' does not have territory.",
                     harvester.getUuid()));
+        }
+        String filter = (String) harvester.getFilter();
+        if (filter != null) {
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            domFactory.setNamespaceAware(true);
+            try {
+                DocumentBuilder builder = domFactory.newDocumentBuilder();
+                builder.parse(new InputSource(
+                                new StringReader(filter)));
+            } catch (Exception e) {
+                listOfErrors.add(String.format("Harvester with UUID '%s' does not have " +
+                                "a valid filter '%s'. Error is: %s.",
+                        harvester.getUuid(), filter, e.getMessage()));
+            }
         }
         return listOfErrors;
     }

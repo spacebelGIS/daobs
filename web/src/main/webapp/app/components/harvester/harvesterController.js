@@ -28,6 +28,7 @@
         'errorRemovingHarvesterRecords',
         'harvesterStarted',
         'harvesterDeleted',
+        'harvesterSaved',
         'errorAddingHarvester',
         'harvesterRecordsDeleted',
         'errorStartingHarvester']).
@@ -50,13 +51,14 @@
       $scope.add = function () {
         harvesterService.add($scope.newHarvester).then(function (response) {
           $scope.adding = false;
+          Notification.success($scope.translations.harvesterSaved);
           init();
           $scope.newHarvester = $scope.harvesterTpl;
         }, function(response) {
           console.error(response);
           Notification.error(
             $scope.translations.errorAddingHarvester + ' ' +
-            response);
+            response.message);
         });
       };
 
