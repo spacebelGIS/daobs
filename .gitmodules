@@ -1,3 +1,6 @@
 [submodule "dashboard"]
 	path = dashboard
 	url = https://github.com/titellus/banana.git
+[submodule "dashboard2"]
+	path = dashboard2
+	url = https://github.com/titellus/banana.git
