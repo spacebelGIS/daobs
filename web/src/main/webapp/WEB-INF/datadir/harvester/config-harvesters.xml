@@ -192,7 +192,7 @@
     <daobs:filter>
       <ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">
         <ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%">
-          <ogc:PropertyName>apiso:Title</ogc:PropertyName>
+          <ogc:PropertyName>apiso:Subject</ogc:PropertyName>
           <ogc:Literal>%INSPIRE%</ogc:Literal>
         </ogc:PropertyIsLike>
       </ogc:Filter>

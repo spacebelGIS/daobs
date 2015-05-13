@@ -230,7 +230,7 @@
       <!--<cm:to uri="direct:indexDeleteDocuments"/>-->
       <cm:split>
         <cm:method bean="cswHarvester" method="getPages"/>
-        <cm:log message="Processing page at index: $simple{property.CamelSplitIndex} (Total number of pages: $simple{bean:cswHarvester?method=getNumberOfPages})"
+        <cm:log message="Processing page $simple{property.CamelSplitIndex} / $simple{bean:cswHarvester?method=getNumberOfPages}"
                 loggingLevel="INFO"
                 logName="org.daobs.harvester.CswHarvester"/>
         <cm:log message="GetRecords request ..."

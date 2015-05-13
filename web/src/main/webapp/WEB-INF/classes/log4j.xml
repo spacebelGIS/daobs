@@ -11,18 +11,40 @@
   <appender name="file" class="org.apache.log4j.RollingFileAppender">
     <param name="Threshold" value="ALL" />
     <!--<param name="File" value="${catalina.home}/logs/daobs.log" />-->
-    <param name="File" value="logs/daobs.log" />
+    <param name="File" value="/tmp/logs/daobs.log" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d{ISO8601} %-5p [%c] - %m%n" />
     </layout>
   </appender>
 
-  <logger name="org.springframework" additivity="true">
+
+  <logger name="org.daobs.harvester.CswHarvester">
+    <level value="DEBUG"/>
+  </logger>
+
+  <logger name="org.daobs.task.ServiceDatasetIndexer">
+    <level value="DEBUG"/>
+  </logger>
+
+  <logger name="org.daobs.task.ValidationChecker">
+    <level value="DEBUG"/>
+  </logger>
+
+  <logger name="org.apache.camel">
+    <level value="WARN"/>
+  </logger>
+
+  <logger name="org.springframework">
+    <level value="WARN"/>
+  </logger>
+
+  <logger name="org.apache.activemq">
     <level value="WARN"/>
   </logger>
 
   <root>
-    <level value="OFF"/>
+    <level value="DEBUG"/>
     <appender-ref ref="console" />
+    <appender-ref ref="file" />
   </root>
 </log4j:configuration>
