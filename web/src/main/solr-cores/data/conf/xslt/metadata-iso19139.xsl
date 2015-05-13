@@ -452,6 +452,8 @@
 
             <xsl:variable name="title" select="current-grouping-key()"/>
             <xsl:if test="count($eu9762009/*[lower-case(normalize-space(.)) =
+                lower-case(normalize-space($title))]) = 1 or
+                count($eu10892010/*[lower-case(normalize-space(.)) =
                 lower-case(normalize-space($title))]) = 1">
 
               <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
