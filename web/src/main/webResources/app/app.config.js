@@ -14,7 +14,7 @@
       reporting: context + 'daobs/reporting/',
       samples: context + 'daobs/samples/',
       reportingSubmit: context + 'data/update/xslt',
-      dashboardBaseURL: context + 'dashboard/#/dashboard/solr/',
+      dashboardBaseURL: context + 'dashboard2/#/dashboard/solr/',
       solrAdmin: context + 'admin.html'
     }
   });
