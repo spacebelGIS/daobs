@@ -64,7 +64,9 @@
     <cm:route id="route-task-start" autoStartup="{{task.service-dataset-indexer.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:simple resultType="java.lang.String">{{task.service-dataset-indexer.filter}}</cm:simple>
+        <cm:groovy>
+          URLEncoder.encode('{{task.service-dataset-indexer.filter}}')
+        </cm:groovy>
       </cm:setHeader>
       <cm:to uri="direct:task-analyze-start"/>
     </cm:route>
@@ -72,7 +74,9 @@
     <cm:route id="route-task-jms-start" autoStartup="{{task.service-dataset-indexer.startup.jms}}">
       <cm:from uri="activemq:task-analyze"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:simple resultType="java.lang.String">{{task.service-dataset-indexer.filter}} %2BharvesterId%3A$simple{in.body}</cm:simple>
+        <cm:groovy>
+          URLEncoder.encode('{{task.service-dataset-indexer.filter}}' + ' ' +  exchange.in.body)
+        </cm:groovy>
       </cm:setHeader>
       <cm:to uri="direct:task-analyze-start"/>
     </cm:route>
@@ -93,13 +97,18 @@
               logName="org.daobs.task.ServiceDatasetIndexer"/>
 
 
+      <cm:log message="Processing documents matching filter $simple{header.documentFilter}..."
+              loggingLevel="INFO"
+              logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+
 
       <!-- Get number of records to validate -->
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q={{task.service-dataset-indexer.filter}}&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -132,7 +141,7 @@
               <cm:constant>GET</cm:constant>
             </cm:setHeader>
             <cm:setHeader headerName="Exchange.HTTP_URI">
-              <cm:simple>{{solr.server.url}}/data/select?q={{task.service-dataset-indexer.filter}}&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+              <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
             </cm:setHeader>
             <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
             <cm:convertBodyTo type="org.w3c.dom.Document"/>

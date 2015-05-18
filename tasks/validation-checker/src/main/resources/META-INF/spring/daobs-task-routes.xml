@@ -24,6 +24,7 @@
     <property name="recordsPerPage" value="${task.validation-checker.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
+  <bean id="urlEncoder" class="java.net.URLEncoder"/>
 
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
@@ -65,7 +66,9 @@
     <cm:route id="route-task-validate" autoStartup="{{task.validation-checker.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}}</cm:simple>
+        <cm:groovy>
+          URLEncoder.encode('{{task.validation-checker.filter}}')
+        </cm:groovy>
       </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
@@ -73,7 +76,9 @@
     <cm:route id="route-task-validate-start" autoStartup="{{task.validation-checker.startup.jms}}">
       <cm:from uri="activemq:task-validate"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:simple resultType="java.lang.String">{{task.validation-checker.filter}}+%2BharvesterId%3A$simple{in.body}</cm:simple>
+        <cm:groovy>
+          URLEncoder.encode('{{task.validation-checker.filter}}' + ' ' +  exchange.in.body)
+        </cm:groovy>
       </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
@@ -105,7 +110,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q={{task.validation-checker.filter}}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -139,7 +144,7 @@
         the paging can't be used as such. It would have been
         better to grab the set of ids to validate and loop over them. -->
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/data/select?q={{task.validation-checker.filter}}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+          <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
