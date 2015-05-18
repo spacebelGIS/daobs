@@ -386,7 +386,7 @@
                                 ./gmd:northBoundLatitude/gco:Decimal castable as xs:decimal and
                                 ./gmd:southBoundLatitude/gco:Decimal castable as xs:decimal
                                 ]">
-            <xsl:variable name="format" select="'#0.0000'"></xsl:variable>
+            <xsl:variable name="format" select="'#0.000000'"></xsl:variable>
 
             <xsl:variable name="w" select="format-number(./gmd:westBoundLongitude/gco:Decimal/text(), $format)"/>
             <xsl:variable name="e" select="format-number(./gmd:eastBoundLongitude/gco:Decimal/text(), $format)"/>
@@ -396,31 +396,54 @@
             <!-- Example: ENVELOPE(-10, 20, 15, 10) which is minX, maxX, maxY, minY order
             http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
             https://cwiki.apache.org/confluence/display/solr/Spatial+Search
+
+            bbox field type limited to one. TODO
+            <xsl:if test="position() = 1">
+              <field name="bbox">
+                <xsl:text>ENVELOPE(</xsl:text>
+                <xsl:value-of select="$w"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$e"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$n"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$s"/>
+                <xsl:text>)</xsl:text>
+              </field>
+            </xsl:if>
             -->
-            <field name="bbox">
-              <xsl:text>ENVELOPE(</xsl:text>
-              <xsl:value-of select="$w"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="$e"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="$n"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="$s"/>
-              <xsl:text>)</xsl:text>
-            </field>
-            <field name="geom">
-              <xsl:text>POLYGON((</xsl:text>
-              <xsl:value-of select="concat($w, ' ', $s)"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="concat($e, ' ', $s)"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="concat($e, ' ', $n)"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="concat($w, ' ', $n)"/>
-              <xsl:text>,</xsl:text>
-              <xsl:value-of select="concat($w, ' ', $s)"/>
-              <xsl:text>))</xsl:text>
-            </field>
+            <xsl:choose>
+              <xsl:when test="$e = $w and $s = $n">
+                <field name="geom">
+                  <xsl:text>POINT(</xsl:text>
+                  <xsl:value-of select="concat($w, ' ', $s)"/>
+                  <xsl:text>)</xsl:text>
+                </field>
+              </xsl:when>
+              <xsl:when test="($e = $w and $s != $n) or ($e != $w and $s = $n)">
+                <!-- Probably an invalid bbox indexing a point only -->
+                <field name="geom">
+                  <xsl:text>POINT(</xsl:text>
+                  <xsl:value-of select="concat($w, ' ', $s)"/>
+                  <xsl:text>)</xsl:text>
+                </field>
+              </xsl:when>
+              <xsl:otherwise>
+                <field name="geom">
+                  <xsl:text>POLYGON((</xsl:text>
+                  <xsl:value-of select="concat($w, ' ', $s)"/>
+                  <xsl:text>,</xsl:text>
+                  <xsl:value-of select="concat($e, ' ', $s)"/>
+                  <xsl:text>,</xsl:text>
+                  <xsl:value-of select="concat($e, ' ', $n)"/>
+                  <xsl:text>,</xsl:text>
+                  <xsl:value-of select="concat($w, ' ', $n)"/>
+                  <xsl:text>,</xsl:text>
+                  <xsl:value-of select="concat($w, ' ', $s)"/>
+                  <xsl:text>))</xsl:text>
+                </field>
+              </xsl:otherwise>
+            </xsl:choose>
             <!--<xsl:value-of select="($e + $w) div 2"/>,<xsl:value-of select="($n + $s) div 2"/></field>-->
           </xsl:for-each>
         </xsl:for-each>
