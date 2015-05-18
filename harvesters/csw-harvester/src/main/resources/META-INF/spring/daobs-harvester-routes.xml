@@ -41,6 +41,10 @@
           errorHandlerRef="loggingErrorHandler"
           useMDCLogging="true">
 
+    <cm:threadPoolProfile id="myDefaultProfile"
+                          defaultProfile="true"
+                          poolSize="30"
+                          maxPoolSize="30"/>
     <!--<cm:jmxAgent id="agent" mbeanObjectDomainName="org.daobs"/>-->
 
     <cm:onException>
@@ -108,43 +112,65 @@
         <cm:setHeader headerName="harvesterName">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:name)</cm:xpath>
         </cm:setHeader>
-        <cm:choice>
+
+       <!-- <cm:choice>
           <cm:when>
-            <cm:xpath>daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
-            <cm:setHeader headerName="harvesterFilter">
-              <cm:xpath resultType="org.w3c.dom.Document">daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
+            <cm:xpath>daobs:harvester/daobs:frequency</cm:xpath>
+            <cm:setHeader headerName="frequency">
+              <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:frequency)</cm:xpath>
             </cm:setHeader>
+            <cm:log message="Scheduled delivery for harvester '$simple{header.harvesterName}', frequency is '$simple{header.frequency}' ..."
+                    loggingLevel="INFO"
+                    logName="org.daobs.harvester.CswHarvester"/>
+
+            <cm:to uri="direct:harvestRunNode"/>
           </cm:when>
           <cm:otherwise>
-            <cm:setHeader headerName="harvesterFilter">
-              <cm:simple resultType="org.w3c.dom.Document">
-                <![CDATA[<Filter xmlns="http://www.opengis.net/ogc"/>]]>
-              </cm:simple>
-            </cm:setHeader>
+            <cm:to uri="direct:harvestRunNode"/>
           </cm:otherwise>
-        </cm:choice>
-        <cm:setHeader headerName="harvesterBeginTime">
-          <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
-        </cm:setHeader>
+        </cm:choice>-->
 
 
-        <cm:log message="Harvesting node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory}) at '$simple{header.harvesterURL}' [Number of records requested per page in config: $simple{header.harvesterNbRecordsPerPage}]"
-                loggingLevel="INFO"
-                logName="org.daobs.harvester.CswHarvester"/>
-        <cm:log message="CSW filter is $simple{header.harvesterFilter}"
-                loggingLevel="INFO"
-                logName="org.daobs.harvester.CswHarvester"/>
-        <cm:log message="Starting at $simple{header.harvesterBeginTime}"
-                loggingLevel="INFO"
-                logName="org.daobs.harvester.CswHarvester"/>
-
-        <cm:to uri="direct:harvestNode"/>
+        <cm:to uri="direct:harvestRunNode"/>
       </cm:split>
     </cm:route>
 
+    <cm:route id="route-csw-run">
+      <cm:from uri="direct:harvestRunNode"/>
+      <cm:choice>
+        <cm:when>
+          <cm:xpath>daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
+          <cm:setHeader headerName="harvesterFilter">
+            <cm:xpath resultType="org.w3c.dom.Document">daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
+          </cm:setHeader>
+        </cm:when>
+        <cm:otherwise>
+          <cm:setHeader headerName="harvesterFilter">
+            <cm:simple resultType="org.w3c.dom.Document">
+              <![CDATA[<Filter xmlns="http://www.opengis.net/ogc"/>]]>
+            </cm:simple>
+          </cm:setHeader>
+        </cm:otherwise>
+      </cm:choice>
+      <cm:setHeader headerName="harvesterBeginTime">
+        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+      </cm:setHeader>
 
-    <cm:route id="route-csw-hits"
-              startupOrder="2">
+
+      <cm:log message="Harvesting node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory}) at '$simple{header.harvesterURL}' [Number of records requested per page in config: $simple{header.harvesterNbRecordsPerPage}]"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:log message="CSW filter is $simple{header.harvesterFilter}"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:log message="Starting at $simple{header.harvesterBeginTime}"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+
+      <cm:to uri="direct:harvestNode"/>
+    </cm:route>
+
+    <cm:route id="route-csw-hits">
       <cm:description>
         Send a GetRecords request (cf. csw-get-records-hits.xml)
         in order to retrieve the max number of records to harvest.
@@ -214,7 +240,6 @@
 
 
     <cm:route id="route-csw-get-records"
-              startupOrder="0"
               shutdownRunningTask="CompleteAllTasks">
       <cm:description>Based on the total number of records
       to be harvested, retrieve records per page and index
@@ -305,7 +330,7 @@
               logName="org.daobs.harvester.CswHarvester"/>
 
       <cm:setBody>
-        <cm:simple>${header.harvesterUrl}</cm:simple>
+        <cm:simple>+harvesterId:"${header.harvesterUrl}"</cm:simple>
       </cm:setBody>
       <cm:multicast stopOnException="false"
                     parallelProcessing="true">
