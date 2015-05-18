@@ -386,11 +386,12 @@
                                 ./gmd:northBoundLatitude/gco:Decimal castable as xs:decimal and
                                 ./gmd:southBoundLatitude/gco:Decimal castable as xs:decimal
                                 ]">
+            <xsl:variable name="format" select="'#0.0000'"></xsl:variable>
 
-            <xsl:variable name="w" select="number(./gmd:westBoundLongitude/gco:Decimal/text())"/>
-            <xsl:variable name="e" select="number(./gmd:eastBoundLongitude/gco:Decimal/text())"/>
-            <xsl:variable name="n" select="number(./gmd:northBoundLatitude/gco:Decimal/text())"/>
-            <xsl:variable name="s" select="number(./gmd:southBoundLatitude/gco:Decimal/text())"/>
+            <xsl:variable name="w" select="format-number(./gmd:westBoundLongitude/gco:Decimal/text(), $format)"/>
+            <xsl:variable name="e" select="format-number(./gmd:eastBoundLongitude/gco:Decimal/text(), $format)"/>
+            <xsl:variable name="n" select="format-number(./gmd:northBoundLatitude/gco:Decimal/text(), $format)"/>
+            <xsl:variable name="s" select="format-number(./gmd:southBoundLatitude/gco:Decimal/text(), $format)"/>
 
             <!-- Example: ENVELOPE(-10, 20, 15, 10) which is minX, maxX, maxY, minY order
             http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
