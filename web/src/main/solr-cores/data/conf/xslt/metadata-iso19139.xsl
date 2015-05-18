@@ -379,7 +379,49 @@
             <field name="geoTag"><xsl:value-of select="."/></field>
           </xsl:for-each>
 
-          <!-- TODO: index bbox -->
+          <!-- TODO: index bounding polygon -->
+          <xsl:for-each select=".//gmd:EX_GeographicBoundingBox[
+                                ./gmd:westBoundLongitude/gco:Decimal castable as xs:decimal and
+                                ./gmd:eastBoundLongitude/gco:Decimal castable as xs:decimal and
+                                ./gmd:northBoundLatitude/gco:Decimal castable as xs:decimal and
+                                ./gmd:southBoundLatitude/gco:Decimal castable as xs:decimal
+                                ]">
+
+            <xsl:variable name="w" select="number(./gmd:westBoundLongitude/gco:Decimal/text())"/>
+            <xsl:variable name="e" select="number(./gmd:eastBoundLongitude/gco:Decimal/text())"/>
+            <xsl:variable name="n" select="number(./gmd:northBoundLatitude/gco:Decimal/text())"/>
+            <xsl:variable name="s" select="number(./gmd:southBoundLatitude/gco:Decimal/text())"/>
+
+            <!-- Example: ENVELOPE(-10, 20, 15, 10) which is minX, maxX, maxY, minY order
+            http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
+            https://cwiki.apache.org/confluence/display/solr/Spatial+Search
+            -->
+            <field name="bbox">
+              <xsl:text>ENVELOPE(</xsl:text>
+              <xsl:value-of select="$w"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="$e"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="$n"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="$s"/>
+              <xsl:text>)</xsl:text>
+            </field>
+            <field name="geom">
+              <xsl:text>POLYGON((</xsl:text>
+              <xsl:value-of select="concat($w, ' ', $s)"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="concat($e, ' ', $s)"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="concat($e, ' ', $n)"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="concat($w, ' ', $n)"/>
+              <xsl:text>,</xsl:text>
+              <xsl:value-of select="concat($w, ' ', $s)"/>
+              <xsl:text>))</xsl:text>
+            </field>
+            <!--<xsl:value-of select="($e + $w) div 2"/>,<xsl:value-of select="($n + $s) div 2"/></field>-->
+          </xsl:for-each>
         </xsl:for-each>
 
 
@@ -495,7 +537,16 @@
         <xsl:for-each select="gmd:transferOptions/*/
                                 gmd:onLine/*[gmd:linkage/gmd:URL != '']">
           <field name="linkUrl"><xsl:value-of select="gmd:linkage/gmd:URL"/></field>
-          <!-- TODO add link field to contains URL, name and protocol -->
+          <field name="linkProtocol"><xsl:value-of select="gmd:protocol/gco:CharacterString/text()"/></field>
+          <field name="link">
+            <xsl:value-of select="gmd:protocol/*/text()"/>
+            <xsl:text>|</xsl:text>
+            <xsl:value-of select="gmd:linkage/gmd:URL"/>
+            <xsl:text>|</xsl:text>
+            <xsl:value-of select="gmd:name/*/text()"/>
+            <xsl:text>|</xsl:text>
+            <xsl:value-of select="gmd:description/*/text()"/>
+          </field>
         </xsl:for-each>
       </xsl:for-each>
 

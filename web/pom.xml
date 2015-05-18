@@ -197,6 +197,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.vividsolutions</groupId>
+      <artifactId>jts</artifactId>
+      <version>1.13</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.daobs</groupId>
       <artifactId>daobs-core</artifactId>
       <version>${project.version}</version>

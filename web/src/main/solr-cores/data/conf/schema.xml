@@ -160,6 +160,7 @@
   <field name="format" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="link" type="string" stored="true" indexed="false" multiValued="true" docValues="true"/>
   <field name="linkUrl" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <field name="linkProtocol" type="string" indexed="true" stored="true" multiValued="true"/>
 
   <field name="tag" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="topic" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
@@ -208,6 +209,9 @@
   <!--<copyField source="serviceType" dest="inspireServiceType"/>-->
   <field name="inspireServiceType" type="only_inspireservicetype" stored="true" indexed="true" multiValued="true"/>
 
+
+  <field name="bbox" type="bbox" stored="true" indexed="true" multiValued="true"/>
+  <field name="geom" type="location_rpt" stored="true" indexed="true" multiValued="true"/>
 
   <field name="geoTag" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="coordinateSystem" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
@@ -934,6 +938,7 @@
     http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
   -->
   <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType"
+             spatialContextFactory="com.spatial4j.core.context.jts.JtsSpatialContextFactory"
              geo="true" distErrPct="0.025" maxDistErr="0.000009" units="degrees"/>
 
   <!-- Spatial rectangle (bounding box) field. It supports most spatial predicates, and has
