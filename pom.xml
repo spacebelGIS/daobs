@@ -280,6 +280,8 @@
 
     <guava.version>17.0</guava.version>
 
+    <tika.version>1.8</tika.version>
+
     <saxon.version>9.1.0.8</saxon.version>
     <saxon-dom.version>9.1.0.8</saxon-dom.version>
     <saxon-xpath.version>9.1.0.8</saxon-xpath.version>

@@ -140,9 +140,11 @@
 
   <field name="resourceType" type="string" stored="true" indexed="true" multiValued="true"/>
   <field name="resourceTitle" type="string" stored="true" indexed="true" multiValued="false"/>
+  <copyField source="resourceTitle" dest="text"/>
   <field name="resourceAltTitle" type="string" stored="true" indexed="true" multiValued="true"/>
   <field name="resourceTitle_*" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="resourceAbstract" type="string" stored="true" indexed="true" multiValued="false"/>
+  <copyField source="resourceAbstract" dest="text"/>
   <field name="resourceCredit" type="string" stored="true" indexed="true" multiValued="true"/>
   <field name="resourceLanguage" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
 
@@ -266,6 +268,9 @@
   <!-- catchall field, containing all other searchable text fields (implemented
        via copyField further on in this schema  -->
   <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+  <field name="analyzeddocument" type="string" indexed="false" stored="true" multiValued="true"/>
+  <field name="geodatatext" type="text_general" indexed="true" stored="false" multiValued="true"/>
+  <field name="documenttext" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
   <!-- catchall text field that indexes tokens both normally and in reverse for efficient
        leading wildcard queries. -->

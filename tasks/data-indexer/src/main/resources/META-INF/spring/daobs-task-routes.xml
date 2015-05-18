@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cm="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <bean id="bridgePropertyPlaceholder"
+        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+    <property name="location" value="/WEB-INF/config.properties"/>
+  </bean>
+
+  <bean id="pagination" class="org.daobs.routing.utility.Pagination">
+    <property name="recordsPerPage" value="${task.data-indexer.records.per.page}"/>
+  </bean>
+  <bean id="utility" class="org.daobs.routing.utility.Utility"/>
+
+  <bean id="dataIndexer" class="org.daobs.tasks.DataIndexer"/>
+  <bean id="urlEncoder" class="java.net.URLEncoder"/>
+
+  <cm:errorHandler id="loggingErrorHandler"
+                      type="LoggingErrorHandler"
+                      logName="daobs.tasks.data-indexer"
+                      level="DEBUG"/>
+
+  <cm:camelContext
+          id="task.data-indexer"
+          errorHandlerRef="loggingErrorHandler"
+          useMDCLogging="true">
+
+    <cm:threadPoolProfile id="myDefaultProfile"
+                          defaultProfile="true"
+                          poolSize="10"
+                          maxPoolSize="10"/>
+
+    <cm:onException>
+      <cm:exception>org.apache.camel.component.http4.HttpOperationFailedException</cm:exception>
+      <cm:continued>
+        <cm:constant>true</cm:constant>
+      </cm:continued>
+      <cm:log message="Oops, something went wrong: $simple{exception.message}."
+              loggingLevel="ERROR"
+              logName="org.daobs.task.DataIndexer"/>
+      <cm:log message="$simple{exception.responseBody}"
+              loggingLevel="ERROR"
+              logName="org.daobs.task.DataIndexer"/>
+      <cm:log message="$simple{exception.stacktrace}"
+              loggingLevel="ERROR"
+              logName="org.daobs.task.DataIndexer"/>
+      <cm:to uri="log:org.daobs.task.DataIndexer?showBody=true"/>
+    </cm:onException>
+
+
+
+    <cm:route id="route-data-indexer-run-cli" autoStartup="{{task.data-indexer.startup.cli}}">
+      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple resultType="java.lang.String">{{task.data-indexer.filter}}</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="direct:data-indexer-start"/>
+    </cm:route>
+
+    <cm:route id="route-data-indexer-run-jms" autoStartup="{{task.data-indexer.startup.jms}}">
+      <cm:from uri="activemq:data-indexer"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple resultType="java.lang.String">{{task.data-indexer.filter}}$simple{in.body}</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="direct:data-indexer-start"/>
+    </cm:route>
+
+
+    <!--<cm:route id="route-data-indexer-reset">
+      <cm:description>
+        Reset data field.
+      </cm:description>
+    </cm:route>-->
+
+    <cm:route id="route-data-indexer-start">
+      <cm:description>
+
+      </cm:description>
+      <cm:from uri="direct:data-indexer-start"/>
+
+      <cm:log message="Background task indexing related data ..."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DataIndexer"/>
+
+
+
+      <!-- Get number of records to validate -->
+      <cm:setHeader headerName="CamelHttpMethod">
+        <cm:constant>GET</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/data/select?q={{task.data-indexer.filter}}&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+      <cm:setHeader headerName="numberOfRecordsMatched">
+        <cm:xpath resultType="java.lang.String">
+          //result/@numFound
+        </cm:xpath>
+      </cm:setHeader>
+      <cm:log message="$simple{header.numberOfRecordsMatched} record(s) with data to index."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DataIndexer"/>
+
+      <cm:split parallelProcessing="false">
+        <cm:method bean="pagination" method="getPages"/>
+        <cm:setHeader headerName="start">
+          <cm:simple>${bean:pagination?method=getStart}</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="row">
+          <cm:simple>{{task.data-indexer.records.per.page}}</cm:simple>
+        </cm:setHeader>
+
+        <cm:log message="Page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row}."
+                loggingLevel="INFO"
+                logName="org.daobs.task.DataIndexer"/>
+
+        <cm:setHeader headerName="CamelHttpMethod">
+          <cm:constant>GET</cm:constant>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_URI">
+          <cm:simple>{{solr.server.url}}/data/select?q={{task.data-indexer.filter}}&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+        </cm:setHeader>
+        <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+        <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        <cm:split parallelProcessing="true">
+          <cm:xpath>//doc</cm:xpath>
+          <!-- Retrieve UUID from Solr response -->
+          <cm:setHeader headerName="documentIdentifier">
+            <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
+          </cm:setHeader>
+          <cm:log message="Record identifier is '$simple{header.documentIdentifier}'."
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.DataIndexer"/>
+
+          <cm:setBody>
+            <cm:xpath>doc/arr[@name = 'link']</cm:xpath>
+          </cm:setBody>
+          <cm:split parallelProcessing="false">
+            <cm:xpath>//str</cm:xpath>
+            <cm:to uri="direct:analyse-link"/>
+          </cm:split>
+        </cm:split>
+      </cm:split>
+
+    </cm:route>
+
+
+
+    <cm:route id="route-analyse-link">
+      <cm:from uri="direct:analyse-link"/>
+      <cm:setHeader headerName="beginTime">
+        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+      </cm:setHeader>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+      <cm:log message="Record '$simple{header.documentIdentifier}' contains link '${body}' for document '$simple{header.documentIdentifier}'. Start at $simple{header.beginTime}."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DataIndexer"/>
+      <cm:bean ref="dataIndexer" method="splitLink"/>
+      <cm:log message="Analyzing URL '$simple{header.linkUrl}', protocol '$simple{header.linkProtocol}', name '$simple{header.linkName}', description '$simple{header.linkDescription}'."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DataIndexer"/>
+
+      <cm:setHeader headerName="stringToEncrypt">
+        <cm:simple>$simple{header.linkUrl}</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="fileNameSuffix">
+        <cm:simple>bean:utility?method=encrypt</cm:simple>
+      </cm:setHeader>
+
+      <!-- TODO: Tika works fine for most of the format (eg. XLS, PDF, ZIP)
+       but for WFS specific processing should be done. -->
+      <cm:bean ref="dataIndexer" method="parseDocument"/>
+      <cm:log message="Extracted content '${body}'."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DataIndexer"/>
+      <cm:setBody>
+        <cm:simple>
+          <![CDATA[<add commitWithin="10000">
+                    <doc>
+                      <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
+                      <field name="analyzeddocument" update="add">$simple{header.linkUrl}</field>
+                      <field name="documenttext" update="add">
+                        <![CDATA[${body}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[
+                      </field>
+                    </doc>
+                  </add>]]>
+        </cm:simple>
+      </cm:setBody>
+      <!-- TODO: Then we should try to create features depening on the
+      file type. A row in an excel document, a feature in a WFS response... -->
+      <cm:to uri="file:{{task.data-indexer.folder}}?fileName=document-data-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+    </cm:route>
+
+
+    <cm:route id="route-index-data">
+      <!--<cm:from uri="direct:save-validation-status"/>-->
+      <cm:from uri="file:{{task.data-indexer.folder}}?consumer.delay={{task.data-indexer.delay}}"/>
+      <cm:log message="Updating index with '$simple{body}' ..."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DataIndexer"/>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/update</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="camelHttpMethod">
+        <cm:constant>POST</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:constant>application/xml</cm:constant>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:log message="Solr response: ${body}."
+              loggingLevel="DEBUG"
+              logName="org.daobs.task.DataIndexer"/>
+    </cm:route>
+
+  </cm:camelContext>
+</beans>

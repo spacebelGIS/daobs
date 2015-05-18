@@ -73,17 +73,28 @@ mvn clean install -Dwebapp.context=/dashboard \
 
 ### Deploy a WAR file
 
-Create a custom data directory, check that the WEB-INF/config.properties point to this new directory and copy the defaults:
-
+Create a custom data directory.
 ```
 mkdir /usr/dashboard/data
+```
+
+Unzip the WAR and check that the WEB-INF/config.properties point to this new directory.
+Copy the defaults datadir from WEB-INF/datadir to the custom data directory:
+
+```
+# If using the source code
 cp -fr web/target/solr/WEB-INF/datadir/* /usr/dashboard/data/.
+
+# If using the WAR file
+unzip dashboard.war
+cp -fr WEB-INF/datadir/* /usr/dashboard/data/.
 ```
 
 
 Copy the default core configuration folder to the solr.solr.home folder.
 
 ```
+# If using the source code
 mkdir /usr/dashboard/core
 cp -fr web/target/solr-cores/* /usr/dashboard/core/.
 ```
@@ -295,7 +306,8 @@ The search query could be adapted to restrict to a subset of documents:
 
 ## Analysis tasks
 
-A set of background tasks could be triggered on the content of the index and improve or add information to the index.
+A set of background tasks could be triggered on the content of the index and 
+improve or add information to the index.
 
 ### Validation task
 
@@ -337,7 +349,8 @@ By default, the task validates all records which have not been validated before 
 
 #### Process
 
-A data sets may be accessible through a view and/or download services. This type of relation is defined at the service metadata level using the operatesOn element:
+A data sets may be accessible through a view and/or download services. This type 
+of relation is defined at the service metadata level using the operatesOn element:
 
 * link using the data sets metadata record UUID:
 
@@ -351,14 +364,18 @@ A data sets may be accessible through a view and/or download services. This type
                 xlink:href="http://services.data.shom.fr/csw/ISOAP?service=CSW&version=2.0.2&request=GetRecordById&Id=81aea739-4d21-427d-bec4-082cb64b825b"/>
 ```
 
-Both type of links are supported. The GetRecordById takes priority. The data sets metadata record identifier is extracted from the GetRecordById request.
+Both type of links are supported. The GetRecordById takes priority. The data sets 
+metadata record identifier is extracted from the GetRecordById request.
 
 
 
-This task analyze all available services in the index and update associated data sets by adding the following fields:
+This task analyze all available services in the index and update associated data 
+sets by adding the following fields:
 
 * recordOperatedByType: Contains the type of all services operating the data sets (eg. view, download)
 * recordOperatedBy: Contains the identifier of all services operating the data sets. Note: it does not provide information that this service is a download service. User need to get the service record to get this details.
+
+The task also propagate INSPIRE theme from each datasets to the service.
 
 
 #### Run the task
@@ -371,6 +388,32 @@ mvn camel:run
 ```
 
 By default, the task analyze all services.
+
+
+
+
+### Associated resource indexer
+
+#### Process
+
+A metadata record may contain URL to remote resources (eg. PDF document, ZIP files).
+This task will retrieve the content of such document using [Tika analysis toolkit](https://tika.apache.org/)
+and index the content retrieved. This improve search results has the data related
+to the metadata are also indexed.
+
+
+Associated document URL are stored in the linkUrl field in the index.
+
+
+#### Run the task
+
+To trigger the data analysis:
+
+```
+cd tasks/data-indexer
+mvn camel:run
+```
+
 
 
 ## Dashboard

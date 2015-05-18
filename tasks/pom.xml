@@ -18,5 +18,6 @@
   <modules>
     <module>service-dataset-indexer</module>
     <module>validation-checker</module>
+    <module>data-indexer</module>
   </modules>
 </project>
