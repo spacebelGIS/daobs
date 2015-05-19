@@ -58,9 +58,7 @@
     <cm:route id="route-data-indexer-run-cli" autoStartup="{{task.data-indexer.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:groovy>
-          URLEncoder.encode('{{task.data-indexer.filter}}')
-        </cm:groovy>
+        <cm:simple>{{task.data-indexer.filter}}</cm:simple>
       </cm:setHeader>
       <cm:to uri="direct:data-indexer-start"/>
     </cm:route>
@@ -68,9 +66,7 @@
     <cm:route id="route-data-indexer-run-jms" autoStartup="{{task.data-indexer.startup.jms}}">
       <cm:from uri="activemq:data-indexer"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:groovy>
-          URLEncoder.encode('{{task.data-indexer.filter}}' + ' ' +  exchange.in.body)
-        </cm:groovy>
+        <cm:groovy>'{{task.data-indexer.filter}}' + ' ' +  exchange.in.body</cm:groovy>
       </cm:setHeader>
       <cm:to uri="direct:data-indexer-start"/>
     </cm:route>
@@ -129,7 +125,11 @@
           <cm:constant>GET</cm:constant>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+          <cm:simple>{{solr.server.url}}/data/select</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_QUERY">
+          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') +
+                      '&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>

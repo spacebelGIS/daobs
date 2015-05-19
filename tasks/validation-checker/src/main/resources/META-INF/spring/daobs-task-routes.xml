@@ -66,9 +66,7 @@
     <cm:route id="route-task-validate" autoStartup="{{task.validation-checker.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:groovy>
-          URLEncoder.encode('{{task.validation-checker.filter}}')
-        </cm:groovy>
+        <cm:simple>{{task.validation-checker.filter}}</cm:simple>
       </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
@@ -76,9 +74,7 @@
     <cm:route id="route-task-validate-start" autoStartup="{{task.validation-checker.startup.jms}}">
       <cm:from uri="activemq:task-validate"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:groovy>
-          URLEncoder.encode('{{task.validation-checker.filter}}' + ' ' +  exchange.in.body)
-        </cm:groovy>
+        <cm:groovy>'{{task.validation-checker.filter}}' + ' ' +  exchange.in.body.trim()</cm:groovy>
       </cm:setHeader>
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
@@ -110,7 +106,10 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_QUERY">
+        <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'</cm:groovy>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -144,7 +143,10 @@
         the paging can't be used as such. It would have been
         better to grab the set of ids to validate and loop over them. -->
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=$simple{header.start}&amp;rows=$simple{header.row}</cm:simple>
+          <cm:simple>{{solr.server.url}}/data/select</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_QUERY">
+          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>

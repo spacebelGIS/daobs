@@ -100,6 +100,9 @@
         <cm:setHeader headerName="harvesterUrl">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:url)</cm:xpath>
         </cm:setHeader>
+        <cm:setHeader headerName="harvesterUuid">
+          <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:uuid)</cm:xpath>
+        </cm:setHeader>
         <cm:setHeader headerName="harvesterTerritory">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:territory)</cm:xpath>
         </cm:setHeader>
@@ -330,7 +333,7 @@
               logName="org.daobs.harvester.CswHarvester"/>
 
       <cm:setBody>
-        <cm:simple>+harvesterId:"${header.harvesterUrl}"</cm:simple>
+        <cm:simple>+harvesterUuid:"${header.harvesterUuid}"</cm:simple>
       </cm:setBody>
       <cm:multicast stopOnException="false"
                     parallelProcessing="true">
