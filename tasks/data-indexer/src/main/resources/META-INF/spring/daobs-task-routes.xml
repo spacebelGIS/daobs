@@ -129,7 +129,7 @@
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
           <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') +
-                      '&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+                      '&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;sort=id+desc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>

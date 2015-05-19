@@ -130,8 +130,7 @@
         <cm:setHeader headerName="row">
           <cm:simple>{{task.validation-checker.records.per.page}}</cm:simple>
         </cm:setHeader>
-
-        <cm:log message="Page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row}."
+        <cm:log message="Validating page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row} | total: $simple{header.numberOfRecordsMatched}."
                 loggingLevel="INFO"
                 logName="org.daobs.task.ValidationChecker"/>
 
@@ -146,11 +145,11 @@
           <cm:simple>{{solr.server.url}}/data/select</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
-          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;sort=id+desc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
-        <cm:split parallelProcessing="true">
+        <cm:split parallelProcessing="false">
           <cm:xpath>//doc</cm:xpath>
           <!-- Retrieve UUID from Solr response -->
           <cm:setHeader headerName="documentIdentifier">
