@@ -295,8 +295,8 @@
                             gmd:keyword">
 
           <xsl:variable name="thesaurusName"
-                        select="../gmd:thesaurusName/gmd:CI_Citation/
-                                  gmd:title/gco:CharacterString"/>
+                        select="../gmd:thesaurusName[1]/gmd:CI_Citation/
+                                  gmd:title[1]/gco:CharacterString"/>
 
           <xsl:variable name="thesaurusId"
                         select="normalize-space(../gmd:thesaurusName/gmd:CI_Citation/
@@ -413,37 +413,46 @@
             </xsl:if>
             -->
             <xsl:choose>
-              <xsl:when test="$e = $w and $s = $n">
-                <field name="geom">
-                  <xsl:text>POINT(</xsl:text>
-                  <xsl:value-of select="concat($w, ' ', $s)"/>
-                  <xsl:text>)</xsl:text>
-                </field>
+              <xsl:when test="-180 &lt;= number($e) and number($e) &lt;= 180 and
+                              -180 &lt;= number($w) and number($w) &lt;= 180 and
+                              -90 &lt;= number($s) and number($s) &lt;= 90 and
+                              -90 &lt;= number($n) and number($n) &lt;= 90">
+                <xsl:choose>
+                  <xsl:when test="$e = $w and $s = $n">
+                    <field name="geom">
+                      <xsl:text>POINT(</xsl:text>
+                      <xsl:value-of select="concat($w, ' ', $s)"/>
+                      <xsl:text>)</xsl:text>
+                    </field>
+                  </xsl:when>
+                  <xsl:when test="($e = $w and $s != $n) or ($e != $w and $s = $n)">
+                    <!-- Probably an invalid bbox indexing a point only -->
+                    <field name="geom">
+                      <xsl:text>POINT(</xsl:text>
+                      <xsl:value-of select="concat($w, ' ', $s)"/>
+                      <xsl:text>)</xsl:text>
+                    </field>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <field name="geom">
+                      <xsl:text>POLYGON((</xsl:text>
+                      <xsl:value-of select="concat($w, ' ', $s)"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat($e, ' ', $s)"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat($e, ' ', $n)"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat($w, ' ', $n)"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat($w, ' ', $s)"/>
+                      <xsl:text>))</xsl:text>
+                    </field>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
-              <xsl:when test="($e = $w and $s != $n) or ($e != $w and $s = $n)">
-                <!-- Probably an invalid bbox indexing a point only -->
-                <field name="geom">
-                  <xsl:text>POINT(</xsl:text>
-                  <xsl:value-of select="concat($w, ' ', $s)"/>
-                  <xsl:text>)</xsl:text>
-                </field>
-              </xsl:when>
-              <xsl:otherwise>
-                <field name="geom">
-                  <xsl:text>POLYGON((</xsl:text>
-                  <xsl:value-of select="concat($w, ' ', $s)"/>
-                  <xsl:text>,</xsl:text>
-                  <xsl:value-of select="concat($e, ' ', $s)"/>
-                  <xsl:text>,</xsl:text>
-                  <xsl:value-of select="concat($e, ' ', $n)"/>
-                  <xsl:text>,</xsl:text>
-                  <xsl:value-of select="concat($w, ' ', $n)"/>
-                  <xsl:text>,</xsl:text>
-                  <xsl:value-of select="concat($w, ' ', $s)"/>
-                  <xsl:text>))</xsl:text>
-                </field>
-              </xsl:otherwise>
+              <xsl:otherwise></xsl:otherwise>
             </xsl:choose>
+
             <!--<xsl:value-of select="($e + $w) div 2"/>,<xsl:value-of select="($n + $s) div 2"/></field>-->
           </xsl:for-each>
         </xsl:for-each>
@@ -544,11 +553,11 @@
                 normalize-space(gmd:nameOfMeasure/gco:CharacterString) != '']">
           <xsl:variable name="measureName"
                         select="normalize-space(gmd:nameOfMeasure/gco:CharacterString)"/>
-          <xsl:variable name="measureValue"
-                        select="normalize-space(gmd:result/gmd:DQ_QuantitativeResult/gmd:value)"/>
-          <xsl:if test="$measureValue != ''">
-            <field name="measure_{$measureName}"><xsl:value-of select="$measureValue"/></field>
-          </xsl:if>
+          <xsl:for-each select="gmd:result/gmd:DQ_QuantitativeResult/gmd:value">
+            <xsl:if test=". != ''">
+              <field name="measure_{$measureName}"><xsl:value-of select="."/></field>
+            </xsl:if>
+          </xsl:for-each>
         </xsl:for-each>
       </xsl:for-each>
 
