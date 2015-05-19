@@ -249,34 +249,45 @@
       <cm:log message="Get INSPIRE themes from dataset '$simple{header.datasetIdentifier}' and add them to service '$simple{header.serviceIdentifier}' ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
-      <cm:setBody>
-        <cm:groovy>
-          URLEncoder.encode(request.getBody(String.class));
-        </cm:groovy>
-      </cm:setBody>
       <!-- Get the INSPIRE themes from the related dataset -->
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q=id%3A%22$simple{body}%22&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1</cm:simple>
+        <cm:simple>{{solr.server.url}}/data/select</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_QUERY">
+        <cm:groovy>'q=' +
+                    URLEncoder.encode('id:"' + exchange.in.headers.datasetIdentifier + '"', 'UTF-8') +
+                    '&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1'</cm:groovy>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
 
-      <cm:log message="INSPIRE themes for dataset '$simple{header.datasetIdentifier}' are '$simple{body}'."
-              loggingLevel="INFO"
-              logName="org.daobs.task.ServiceDatasetIndexer"/>
-      <!-- Camel XSLT issue with Saxon 8
-      http://camel.465427.n5.nabble.com/camel-xslt-with-saxon-8-7-td5759704.html
-      <cm:to uri="xslt:WEB-INF/xslt/index-service-themes.xsl?saxon=false"/>
-      -->
-      <cm:to uri="bean:xsltUtility?method=transform(*, 'index-service-themes.xsl')"/>
+      <cm:choice>
+        <cm:when>
+          <cm:xpath>count(//doc[arr/@name="inspireTheme"]) = 1</cm:xpath>
+          <cm:log message="INSPIRE themes for dataset '$simple{header.datasetIdentifier}' are '$simple{body}'."
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.ServiceDatasetIndexer"/>
+          <!-- Camel XSLT issue with Saxon 8
+          http://camel.465427.n5.nabble.com/camel-xslt-with-saxon-8-7-td5759704.html
+          <cm:to uri="xslt:WEB-INF/xslt/index-service-themes.xsl?saxon=false"/>
+          -->
+          <cm:to uri="bean:xsltUtility?method=transform(*, 'index-service-themes.xsl')"/>
 
-      <cm:log message="Service '$simple{header.serviceIdentifier}' is about to be updated by request '$simple{body}'"
-              loggingLevel="INFO"
-              logName="org.daobs.task.ServiceDatasetIndexer"/>
-      <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-themes-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+          <cm:log message="Service '$simple{header.serviceIdentifier}' is about to be updated by request '$simple{body}'"
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.ServiceDatasetIndexer"/>
+          <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-themes-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+        </cm:when>
+        <cm:otherwise>
+          <cm:log message="No INSPIRE themes found for dataset '$simple{header.datasetIdentifier}'."
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.ServiceDatasetIndexer"/>
+        </cm:otherwise>
+      </cm:choice>
+
     </cm:route>
 
 
