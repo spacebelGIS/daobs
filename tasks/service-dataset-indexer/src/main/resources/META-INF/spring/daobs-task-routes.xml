@@ -25,6 +25,8 @@
 
   <bean id="xsltUtility" class="org.daobs.tasks.serviceDatasetIndexer.Utility"/>
 
+  <bean id="duplicateRepo" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository"/>
+
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
                       logName="daobs.tasks.service-dataset-indexer"
@@ -99,7 +101,7 @@
 
 
 
-      <!-- Get number of records to validate -->
+      <!-- Get number of services to analyze -->
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
@@ -175,16 +177,23 @@
               <cm:split parallelProcessing="false">
                 <cm:xpath>doc/arr[@name = 'recordOperateOn']/str</cm:xpath>
 
-                <cm:setBody>
+                <cm:setHeader headerName="idToCheck">
                   <cm:xpath resultType="java.lang.String">normalize-space(.)</cm:xpath>
-                </cm:setBody>
-                <cm:log message=" * Service '$simple{header.documentIdentifier}' operates on '${body}'."
-                        loggingLevel="INFO"
-                        logName="org.daobs.task.ServiceDatasetIndexer"/>
-                <cm:multicast>
-                  <cm:to uri="direct:index-association"/>
-                  <cm:to uri="direct:index-inspirethemes-in-service"/>
-                </cm:multicast>
+                </cm:setHeader>
+                <cm:idempotentConsumer messageIdRepositoryRef="duplicateRepo">
+                  <cm:header>idToCheck</cm:header>
+
+                  <cm:setBody>
+                    <cm:xpath resultType="java.lang.String">normalize-space(.)</cm:xpath>
+                  </cm:setBody>
+                  <cm:log message=" * Service '$simple{header.documentIdentifier}' operates on '${body}'."
+                          loggingLevel="INFO"
+                          logName="org.daobs.task.ServiceDatasetIndexer"/>
+                  <cm:multicast>
+                    <cm:to uri="direct:index-association"/>
+                    <cm:to uri="direct:index-inspirethemes-in-service"/>
+                  </cm:multicast>
+                </cm:idempotentConsumer>
               </cm:split>
             </cm:split>
           </cm:split>
