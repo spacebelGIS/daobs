@@ -80,6 +80,10 @@
     </cm:route>
 
 
+    <cm:route id="route-task-validate-check-regularly" autoStartup="{{task.validation-checker.startup.background}}">
+      <cm:from uri="quartz2://task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
+      <cm:to uri="direct:task-validate-start"/>
+    </cm:route>
 
     <cm:route id="route-get-non-validated-records">
       <cm:description>
@@ -145,7 +149,9 @@
           <cm:simple>{{solr.server.url}}/data/select</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
-          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;sort=id+desc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') +
+                      '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=' +
+                      exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
