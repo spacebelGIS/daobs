@@ -141,7 +141,10 @@
   <field name="resourceType" type="string" stored="true" indexed="true" multiValued="true"/>
   <field name="resourceTitle" type="string" stored="true" indexed="true" multiValued="false"/>
   <copyField source="resourceTitle" dest="text"/>
+  <copyField source="resourceTitle" dest="suggest"/>
   <field name="resourceAltTitle" type="string" stored="true" indexed="true" multiValued="true"/>
+  <copyField source="resourceAltTitle" dest="text"/>
+  <copyField source="resourceAltTitle" dest="suggest"/>
   <field name="resourceTitle_*" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="resourceAbstract" type="string" stored="true" indexed="true" multiValued="false"/>
   <copyField source="resourceAbstract" dest="text"/>
@@ -166,6 +169,9 @@
 
   <field name="tag" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <field name="topic" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
+  <copyField source="tag" dest="suggest"/>
+  <copyField source="topic" dest="suggest"/>
+
   <dynamicField name="thesaurus_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <dynamicField name="codelist_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
   <dynamicField name="measure_*" type="string" stored="true" indexed="true" multiValued="true" docValues="true"/>
@@ -268,6 +274,12 @@
   <!-- catchall field, containing all other searchable text fields (implemented
        via copyField further on in this schema  -->
   <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+
+  <!-- A field for suggestion -->
+  <field name="suggest" type="text_general" indexed="true" stored="true" multiValued="true"/>
+
+  <!-- Field containing associated resources analyzed.
+  The content of those resources is stored in documenttext or geodatatext. -->
   <field name="analyzeddocument" type="string" indexed="false" stored="true" multiValued="true"/>
   <field name="geodatatext" type="text_general" indexed="true" stored="false" multiValued="true"/>
   <field name="documenttext" type="text_general" indexed="true" stored="false" multiValued="true"/>
