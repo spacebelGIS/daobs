@@ -398,8 +398,8 @@
 
   <daobs:harvester>
     <daobs:uuid>b207c9b4-cc15-4a09-88e0-ef8785bfa657</daobs:uuid>
-    <daobs:territory>SL</daobs:territory>
-    <daobs:folder>SL</daobs:folder>
+    <daobs:territory>SI</daobs:territory>
+    <daobs:folder>SI</daobs:folder>
     <daobs:name>Slovenski Inspire metadata sistem (admin)</daobs:name>
     <daobs:url>http://prostor3.gov.si:80/imps/srv/sl/csw</daobs:url>
     <daobs:pointOfTruthURLPattern>http://prostor3.gov.si:80/imps/?uuid={{uuid}}
