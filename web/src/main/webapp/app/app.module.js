@@ -21,7 +21,7 @@
       }, {
         id: 'dashboard',
         icon: 'glyphicon-stats',
-        url: 'dashboard'
+        url: 'dashboard2/#/dashboard/solr/INSPIRE%20Indicator%20trends'
       }, {
         id: 'monitoring',
         icon: 'glyphicon-list-alt',
