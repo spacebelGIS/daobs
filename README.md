@@ -1,12 +1,18 @@
 
 # Overview
 
-Collect information and configure indicators to generate reporting. Build dashboards using the online creation tools. Share your dashboards and provide access to all monitoring information. This project is using [Solr](http://lucene.apache.org/solr/) and [Banana](https://github.com/LucidWorks/banana) dashboard tool to analyze geospatial metadata catalog content.
+Collect information and configure indicators to generate reporting. Build dashboards 
+using the online creation tools. Share your dashboards and provide access to all 
+monitoring information. This project is using [Solr](http://lucene.apache.org/solr/) and 
+[Banana](https://github.com/LucidWorks/banana) dashboard tool to analyze geospatial metadata 
+catalog content and [Tika analysis toolkit](https://tika.apache.org/) to analyze 
+associated resources (eg. PDF, JSON, DBF).
 
 
 * Advanced full-text search capabilities
 * Create, share and visualize online dashboards
 * Collect information using the OGC CSW standard
+* Dataset indexing for better search
 * Generate configurable reports
 
 
@@ -246,14 +252,10 @@ find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
-done
-
-or 
-
-for f in *.xml; do
-  echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" \
+    -u admin:admin \
+    -H "Content-Type: text/xml; charset=utf-8" \
+    --data-binary @$f
 done
 ```
 
