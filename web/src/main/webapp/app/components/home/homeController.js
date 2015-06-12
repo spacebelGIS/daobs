@@ -15,7 +15,7 @@
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
         $http.get(cfg.SERVICES.dashboardCore +
-        '/select?q=title:*&wt=json&rows=20&sort=title asc').
+        '/select?q=title:*&wt=json&sort=title asc&start=0&rows=40').
           success(function (data) {
             $scope.dashboards = data.response.docs;
           });
