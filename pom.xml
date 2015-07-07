@@ -238,7 +238,6 @@
 
   <modules>
     <module>core</module>
-    <module>dashboard</module>
     <module>dashboard2</module>
     <module>core-deps</module>
     <module>logging-deps</module>
