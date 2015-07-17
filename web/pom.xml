@@ -285,9 +285,6 @@
           <includeEmptyDirectories>true</includeEmptyDirectories>
           <webResources>
             <resource>
-              <directory>${project.basedir}/../dashboard/target/web</directory>
-            </resource>
-            <resource>
               <directory>${project.basedir}/../dashboard2/target/web</directory>
             </resource>
           </webResources>

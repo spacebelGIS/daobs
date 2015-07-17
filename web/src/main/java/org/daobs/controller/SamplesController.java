@@ -22,7 +22,7 @@ import java.util.Set;
 @Controller
 public class SamplesController {
 
-    public static final String DASHBOARD_FOLDER = "/dashboard/app/dashboards";
+    public static final String DASHBOARD_FOLDER = "/dashboard2/app/dashboards";
     @Autowired
     DashboardLoader loader;
 
