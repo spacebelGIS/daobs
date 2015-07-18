@@ -15,8 +15,7 @@
   <div class="col-sm-6" id='ds-latest-dashboard'>
 
     <h3>
-      <span data-ng-if="dashboards.length !== 0"
-            data-translate="">latestDashboards</span>
+      <!-- TODO: Should be only displayed for identified users -->
       <span data-ng-if="dashboards.length === 0"
             data-translate="">noDashboard</span>
       <div class="btn-group">
@@ -59,20 +58,43 @@
     </p>
 
 
-    <ul class="list-group"
-        data-ng-show="dashboards.length > 0">
-      <li class="list-group-item"
-          data-ng-repeat="dashboard in dashboards">
-        <a href=""
-           data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
-          {{dashboard.title}}
-        </a>
-        <button class="btn btn-link btn-sm pull-right"
-                data-ng-click="removeDashboard(dashboard.id)">
-          <i class="glyphicon glyphicon-remove text-danger"></i>
-        </button>
-      </li>
-    </ul>
+    <p>
+      <h2 data-translate="">inspireOfficialMonitoringReporting</h2>
+      <ul class="list-group"
+          data-ng-show="dashboards.length > 0 && listOfDashboardToLoad.indexOf('INSPIRE') !== -1">
+        <li class="list-group-item"
+            data-ng-repeat="dashboard in dashboards | filter:'inspire':startsWith">
+          <a href=""
+             data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
+            {{dashboard.title}}
+          </a>
+          <button class="btn btn-link btn-sm pull-right"
+                  data-ng-click="removeDashboard(dashboard.id)">
+            <i class="glyphicon glyphicon-remove text-danger"></i>
+          </button>
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <h2 data-ng-if="dashboards.length !== 0"
+          data-translate="">dashboards</h2>
+      <ul class="list-group"
+          data-ng-show="dashboards.length > 0">
+        <li class="list-group-item"
+            data-ng-repeat="dashboard in dashboards | filter:'inspire':notStartsWith">
+          <a href=""
+             data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
+            {{dashboard.title}}
+          </a>
+          <button class="btn btn-link btn-sm pull-right"
+                  data-ng-click="removeDashboard(dashboard.id)">
+            <i class="glyphicon glyphicon-remove text-danger"></i>
+          </button>
+        </li>
+      </ul>
+    </p>
+
 
 
     <div class="alert alert-info"

@@ -15,7 +15,7 @@
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
         $http.get(cfg.SERVICES.dashboardCore +
-        '/select?q=title:*&wt=json&sort=title asc&start=0&rows=40').
+        '/select?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').
           success(function (data) {
             $scope.dashboards = data.response.docs;
           });
@@ -42,6 +42,17 @@
         return solrService.delete(documentFilter, 'dashboard').success(
           init
         );
+      };
+
+      $scope.startsWith = function (actual, expected) {
+        if (angular.isObject(actual)) {
+          actual = actual.title;
+        }
+        var lowerStr = (actual + "").toLowerCase();
+        return lowerStr.indexOf(expected.toLowerCase()) === 0;
+      };
+      $scope.notStartsWith = function (actual, expected) {
+        return !$scope.startsWith(actual, expected);
       };
       init();
     }]);
