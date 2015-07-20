@@ -58,10 +58,9 @@
     </p>
 
 
-    <p>
+    <div data-ng-show="hasINSPIREdashboard">
       <h2 data-translate="">inspireOfficialMonitoringReporting</h2>
-      <ul class="list-group"
-          data-ng-show="dashboards.length > 0 && listOfDashboardToLoad.indexOf('INSPIRE') !== -1">
+      <ul class="list-group">
         <li class="list-group-item"
             data-ng-repeat="dashboard in dashboards | filter:'inspire':startsWith">
           <a href=""
@@ -74,9 +73,9 @@
           </button>
         </li>
       </ul>
-    </p>
+    </div>
 
-    <p>
+    <div>
       <h2 data-ng-if="dashboards.length !== 0"
           data-translate="">dashboards</h2>
       <ul class="list-group"
@@ -93,7 +92,7 @@
           </button>
         </li>
       </ul>
-    </p>
+    </div>
 
 
 

@@ -11,6 +11,7 @@
       $scope.dashboards = null;
       $scope.dashboardsLoaded = null;
       $scope.listOfDashboardToLoad = null;
+      $scope.hasINSPIREdashboard = false;
 
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
@@ -18,6 +19,11 @@
         '/select?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').
           success(function (data) {
             $scope.dashboards = data.response.docs;
+            angular.forEach($scope.dashboards, function (d) {
+              if ($scope.startsWith(d, 'inspire')) {
+                $scope.hasINSPIREdashboard = true;
+              }
+            });
           });
 
         $http.get(cfg.SERVICES.samples + 'dashboardType.json').
