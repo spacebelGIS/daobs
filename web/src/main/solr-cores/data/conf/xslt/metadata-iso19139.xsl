@@ -179,6 +179,10 @@
             <field name="{$dateType}YearForResource"><xsl:value-of select="substring($date, 0, 5)"/></field>
             <field name="{$dateType}MonthForResource"><xsl:value-of select="substring($date, 0, 8)"/></field>
           </xsl:for-each>
+
+          <xsl:for-each select="gmd:presentationForm/gmd:CI_PresentationFormCode/@codeListValue[. != '']">
+            <field name="presentationForm"><xsl:value-of select="."/></field>
+          </xsl:for-each>
         </xsl:for-each>
 
         <field name="resourceAbstract">
@@ -193,11 +197,6 @@
                              select="gmd:pointOfContact">
           <xsl:with-param name="fieldSuffix" select="'ForResource'"/>
         </xsl:apply-templates>
-
-
-        <xsl:for-each select="gmd:presentationForm/gmd:CI_PresentationFormCode/@codeListValue[. != '']">
-          <field name="presentationForm"><xsl:value-of select="."/></field>
-        </xsl:for-each>
 
         <xsl:for-each select="gmd:credit/*[. != '']">
           <field name="resourceCredit"><xsl:value-of select="."/></field>
@@ -343,7 +342,7 @@
           </xsl:for-each>
 
           <xsl:for-each select="gmd:distance/gco:Distance[. != '']">
-            <field name="resolutionDistance"><xsl:value-of select="concat(., @uom)"/></field>
+            <field name="resolutionDistance"><xsl:value-of select="concat(., ' ', @uom)"/></field>
           </xsl:for-each>
         </xsl:for-each>
 
