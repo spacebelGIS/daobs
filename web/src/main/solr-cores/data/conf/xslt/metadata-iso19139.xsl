@@ -23,8 +23,8 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
 
-  <xsl:include href="metadata-inspire-utility.xsl"/>
-  <xsl:include href="metadata-medsea.xsl"/>
+  <xsl:include href="metadata-inspire-constant.xsl"/>
+  <xsl:include href="metadata-iso19139-medsea.xsl"/>
 
   <xsl:template match="gmd:MD_Metadata" mode="index">
     <!-- Main variables for the document -->
