@@ -111,10 +111,10 @@
               deferred = $q.defer();
 
 
-            solrService.delete(indicatorFilter, 'data').success(
+            solrService.delete(indicatorFilter, cfg.SERVICES.dataCoreName).success(
               function () {
                 // Remove monitoring
-                solrService.delete(monitoringFilter, 'data').success(
+                solrService.delete(monitoringFilter, cfg.SERVICES.dataCoreName).success(
                   function (data) {
                     deferred.resolve('Monitoring deleted.');
                   }

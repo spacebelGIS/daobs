@@ -7,6 +7,9 @@
   app.constant('cfg', {
     'SERVICES': {
       root: context,
+      // TODO: dashboard core should be a parameter
+      dashboardCoreName: 'dashboard',
+      dataCoreName: 'data',
       dashboardCore: context + 'dashboard',
       dataCore: context + 'data',
       harvester: context + 'daobs/harvester',
