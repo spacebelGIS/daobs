@@ -45,6 +45,7 @@
   <xsl:variable name="maxFieldLength" select="32000" as="xs:integer"/>
 
   <xsl:include href="metadata-iso19139.xsl"/>
+  <xsl:include href="metadata-iso19115-3.xsl"/>
 
 
   <xsl:template match="/">
