@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>daobs</artifactId>
+    <groupId>org.daobs</groupId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>solr-cores</artifactId>
+  <name>Solr cores</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.vividsolutions</groupId>
+      <artifactId>jts</artifactId>
+      <version>1.13</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <!-- Copy Solr cores and config to the build directory.
+        This folder is the solr.solr.home directory.
+        -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-solr-config</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${solr.core.directory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/resources</directory>
+                  <filtering>true</filtering>
+                  <targetPath>${project.build.directory}/${solr.core.directory}</targetPath>
+                  <includes>
+                    <include>solr.xml</include>
+                  </includes>
+                </resource>
+                <!-- Copy cores -->
+                <resource>
+                  <directory>${project.basedir}/src/main/${solr.core.directory}/data</directory>
+                  <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.data}</targetPath>
+                </resource>
+                <resource>
+                  <directory>${project.basedir}/src/main/${solr.core.directory}/dashboard</directory>
+                  <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.dashboard}</targetPath>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>solr-start</id>
+      <activation>
+        <property>
+          <name>solr-start</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <configuration>
+              <executable>solr-${solr.version}/bin/solr</executable>
+              <arguments>
+                <argument>start</argument>
+                <!-- In foreground -->
+                <argument>-f</argument>
+                <argument>-s</argument>
+                <argument>${project.build.directory}/solr-cores</argument>
+                <argument>-p</argument>
+                <argument>${solr.port}</argument>
+              </arguments>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

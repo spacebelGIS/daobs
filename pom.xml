@@ -246,6 +246,7 @@
     <module>harvesters</module>
     <module>tasks</module>
     <module>web</module>
+    <module>solr</module>
   </modules>
 
 
@@ -271,6 +272,8 @@
     <webapp.port>8983</webapp.port>
     <webapp.url>${webapp.protocol}://localhost:${webapp.port}</webapp.url>
 
+    <data.dir>${project.basedir}/target/solr/WEB-INF/datadir</data.dir>
+
     <!-- Default username and password. This
     set the values in Spring security file and
     in services needing authentication against
@@ -278,12 +281,14 @@
     <webapp.username>admin</webapp.username>
     <webapp.password>admin</webapp.password>
 
+    <solr.port>8984</solr.port>
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
-    <data.dir>${project.basedir}/target/solr/WEB-INF/datadir</data.dir>
+    <solr.core.directory>solr-cores</solr.core.directory>
+    <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
 
-    <solr.version>4.10.4</solr.version>
+    <solr.version>5.2.1</solr.version>
 
     <guava.version>17.0</guava.version>
 

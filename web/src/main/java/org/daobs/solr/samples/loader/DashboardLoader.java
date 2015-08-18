@@ -9,6 +9,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.codehaus.jackson.JsonNode;
@@ -87,16 +88,16 @@ public class DashboardLoader {
 
         String json = com.google.common.io.Files.toString(file, Charsets.UTF_8);
 
-        SolrServer server = null;
+        HttpSolrClient server = null;
         if (!StringUtils.isEmpty(solrServerUsername) && !StringUtils.isEmpty(solrServerPassword)) {
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(AuthScope.ANY,
                     new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
             CloseableHttpClient httpClient =
                     HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
-            server = new HttpSolrServer(solrServerUrl, httpClient);
+            server = new HttpSolrClient(solrServerUrl, httpClient);
         } else {
-            server = new HttpSolrServer(solrServerUrl);
+            server = new HttpSolrClient(solrServerUrl);
         }
 
         ObjectMapper mapper = new ObjectMapper();

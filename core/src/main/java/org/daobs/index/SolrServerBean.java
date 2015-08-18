@@ -6,14 +6,14 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
 /**
  * Create a bean providing a connection to the
- * Solr server.
+ * Solr client.
  *
  * Created by francois on 30/09/14.
  */
@@ -21,7 +21,7 @@ public class SolrServerBean implements InitializingBean {
 
     private static SolrServerBean instance;
 
-    private SolrServer server;
+    private SolrClient client;
     private String solrServerUrl;
     private String solrServerCore;
     private String solrServerUsername;
@@ -30,25 +30,25 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      * The first time this method is called, ping the
-     * server to check connection status.
+     * client to check connection status.
      *
-     * @return  The Solr server instance.
+     * @return  The Solr client instance.
      */
-    public SolrServer getServer() throws Exception {
+    public SolrClient getServer() throws Exception {
         if (!connectionChecked) {
             this.ping();
             connectionChecked = true;
         }
-        return server;
+        return client;
     }
 
-    public SolrServerBean setServer(SolrServer server) {
-        this.server = server;
+    public SolrServerBean setServer(SolrClient server) {
+        this.client = server;
         return this;
     }
 
     /**
-     * Connect to the Solr server, ping the server
+     * Connect to the Solr client, ping the client
      * to check connection and set the instance.
      *
      * @throws Exception
@@ -62,29 +62,29 @@ public class SolrServerBean implements InitializingBean {
                         new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
                 CloseableHttpClient httpClient =
                         HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
-                server = new HttpSolrServer(this.solrServerUrl, httpClient);
+                client = new HttpSolrClient(this.solrServerUrl, httpClient);
             } else {
-                server = new HttpSolrServer(this.solrServerUrl);
+                client = new HttpSolrClient(this.solrServerUrl);
             }
 
             instance = this;
         } else {
-            throw new Exception(String.format("No Solr server URL defined in %s. " +
+            throw new Exception(String.format("No Solr client URL defined in %s. " +
                     "Check bean configuration.", this.solrServerUrl));
         }
     }
 
     /**
-     * Ping the Solr server.
+     * Ping the Solr client.
      *
      * @throws Exception
      */
     private void ping() throws Exception {
         try {
-            server.ping();
+            client.ping();
         } catch (Exception e) {
             throw new Exception(
-                    String.format("Failed to ping Solr server at URL %s. " +
+                    String.format("Failed to ping Solr client at URL %s. " +
                         "Check bean configuration.",
                         this.solrServerUrl),
                     e);
@@ -101,7 +101,7 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      *
-     * @return Return the Solr server URL
+     * @return Return the Solr client URL
      */
     public String getSolrServerUrl() {
         return solrServerUrl;
@@ -109,7 +109,7 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      *
-     * @param solrServerUrl The Solr server URL
+     * @param solrServerUrl The Solr client URL
      */
     public SolrServerBean setSolrServerUrl(String solrServerUrl) {
         this.solrServerUrl = solrServerUrl;
@@ -135,7 +135,7 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      *
-     * @return Return Solr server username for credentials
+     * @return Return Solr client username for credentials
      */
     public String getSolrServerUsername() {
         return solrServerUsername;
@@ -143,7 +143,7 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      *
-     * @param solrServerUsername    The Solr server credentials username
+     * @param solrServerUsername    The Solr client credentials username
      */
     public SolrServerBean setSolrServerUsername(String solrServerUsername) {
         this.solrServerUsername = solrServerUsername;
@@ -152,7 +152,7 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      *
-     * @return Return Solr server password for credentials
+     * @return Return Solr client password for credentials
      */
     public String getSolrServerPassword() {
         return solrServerPassword;
@@ -160,7 +160,7 @@ public class SolrServerBean implements InitializingBean {
 
     /**
      *
-     * @param solrServerPassword    The Solr server credentials password
+     * @param solrServerPassword    The Solr client credentials password
      */
     public SolrServerBean setSolrServerPassword(String solrServerPassword) {
         this.solrServerPassword = solrServerPassword;

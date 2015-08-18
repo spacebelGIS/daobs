@@ -1,10 +1,7 @@
 package org.daobs.index;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrResponse;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.*;
 import org.apache.solr.client.solrj.request.FieldAnalysisRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.AnalysisResponseBase;
@@ -73,7 +70,7 @@ public class SolrRequestBean {
             solrQuery.setRows(0);
 
             SolrServerBean serverBean = SolrServerBean.get();
-            SolrServer solrServer = serverBean.getServer();
+            SolrClient solrServer = serverBean.getServer();
 
             QueryResponse solrResponse = solrServer.query(solrQuery);
             return (double)solrResponse.getResults().getNumFound();
@@ -96,7 +93,7 @@ public class SolrRequestBean {
             solrQuery.setGetFieldStatistics(statsField);
 
             SolrServerBean serverBean = SolrServerBean.get();
-            SolrServer solrServer = serverBean.getServer();
+            SolrClient solrServer = serverBean.getServer();
 
             QueryResponse solrResponse = solrServer.query(solrQuery);
             FieldStatsInfo fieldStatsInfo = solrResponse.getFieldStatsInfo().get(statsField);
@@ -172,7 +169,7 @@ public class SolrRequestBean {
                                       int tokenPosition) {
 
         try {
-            SolrServer server = SolrServerBean.get().getServer();
+            SolrClient server = SolrServerBean.get().getServer();
 
             ModifiableSolrParams params = new ModifiableSolrParams();
             params.set(AnalysisParams.FIELD_NAME, fieldName);

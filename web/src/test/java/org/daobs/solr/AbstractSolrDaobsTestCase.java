@@ -40,7 +40,7 @@ public class AbstractSolrDaobsTestCase
     @Before
     @Override
     public void setUp() throws Exception {
-
+/*
         // Setup XSLT Transformer Factory
         System.setProperty("javax.xml.transform.TransformerFactory",
                 "net.sf.saxon.TransformerFactoryImpl");
@@ -67,7 +67,7 @@ public class AbstractSolrDaobsTestCase
         );
 
 
-        initBeans();
+        initBeans();*/
     }
 
     public void initBeans() {

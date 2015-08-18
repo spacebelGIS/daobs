@@ -14,3 +14,4 @@ rebel.xml
 web/csw/
 web/logs/
 web/overlays/
+solr/solr-*

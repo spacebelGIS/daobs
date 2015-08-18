@@ -68,19 +68,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.solr</groupId>
-      <artifactId>solr</artifactId>
-      <type>war</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-velocity</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-dataimporthandler</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
     </dependency>
 
@@ -197,12 +184,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.vividsolutions</groupId>
-      <artifactId>jts</artifactId>
-      <version>1.13</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.daobs</groupId>
       <artifactId>daobs-core</artifactId>
       <version>${project.version}</version>
@@ -228,7 +209,7 @@
           <includeEmptyDirs>true</includeEmptyDirs>
         </configuration>
         <executions>
-          <execution>
+          <!--<execution>
             <id>copy-solr-config</id>
             <phase>compile</phase>
             <goals>
@@ -237,10 +218,10 @@
             <configuration>
               <outputDirectory>${project.build.directory}/${solr.core.directory}</outputDirectory>
               <resources>
-                <!--
+                &lt;!&ndash;
                 Copy solr.xml to correct directory and applies properties
                 filtering to it.
-                -->
+                &ndash;&gt;
                 <resource>
                   <directory>${project.basedir}/src/main/resources</directory>
                   <filtering>true</filtering>
@@ -249,7 +230,7 @@
                     <include>solr.xml</include>
                   </includes>
                 </resource>
-                <!-- Copy cores -->
+                &lt;!&ndash; Copy cores &ndash;&gt;
                 <resource>
                   <directory>${project.basedir}/src/main/${solr.core.directory}/data</directory>
                   <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.data}</targetPath>
@@ -260,7 +241,7 @@
                 </resource>
               </resources>
             </configuration>
-          </execution>
+          </execution>-->
           <execution>
             <id>copy-webapp-config</id>
             <phase>compile</phase>
@@ -314,7 +295,6 @@
           <uriEncoding>UTF-8</uriEncoding>
           <systemProperties>
             <daobs.data.dir>${data.dir}</daobs.data.dir>
-            <solr.solr.home>${solr.solr.home}</solr.solr.home>
           </systemProperties>
           <!-- if you want to use test dependencies rather than only runtime -->
           <useTestClasspath>false</useTestClasspath>
@@ -323,7 +303,5 @@
     </plugins>
   </build>
   <properties>
-    <solr.core.directory>solr-cores</solr.core.directory>
-    <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
   </properties>
 </project>

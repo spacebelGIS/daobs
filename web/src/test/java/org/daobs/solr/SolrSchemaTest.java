@@ -20,7 +20,12 @@ public class SolrSchemaTest extends AbstractSolrDaobsTestCase {
     @Test
     public void testThatNoResultsAreReturned() throws SolrServerException {
         SolrParams params = new SolrQuery("text that is not found");
-        QueryResponse response = server.query(params);
+        QueryResponse response = null;
+        try {
+            response = server.query(params);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         assertEquals(0L, response.getResults().getNumFound());
     }
 
