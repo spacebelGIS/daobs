@@ -95,7 +95,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/data/select?q=$simple{header.documentFilter}&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
+        <cm:simple>{{solr.server.url}}/{{solr.server.core}}/select?q=$simple{header.documentFilter}&amp;fl={{task.data-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
@@ -125,7 +125,7 @@
           <cm:constant>GET</cm:constant>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/data/select</cm:simple>
+          <cm:simple>{{solr.server.url}}/{{solr.server.core}}/select</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
           <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') +
@@ -210,7 +210,7 @@
               loggingLevel="INFO"
               logName="org.daobs.task.DataIndexer"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/update</cm:simple>
+        <cm:simple>{{solr.server.url}}/{{solr.server.core}}/update</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="camelHttpMethod">
         <cm:constant>POST</cm:constant>

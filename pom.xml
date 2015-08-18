@@ -278,6 +278,9 @@
     <webapp.username>admin</webapp.username>
     <webapp.password>admin</webapp.password>
 
+    <solr.core.data>data</solr.core.data>
+    <solr.core.dashboard>dashboard</solr.core.dashboard>
+
     <data.dir>${project.basedir}/target/solr/WEB-INF/datadir</data.dir>
 
     <solr.version>4.10.4</solr.version>

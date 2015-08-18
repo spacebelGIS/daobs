@@ -53,14 +53,14 @@
 
   <bean id="SolrServer"
         class="org.daobs.index.SolrServerBean">
-    <property name="solrServerUrl" value="${solr.server.url}"/>
+    <property name="solrServerUrl" value="${solr.server.url}/${solr.core.data}"/>
     <property name="solrServerUsername" value="${solr.server.user}"/>
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
 
   <bean id="DashboardLoader"
         class="org.daobs.solr.samples.loader.DashboardLoader">
-    <property name="solrServerUrl" value="${solr.server.url}/dashboard"/>
+    <property name="solrServerUrl" value="${solr.server.url}/${solr.core.dashboard}"/>
     <property name="solrServerUsername" value="${solr.server.user}"/>
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>

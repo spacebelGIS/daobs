@@ -11,12 +11,12 @@
 
     <!-- Solr services -->
     <!-- Luke used by dashboard app -->
-    <intercept-url pattern="/data/admin/luke" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    <intercept-url pattern="/${solr.core.data}/admin/luke" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 
-    <intercept-url pattern="/data/admin/*" access="ROLE_ADMIN"/>
-    <intercept-url pattern="/data/update/*" access="ROLE_ADMIN"/>
-    <intercept-url pattern="/dashboard/admin/*" access="ROLE_ADMIN"/>
-    <intercept-url pattern="/dashboard/update/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/${solr.core.data}/admin/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/${solr.core.data}/update/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/${solr.core.dashboard}/admin/*" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/${solr.core.dashboard}/update/*" access="ROLE_ADMIN"/>
 
     <!-- Controllers -->
     <intercept-url pattern="/*/reporting*" method="GET" access="IS_AUTHENTICATED_ANONYMOUSLY"/>

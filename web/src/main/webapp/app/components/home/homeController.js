@@ -12,6 +12,7 @@
       $scope.dashboardsLoaded = null;
       $scope.listOfDashboardToLoad = null;
       $scope.hasINSPIREdashboard = false;
+      $scope.hasOnlyINSPIREdashboard = true;
 
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
@@ -22,6 +23,8 @@
             angular.forEach($scope.dashboards, function (d) {
               if ($scope.startsWith(d, 'inspire')) {
                 $scope.hasINSPIREdashboard = true;
+              } else {
+                $scope.hasOnlyINSPIREdashboard = false;
               }
             });
           });

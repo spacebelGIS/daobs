@@ -21,7 +21,7 @@ import java.util.*;
 public class CustomReportingController {
 
     // TODO: config should move to configuration file
-    public static final String SPATIALDATASETS_QUERY_URL = "/data/select?" +
+    public static final String SPATIALDATASETS_QUERY_URL = "/select?" +
             "q=%%2BdocumentType%%3Ametadata+" +
                 "%%2B(resourceType%%3Adataset+" +
                 "resourceType%%3Aseries)&" +
@@ -32,7 +32,7 @@ public class CustomReportingController {
             "recordOperatedByType,recordOperatedByTypeview,recordOperatedByTypedownload," +
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
-    public static final String SPATIALDATASERVICE_QUERY_URL = "/data/select?" +
+    public static final String SPATIALDATASERVICE_QUERY_URL = "/select?" +
             "q=%%2BdocumentType%%3Ametadata+%%2BresourceType%%3Aservice&" +
             "fq=%s&" +
             "start=0&rows=%d&" +

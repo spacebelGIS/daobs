@@ -47,8 +47,8 @@
          hostPort="${jetty.port:8983}"
          hostContext="${hostContext:solr}"
          defaultCoreName="data">
-    <core name="dashboard" instanceDir="dashboard" />
-    <core name="data" instanceDir="data" />
+    <core name="${solr.core.dashboard}" instanceDir="${solr.core.dashboard}" />
+    <core name="${solr.core.data}" instanceDir="${solr.core.data}" />
 
     <shardHandlerFactory name="shardHandlerFactory" class="HttpShardHandlerFactory">
       <str name="urlScheme">${urlScheme:}</str>

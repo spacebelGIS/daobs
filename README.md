@@ -63,6 +63,8 @@ In order to build a custom WAR file, update the following properties which are d
 * webapp.url
 * webapp.username
 * webapp.password
+* solr.core.data: Define the data core name (useful if more than one daobs instance use the same Solr)
+* solr.core.dashboard: Define the dashboard core name
 
 
 Run the following command line and copy the WAR which is built in web/target/{{war.name}}.war.

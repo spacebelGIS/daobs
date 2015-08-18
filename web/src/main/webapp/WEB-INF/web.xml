@@ -198,8 +198,6 @@
   </servlet-mapping>
 
 
-
-<!--
   <context-param>
     <param-name>org.apache.activemq.brokerURL</param-name>
     <param-value>tcp://localhost:0</param-value>
@@ -229,7 +227,6 @@
     <servlet-name>MessageServlet</servlet-name>
     <url-pattern>/message/*</url-pattern>
   </servlet-mapping>
--->
 
 
   <mime-mapping>

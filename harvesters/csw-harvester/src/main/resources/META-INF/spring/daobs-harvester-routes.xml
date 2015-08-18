@@ -350,7 +350,7 @@
       </cm:description>
       <cm:from uri="direct:indexDocuments"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/update/xslt?commit=true&amp;tr=metadata.xsl</cm:simple>
+        <cm:simple>{{solr.server.url}}/{{solr.server.core}}/update/xslt?commit=true&amp;tr=metadata.xsl</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
       <!-- Camel Solr component can't be used to set the
