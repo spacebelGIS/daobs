@@ -8,7 +8,10 @@
   exclude-result-prefixes="#all"
   version="2.0">
 
+  <xsl:output indent="yes"/>
+  
   <xsl:include href="constant.xsl"/>
+  <xsl:include href="metadata-inspire-constant.xsl"/>
 
   <xsl:variable name="reportingYear" select="/monitoring:Monitoring/documentYear/year"/>
   <xsl:variable name="reportingTerritory" select="/monitoring:Monitoring/memberState"/>
@@ -38,7 +41,9 @@
     <add>
       <xsl:apply-templates select="//MonitoringMD|//Indicators/*|
                 //RowData/SpatialDataService/NetworkService/userRequest|
-                //RowData/SpatialDataSet/Coverage/(relevantArea|actualArea)"/>
+                //RowData/SpatialDataSet/Coverage/(relevantArea|actualArea)|
+                //RowData/SpatialDataService|
+                //RowData/SpatialDataSet"/>
     </add>
   </xsl:template>
 
@@ -81,6 +86,72 @@
         <field name="reportingYear"><xsl:value-of select="$reportingYear"/></field>
       </doc>
     </xsl:for-each>
+  </xsl:template>
+
+
+  <!-- Index row data like metadata records -->
+  <xsl:template match="SpatialDataService">
+    <doc>
+      <xsl:variable name="uuid" select="if (uuid != '') then uuid else concat('nouuid', position())"/>
+      <field name="id"><xsl:value-of
+              select="concat('monitoring', $reportingTerritory, $reportingDate, $uuid)"/></field>
+      <field name="metadataIdentifier"><xsl:value-of select="$uuid"/></field>
+      <field name="documentType">monitoringMetadata</field>
+      <field name="resourceType">service</field>
+      <field name="territory"><xsl:value-of select="$reportingTerritory"/></field>
+      <field name="reportingDateSubmission"><xsl:value-of select="$reportingDateSubmission"/></field>
+      <field name="reportingDate"><xsl:value-of select="$reportingDate"/></field>
+      <field name="reportingYear"><xsl:value-of select="$reportingYear"/></field>
+      <field name="resourceTitle"><xsl:value-of select="name"/></field>
+      <field name="custodianOrgForResource"><xsl:value-of select="respAuthority"/></field>
+      <xsl:for-each-group select="Themes/*" group-by="name()">
+        <field name="inspireAnnex"><xsl:value-of select="if (name() = 'AnnexIII') then 'iii' else if (name() = 'AnnexII') then 'ii' else 'i'"/></field>
+      </xsl:for-each-group>
+      <xsl:for-each select="Themes/*">
+        <xsl:variable name="themeKey" select="."/>
+        <field name="inspireTheme"><xsl:value-of select="$inspireThemesMap/map[@monitoring = $themeKey]/@theme"/></field>
+      </xsl:for-each>
+
+
+      <field name="isAboveThreshold"><xsl:value-of select="MdServiceExistence/mdConformity"/></field>
+      <field name="harvesterUuid"><xsl:value-of select="MdServiceExistence/discoveryAccessibilityUuid"/></field>
+      <field name="linkUrl"><xsl:value-of select="NetworkService/URL"/></field>
+      <field name="serviceType"><xsl:value-of select="NetworkService/NnServiceType"/></field>
+      <field name="inspireConformResource"><xsl:value-of select="NetworkService/nnConformity"/></field>
+    </doc>
+  </xsl:template>
+
+
+  <xsl:template match="SpatialDataSet">
+    <doc>
+      <xsl:variable name="uuid" select="if (uuid != '') then uuid else concat('nouuid', position())"/>
+      <field name="id"><xsl:value-of
+              select="concat('monitoring', $reportingTerritory, $reportingDate, $uuid)"/></field>
+      <field name="metadataIdentifier"><xsl:value-of select="$uuid"/></field>
+      <field name="documentType">monitoringMetadata</field>
+      <field name="resourceType">dataset</field>
+      <field name="territory"><xsl:value-of select="$reportingTerritory"/></field>
+      <field name="reportingDateSubmission"><xsl:value-of select="$reportingDateSubmission"/></field>
+      <field name="reportingDate"><xsl:value-of select="$reportingDate"/></field>
+      <field name="reportingYear"><xsl:value-of select="$reportingYear"/></field>
+      <field name="resourceTitle"><xsl:value-of select="name"/></field>
+      <field name="custodianOrgForResource"><xsl:value-of select="respAuthority"/></field>
+      <xsl:for-each-group select="Themes/*" group-by="name()">
+        <field name="inspireAnnex"><xsl:value-of select="if (name() = 'AnnexIII') then 'iii' else if (name() = 'AnnexII') then 'ii' else 'i'"/></field>
+      </xsl:for-each-group>
+      <xsl:for-each select="Themes/*">
+        <field name="inspireTheme"><xsl:value-of select="$inspireThemesMap[@monitoring = current()/.]/@theme"/></field>
+      </xsl:for-each>
+
+
+      <xsl:for-each select="MdDataSetExistence/MdAccessibility/(discovery|view|download|viewDownload)[. = 'true']">
+        <field name="recordOperatedByType"><xsl:value-of select="name()"/></field>
+      </xsl:for-each>
+
+      <field name="isAboveThreshold"><xsl:value-of select="MdDataSetExistence/mdConformity"/></field>
+      <field name="harvesterUuid"><xsl:value-of select="MdDataSetExistence/MdAccessibility/discoveryUuid"/></field>
+      <field name="inspireConformResource"><xsl:value-of select="MdDataSetExistence/IRConformity/structureCompliance"/></field>
+    </doc>
   </xsl:template>
 
 </xsl:stylesheet>

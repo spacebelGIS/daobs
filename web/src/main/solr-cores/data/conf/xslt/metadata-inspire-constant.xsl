@@ -2,6 +2,79 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
 
+
+  <xsl:variable name="inspireThemesMap">
+    <map theme="Coordinate reference systems"
+         monitoring="coordinateReferenceSystems" annex="I"/>
+    <map theme="Elevation"
+         monitoring="elevation" annex="II"/>
+    <map theme="Land cover"
+         monitoring="landCover" annex="II"/>
+    <map theme="Orthoimagery"
+         monitoring="orthoimagery" annex="II"/>
+    <map theme="Geology"
+         monitoring="geology" annex="II"/>
+    <map theme="Statistical units"
+         monitoring="statisticalUnits" annex="III"/>
+    <map theme="Buildings"
+         monitoring="buildings" annex="III"/>
+    <map theme="Soil"
+         monitoring="soil" annex="III"/>
+    <map theme="Land use"
+         monitoring="landUse" annex="III"/>
+    <map theme="Human health and safety"
+         monitoring="humanHealthAndSafety" annex="III"/>
+    <map theme="Utility and governmental services"
+         monitoring="utilityAndGovernmentalServices" annex="III"/>
+    <map theme="Geographical grid systems"
+         monitoring="geographicalGridSystems" annex="I"/>
+    <map theme="Environmental monitoring facilities"
+         monitoring="environmentalMonitoringFacilities" annex="III"/>
+    <map theme="Production and industrial facilities"
+         monitoring="productionAndIndustrialFacilities" annex="III"/>
+    <map theme="Agricultural and aquaculture facilities"
+         monitoring="agriculturalAndAquacultureFacilities" annex="III"/>
+    <!--<map theme="Population distribution — demography"-->
+    <map theme="Population distribution.*"
+         monitoring="populationDistributionDemography" annex="III"/>
+    <map theme="Area management/restriction/regulation zones and reporting units"
+         monitoring="areaManagementRestrictionRegulationZonesAndReportingUnits" annex="III"/>
+    <map theme="Natural risk zones"
+         monitoring="naturalRiskZones" annex="III"/>
+    <map theme="Atmospheric conditions"
+         monitoring="atmosphericConditions" annex="III"/>
+    <map theme="Meteorological geographical features"
+         monitoring="meteorologicalGeographicalFeatures" annex="III"/>
+    <map theme="Oceanographic geographical features"
+         monitoring="oceanographicGeographicalFeatures" annex="III"/>
+    <map theme="Sea regions"
+         monitoring="seaRegions" annex="III"/>
+    <map theme="Geographical names"
+         monitoring="geographicalNames" annex="I"/>
+    <map theme="Bio-geographical regions"
+         monitoring="bioGeographicalRegions" annex="III"/>
+    <map theme="Habitats and biotopes"
+         monitoring="habitatsAndBiotopes" annex="III"/>
+    <map theme="Species distribution"
+         monitoring="speciesDistribution" annex="III"/>
+    <map theme="Energy resources"
+         monitoring="energyResources" annex="III"/>
+    <map theme="Mineral resources"
+         monitoring="mineralResources" annex="III"/>
+    <map theme="Administrative units"
+         monitoring="administrativeUnits" annex="I"/>
+    <map theme="Addresses"
+         monitoring="addresses" annex="I"/>
+    <map theme="Cadastral parcels"
+         monitoring="cadastralParcels" annex="I"/>
+    <map theme="Transport networks"
+         monitoring="transportNetworks" annex="I"/>
+    <map theme="Hydrography"
+         monitoring="hydrography" annex="I"/>
+    <map theme="Protected sites"
+         monitoring="protectedSites" annex="I"/>
+  </xsl:variable>
+
   <xsl:variable name="eu10892010">
     <en>Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services</en>
     <bg>Регламент (ЕС) № 1089/2010 на Комисията от 23 ноември 2010 година за прилагане на Директива 2007/2/ЕО на Европейския парламент и на Съвета по отношение на оперативната съвместимост на масиви от пространствени данни и услуги за пространствени данни</bg>
