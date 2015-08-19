@@ -23,7 +23,7 @@
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
 
-  <bean id="xsltUtility" class="org.daobs.tasks.serviceDatasetIndexer.Utility"/>
+  <bean id="xsltUtility" class="org.daobs.routing.utility.Utility"/>
 
   <bean id="duplicateRepo" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository"/>
 

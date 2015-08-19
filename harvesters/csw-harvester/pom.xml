@@ -20,6 +20,13 @@
     <dependency>
       <groupId>org.daobs</groupId>
       <artifactId>daobs-routing-utility</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -27,19 +34,6 @@
       <artifactId>daobs-logging-deps</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
-    </dependency>
-
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon-dom</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon-xpath</artifactId>
     </dependency>
 
     <dependency>

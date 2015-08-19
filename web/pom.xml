@@ -57,7 +57,7 @@
     <dependency>
       <groupId>org.daobs</groupId>
       <artifactId>daobs-logging-deps</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>pom</type>
     </dependency>
 
@@ -207,7 +207,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>solr</finalName>
+    <finalName>${war.name}</finalName>
     <resources>
       <resource>
         <filtering>true</filtering>
@@ -233,7 +233,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/solr/</outputDirectory>
+              <outputDirectory>${project.build.directory}/${war.name}/</outputDirectory>
               <resources>
                 <resource>
                   <directory>${project.basedir}/src/main/webResources</directory>

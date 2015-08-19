@@ -29,6 +29,18 @@
 
   <bean id="harvesterDetailsAgg" class="org.daobs.harvester.HarvesterDetailsAggregate"/>
 
+  <bean id="SolrServer"
+        class="org.daobs.index.SolrServerBean">
+    <property name="solrServerUrl" value="${solr.server.url}/${solr.core.data}"/>
+    <property name="solrServerUsername" value="${solr.server.user}"/>
+    <property name="solrServerPassword" value="${solr.server.password}"/>
+  </bean>
+
+  <bean id="SolrRequest"
+        class="org.daobs.index.SolrRequestBean"/>
+
+  <bean id="xsltUtility" class="org.daobs.routing.utility.Utility"/>
+
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"
                       logName="daobs.harvesters.csw"
@@ -349,8 +361,12 @@
         Index records in Solr and report any errors.
       </cm:description>
       <cm:from uri="direct:indexDocuments"/>
+
+      <!-- From CSW GetRecords response to Solr XML transaction document-->
+      <cm:to uri="bean:xsltUtility?method=transform(*, '/xslt/metadata.xsl')"/>
+
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update?commit=true&amp;tr=metadata.xsl</cm:simple>
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update?commit=true</cm:simple>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
       <!-- Camel Solr component can't be used to set the

@@ -238,15 +238,15 @@
 
   <modules>
     <module>core</module>
-    <module>dashboard2</module>
     <module>core-deps</module>
     <module>logging-deps</module>
     <module>routing-deps</module>
     <module>routing-utility</module>
     <module>harvesters</module>
     <module>tasks</module>
-    <module>web</module>
     <module>solr</module>
+    <module>dashboard2</module>
+    <module>web</module>
   </modules>
 
 
@@ -272,7 +272,7 @@
     <webapp.port>8983</webapp.port>
     <webapp.url>${webapp.protocol}://localhost:${webapp.port}</webapp.url>
 
-    <data.dir>${project.basedir}/target/solr/WEB-INF/datadir</data.dir>
+    <data.dir>${project.basedir}/target/${war.name}/WEB-INF/datadir</data.dir>
 
     <!-- Default username and password. This
     set the values in Spring security file and

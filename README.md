@@ -234,27 +234,18 @@ Harvesting is multithreaded on endpoint basis. By default, configuration is 11 t
 ### Indexing ISO19139 records
 
 Metadata records and indicators could be manually loaded using Solr API by importing XML files.
+First you need to apply the following XSL transformation to convert ISO metadata
+to Solr XML transaction document.
 
-
-Manually index XML records:
+After the transformation, you can then load the output documents using:
 
 ```
-# Load file in current directory
-for f in *.xml; do
-  echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update?commit=true&tr=metadata.xsl" \
-     -u admin:admin \
-     -H "Content-Type: text/xml; charset=utf-8" \
-     --data-binary @$f
-done
-
-
 # Load files in all subfolders
 find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update?commit=true&tr=metadata.xsl" \
+  curl "http://localhost:8983/data/update?commit=true" \
     -u admin:admin \
     -H "Content-Type: text/xml; charset=utf-8" \
     --data-binary @$f
