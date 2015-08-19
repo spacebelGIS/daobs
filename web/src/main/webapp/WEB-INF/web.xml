@@ -57,7 +57,30 @@
 
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/solr/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+
+    <init-param>
+      <param-name>confReloadCheckInterval</param-name>
+      <param-value>-1</param-value>
+    </init-param>
+
+    <init-param>
+      <param-name>logLevel</param-name>
+      <param-value>WARN</param-value>
+    </init-param>
+
+  </filter>
+
+  <filter-mapping>
+    <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
 
 
@@ -104,12 +127,12 @@
     <welcome-file>admin.html</welcome-file>
   </welcome-file-list>
 
-  <error-page>
+<!--  <error-page>
     <error-code>404</error-code>
     <location>/WEB-INF/errors/404.jsp</location>
   </error-page>
   <error-page>
     <error-code>500</error-code>
     <location>/WEB-INF/errors/500.jsp</location>
-  </error-page>
+  </error-page>-->
 </web-app>

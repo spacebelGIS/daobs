@@ -19,7 +19,7 @@
   <bean id="SolrServer"
         class="org.daobs.index.SolrServerBean">
     <property name="solrServerUrl" value="${solr.server.url}"/>
-    <property name="solrServerCore" value="${solr.server.core}"/>
+    <property name="solrServerCore" value="${solr.core.data}"/>
     <property name="solrServerUsername" value="${solr.server.username}"/>
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
