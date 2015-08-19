@@ -110,7 +110,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.server.core}}/select</cm:simple>
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
         <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'</cm:groovy>
@@ -146,7 +146,7 @@
         the paging can't be used as such. It would have been
         better to grab the set of ids to validate and loop over them. -->
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/{{solr.server.core}}/select</cm:simple>
+          <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
           <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') +
@@ -305,7 +305,7 @@
               loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.server.core}}/update</cm:simple>
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="camelHttpMethod">
         <cm:constant>POST</cm:constant>

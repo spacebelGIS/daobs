@@ -242,7 +242,7 @@ Manually index XML records:
 # Load file in current directory
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" \
+  curl "http://localhost:8983/data/update?commit=true&tr=metadata.xsl" \
      -u admin:admin \
      -H "Content-Type: text/xml; charset=utf-8" \
      --data-binary @$f
@@ -254,7 +254,7 @@ find . -name *.xml -type f |
 while read f
 do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=metadata.xsl" \
+  curl "http://localhost:8983/data/update?commit=true&tr=metadata.xsl" \
     -u admin:admin \
     -H "Content-Type: text/xml; charset=utf-8" \
     --data-binary @$f
@@ -270,7 +270,7 @@ Manually indexing INSPIRE monitoring:
 ```
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 
@@ -278,7 +278,7 @@ To import monitoring with ancillary information:
 ```
 for f in *.xml; do
   echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update/xslt?commit=true&tr=inspire-monitoring-reporting-with-ai.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
+  curl "http://localhost:8983/data/update?commit=true&tr=inspire-monitoring-reporting-with-ai.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
 done
 ```
 

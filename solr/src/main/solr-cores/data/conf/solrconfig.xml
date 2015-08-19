@@ -465,6 +465,7 @@
     </arr>
   </requestHandler>
 
+  <requestHandler name="/update" class="solr.UpdateRequestHandler" />
 
   <initParams path="/update/**,/query,/select,/tvrh,/elevate,/spell">
     <lst name="defaults">
