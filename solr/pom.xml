@@ -55,6 +55,10 @@
                   <directory>${project.basedir}/src/main/${solr.core.directory}/dashboard</directory>
                   <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.dashboard}</targetPath>
                 </resource>
+                <resource>
+                  <directory>${project.basedir}/src/main/${solr.core.directory}/silk</directory>
+                  <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.data}</targetPath>
+                </resource>
               </resources>
             </configuration>
           </execution>
@@ -81,6 +85,7 @@
                 <argument>start</argument>
                 <!-- In foreground -->
                 <argument>-f</argument>
+                <argument>-c</argument>
                 <argument>-s</argument>
                 <argument>${project.build.directory}/solr-cores</argument>
                 <argument>-p</argument>

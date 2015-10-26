@@ -25,6 +25,7 @@ The guide for user installing and configuring the application.
 * Git
 * Java 7
 * Maven 3
+* Solr 5.x
 * A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE10+ should be also supported.
 
 ## Build the application
@@ -37,6 +38,10 @@ cd daobs
 mvn clean install
 ```
 
+## Install and configure Solr
+
+See [solr/README.md](solr/README.md).
+
 
 ## Run the application
 
@@ -44,6 +49,7 @@ mvn clean install
 
 * Deploy the WAR file in a servlet container (eg. tomcat).
 * Start the web application using maven.
+
 
 ### Using maven
 

@@ -246,6 +246,7 @@
     <module>tasks</module>
     <module>solr</module>
     <module>dashboard2</module>
+    <module>silk</module>
     <module>web</module>
   </modules>
 
@@ -291,6 +292,8 @@
     <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
 
     <solr.version>5.2.1</solr.version>
+
+    <silk.port>8985</silk.port>
 
     <guava.version>17.0</guava.version>
 

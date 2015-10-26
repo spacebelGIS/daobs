@@ -4,3 +4,6 @@
 [submodule "dashboard2"]
 	path = dashboard2
 	url = https://github.com/titellus/banana.git
+[submodule "silk"]
+	path = silk
+	url = https://github.com/titellus/silk.git
