@@ -33,7 +33,7 @@
       }, {
         id: 'admin',
         icon: 'glyphicon-cog',
-        url: 'admin.html#/data/query'
+        url: '/solr/' // TODO: it may be a different URL
       }, {
         id: 'signout',
         icon: 'glyphicon-user',
