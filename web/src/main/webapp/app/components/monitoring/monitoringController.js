@@ -93,8 +93,8 @@
       $scope.listOfTerritory = [];
       $scope.filterCount = null;
       $scope.fq = null;
-      $scope.facetFields = ['territory', 'resourceType','Org',
-        'OrgForResource', 'isValid'];
+      $scope.facetFields = ['resourceType','Org',
+        'OrgForResource', 'isValid', 'territory'];
       var facetParam = '';
       $.each($scope.facetFields, function (item) {
         facetParam += '&facet.field=' + $scope.facetFields[item];
@@ -155,7 +155,6 @@
             success(function (data) {
             $scope.facetValues = {};
             var i = 0, facet = data.facet_counts.facet_fields.territory;
-            $scope.facetValues = data.facet_counts.facet_fields;
 
             // The facet response contains an array
             // with [value1, countFor1, value2, countFor2, ...]
@@ -225,9 +224,12 @@
           '/select?q=' +
           'documentType%3Ametadata&' +
           'start=0&rows=0&' +
-          'wt=json&indent=true&fq=' + encodeURIComponent(fq)).
+          'facet=true&facet.sort=index&facet.mincount=1' + facetParam +
+          '&wt=json&indent=true&fq=' + encodeURIComponent(fq)).
             success(function (data) {
               $scope.filterCount = data.response.numFound;
+              $scope.facetValues = {};
+              $scope.facetValues = data.facet_counts.facet_fields;
               $scope.preview();
             }).error(function (response) {
               $scope.filterError = response.error.msg;
