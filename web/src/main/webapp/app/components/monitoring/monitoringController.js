@@ -93,6 +93,13 @@
       $scope.listOfTerritory = [];
       $scope.filterCount = null;
       $scope.fq = null;
+      $scope.facetFields = ['territory', 'resourceType','Org',
+        'OrgForResource', 'isValid'];
+      var facetParam = '';
+      $.each($scope.facetFields, function (item) {
+        facetParam += '&facet.field=' + $scope.facetFields[item];
+      });
+      $scope.facetValues = {};
       $scope.listOfLanguages = [
         {code: 'bul', label: 'bul'},
         {code: 'cze', label: 'cze'},
@@ -144,9 +151,12 @@
           'documentType%3Ametadata&' +
           'start=0&rows=0&' +
           'wt=json&indent=true&' +
-          'facet=true&facet.field=territory', {cache: true}).
+          'facet=true&facet.sort=index' + facetParam, {cache: true}).
             success(function (data) {
+            $scope.facetValues = {};
             var i = 0, facet = data.facet_counts.facet_fields.territory;
+            $scope.facetValues = data.facet_counts.facet_fields;
+
             // The facet response contains an array
             // with [value1, countFor1, value2, countFor2, ...]
             do {
@@ -211,16 +221,17 @@
         $scope.filterError = null;
         $scope.fq = encodeURIComponent(fq);
 
-        $http.get(cfg.SERVICES.dataCore +
-        '/select?q=' +
-        'documentType%3Ametadata&' +
-        'start=0&rows=0&' +
-        'wt=json&indent=true&fq=' + encodeURIComponent(fq)).
-          success(function (data) {
-            $scope.filterCount = data.response.numFound;
-          }).error(function (response) {
-            $scope.filterError = response.error.msg;
-          });
+        return $http.get(cfg.SERVICES.dataCore +
+          '/select?q=' +
+          'documentType%3Ametadata&' +
+          'start=0&rows=0&' +
+          'wt=json&indent=true&fq=' + encodeURIComponent(fq)).
+            success(function (data) {
+              $scope.filterCount = data.response.numFound;
+              $scope.preview();
+            }).error(function (response) {
+              $scope.filterError = response.error.msg;
+            });
         };
 
       function setReport(data) {
@@ -234,14 +245,19 @@
         }
       }
 
+      // Add selected facet to the filter
+      $scope.addFacet = function (facet, value) {
+        $scope.filter = '+' + facet + ':"' + value + '"';
+      };
+
       // View report configuration
       $scope.getReportDetails = function () {
         //$scope.territory = null;
-        $http.get(cfg.SERVICES.reporting +
-        $scope.reporting.id + '.json').success(function (data) {
-          setReport(data);
-          $scope.overview = true;
-        });
+        return $http.get(cfg.SERVICES.reporting +
+          $scope.reporting.id + '.json').success(function (data) {
+            setReport(data);
+            $scope.overview = true;
+          });
       };
 
       // Preview report
@@ -250,12 +266,12 @@
         $scope.report = null;
         var area = $scope.territory && $scope.territory.label,
           filterParameter = $scope.filter ? '?fq=' + encodeURIComponent($scope.filter)  : '?';
-        $http.get(cfg.SERVICES.reporting +
-        $scope.reporting.id +
-        (area ? '/' +  area : '') +
-        '.json' + filterParameter).success(function (data) {
-          setReport(data);
-        });
+        return $http.get(cfg.SERVICES.reporting +
+          $scope.reporting.id +
+          (area ? '/' +  area : '') +
+          '.json' + filterParameter).success(function (data) {
+            setReport(data);
+          });
       };
       $scope.$watch('reporting', function () {
         $scope.reporting && $location.search('reporting', $scope.reporting.id);
@@ -275,6 +291,26 @@
           getMatchingRecord();
         }
       });
+
+      $scope.isfilterErrors = false;
+      $scope.isfilterNonNull = false;
+      $scope.checkboxFilters = function (indicator) {
+        if ($scope.isfilterErrors && $scope.isfilterNonNull &&
+          indicator.status != null &&
+          parseFloat(indicator.value) != NaN &&
+          parseFloat(indicator.value) > 0) {
+          return indicator;
+        } else if ($scope.isfilterErrors && indicator.status != null) {
+          return indicator;
+        }
+        if ($scope.isfilterNonNull &&
+          parseFloat(indicator.value) != NaN &&
+          parseFloat(indicator.value) > 0) {
+          return indicator;
+        } else if (!$scope.isfilterErrors && !$scope.isfilterNonNull) {
+          return indicator;
+        }
+      };
       init();
     }]);
 

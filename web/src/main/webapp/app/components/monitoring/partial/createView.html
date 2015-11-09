@@ -1,9 +1,22 @@
 <div class="row" data-ng-controller="MonitoringCreateCtrl">
-  <div class="col-md-2">
+  <div class="col-md-3">
     <br/>
     <p class="alert alert-info" data-translate="">monitoringCreationPage</p>
+
+    <ul>
+      <li data-ng-repeat="(key, value) in facetValues">
+        <h3>{{key | translate}}</h3>
+        <ul>
+          <li data-ng-repeat="v in value track by $index"
+              data-ng-hide="$odd"
+              data-ng-click="addFacet(key, v)">
+            {{v}} ({{value[$index + 1]}})
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
-  <div class="col-md-10">
+  <div class="col-md-9">
     <br/>
 
     <form class="form-horizontal" role="form">
@@ -15,7 +28,8 @@
                    data-translate="">chooseMonitoring</label>
             <div class="col-sm-10">
               <div class="input-group">
-                <select id="ds-report-field" class="form-control"
+                <select id="ds-report-field"
+                        class="form-control"
                         data-ng-model="reporting"
                         data-ng-options="value.id for (key, value) in reportingConfig | orderBy: 'id'">
                 </select>
@@ -46,9 +60,16 @@
                    class="col-sm-2 control-label"
                    data-translate="">customFilter</label>
             <div class="col-sm-10">
-              <input id="ds-query-filter"
-                     data-ng-model="filter"
-                     class="form-control"/>
+              <div class="input-group">
+                <input id="ds-query-filter"
+                       data-ng-model="filter"
+                       class="form-control"/>
+                <div class="input-group-btn">
+                  <button type="submit"
+                          class="btn btn-default glyphicon glyphicon-remove"
+                          data-ng-click="filter = ''"></button>
+                </div>
+              </div>
             </div>
             <p class="help-block" data-translate="">customFilterHelp</p>
           </div>
@@ -127,6 +148,7 @@
               <button id="ds-btn-report-preview"
                       type="submit"
                       class="btn btn-primary"
+                      data-ng-disabled="!filterCount"
                       data-ng-click="preview()">
                 <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
                 <span data-translate="">preview</span>
@@ -135,6 +157,7 @@
                 <button id="ds-btn-report-dwn"
                         type="button"
                         class="btn btn-default dropdown-toggle"
+                        data-ng-disabled="!filterCount"
                         data-toggle="dropdown">
                   <i class="glyphicon glyphicon-download-alt"></i>&nbsp;
                   <span data-translate="">download</span> <span class="caret"></span>
@@ -172,131 +195,144 @@
                          data-translate="">JSON</a></li>
                 </ul>
               </div>
-              <button id="ds-btn-report-submit"
+              <!--<button id="ds-btn-report-submit"
                       type="submit"
                       class="btn btn-default disabled"
                       data-ng-click="submit()"
                       data-toggle="tooltip"
                       data-placement="bottom">
                 <i class="glyphicon glyphicon-time"></i>&nbsp;
-                <span data-translate="">schedule</button>
+                <span data-translate="">schedule</button>-->
             </div>
           </div>
         </div>
       </div>
+    </form>
+    <div data-ng-show="report != null && overview"
+         id="ds-report-results">
+      <h2 data-translate="">
+        monitoringTitle
+      </h2>
 
-      <div data-ng-show="report != null && overview"
-           id="ds-report-results">
-        <h2 data-translate=""
-            data-translate-values="{title: '{{report.identification.title.content}}'}">
-          monitoringTitle
-        </h2>
-
-        <p data-ng-show="report.identification.url"
-           data-translate=""
-                data-translate-values="{url: '{{report.identification.url}}'}">
-          monitoringUrlLink
-        </p>
-        <div class="alert alert-info" data-translate="">
-          monitoringHelp
-        </div>
-
-        <table class="table table-striped">
-          <tr>
-            <th></th>
-            <th data-translate="">name</th>
-            <th data-translate="">definition</th>
-          </tr>
-          <tr>
-            <th>
-              <input class="form-control"
-                     data-ng-model="reportConfigSearch.id"
-                     autofocus="autofocus"/>
-            </th>
-            <th colspan="2">
-              <input class="form-control"
-                     data-ng-model="reportConfigSearch.$"/>
-            </th>
-          </tr>
-          <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
-            <td>{{v.id}}</td>
-            <td><strong>{{v.name.content}}</strong></td>
-            <td>
-              <p>
-                {{v.comment}}
-              </p>
-
-              <samp data-ng-show="v.query">
-                {{v.query.value}}
-              </samp>
-              <ul data-ng-show="v.query.stats != null6  ">
-                <li><label data-translate="">Statistics field</label> {{v.query.statsField}}</li>
-                <li><label data-translate="">Type</label> {{v.query.stats}}</li>
-              </ul>
-              <samp>
-                {{v.expression}}
-              </samp>
-            </td>
-          </tr>
-        </table>
+      <p data-ng-show="report.identification.url"
+         data-translate=""
+         data-translate-values="{url: '{{report.identification.url}}'}">
+        monitoringUrlLink
+      </p>
+      <div class="alert alert-info" data-translate="">
+        monitoringHelp
       </div>
 
-      <div data-ng-show="report != null && overview == false">
-        <h2 data-translate=""
-                data-translate-values="{
-                title: '{{report.identification.title.content}}',
-                territory: '{{territory.label}}',
-                count: '{{filterCount}}'}">
-          monitoringDetails</h2>
+      <table class="table table-striped">
+        <tr>
+          <th></th>
+          <th data-translate="">name</th>
+          <th data-translate="">definition</th>
+        </tr>
+        <tr>
+          <th>
+            <input class="form-control"
+                   data-ng-model="reportConfigSearch.id"
+                   autofocus="autofocus"/>
+          </th>
+          <th colspan="2">
+            <input class="form-control"
+                   data-ng-model="reportConfigSearch.$"/>
+          </th>
+        </tr>
+        <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
+          <td>{{v.id}}</td>
+          <td><strong>{{v.name.content}}</strong></td>
+          <td>
+            <p>
+              {{v.comment}}
+            </p>
+
+            <samp data-ng-show="v.query">
+              {{v.query.value}}
+            </samp>
+            <ul data-ng-show="v.query.stats != null6  ">
+              <li><label data-translate="">Statistics field</label> {{v.query.statsField}}</li>
+              <li><label data-translate="">Type</label> {{v.query.stats}}</li>
+            </ul>
+            <samp>
+              {{v.expression}}
+            </samp>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div data-ng-show="report != null && overview == false">
+      <h2 data-translate=""
+          data-translate-values="{
+          title: '{{report.identification.title.content}}',
+          territory: '{{territory.label}}',
+          count: '{{filterCount}}'}">
+        monitoringDetails</h2>
 
 
-        <div class="alert alert-info"
-             data-translate="">
-          monitoringContentInfo
-        </div>
+      <div class="alert alert-info"
+           data-translate="">
+        monitoringContentInfo
+      </div>
 
-        <table class="table table-striped">
-          <tr>
-            <th></th>
-            <th data-translate="">name</th>
-            <th data-translate="">value</th>
-          </tr>
-          <tr>
-            <th>
-              <input class="form-control"
-                     data-ng-model="reportSearch.id"
-                     autofocus="autofocus"/>
-            </th>
-            <th colspan="2">
+      <table class="table table-striped">
+        <tr>
+          <th></th>
+          <th data-translate="">name</th>
+          <th data-translate="">value</th>
+        </tr>
+        <tr>
+          <th>
+            <input class="form-control"
+                   data-ng-model="reportSearch.id"
+                   autofocus="autofocus"/>
+          </th>
+          <th colspan="2">
+            <form class="form-inline">
               <input class="form-control"
                      data-ng-model="reportSearch.$"/>
-            </th>
-          </tr>
-          <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch">
-            <td>{{v.id}}</td>
-            <td title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
-              {{v.name.content}}
-              <div class="alert alert-danger"
-                   data-ng-show="v.status.indexOf('Error')"
-                   role="alert">
-                <strong data-ng-show="v.comment">{{v.comment}}</strong>
-                <p>{{v.status}}</p>
-                <span data-ng-show="v.parameters" data-translate="">parameters</span>
-                <ul>
-                  <li data-ng-repeat="p in v.parameters.parameter">
-                    {{p.id}}
-                    <span data-ng-show="p.status === 'set'">{{p.status}} with value {{p.value}}</span>
-                    <span data-ng-show="p.status === 'undefined'">{{p.status}}</span>
-                  </li>
-                </ul>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"
+                         data-ng-model="isfilterErrors"/>
+                  <span data-translate="">withErrorsIndicators</span>
+                </label>
               </div>
-            </td>
-            <td>{{v.value}}</td>
-            <td></td>
-          </tr>
-        </table>
-
-      </div>
-    </form>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"
+                         data-ng-model="isfilterNonNull"/>
+                  <span data-translate="">nonNullIndicators</span>
+                </label>
+              </div>
+            </form>
+          </th>
+        </tr>
+        <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch | filter:checkboxFilters">
+          <td>{{v.id}}</td>
+          <td title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
+            {{v.name.content}}
+            <div class="alert alert-danger"
+                 data-ng-show="v.status.indexOf('Error')"
+                 role="alert">
+              <strong data-ng-show="v.comment">{{v.comment}}</strong>
+              <p>{{v.status}}</p>
+              <span data-ng-show="v.parameters" data-translate="">parameters</span>
+              <ul>
+                <li data-ng-repeat="p in v.parameters.parameter">
+                  {{p.id}}
+                  <span data-ng-show="p.status === 'set'">{{p.status}} with value {{p.value}}</span>
+                  <span data-ng-show="p.status === 'undefined'">{{p.status}}</span>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>{{v.value}}</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
