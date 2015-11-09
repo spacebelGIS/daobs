@@ -44,20 +44,8 @@
                   <targetPath>${project.build.directory}/${solr.core.directory}</targetPath>
                   <includes>
                     <include>solr.xml</include>
+                    <include>zoo.cfg</include>
                   </includes>
-                </resource>
-                <!-- Copy cores -->
-                <resource>
-                  <directory>${project.basedir}/src/main/${solr.core.directory}/data</directory>
-                  <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.data}</targetPath>
-                </resource>
-                <resource>
-                  <directory>${project.basedir}/src/main/${solr.core.directory}/dashboard</directory>
-                  <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.dashboard}</targetPath>
-                </resource>
-                <resource>
-                  <directory>${project.basedir}/src/main/${solr.core.directory}/silk</directory>
-                  <targetPath>${project.build.directory}/${solr.core.directory}/${solr.core.data}</targetPath>
                 </resource>
               </resources>
             </configuration>
