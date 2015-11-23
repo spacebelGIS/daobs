@@ -113,11 +113,11 @@
       </xsl:for-each>
 
 
-      <field name="isAboveThreshold"><xsl:value-of select="MdServiceExistence/mdConformity"/></field>
+      <field name="isAboveThreshold"><xsl:value-of select="MdServiceExistence/mdConformity = 'true'"/></field>
       <field name="harvesterUuid"><xsl:value-of select="MdServiceExistence/discoveryAccessibilityUuid"/></field>
       <field name="linkUrl"><xsl:value-of select="NetworkService/URL"/></field>
       <field name="serviceType"><xsl:value-of select="NetworkService/NnServiceType"/></field>
-      <field name="inspireConformResource"><xsl:value-of select="NetworkService/nnConformity"/></field>
+      <field name="inspireConformResource"><xsl:value-of select="NetworkService/nnConformity = 'true'"/></field>
     </doc>
   </xsl:template>
 
@@ -148,9 +148,9 @@
         <field name="recordOperatedByType"><xsl:value-of select="name()"/></field>
       </xsl:for-each>
 
-      <field name="isAboveThreshold"><xsl:value-of select="MdDataSetExistence/mdConformity"/></field>
+      <field name="isAboveThreshold"><xsl:value-of select="count(MdDataSetExistence/IRConformity) > 0"/></field>
       <field name="harvesterUuid"><xsl:value-of select="MdDataSetExistence/MdAccessibility/discoveryUuid"/></field>
-      <field name="inspireConformResource"><xsl:value-of select="MdDataSetExistence/IRConformity/structureCompliance"/></field>
+      <field name="inspireConformResource"><xsl:value-of select="MdDataSetExistence/IRConformity/structureCompliance = 'true'"/></field>
     </doc>
   </xsl:template>
 
