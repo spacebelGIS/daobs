@@ -23,7 +23,7 @@
         },
         'delete': function (documentFilter, core) {
           return $http.post(
-            solrConfig.url +
+            solrConfig.url + '/' +
               (core || solrConfig.core) +
               '/update/json',
             { 'delete': { 'query': documentFilter }},

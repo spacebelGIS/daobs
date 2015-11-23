@@ -107,7 +107,7 @@
                   '+reportingDate:"' + m.reportingDate + '" ' +
                   '+territory:"' + m.territory + '"',
               indicatorFilter = '+documentType:indicator ' + filter,
-              monitoringFilter = '+documentType:monitoring ' + filter,
+              monitoringFilter = '+documentType:monitoring* ' + filter,
               deferred = $q.defer();
 
 

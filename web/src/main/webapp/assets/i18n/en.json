@@ -16,6 +16,7 @@
   "dashboardLoaded": "<strong>{{number}}</strong> dashboard(s) loaded.",
   "deleteAllDashboards": "Delete all <strong>{{number}}</strong> dashboard(s)",
   "home": "Home",
+  "removeAllMonitoring": "Remove all monitoring",
   "homeTitle": "Go back to home page",
   "monitoring": "Monitoring",
   "harvesting": "Harvesting",
