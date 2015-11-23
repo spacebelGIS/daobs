@@ -291,7 +291,7 @@
     <solr.core.directory>solr-cores</solr.core.directory>
     <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
 
-    <solr.version>5.2.1</solr.version>
+    <solr.version>5.3.1</solr.version>
 
     <silk.port>8985</silk.port>
 
