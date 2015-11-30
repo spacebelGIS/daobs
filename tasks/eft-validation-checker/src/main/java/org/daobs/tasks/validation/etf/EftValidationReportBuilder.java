@@ -1,6 +1,8 @@
 package org.daobs.tasks.validation.etf;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,9 +22,19 @@ import java.io.File;
  * @author Jose García
  */
 public class EftValidationReportBuilder {
+    private Log log = LogFactory.getLog(this.getClass());
 
-    public EtfValidationReport build(File eftResults, String endPoint, String protocol) {
-        EtfValidationReport report = new EtfValidationReport(endPoint, protocol);
+
+    /**
+     * Creates a validation report from the ETF validation results.
+     *
+     * @param eftResults
+     * @param endPoint
+     * @param protocol
+     * @return
+     */
+    public EtfValidationReport build(File eftResults, String endPoint, ServiceProtocol protocol) {
+        EtfValidationReport report = new EtfValidationReport(endPoint, protocol.toString());
 
         try {
             DocumentBuilderFactory factory =
@@ -63,9 +75,24 @@ public class EftValidationReportBuilder {
             report.setReport(FileUtils.readFileToString(eftResults));
 
         } catch (Exception ex) {
+            log.error(ex.getMessage());
             report.setInfo(ex.getMessage());
-            ex.printStackTrace();
         }
+
+        log.info(report.toString());
+
+        return report;
+    }
+
+    /**
+     * Creates an error report.
+     *
+     * @param endPoint
+     * @return
+     */
+    public EtfValidationReport buildErrorReport(String endPoint, String error) {
+        EtfValidationReport report = new EtfValidationReport(endPoint, "");
+        report.setInfo(error);
 
         return report;
     }

@@ -23,10 +23,16 @@
   <logger name="org.springframework" additivity="true">
     <level value="WARN"/>
   </logger>
-  <logger name="org.daobs.task.ValidationChecker">
+  <logger name="org.daobs.task.EtfValidationChecker">
     <level value="DEBUG"/>
     <appender-ref ref="file" />
   </logger>
+
+  <logger name="org.daobs.tasks.validation.etf" additivity="true">
+    <level value="DEBUG"/>
+    <appender-ref ref="file" />
+  </logger>
+
 
   <root>
     <level value="OFF"/>

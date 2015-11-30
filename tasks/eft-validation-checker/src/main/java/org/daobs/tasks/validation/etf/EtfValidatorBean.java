@@ -2,6 +2,8 @@ package org.daobs.tasks.validation.etf;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -15,11 +17,13 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Simple bean to call the etf validation service.
+ * Simple bean to call the ETF validation service.
  *
  * @author Jose García
  */
 public class EtfValidatorBean {
+    private Log log = LogFactory.getLog(this.getClass());
+
     String etfResourceTesterPath;
 
     public String getEtfResourceTesterPath() {
@@ -32,7 +36,7 @@ public class EtfValidatorBean {
 
     /**
      * Get the input message body and validate
-     * it against the INSPIRE validation service.
+     * it against the ETF validation tool.
      * The output body contains the validation report.
      *
      * Headers are propagated.
@@ -42,7 +46,6 @@ public class EtfValidatorBean {
     public void validateBody(Exchange exchange) {
         String xml = exchange.getIn().getBody(String.class);
 
-        System.out.println("validateBody:" + xml);
         EtfValidationReport report = null;
         EtfValidatorClient validatorClient =
                 new EtfValidatorClient(this.etfResourceTesterPath);
@@ -56,41 +59,21 @@ public class EtfValidatorBean {
             Document doc = builder.parse(input);
 
             XPath xPath = XPathFactory.newInstance().newXPath();
-            String expression = "/doc/arr[@name='link']/str";
-            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node n = nodeList.item(i);
+            String expression = "/doc/arr[@name='serviceType']/str";
+            String serviceType = (String) xPath.compile(expression).evaluate(doc, XPathConstants.STRING);
 
-                // TODO: Manage exceptional cases
-                String[] linkInfo = n.getTextContent().split("\\|");
-                String url = linkInfo[1];
-                String protocol = linkInfo[0];
+            expression = "/doc/arr[@name='linkUrl']/str";
+            String url = (String) xPath.compile(expression).evaluate(doc, XPathConstants.STRING);
 
-                if (!canProcessProtocol(protocol)) continue;
 
-                report = validatorClient.validate(url, protocol);
-
-                // TODO: Check this requirement
-                // If multiple endpoints are mentioned in one metadata, only the first will be evaluated
-                break;
-            }
-
+            report = validatorClient.validate(url, ServiceType.fromString(serviceType));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         exchange.getOut().setBody(report);
         exchange.getOut().setHeaders(exchange.getIn().getHeaders());
-    }
-
-
-    private boolean canProcessProtocol(String protocol) {
-        return (protocol.equalsIgnoreCase("OGC:WMS") ||
-                protocol.equalsIgnoreCase("OGC:WTMS") ||
-                protocol.equalsIgnoreCase("OGC:WFS") ||
-                protocol.equalsIgnoreCase("INSPIRE Atom"));
-
     }
 }

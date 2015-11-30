@@ -1,6 +1,5 @@
 package org.daobs.tasks.validation.etf;
 
-import java.util.Date;
 
 /**
  * ETF Validation report.
@@ -82,7 +81,7 @@ public class EtfValidationReport {
 
 
     public double getCompletenessIndicator() {
-        return 100 - (((totalErrors + totalFailures) / totalTests) * 100);
+        return 100 - (((totalErrors + totalFailures) * 1.0 / totalTests) * 100);
     }
 
 
@@ -108,8 +107,9 @@ public class EtfValidationReport {
     }
 
     public String toString() {
-        StringBuffer buffer = new StringBuffer("Etf Validation report:");
+        StringBuffer buffer = new StringBuffer("ETF Validation report:");
         buffer.append("\nValid: ").append(this.isStatus());
+        buffer.append("\nCompleteness indicator: ").append(this.getCompletenessIndicator());
         buffer.append("\nReport: ").append(this.getReport());
         return buffer.toString();
     }
