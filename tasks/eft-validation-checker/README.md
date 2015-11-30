@@ -8,6 +8,8 @@ The following components are required by this task:
 * Java 7
 * ETF 1.4.1
 
+* SOLR should be running in port 8984, with metadata records. See ../../README.md ../../solr/README.md for configuration.
+
 ## ETF Installation
 Unzip the downloaded file `ETF1.4.1.zip`to a folder, for example:
 ```
@@ -21,7 +23,7 @@ The configuration is done in the file `eft-validation-checker/src/main/resources
 * task.validation-etf-checker.validator.path: Path to ETF tool, for example:
     * `task.validation-etf-checker.validator.path=/opt/ETF1.4.1/ETF`
 * task.validation-etf-checker.filter: Filter to query the metadata to process. Configured by default to retrieve the service metadata:
-    * `task.validation-etf-checker.filter=+documentType:metadata +standardName:"ISO 19119"`
+    * `task.validation-etf-checker.filter=+documentType:metadata +resourceType:service`
 
 ## Execution
 To run the task:
