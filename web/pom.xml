@@ -201,6 +201,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-messaging</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.tuckey</groupId>
       <artifactId>urlrewritefilter</artifactId>
       <version>4.0.3</version>
@@ -209,6 +215,11 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-messaging</artifactId>
+      <version>0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>
