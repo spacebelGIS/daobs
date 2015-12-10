@@ -60,26 +60,26 @@
 
 
 
-    <cm:route id="route-task-validate" autoStartup="{{task.validation-etf-checker.startup.cli}}">
+    <cm:route id="route-etf-task-validate" autoStartup="{{task.validation-etf-checker.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
         <cm:simple>{{task.validation-etf-checker.filter}}</cm:simple>
       </cm:setHeader>
-      <cm:to uri="direct:task-validate-start"/>
+      <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
-    <cm:route id="route-task-validate-start" autoStartup="{{task.validation-etf-checker.startup.jms}}">
-      <cm:from uri="activemq:task-validate"/>
+    <cm:route id="route-etf-task-validate-start" autoStartup="{{task.validation-etf-checker.startup.jms}}">
+      <cm:from uri="activemq:etf-task-validate"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:groovy>'{{task.validation-etf-checker.filter}}' + ' ' +  exchange.in.body.trim()</cm:groovy>
+        <cm:groovy>'{{task.validation-etf-checker.filter}}'</cm:groovy>
       </cm:setHeader>
-      <cm:to uri="direct:task-validate-start"/>
+      <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
 
-    <cm:route id="route-task-validate-check-regularly" autoStartup="{{task.validation-etf-checker.startup.background}}">
-      <cm:from uri="quartz2://task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
-      <cm:to uri="direct:task-validate-start"/>
+    <cm:route id="route-etf-task-validate-check-regularly" autoStartup="{{task.validation-etf-checker.startup.background}}">
+      <cm:from uri="quartz2://etf-task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
+      <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
     <cm:route id="route-get-records">
@@ -94,7 +94,7 @@
 
         Check against the XSD.
       </cm:description>
-      <cm:from uri="direct:task-validate-start"/>
+      <cm:from uri="direct:etf-task-validate-start"/>
 
       <cm:log message="Background task checking document validation status ..."
               loggingLevel="INFO"

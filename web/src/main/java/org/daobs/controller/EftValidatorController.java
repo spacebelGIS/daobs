@@ -38,6 +38,6 @@ public class EftValidatorController {
     private void sendMessage() {
         EtfValidatorEvent event = new EtfValidatorEvent(appContext);
 
-        jmsMessager.sendMessage("task-validate", event);
+        jmsMessager.sendMessage("etf-task-validate", event);
     }
 }
