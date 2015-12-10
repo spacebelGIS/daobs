@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Jose García
  */
 @Controller
-public class EftValidatorController {
+public class EtfValidatorController {
     @Autowired
     private ApplicationContext appContext;
 
