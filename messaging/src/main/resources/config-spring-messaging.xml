@@ -26,7 +26,7 @@
   </bean>
 
   <bean id="jmsMessager"
-        class="org.geonetwork.messaging.JMSMessager">
+        class="org.daobs.messaging.JMSMessager">
     <property name="jmsUrl" value="${jms.url}"/>
   </bean>
 </beans>
