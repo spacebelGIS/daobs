@@ -207,6 +207,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-routing-utility</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.tuckey</groupId>
       <artifactId>urlrewritefilter</artifactId>
       <version>4.0.3</version>

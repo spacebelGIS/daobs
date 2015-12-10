@@ -37,6 +37,7 @@
     </amq:systemUsage>
   </amq:systemUsage>-->
 
+  <import resource="classpath*:META-INF/spring/config-spring-messaging.xml" />
   <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml"/>
   <import resource="classpath*:META-INF/spring/daobs-task-routes.xml" />
 
