@@ -248,6 +248,7 @@
     <module>dashboard2</module>
     <module>silk</module>
     <module>web</module>
+    <module>messaging</module>
   </modules>
 
 
@@ -308,6 +309,7 @@
 
     <camel.version>2.14.0</camel.version>
 
+    <jms.url>tcp://localhost:61616</jms.url>
     <activemq.version>5.6.0</activemq.version>
     <xbean.version>3.18</xbean.version>
 

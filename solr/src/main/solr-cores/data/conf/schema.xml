@@ -294,6 +294,12 @@
 
   <field name="payloads" type="payloads" indexed="true" stored="true"/>
 
+  <!-- Field to store validation status with ETF Validation tool -->
+  <field name="etfIsValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
+  <field name="etfCompletenessIndicator" type="double" stored="true" indexed="true" multiValued="false"/>
+  <field name="etfValidDate" type="string" stored="true" indexed="true" multiValued="false"/>
+  <field name="etfValidReport" type="string" stored="true" indexed="false" multiValued="false"/>
+  <field name="etfValidInfo" type="string" stored="true" indexed="false" multiValued="false"/>
 
   <!--
     Some fields such as popularity and manu_exact could be modified to

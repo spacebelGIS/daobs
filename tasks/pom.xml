@@ -19,5 +19,6 @@
     <module>service-dataset-indexer</module>
     <module>validation-checker</module>
     <module>data-indexer</module>
+    <module>etf-validation-checker</module>
   </modules>
 </project>
