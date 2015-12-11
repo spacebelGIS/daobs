@@ -88,7 +88,10 @@ public class EtfValidatorClient {
         String reportName = "report";
 
         try {
-            FileUtils.cleanDirectory(new File(this.etfResourceTesterPath, "reports"));
+            File reportDirectory = new File(this.etfResourceTesterPath, "reports");
+            if (reportDirectory.exists()) {
+                FileUtils.cleanDirectory(reportDirectory);
+            }
 
             Runtime rt = Runtime.getRuntime();
 

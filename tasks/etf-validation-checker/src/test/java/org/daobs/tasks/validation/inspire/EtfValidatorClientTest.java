@@ -19,7 +19,7 @@ public class EtfValidatorClientTest extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        validator = new EtfValidatorClient("/Users/jose/apps/ETF1.4.1/ETF");
+        validator = new EtfValidatorClient("./ETF/ETF");
     }
 
     @org.junit.Test
