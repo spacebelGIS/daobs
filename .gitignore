@@ -3,6 +3,7 @@ harvesters/csw-harvester/activemq-data/
 harvesters/csw-harvester/csw/
 harvesters/csw-harvester/logs/
 harvesters/csw-harvester/src/main/resources/WEB-INF/config-harvesters.xml
+tasks/etf-validation-checker/ETF
 tasks/*/tmp/
 tasks/*/logs/
 pom.xml.tag

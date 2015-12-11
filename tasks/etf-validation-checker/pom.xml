@@ -56,6 +56,40 @@
     </dependency>
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>etf-download</id>
+      <activation>
+        <property>
+          <name>etf-download</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.googlecode.maven-download-plugin</groupId>
+            <artifactId>download-maven-plugin</artifactId>
+            <version>1.2.1</version>
+            <executions>
+              <execution>
+                <id>download-etf</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>wget</goal>
+                </goals>
+                <configuration>
+                  <url>http://www.geostandaarden.nl/validatie/inspire/versies/1.4/ETF1.4.1.zip</url>
+                  <unpack>true</unpack>
+                  <outputDirectory>${project.basedir}/ETF</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <build>
     <defaultGoal>install</defaultGoal>
 

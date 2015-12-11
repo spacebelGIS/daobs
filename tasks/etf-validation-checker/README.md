@@ -8,14 +8,25 @@ The following components are required by this task:
 * Java 7
 * ETF 1.4.1
 
-* SOLR should be running in port 8984, with metadata records. See ../../README.md ../../solr/README.md for configuration.
+* SOLR should be running in port 8984, with metadata records. See [solr/README.md](../../solr/README.md) for configuration.
 
 ## ETF Installation
-Unzip the downloaded file `ETF1.4.1.zip`to a folder, for example:
+
+### Manual installation
+
+Unzip the downloaded file `ETF1.4.1.zip` to a folder, for example:
 ```
 $ unzip ETF1.4.1.zip -d /opt
 ```
 That creates the following folder `/opt/ETF1.4.1`
+
+### Installation with maven
+
+```
+cd tasks/etf-validation-checker
+mvn install -Petf-download
+```
+
 
 ## Configuration
 The configuration is done in the file `eft-validation-checker/src/main/resources/WEB-INF/config.properties`:
