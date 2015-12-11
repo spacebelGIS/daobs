@@ -52,6 +52,21 @@
         </dependency>
       </dependencies>
     </profile>
+
+
+    <profile>
+      <id>with-tasks-etf</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daobs.tasks</groupId>
+          <artifactId>daobs-tasks-etf-validation-checker</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
   </profiles>
   <dependencies>
     <dependency>
