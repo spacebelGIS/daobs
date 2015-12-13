@@ -29,14 +29,14 @@ public class EtfValidatorController {
             },
             method = RequestMethod.GET)
     @ResponseBody
-    public RequestResponse run()
+    public RequestResponse run(@RequestParam(required = true) String fq)
             throws Exception {
-        sendMessage();
+        sendMessage(fq);
         return new RequestResponse("ETF Validator started", "success");
     }
 
-    private void sendMessage() {
-        EtfValidatorEvent event = new EtfValidatorEvent(appContext);
+    private void sendMessage(String fq) {
+        EtfValidatorEvent event = new EtfValidatorEvent(appContext, fq);
 
         jmsMessager.sendMessage("etf-task-validate", event);
     }

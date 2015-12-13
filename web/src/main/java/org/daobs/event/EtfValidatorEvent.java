@@ -8,7 +8,15 @@ import org.springframework.context.ApplicationEvent;
  * @author Jose García
  */
 public class EtfValidatorEvent extends ApplicationEvent {
-    public EtfValidatorEvent(Object source) {
+
+    final String fq;
+
+    public String getFq() {
+        return fq;
+    }
+
+    public EtfValidatorEvent(Object source, final String fq) {
         super(source);
+        this.fq = fq;
     }
 }

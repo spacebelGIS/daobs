@@ -60,7 +60,8 @@
 
 
 
-    <cm:route id="route-etf-task-validate" autoStartup="{{task.validation-etf-checker.startup.cli}}">
+    <cm:route id="route-etf-task-validate-start-cli"
+              autoStartup="{{task.validation-etf-checker.startup.cli}}">
       <cm:from uri="timer://start?repeatCount=1"/>
       <cm:setHeader headerName="documentFilter">
         <cm:simple>{{task.validation-etf-checker.filter}}</cm:simple>
@@ -68,21 +69,26 @@
       <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
-    <cm:route id="route-etf-task-validate-start" autoStartup="{{task.validation-etf-checker.startup.jms}}">
+    <cm:route id="route-etf-task-validate-start-jms"
+              autoStartup="{{task.validation-etf-checker.startup.jms}}">
       <cm:from uri="activemq:etf-task-validate"/>
       <cm:setHeader headerName="documentFilter">
-        <cm:groovy>'{{task.validation-etf-checker.filter}}'</cm:groovy>
+        <cm:simple>${body.fq}</cm:simple>
       </cm:setHeader>
+      <cm:setBody>
+        <cm:constant></cm:constant>
+      </cm:setBody>
       <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
 
-    <cm:route id="route-etf-task-validate-check-regularly" autoStartup="{{task.validation-etf-checker.startup.background}}">
+    <cm:route id="route-etf-task-validate-check-regularly"
+              autoStartup="{{task.validation-etf-checker.startup.background}}">
       <cm:from uri="quartz2://etf-task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
       <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
-    <cm:route id="route-get-records">
+    <cm:route id="route-etf-task-validate-start">
       <cm:description>
         Query all documents
         +documentType:metadata
@@ -202,7 +208,7 @@
         </cm:simple>
       </cm:setBody>
 
-      <cm:to uri="file:{{task.validation-etf-checker.folder}}?fileName=inspire-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+      <cm:to uri="file:{{task.validation-etf-checker.folder}}?fileName=etf-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
     </cm:route>
 
 
