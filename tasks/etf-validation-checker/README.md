@@ -45,8 +45,16 @@ task.validation-etf-checker.filter=+documentType:metadata +resourceType:service
 ```
 
 ## Execution
-To run the task:
+
+To run the task from the command line:
+
 ```
 cd eft-validation-checker
-$ mvn camel:run
+mvn camel:run
+```
+
+From the webapplication, run validation on all none validated records:
+
+```
+http://localhost:8080/daobs/etf-validator?fq=-etfCompletenessIndicator:[*%20TO%20*]
 ```
