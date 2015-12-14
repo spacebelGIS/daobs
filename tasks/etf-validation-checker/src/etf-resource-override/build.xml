@@ -74,6 +74,8 @@
 		<propertyfile file="config.properties">
 			<!--Edwin Kerkenaar (TNO) -->
 			<entry key="VS.serviceEndpoint" value="${map}" />
+			<!-- Jose García: use the property also for download service end-points -->
+			<entry key="DS.serviceEndpoint" value="${map}" />
 		</propertyfile>
 	</target>
 
