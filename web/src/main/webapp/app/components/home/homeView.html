@@ -105,13 +105,25 @@
         <span aria-hidden="true">&times;</span>
       </button>
 
-      <h3 data-translate=""
-          data-translate-values="{number: '{{dashboardsLoaded.success.length}}'}">
-        dashboardLoaded
-      </h3>
-      <ul>
-        <li data-ng-repeat="d in dashboardsLoaded.success">{{d}}</li>
-      </ul>
+      <div data-ng-show="dashboardsLoaded.success.length > 0">
+        <h3 data-translate=""
+            data-translate-values="{number: '{{dashboardsLoaded.success.length}}'}">
+          dashboardLoaded
+        </h3>
+        <ul>
+          <li data-ng-repeat="d in dashboardsLoaded.success">{{d}}</li>
+        </ul>
+      </div>
+
+      <div data-ng-show="dashboardsLoaded.errors.length > 0">
+        <h3 data-translate=""
+            data-translate-values="{number: '{{dashboardsLoaded.errors.length}}'}">
+          dashboardNotLoaded
+        </h3>
+        <ul>
+          <li data-ng-repeat="d in dashboardsLoaded.errors">{{d}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
