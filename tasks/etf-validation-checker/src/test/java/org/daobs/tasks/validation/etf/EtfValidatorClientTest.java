@@ -1,4 +1,4 @@
-package org.daobs.tasks.validation.inspire;
+package org.daobs.tasks.validation.etf;
 
 import junit.framework.TestCase;
 import org.daobs.tasks.validation.etf.EtfValidationReport;
@@ -19,7 +19,8 @@ public class EtfValidatorClientTest extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        validator = new EtfValidatorClient("./ETF/ETF");
+        validator = new EtfValidatorClient("./ETF/ETF", "./ETF/ETF/etf-html-reports",
+                "http://localhost/validation-reports");
     }
 
     @org.junit.Test

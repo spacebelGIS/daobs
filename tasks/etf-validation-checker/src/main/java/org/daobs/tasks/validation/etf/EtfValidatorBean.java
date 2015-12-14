@@ -26,12 +26,32 @@ public class EtfValidatorBean {
 
     String etfResourceTesterPath;
 
+    String etfResourceTesterHtmlReportsPath;
+
+    String etfResourceTesterHtmlReportsUrl;
+
     public String getEtfResourceTesterPath() {
         return etfResourceTesterPath;
     }
 
     public void setEtfResourceTesterPath(String etfResourceTesterPath) {
         this.etfResourceTesterPath = etfResourceTesterPath;
+    }
+
+    public String getEtfResourceTesterHtmlReportsPath() {
+        return etfResourceTesterHtmlReportsPath;
+    }
+
+    public void setEtfResourceTesterHtmlReportsPath(String etfResourceTesterHtmlReportsPath) {
+        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
+    }
+
+    public String getEtfResourceTesterHtmlReportsUrl() {
+        return etfResourceTesterHtmlReportsUrl;
+    }
+
+    public void setEtfResourceTesterHtmlReportsUrl(String etfResourceTesterHtmlReportsUrl) {
+        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
     }
 
     /**
@@ -48,7 +68,9 @@ public class EtfValidatorBean {
 
         EtfValidationReport report = null;
         EtfValidatorClient validatorClient =
-                new EtfValidatorClient(this.etfResourceTesterPath);
+                new EtfValidatorClient(this.etfResourceTesterPath,
+                        this.etfResourceTesterHtmlReportsPath,
+                        this.etfResourceTesterHtmlReportsUrl);
 
         try {
             DocumentBuilderFactory factory =

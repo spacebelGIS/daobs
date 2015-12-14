@@ -31,6 +31,8 @@ public class EtfValidatorClient {
     private Log log = LogFactory.getLog(this.getClass());
 
     String etfResourceTesterPath;
+    String etfResourceTesterHtmlReportsPath;
+    String etfResourceTesterHtmlReportsUrl;
 
     public String getEtfResourceTesterPath() {
         return etfResourceTesterPath;
@@ -40,8 +42,30 @@ public class EtfValidatorClient {
         this.etfResourceTesterPath = etfResourceTesterPath;
     }
 
-    public EtfValidatorClient(String etfResourceTesterPath) {
+    public String getEtfResourceTesterHtmlReportsPath() {
+        return etfResourceTesterHtmlReportsPath;
+    }
+
+    public void setEtfResourceTesterHtmlReportsPath(String etfResourceTesterHtmlReportsPath) {
+        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
+    }
+
+    public String getEtfResourceTesterHtmlReportsUrl() {
+        return etfResourceTesterHtmlReportsUrl;
+    }
+
+    public void setEtfResourceTesterHtmlReportsUrl(String etfResourceTesterHtmlReportsUrl) {
+        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
+    }
+
+
+    public EtfValidatorClient(String etfResourceTesterPath,
+                              String etfResourceTesterHtmlReportsPath,
+                              String etfResourceTesterHtmlReportsUrl) {
+
         this.etfResourceTesterPath = etfResourceTesterPath;
+        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
+        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
     }
 
     public EtfValidationReport validate(String resourceDescriptorUrl,
@@ -77,8 +101,9 @@ public class EtfValidatorClient {
         }
 
         // Build report
+        String reportUrl = this.etfResourceTesterHtmlReportsUrl + "/" + FilenameUtils.getName(eftResultsPath) + "/index.html";
         EtfValidationReport report = new EftValidationReportBuilder()
-                .build(eftResults, resourceDescriptorUrl, protocol);
+                .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
 
         return report;
     }
@@ -128,6 +153,11 @@ public class EtfValidatorClient {
             log.info("Process exitValue: " + exitVal);
 
             String eftResultsPath = this.etfResourceTesterPath + "/reports/" + reportName;
+
+            // Move the html folder to the html reports folder, accessible with http
+            FileUtils.moveDirectory(new File(eftResultsPath, "html"),
+                    new File(this.etfResourceTesterHtmlReportsPath, reportName));
+
             return eftResultsPath;
 
         } catch (Throwable ex) {

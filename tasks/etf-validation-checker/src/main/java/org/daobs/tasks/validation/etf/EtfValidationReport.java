@@ -31,6 +31,11 @@ public class EtfValidationReport {
      */
     private String info;
 
+    /**
+     * Url to the html report.
+     * @return
+     */
+    private  String reportUrl;
 
     public String getEndPoint() {
         return endPoint;
@@ -101,6 +106,14 @@ public class EtfValidationReport {
         this.info = info;
     }
 
+    public String getReportUrl() {
+        return reportUrl;
+    }
+
+    public void setReportUrl(String reportUrl) {
+        this.reportUrl = reportUrl;
+    }
+
     public EtfValidationReport(String endPoint, String protocol) {
         this.endPoint = endPoint;
         this.protocol = protocol;
@@ -111,6 +124,7 @@ public class EtfValidationReport {
         buffer.append("\nValid: ").append(this.isStatus());
         buffer.append("\nCompleteness indicator: ").append(this.getCompletenessIndicator());
         buffer.append("\nReport: ").append(this.getReport());
+        buffer.append("\nReport URL: ").append(this.getReportUrl());
         return buffer.toString();
     }
 }

@@ -31,9 +31,10 @@ public class EftValidationReportBuilder {
      * @param eftResults
      * @param endPoint
      * @param protocol
+     * @param reportUrl
      * @return
      */
-    public EtfValidationReport build(File eftResults, String endPoint, ServiceProtocol protocol) {
+    public EtfValidationReport build(File eftResults, String endPoint, ServiceProtocol protocol, String reportUrl) {
         EtfValidationReport report = new EtfValidationReport(endPoint, protocol.toString());
 
         try {
@@ -73,6 +74,7 @@ public class EftValidationReportBuilder {
             report.setTotalTime(totalTime);
 
             report.setReport(FileUtils.readFileToString(eftResults));
+            report.setReportUrl(reportUrl);
 
         } catch (Exception ex) {
             log.error(ex.getMessage());

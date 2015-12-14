@@ -15,6 +15,10 @@
 
   <bean id="etfValidationClient" class="org.daobs.tasks.validation.etf.EtfValidatorBean">
     <property name="etfResourceTesterPath" value="${task.validation-etf-checker.validator.path}"/>
+    <!-- Destination to copy the html reports -->
+    <property name="etfResourceTesterHtmlReportsPath" value="${task.validation-etf-checker.validator.htmlreports.path}"/>
+    <!-- Url to the html reports -->
+    <property name="etfResourceTesterHtmlReportsUrl" value="${task.validation-etf-checker.validator.htmlreports.url}"/>
   </bean>
 
   <bean id="pagination" class="org.daobs.routing.utility.Pagination">
@@ -202,7 +206,7 @@
                   <field name="etfValidDate" update="set">$simple{header.beginTime}</field>
                   <field name="etfIsValid" update="set">${body.status}</field>
                   <field name="etfCompletenessIndicator" update="set">${body.completenessIndicator}</field>
-                  <field name="etfValidReport" update="set">${body.report} - ${body.completenessIndicator}</field>
+                  <field name="etfValidReportUrl" update="set">${body.reportUrl}</field>
                   <field name="etfValidInfo" update="set">${body.info} - ${body.completenessIndicator}</field>
                 </doc>
               </add>]]>
