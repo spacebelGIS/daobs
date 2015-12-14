@@ -181,15 +181,6 @@
     </dependency>-->
 
 
-    <!-- A simple mathematical expression parser
-    http://www.objecthunter.net/tinybo/blog/articles/86
-    http://projects.congrace.de/exp4j/index.html
-    -->
-    <dependency>
-      <groupId>de.congrace</groupId>
-      <artifactId>exp4j</artifactId>
-      <version>0.3.11</version>
-    </dependency>
 
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
@@ -226,6 +217,16 @@
       <artifactId>daobs-routing-utility</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-reporting</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-messaging</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
 
     <dependency>
       <groupId>org.tuckey</groupId>
@@ -236,11 +237,6 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daobs</groupId>
-      <artifactId>daobs-messaging</artifactId>
-      <version>0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>

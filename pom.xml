@@ -249,6 +249,7 @@
     <module>silk</module>
     <module>web</module>
     <module>messaging</module>
+    <module>reporting</module>
   </modules>
 
 
