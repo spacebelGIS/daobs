@@ -73,7 +73,8 @@ public class EftValidationReportBuilder {
             report.setTotalTests(totalTests);
             report.setTotalTime(totalTime);
 
-            report.setReport(FileUtils.readFileToString(eftResults));
+            // Replace CDATA sections in the xml
+            report.setReport(FileUtils.readFileToString(eftResults).replace("]]>", "]]]]><![CDATA[>"));
             report.setReportUrl(reportUrl);
 
         } catch (Exception ex) {
