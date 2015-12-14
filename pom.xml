@@ -299,7 +299,7 @@
     <!-- web folder where to store the validation reports -->
     <etf.validation-html-reports.path>${project.basedir}/target/${war.name}/etf-validation-reports</etf.validation-html-reports.path>
     <!--url where to store the validation reports -->
-    <etf.validation-html-reports.url>${webapp.url}/etf-validation-reports</etf.validation-html-reports.url>
+    <etf.validation-html-reports.url>${webapp.url}${webapp.rootUrl}etf-validation-reports</etf.validation-html-reports.url>
 
     <silk.port>8985</silk.port>
 
