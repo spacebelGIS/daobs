@@ -1,0 +1,458 @@
+<project name="esdin-wp12-tests" default="run-all-tests" basedir=".">
+
+	<property name="SOAPUI_HOME" location="bin/soapui-4.5.1" />
+
+	<!-- SoapUI project files -->
+	<property name="AUTHS_SOAPUI" location="ETF/AuthS/AuthServices-EDINA-soapui-project.xml" />
+	<property name="CTS_SOAPUI" location="ETF/CTS/ESDIN-CTS-Tests-soapui-project.xml" />
+	<property name="DS_SOAPUI" location="ETF/DS/ESDIN-DS-testing-soapui-project.xml" />
+	<property name="DSATOM_SOAPUI" location="ETF/DS/ESDIN-DS-Tests-Atom-soapui-project.xml" />
+	<property name="DSWFS_SOAPUI" location="ETF/DS/ESDIN-DS-Tests-ISO19142-soapui-project.xml" />
+	<property name="EXM_SOAPUI" location="ETF/ExM/ESDIN_ExM_soapUI.xml" />
+	<property name="AAA_SOAPUI" location="ETF/AAA/AAA-data_soapUI-project.xml" />
+	<property name="VS_SOAPUI" location="ETF/VS/ViewServices-EDINA-soapui-project.xml" />
+	<property name="VSPERF_SOAPUI" location="ETF/VS/Generic-WMS-1.3.0-Performance-Tests-soapui-project.xml" />
+	<property name="VSWMTS_SOAPUI" location="ETF/VS/VS-WMTS-soapui-project.xml" />
+
+	<!-- Memory settings -->
+	<property name="soapui.xms" value="256M" />
+	<property name="soapui.xmx" value="1024M" />
+	<property name="soapui.maxpermsize" value="512m" />
+
+	<!-- SoapUI paths -->
+	<path id="soapui.classpath">
+		<pathelement location="${SOAPUI_HOME}/bin/soapui-4.5.1.jar" />
+		<pathelement location="${SOAPUI_HOME}/lib/*" />
+	</path>
+	<path id="soapui.extlibs.path">
+		<pathelement location="${SOAPUI_HOME}/bin/ext" />
+	</path>
+	<path id="soapui.extlisteners.path">
+		<pathelement location="${SOAPUI_HOME}/bin/listeners" />
+	</path>
+	<path id="soapui.extactions.path">
+		<pathelement location="${SOAPUI_HOME}/bin/actions" />
+	</path>
+	<path id="soapui.javalibrary.path">
+		<pathelement location="${SOAPUI_HOME}/bin" />
+	</path>
+	<path id="soapui.wsidir.path">
+		<pathelement location="${SOAPUI_HOME}/wsi-test-tools" />
+	</path>
+	<path id="soapui.workspace.path">
+		<pathelement location="${basedir}/ETF/ETF-workspace.xml" />
+	</path>
+	<path id="soapui.properties.path">
+		<pathelement location="${basedir}/config.properties" />
+	</path>
+
+	<target name="init-properties" depends="check-ant,set-serviceEndpoint">        
+		<tstamp>
+			<format property="current.time" pattern="yyyyMMdd_HHmmss" />
+		</tstamp>
+		<!-- Thijs Brentjens (Geonovum): make sure the mapName is set for creation of the report and logging directories. -->
+		<!-- properties are immutable in Ant, so just try to set the mapName to be the current time. 
+			If the mapName is already set by e.g. Maven (for TNO), the property is not overruled by the line below.
+		-->
+		<property name="mapName" value="${current.time}" />
+
+		<!-- Set traces_dir in config.properties -->
+		<!-- Edwin Kerkenaar (TNO) -->
+		<property name="traces_dir" location="logs/traces/${mapName}" />
+		<mkdir dir="${traces_dir}" />
+		<propertyfile file="config.properties">
+			<entry key="traces_dir" value="${traces_dir}" />
+		</propertyfile>
+		<!-- Load user-specified service parameters (endpoints, etc.) -->
+		<property file="config.properties" />
+	</target>
+	
+	<!-- Thijs Brentjens (Geonovum): add a target that checks if the url of the map has been set already by a property. 
+		If so, set it in the config.properties. This is neceasary if the tests are ran using Maven, as done by TNO.
+	 -->
+	<target name="set-serviceEndpoint" if="map">
+		<propertyfile file="config.properties">
+			<!--Edwin Kerkenaar (TNO) -->
+			<entry key="VS.serviceEndpoint" value="${map}" />
+		</propertyfile>
+	</target>
+
+	<!-- Test targets -->
+	<target name="run-all-tests" depends="run-as-tests,run-vs-tests,run-vs-wmts-tests,run-exm-tests" description="Execute all ETF tests" />
+
+	<!-- AuthS tests -->
+	<target name="run-as-tests" depends="init-properties,as-tests-check" description="Execute Authentication Service tests" if="AS.serviceEndpoint">
+		<echo message="Running Authentication Service tests against endpoint '${AS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${AUTHS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="as-tests-check" unless="AS.serviceEndpoint">
+		<echo message="In order to run the AuthS Data tests, at least 'AS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- ExM tests -->
+	<target name="run-exm-tests" depends="init-properties,exm-tests-check" description="Execute ExM data tests" if="ExM.serviceEndpoint">
+		<echo message="Running ExM Data tests against endpoint '${ExM.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${EXM_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="exm-tests-check" unless="ExM.serviceEndpoint">
+		<echo message="In order to run the ExM Data tests, at least 'ExM.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- VS (WMTS) tests -->
+	<target name="run-vs-wmts-tests" depends="init-properties,vs-wmts-tests-check" description="Execute View Service (WMTS) tests" if="VSWMTS.serviceEndpoint">
+		<echo message="Running View Service (WMTS) tests against endpoint '${VSWMTS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${VSWMTS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="vs-wmts-tests-check" unless="VSWMTS.serviceEndpoint">
+		<echo message="In order to run the View Service (WMTS) tests, at least 'VSWMTS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- VS performance tests -->
+	<target name="run-vs-perftests" depends="vs-perftests-init" description="Execute View Service performance tests" if="VS.serviceEndpoint">
+		<echo message="Running View Service performance tests against endpoint '${VS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<!--Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/logs/${mapName}" />
+		</path>
+		<path id="test.reportdir.path">
+			<!--Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/reports/${mapName}" />
+		</path>
+		<antcall target="run-perftest">
+			<param name="soapui_project_file" value="${VSPERF_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="vs-perftests-init" depends="init-properties,vs-perftests-check" if="VS.serviceEndpoint">
+		<echo message="Initialising View Service performance tests against endpoint '${VS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<!--Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/logs/${mapName}" />
+		</path>
+		<path id="test.reportdir.path">
+			<!--Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/reports/${mapName}" />
+		</path>
+		<antcall target="run-initperftest">
+			<param name="soapui_project_file" value="${VSPERF_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="vs-perftests-check" unless="VS.serviceEndpoint">
+		<echo message="In order to run the View Service performance tests, at least 'VS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- VS tests -->
+	<target name="run-vs-tests" depends="init-properties,vs-tests-check" description="Execute View Service tests" if="VS.serviceEndpoint">
+		<echo message="Running View Service tests against endpoint '${VS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs/${mapName}" />
+		</path>
+		<path id="test.reportdir.path">
+			<!-- Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/reports/${mapName}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${VS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="vs-tests-check" unless="VS.serviceEndpoint">
+		<echo message="In order to run the View Service tests, at least 'VS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- DS tests -->
+	<target name="run-ds-tests" depends="init-properties,ds-tests-check" description="Execute Download Service tests" if="DS.serviceEndpoint">
+		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${DS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="ds-tests-check" unless="DS.serviceEndpoint">
+		<echo message="In order to run the Download Service tests, at least 'DS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+	
+	<!-- DS ATOM feed tests -->
+	<target name="run-dsatom-tests" depends="init-properties,dsatom-tests-check" description="Execute Download Service tests for Atom feed implementation" if="DS.serviceEndpoint">
+		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${DSATOM_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="dsatom-tests-check" unless="DS.serviceEndpoint">
+		<echo message="In order to run the Download Service tests for Atom feed implementations, at least 'DS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- DS WFS tests -->
+	<target name="run-dswfs-tests" depends="init-properties,dswfs-tests-check" description="Execute Download Service tests for Web Feature Service implementations" if="DS.serviceEndpoint">
+		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${DSWFS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="dswfs-tests-check" unless="DS.serviceEndpoint">
+		<echo message="In order to run the Download Service tests for Web Feature Service implementations, at least 'DS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- CTS tests -->
+	<target name="run-cts-tests" depends="init-properties,cts-tests-check" description="Execute Coordinate Transformation Service tests" if="CTS.serviceEndpoint">
+		<echo message="Running Coordinate Transformation Service tests against endpoint '${CTS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${CTS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="cts-tests-check" unless="CTS.serviceEndpoint">
+		<echo message="In order to run the Coordinate Transformation Service tests, at least 'CTS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- AAA data tests -->
+	<target name="run-aaa-tests" depends="init-properties,aaa-tests-check" description="Execute AFIS-ALKIS-ATKIS data tests" if="AAA.dataURI">
+		<echo message="Running AAA Data tests against document '${AAA.dataURI}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${current.time}" />
+		</path>
+		<antcall target="run-test">
+			<param name="soapui_project_file" value="${AAA_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="aaa-tests-check" unless="AAA.dataURI">
+		<echo message="In order to run the AAA data tests, at least 'AAA.dataURI' has to be provided in file 'config.properties'." />
+	</target>
+
+	<target name="run-test" depends="check-jvm">
+		<echo message="Running SoapUI project '${soapui_project_file}'" />
+		<java classname="com.eviware.soapui.tools.SoapUITestCaseRunner" fork="true" dir="${SOAPUI_HOME}/bin">
+			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<jvmarg value="-Xms${soapui.xms}" />
+			<jvmarg value="-Xmx${soapui.xmx}" />
+			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
+			<jvmarg value="-cp" />
+			<jvmarg value="${toString:soapui.classpath}" />
+			<jvmarg value="-Dsoapui.properties=${toString:soapui.properties.path}" />
+			<jvmarg value="-Dsoapui.home=${SOAPUI_HOME}" />
+			<jvmarg value="-Dsoapui.ext.libraries=${toString:soapui.extlibs.path}" />
+			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
+			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
+			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
+			<arg value="-r" />
+			<arg value="-f" />
+			<arg value="${logdir}" />
+			<arg value="-j" />
+			<arg value="-a" />
+			<arg value="${soapui_project_file}" />
+		</java>
+		<echo message="Finished running SoapUI project '${soapui_project_file}'. See '${logdir}' for logs." />
+	</target>
+
+	<target name="run-initperftest" depends="check-jvm">
+		<echo message="Running SoapUI project '${soapui_project_file}'" />
+		<java classname="com.eviware.soapui.tools.SoapUITestCaseRunner" fork="true" dir="${SOAPUI_HOME}/bin">
+			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<jvmarg value="-Xms${soapui.xms}" />
+			<jvmarg value="-Xmx${soapui.xmx}" />
+			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
+			<jvmarg value="-cp" />
+			<jvmarg value="${toString:soapui.classpath}" />
+			<jvmarg value="-Dsoapui.properties=${toString:soapui.properties.path}" />
+			<jvmarg value="-Dsoapui.home=${SOAPUI_HOME}" />
+			<jvmarg value="-Dsoapui.ext.libraries=${toString:soapui.extlibs.path}" />
+			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
+			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
+			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
+			<arg value="-r" />
+			<arg value="-f" />
+			<arg value="${logdir}" />
+			<arg value="-j" />
+			<arg value="-S" />
+			<arg value="-a" />
+			<arg value="${soapui_project_file}" />
+		</java>
+		<echo message="Finished running SoapUI project '${soapui_project_file}'. See '${logdir}' for logs." />
+	</target>
+
+	<target name="run-perftest" depends="check-jvm">
+		<echo message="Running SoapUI project '${soapui_project_file}'" />
+		<java classname="com.eviware.soapui.tools.SoapUILoadTestRunner" fork="true" dir="${SOAPUI_HOME}/bin">
+			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<jvmarg value="-Xms${soapui.xms}" />
+			<jvmarg value="-Xmx${soapui.xmx}" />
+			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
+			<jvmarg value="-cp" />
+			<jvmarg value="${toString:soapui.classpath}" />
+			<jvmarg value="-Dsoapui.properties=${toString:soapui.properties.path}" />
+			<jvmarg value="-Dsoapui.home=${SOAPUI_HOME}" />
+			<jvmarg value="-Dsoapui.ext.libraries=${toString:soapui.extlibs.path}" />
+			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
+			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
+			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
+			<arg value="-r" />
+			<arg value="-f" />
+			<arg value="${logdir}" />
+			<arg value="-j" />
+			<arg value="-a" />
+			<arg value="${soapui_project_file}" />
+		</java>
+		<echo message="Finished running load test of SoapUI project '${soapui_project_file}'. See '${logdir}' for logs." />
+	</target>
+
+	<target name="create-report">
+		<echo message="Creating report from logs in '${logdir}'" />
+		<mkdir dir="${reportdir}" />
+		<junitreport todir="${reportdir}">
+			<fileset dir="${logdir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reportdir}/html" styledir="${basedir}/ETF/reportstyle"/>
+		</junitreport>
+		<echo message="Finished creating reports. See '${reportdir}' for files." />
+	</target>
+
+	<target name="start-soapui" depends="init-properties,check-jvm" description="Start SoapUI and open ESDIN WP12 ETF test projects">
+		<java classname="com.eviware.soapui.SoapUI" dir="${SOAPUI_HOME}/bin" fork="true">
+			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<jvmarg value="-Xms${soapui.xms}" />
+			<jvmarg value="-Xmx${soapui.xmx}" />
+			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
+			<jvmarg value="-cp" />
+			<jvmarg value="${toString:soapui.classpath}" />
+			<jvmarg value="-Dsoapui.properties=${toString:soapui.properties.path}" />
+			<jvmarg value="-Dsoapui.home=${SOAPUI_HOME}" />
+			<jvmarg value="-Dsoapui.ext.libraries=${toString:soapui.extlibs.path}" />
+			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
+			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
+			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
+			<arg value="-w" />
+			<arg value="${toString:soapui.workspace.path}" />
+		</java>
+	</target>
+
+	<target name="get-jvm">
+		<!--Edwin Kerkenaar (TNO) -->
+		<echo>Java version: ${ant.java.version}</echo>
+		<condition property="jvm.nok">
+			<matches pattern="^1\.[0-5]\.*$" string="${ant.java.version}" />
+		</condition>
+	</target>
+	<target name="check-jvm" depends="get-jvm" if="jvm.nok">
+		<fail message="Incompatible Java version (${ant.java.version}) – 1.6 or better required" />
+	</target>
+
+	<target name="get-ant">
+		<!--Edwin Kerkenaar (TNO) -->
+		<echo>ANT version: ${ant.version}</echo>
+		<condition property="ant.nok">
+			<matches pattern="1\.[0-7]\.*" string="${ant.version}" />
+		</condition>
+	</target>
+	<target name="check-ant" depends="get-ant" if="ant.nok">
+		<fail message="Incompatible Ant version (${ant.version}) – 1.8 or better required. It seems as if your system has an older ant version on the path. Remove it from the path to use the ant version bundled with this package." />
+	</target>
+
+</project>

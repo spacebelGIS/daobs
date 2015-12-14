@@ -85,6 +85,29 @@
               </execution>
             </executions>
           </plugin>
+
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/ETF/ETF</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>src/etf-resource-override</directory>
+                      <filtering>true</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
         </plugins>
       </build>
     </profile>
@@ -136,4 +159,9 @@
       </plugin>
     </plugins>
   </build>
+
+  <properties>
+    <!-- Override the property to allow to run the task with mvn camel:run -->
+    <etf.installation.path>${project.basedir}/ETF/ETF</etf.installation.path>
+  </properties>
 </project>

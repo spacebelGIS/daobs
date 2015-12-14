@@ -17,7 +17,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -84,8 +86,7 @@ public class EtfValidatorClient {
     private String executeEtfTool(String resourceDescriptorUrl,
                                   ServiceProtocol protocol) {
 
-        // TODO: Create a temporal folder name for the report
-        String reportName = "report";
+        String reportName = getReportName();
 
         try {
             File reportDirectory = new File(this.etfResourceTesterPath, "reports");
@@ -126,10 +127,6 @@ public class EtfValidatorClient {
             int exitVal = pr.waitFor();
             log.info("Process exitValue: " + exitVal);
 
-            // TODO: Change this, the report folder should be configurable (requires changes in Ant script seem)
-            String[] directories = new File(this.etfResourceTesterPath, "reports").list();
-            reportName = directories[0];
-
             String eftResultsPath = this.etfResourceTesterPath + "/reports/" + reportName;
             return eftResultsPath;
 
@@ -157,21 +154,33 @@ public class EtfValidatorClient {
         String command = "ant ";
 
         if (protocol.equals(ServiceProtocol.WMS)) {
-            command = command + " run-vs-tests -DVS.serviceEndpoint=" + resourceDescriptorUrl;
+            command = command + "set-serviceEndpoint run-vs-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
 
         } else if (protocol.equals(ServiceProtocol.WMTS)) {
-            command = command + " run-wmts-tests -DVS.serviceEndpoint=" + resourceDescriptorUrl;
+            command = command + "set-serviceEndpoint run-wmts-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
 
         } else if (protocol.equals(ServiceProtocol.WFS)) {
-            command = command + " run-dswfs-tests -DDS.serviceEndpoint=" + resourceDescriptorUrl;
+            command = command + "set-serviceEndpoint run-dswfs-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
 
         } else if (protocol.equals(ServiceProtocol.ATOM)) {
-            command = command + " run-dsatom-tests -DDS.serviceEndpoint=" + resourceDescriptorUrl;
+            command = command + "set-serviceEndpoint run-dsatom-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
 
         } else {
             return "";
         }
 
         return command;
+    }
+
+
+    /**
+     * Generates a name for the report folder.
+     *
+     * @return Report name.
+     */
+    private String getReportName() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
+        return "report-" + format.format(new Date());
     }
 }
