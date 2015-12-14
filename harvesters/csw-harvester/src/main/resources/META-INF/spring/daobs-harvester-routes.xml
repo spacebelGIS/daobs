@@ -93,7 +93,7 @@
         Start the harvester when a config file is dropped in the
         tasks folder
       </cm:description>
-      <cm:from uri="file:{{harvester.csw.config.folder}}tasks?delay={{harvester.csw.tasks.delay}}"/>
+      <cm:from uri="file:{{harvester.csw.config.folder}}tasks?delay={{harvester.csw.tasks.delay}}&amp;move=.done&amp;moveFailed=.done"/>
       <cm:to uri="direct:route-start-csw-harvesting"/>
     </cm:route>
 
