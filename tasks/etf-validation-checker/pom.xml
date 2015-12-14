@@ -86,7 +86,7 @@
             </executions>
           </plugin>
 
-          <plugin>
+         <plugin>
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
@@ -100,7 +100,7 @@
                   <resources>
                     <resource>
                       <directory>src/etf-resource-override</directory>
-                      <filtering>true</filtering>
+                      <filtering>false</filtering>
                     </resource>
                   </resources>
                 </configuration>
