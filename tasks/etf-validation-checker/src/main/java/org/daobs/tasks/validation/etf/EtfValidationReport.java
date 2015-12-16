@@ -131,6 +131,15 @@ public class EtfValidationReport {
         return 100 - (((totalErrors + totalFailures) * 1.0 / totalTests) * 100);
     }
 
+    /**
+     * Completeness indicator for optional tests.
+     *
+     * @return
+     */
+    public double getCompletenessIndicatorOptional() {
+        return 100 - (((totalErrorsOptional + totalFailuresOptional) * 1.0 / totalTestsOptional) * 100);
+    }
+
     public String getReport() {
         return report;
     }
@@ -164,7 +173,8 @@ public class EtfValidationReport {
         StringBuffer buffer = new StringBuffer("ETF Validation report:");
         buffer.append("\nValid (mandatory): ").append(this.isStatus());
         buffer.append("\nValid (optional): ").append(this.isStatusOptional());
-        buffer.append("\nCompleteness indicator: ").append(this.getCompletenessIndicator());
+        buffer.append("\nCompleteness indicator (mandatory): ").append(this.getCompletenessIndicator());
+        buffer.append("\nCompleteness indicator (optional): ").append(this.getCompletenessIndicatorOptional());
         buffer.append("\nReport: ").append(this.getReport());
         buffer.append("\nReport URL: ").append(this.getReportUrl());
         return buffer.toString();

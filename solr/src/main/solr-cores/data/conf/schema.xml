@@ -298,6 +298,7 @@
   <field name="etfIsValid" type="boolean" stored="true" indexed="true" multiValued="false"/>
   <field name="etfIsValidOptional" type="boolean" stored="true" indexed="true" multiValued="false"/>
   <field name="etfCompletenessIndicator" type="double" stored="true" indexed="true" multiValued="false"/>
+  <field name="etfCompletenessIndicatorOptional" type="double" stored="true" indexed="true" multiValued="false"/>
   <field name="etfValidDate" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="etfValidReport" type="string" stored="true" indexed="false" multiValued="false"/>
   <field name="etfValidInfo" type="string" stored="true" indexed="false" multiValued="false"/>

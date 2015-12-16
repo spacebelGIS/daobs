@@ -207,6 +207,7 @@
                   <field name="etfIsValid" update="set">${body.status}</field>
                   <field name="etfIsValidOptional" update="set">${body.statusOptional}</field>
                   <field name="etfCompletenessIndicator" update="set">${body.completenessIndicator}</field>
+                  <field name="etfCompletenessIndicatorOptional" update="set">${body.completenessIndicatorOptional}</field>
                   <field name="etfValidReport"><![CDATA[$simple{body.report}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
                   <field name="etfValidReportUrl" update="set">${body.reportUrl}</field>
                   <field name="etfValidInfo" update="set">${body.info} - ${body.completenessIndicator}</field>
