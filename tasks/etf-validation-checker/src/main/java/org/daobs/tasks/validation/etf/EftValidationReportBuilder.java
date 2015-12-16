@@ -50,28 +50,48 @@ public class EftValidationReportBuilder {
             String expression = "/testsuites/testsuite";
             NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
 
-            int totalErrors = 0;
-            int totalFailures = 0;
-            int totalTests = 0;
-            double totalTime = 0.0;
+            int totalErrorsMandatory = 0;
+            int totalFailuresMandatory = 0;
+            int totalTestsMandatory = 0;
+            double totalTimeMandatory = 0.0;
+
+            int totalErrorsOptional = 0;
+            int totalFailuresOptional = 0;
+            int totalTestsOptional = 0;
+            double totalTimeOptional = 0.0;
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node nNode = nodeList.item(i);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
 
-                    totalErrors += Integer.parseInt(eElement.getAttribute("errors"));
-                    totalFailures += Integer.parseInt(eElement.getAttribute("failures"));
-                    totalTests += Integer.parseInt(eElement.getAttribute("tests"));
-                    totalTime += Double.parseDouble(eElement.getAttribute("time"));
+                    String testName = eElement.getAttribute("name").toLowerCase();
+
+                    // Optional/mandatory tests are indicated in the report created by ETF in the name attribute
+                    if (testName.endsWith("optional")) {
+                        totalErrorsOptional += Integer.parseInt(eElement.getAttribute("errors"));
+                        totalFailuresOptional += Integer.parseInt(eElement.getAttribute("failures"));
+                        totalTestsOptional += Integer.parseInt(eElement.getAttribute("tests"));
+                        totalTimeOptional += Double.parseDouble(eElement.getAttribute("time"));
+                    } else {
+                        totalErrorsMandatory += Integer.parseInt(eElement.getAttribute("errors"));
+                        totalFailuresMandatory += Integer.parseInt(eElement.getAttribute("failures"));
+                        totalTestsMandatory += Integer.parseInt(eElement.getAttribute("tests"));
+                        totalTimeMandatory += Double.parseDouble(eElement.getAttribute("time"));
+                    }
 
                 }
             }
 
-            report.setTotalErrors(totalErrors);
-            report.setTotalFailures(totalFailures);
-            report.setTotalTests(totalTests);
-            report.setTotalTime(totalTime);
+            report.setTotalErrors(totalErrorsMandatory);
+            report.setTotalFailures(totalFailuresMandatory);
+            report.setTotalTests(totalTestsMandatory);
+            report.setTotalTime(totalTimeMandatory);
+
+            report.setTotalErrorsOptional(totalErrorsOptional);
+            report.setTotalFailuresOptional(totalFailuresOptional);
+            report.setTotalTestsOptional(totalTestsOptional);
+            report.setTotalTimeOptional(totalTimeOptional);
 
             // Replace CDATA sections in the xml
             report.setReport(FileUtils.readFileToString(eftResults).replace("]]>", "]]]]><![CDATA[>"));

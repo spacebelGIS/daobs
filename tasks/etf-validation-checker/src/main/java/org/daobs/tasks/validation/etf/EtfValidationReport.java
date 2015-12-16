@@ -9,16 +9,15 @@ package org.daobs.tasks.validation.etf;
 public class EtfValidationReport {
 
     private String endPoint;
-
     private String protocol;
-
     private int totalErrors;
-
     private int totalFailures;
-
     private int totalTests;
-
     private double totalTime;
+    private int totalErrorsOptional;
+    private int totalFailuresOptional;
+    private int totalTestsOptional;
+    private double totalTimeOptional;
 
     /**
      * Validation report. Could be an exception message
@@ -77,18 +76,60 @@ public class EtfValidationReport {
         this.totalTime = totalTime;
     }
 
+    public int getTotalErrorsOptional() {
+        return totalErrorsOptional;
+    }
+
+    public void setTotalErrorsOptional(int totalErrorsOptional) {
+        this.totalErrorsOptional = totalErrorsOptional;
+    }
+
+    public int getTotalFailuresOptional() {
+        return totalFailuresOptional;
+    }
+
+    public void setTotalFailuresOptional(int totalFailuresOptional) {
+        this.totalFailuresOptional = totalFailuresOptional;
+    }
+
+    public int getTotalTestsOptional() {
+        return totalTestsOptional;
+    }
+
+    public void setTotalTestsOptional(int totalTestsOptional) {
+        this.totalTestsOptional = totalTestsOptional;
+    }
+
+    public double getTotalTimeOptional() {
+        return totalTimeOptional;
+    }
+
+    public void setTotalTimeOptional(double totalTimeOptional) {
+        this.totalTimeOptional = totalTimeOptional;
+    }
+
     /**
-     * The validation status.
+     * The validation status for mandatory tests.
      */
     public boolean isStatus() {
         return ((getTotalErrors() + getTotalFailures()) == 0);
     }
 
+    /**
+     * The validation status for optional tests.
+     */
+    public boolean isStatusOptional() {
+        return ((getTotalErrorsOptional() + getTotalFailuresOptional()) == 0);
+    }
 
+    /**
+     * Completeness indicator for mandatory tests.
+     *
+     * @return
+     */
     public double getCompletenessIndicator() {
         return 100 - (((totalErrors + totalFailures) * 1.0 / totalTests) * 100);
     }
-
 
     public String getReport() {
         return report;
@@ -121,7 +162,8 @@ public class EtfValidationReport {
 
     public String toString() {
         StringBuffer buffer = new StringBuffer("ETF Validation report:");
-        buffer.append("\nValid: ").append(this.isStatus());
+        buffer.append("\nValid (mandatory): ").append(this.isStatus());
+        buffer.append("\nValid (optional): ").append(this.isStatusOptional());
         buffer.append("\nCompleteness indicator: ").append(this.getCompletenessIndicator());
         buffer.append("\nReport: ").append(this.getReport());
         buffer.append("\nReport URL: ").append(this.getReportUrl());

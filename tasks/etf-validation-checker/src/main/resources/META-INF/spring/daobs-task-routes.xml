@@ -205,6 +205,7 @@
                   <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
                   <field name="etfValidDate" update="set">$simple{header.beginTime}</field>
                   <field name="etfIsValid" update="set">${body.status}</field>
+                  <field name="etfIsValidOptional" update="set">${body.statusOptional}</field>
                   <field name="etfCompletenessIndicator" update="set">${body.completenessIndicator}</field>
                   <field name="etfValidReport"><![CDATA[$simple{body.report}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
                   <field name="etfValidReportUrl" update="set">${body.reportUrl}</field>
