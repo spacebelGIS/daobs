@@ -312,7 +312,7 @@
               <!-- Try to build a thesaurus key based on the name
               by removing space - to be improved. -->
               <xsl:when test="normalize-space($thesaurusName) != ''">
-                <xsl:value-of select="replace($thesaurusName, ' ', '')"/>
+                <xsl:value-of select="replace($thesaurusName, ' ', '-')"/>
               </xsl:when>
             </xsl:choose>
           </xsl:variable>
@@ -537,6 +537,15 @@
         </xsl:otherwise>
       </xsl:choose>
 
+      <xsl:for-each-group select="gmd:dataQualityInfo/*/gmd:report"
+                          group-by="*/gmd:result/*/gmd:specification/
+                                      */gmd:title/gco:CharacterString">
+        <xsl:variable name="title" select="current-grouping-key()"/>
+        <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
+        <xsl:if test="$pass">
+          <field name="conformTo_{replace(normalize-space($title), ' ', '-')}"><xsl:value-of select="$pass"/></field>
+        </xsl:if>
+      </xsl:for-each-group>
 
 
       <xsl:for-each select="gmd:dataQualityInfo/*">
@@ -617,25 +626,6 @@
 
         <xsl:if test="$datasetId != ''">
           <field name="recordOperateOn"><xsl:value-of select="$datasetId"/></field>
-
-          <!--<doc>
-            <field name="id"><xsl:value-of
-                    select="concat('association', $identifier,
-              $associationType, $datasetId)"/></field>
-            <field name="documentType">association</field>
-            <field name="record"><xsl:value-of select="$identifier"/></field>
-            <field name="associationType"><xsl:value-of select="$associationType"/></field>
-            <field name="relatedTo"><xsl:value-of select="$datasetId"/></field>
-          </doc>
-          <doc>
-            <field name="id"><xsl:value-of
-                    select="concat('association',
-              $associationType, $datasetId)"/></field>
-            <field name="documentType">association2</field>
-            <field name="record"><xsl:value-of select="$identifier"/></field>
-            <field name="associationType"><xsl:value-of select="concat($associationType, $serviceType)"/></field>
-            <field name="relatedTo"><xsl:value-of select="$datasetId"/></field>
-          </doc>-->
         </xsl:if>
       </xsl:for-each>
 
@@ -668,24 +658,6 @@
           </xsl:analyze-string>
         </xsl:if>
       </xsl:variable>
-      <!--<xsl:message>## child record <xsl:value-of select="$relatedTo"/> </xsl:message>-->
-
-      <xsl:choose>
-        <xsl:when test="$relatedTo">
-          <doc>
-            <field name="id"><xsl:value-of select="$relatedTo"/></field>
-            <field name="metadataIdentifier" update="set"><xsl:value-of select="$relatedTo"/></field>
-            <field name="recordOperatedBy" update="add"><xsl:value-of select="$identifier"/></field>
-            <xsl:for-each select="../srv:serviceType/gco:LocalName">
-              <field name="recordOperatedByType" update="add"><xsl:value-of select="."/></field>
-            </xsl:for-each>
-          </doc>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Failed to extract metadata identifier from @uuidref or xlink:href <xsl:value-of select="@xlink:href"/></xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-
     </xsl:for-each>
   </xsl:template>
 
