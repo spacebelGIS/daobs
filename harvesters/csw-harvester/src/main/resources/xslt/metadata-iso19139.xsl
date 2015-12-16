@@ -229,11 +229,13 @@
 
         Take in account gmd:descriptiveKeywords or srv:keywords
         -->
+        <!-- TODO: Some MS may be using a translated version of the thesaurus title -->
+        <xsl:variable name="inspireThemeThesaurusTitle" select="'INSPIRE themes'"/>
         <xsl:for-each
                 select="*/gmd:MD_Keywords[contains(
                      gmd:thesaurusName[1]/gmd:CI_Citation/
                        gmd:title[1]/gco:CharacterString/text(),
-                       'INSPIRE themes')]
+                       $inspireThemeThesaurusTitle)]
                   /gmd:keyword/gco:CharacterString">
 
           <xsl:variable name="inspireTheme" as="xs:string"
@@ -262,7 +264,7 @@
                 select="count(*/gmd:MD_Keywords[contains(
                      gmd:thesaurusName[1]/gmd:CI_Citation/
                        gmd:title[1]/gco:CharacterString/text(),
-                       'GEMET - INSPIRE themes')]
+                       $inspireThemeThesaurusTitle)]
                   /gmd:keyword)"/></field>
 
 
@@ -504,13 +506,13 @@
 
       <!-- Conformity for data sets -->
       <xsl:choose>
-        <xsl:when test="$isDataset">
+        <xsl:when test="$isService">
           <xsl:for-each-group select="gmd:dataQualityInfo/*/gmd:report"
                               group-by="*/gmd:result/*/gmd:specification/gmd:CI_Citation/
         gmd:title/gco:CharacterString">
 
             <xsl:variable name="title" select="current-grouping-key()"/>
-            <xsl:if test="count($eu10892010/*[lower-case(normalize-space(.)) =
+            <xsl:if test="count($eu9762009/*[lower-case(normalize-space(.)) =
                 lower-case(normalize-space($title))]) = 1">
 
               <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
@@ -525,9 +527,7 @@
         gmd:title/gco:CharacterString">
 
             <xsl:variable name="title" select="current-grouping-key()"/>
-            <xsl:if test="count($eu9762009/*[lower-case(normalize-space(.)) =
-                lower-case(normalize-space($title))]) = 1 or
-                count($eu10892010/*[lower-case(normalize-space(.)) =
+            <xsl:if test="count($eu10892010/*[lower-case(normalize-space(.)) =
                 lower-case(normalize-space($title))]) = 1">
 
               <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
