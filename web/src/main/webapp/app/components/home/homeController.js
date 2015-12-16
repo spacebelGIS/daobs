@@ -19,8 +19,8 @@
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
         $http.get(cfg.SERVICES.dashboardCore +
         '/select?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').
-          then(function (data) {
-            $scope.dashboards = data.response.docs;
+          then(function (response) {
+            $scope.dashboards = response.data.response.docs;
             angular.forEach($scope.dashboards, function (d) {
               if ($scope.startsWith(d, 'inspire')) {
                 $scope.hasINSPIREdashboard = true;
