@@ -14,6 +14,18 @@
   </div>
   <div class="col-sm-6" id='ds-latest-dashboard'>
 
+
+    <div class="alert alert-danger"
+       role="alert"
+       data-ng-if="solrConnectionError !== null">
+      <p data-translate=""
+         data-translate-values="{url: '{{solrConnectionError.config.url}}'}">solrConnectionError</p>
+
+      <p>
+        {{solrConnectionError.statusText}} ({{solrConnectionError.status}})
+      </p>
+    </div>
+
     <h3>
       <!-- TODO: Should be only displayed for identified users -->
       <span data-ng-if="dashboards.length === 0"

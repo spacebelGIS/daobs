@@ -13,12 +13,13 @@
       $scope.listOfDashboardToLoad = null;
       $scope.hasINSPIREdashboard = false;
       $scope.hasOnlyINSPIREdashboard = true;
+      $scope.solrConnectionError = null;
 
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
         $http.get(cfg.SERVICES.dashboardCore +
         '/select?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').
-          success(function (data) {
+          then(function (data) {
             $scope.dashboards = data.response.docs;
             angular.forEach($scope.dashboards, function (d) {
               if ($scope.startsWith(d, 'inspire')) {
@@ -27,7 +28,11 @@
                 $scope.hasOnlyINSPIREdashboard = false;
               }
             });
-          });
+          }, function (response) {
+          if (response.status = 500) {
+            $scope.solrConnectionError = response;
+          }
+        });
 
         $http.get(cfg.SERVICES.samples + 'dashboardType.json').
           success(function (data) {
