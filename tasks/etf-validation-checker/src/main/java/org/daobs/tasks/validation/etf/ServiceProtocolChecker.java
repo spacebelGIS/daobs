@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -147,7 +148,14 @@ public class ServiceProtocolChecker {
     private Document retrieve(String url) {
         log.info("Retrieving url: " + url);
 
-        try(CloseableHttpClient httpclient = HttpClients.createDefault()){
+        RequestConfig defaultRequestConfig = RequestConfig.custom()
+                .setSocketTimeout(5000)
+                .setConnectTimeout(5000)
+                .setConnectionRequestTimeout(5000)
+                .build();
+
+        try(CloseableHttpClient httpclient = HttpClients.custom().
+                setDefaultRequestConfig(defaultRequestConfig).build()){
             try(CloseableHttpResponse response = httpclient.execute(new HttpGet(url))){
                 String body = EntityUtils.toString(response.getEntity());
 
