@@ -113,14 +113,22 @@ public class EtfValidationReport {
      * The validation status for mandatory tests.
      */
     public boolean isStatus() {
-        return ((getTotalErrors() + getTotalFailures()) == 0);
+        if (totalTests == 0) {
+            return false;
+        } else {
+            return ((getTotalErrors() + getTotalFailures()) == 0);
+        }
     }
 
     /**
      * The validation status for optional tests.
      */
     public boolean isStatusOptional() {
-        return ((getTotalErrorsOptional() + getTotalFailuresOptional()) == 0);
+        if (totalTestsOptional == 0) {
+            return false;
+        } else {
+            return ((getTotalErrorsOptional() + getTotalFailuresOptional()) == 0);
+        }
     }
 
     /**
