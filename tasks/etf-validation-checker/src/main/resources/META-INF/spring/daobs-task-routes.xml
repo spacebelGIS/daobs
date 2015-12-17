@@ -52,14 +52,14 @@
       </cm:continued>
       <cm:log message="Oops, something went wrong: $simple{exception.message}."
               loggingLevel="ERROR"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
       <cm:log message="$simple{exception.responseBody}"
               loggingLevel="ERROR"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
       <cm:log message="$simple{exception.stacktrace}"
               loggingLevel="ERROR"
-              logName="org.daobs.task.EtfValidationChecker"/>
-      <cm:to uri="log:org.daobs.task.EtfValidationChecker?showBody=true"/>
+              logName="org.daobs.tasks.validation.etf"/>
+      <cm:to uri="log:org.daobs.tasks.validation.etf?showBody=true"/>
     </cm:onException>
 
 
@@ -106,10 +106,13 @@
       </cm:description>
       <cm:from uri="direct:etf-task-validate-start"/>
 
-      <cm:log message="Background task checking document validation status ..."
+      <cm:log message="Background task checking document ETF validation status ..."
               loggingLevel="INFO"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
 
+      <cm:log message="Searching for documents with filter '$simple{header.documentFilter}'."
+              loggingLevel="INFO"
+              logName="org.daobs.tasks.validation.etf"/>
 
 
       <!-- Get number of records to validate -->
@@ -131,7 +134,7 @@
       </cm:setHeader>
       <cm:log message="$simple{header.numberOfRecordsMatched} record(s) to validate."
               loggingLevel="INFO"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
 
       <cm:split parallelProcessing="false">
         <cm:method bean="pagination" method="getPages"/>
@@ -143,7 +146,7 @@
         </cm:setHeader>
         <cm:log message="Validating page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row} | total: $simple{header.numberOfRecordsMatched}."
                 loggingLevel="INFO"
-                logName="org.daobs.task.EtfValidationChecker"/>
+                logName="org.daobs.tasks.validation.etf"/>
 
         <cm:setHeader headerName="CamelHttpMethod">
           <cm:constant>GET</cm:constant>
@@ -178,7 +181,7 @@
 
           <cm:log message="Record identifier is '$simple{header.documentIdentifier}' '$simple{header.link}' '$simple{body}' '$simple{header.documentStandard}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
                   loggingLevel="INFO"
-                  logName="org.daobs.task.EtfValidationChecker"/>
+                  logName="org.daobs.tasks.validation.etf"/>
 
           <cm:to uri="direct:validation-etf"/>
         </cm:split>
@@ -193,7 +196,7 @@
       </cm:setHeader>
       <cm:log message="Checking record with UUID '$simple{header.documentIdentifier}'. Start at $simple{header.beginTime}. Body: $simple{body}"
               loggingLevel="INFO"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
 
 
       <cm:bean ref="etfValidationClient" method="validateBody"/>
@@ -225,7 +228,7 @@
       <cm:from uri="file:{{task.validation-etf-checker.folder}}?consumer.delay={{task.validation-etf-checker.delay}}"/>
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="INFO"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>
@@ -238,7 +241,7 @@
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:log message="Solr response: ${body}."
               loggingLevel="DEBUG"
-              logName="org.daobs.task.EtfValidationChecker"/>
+              logName="org.daobs.tasks.validation.etf"/>
     </cm:route>
 
   </cm:camelContext>
