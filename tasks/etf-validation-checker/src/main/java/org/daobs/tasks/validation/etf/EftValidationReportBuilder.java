@@ -100,6 +100,7 @@ public class EftValidationReportBuilder {
         } catch (Exception ex) {
             log.error(ex.getMessage());
             report.setInfo(ex.getMessage());
+            report.setValidationFailed(true);
         }
 
         log.info(report.toString());
@@ -116,6 +117,7 @@ public class EftValidationReportBuilder {
     public EtfValidationReport buildErrorReport(String endPoint, String error) {
         EtfValidationReport report = new EtfValidationReport(endPoint, "");
         report.setInfo(error);
+        report.setValidationFailed(true);
 
         return report;
     }

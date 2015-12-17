@@ -27,7 +27,7 @@ public class EtfValidatorClientTest extends TestCase {
     public void testValidateValidService() throws Exception {
         String resourceDescriptorUrl = "http://services.rce.geovoorziening.nl/rce/wms?";
 
-        EtfValidationReport report = validator.validate(resourceDescriptorUrl, ServiceType.View);
+        EtfValidationReport report = validator.validate(resourceDescriptorUrl, ServiceType.View, "OGC:WMS");
         assertNotNull(report);
         //assertEquals(report.getCompletenessIndicator(), 100.0);
     }
@@ -36,7 +36,7 @@ public class EtfValidatorClientTest extends TestCase {
     public void testValidateNonValidService() throws Exception {
         String resourceDescriptorUrl = "http://maps.waterschapservices.nl/wms/inspire?";
 
-        EtfValidationReport report = validator.validate(resourceDescriptorUrl, ServiceType.View);
+        EtfValidationReport report = validator.validate(resourceDescriptorUrl, ServiceType.View, "OGC:WMS");
         assertNotNull(report);
         //assertEquals(report.getCompletenessIndicator(), 100.0);
     }

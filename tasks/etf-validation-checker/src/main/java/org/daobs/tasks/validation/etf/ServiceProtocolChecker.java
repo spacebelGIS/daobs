@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,6 +18,7 @@ import scala.actors.threadpool.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 /**
  * Class to identify the service protocol.
  *
@@ -28,12 +30,29 @@ public class ServiceProtocolChecker {
 
     private String endPoint;
 
+    private String errorMessage;
+
     // Type of service: download, view
     private ServiceType serviceType;
 
-    public ServiceProtocolChecker(String endPoint, ServiceType serviceType) {
+    // The declared protocol, to establish the precedence of checks
+    private String declaredProtocol;
+
+
+    public String getErrorMessage() {
+        if (StringUtils.isNotEmpty(this.errorMessage)) {
+            return this.errorMessage;
+
+        } else {
+            return "Protocol from " + this.endPoint +
+                    " (serviceType=" + this.serviceType.toString() +  ") can't be identified.";
+        }
+    }
+
+    public ServiceProtocolChecker(String endPoint, ServiceType serviceType, String declaredProtocol) {
         this.endPoint = endPoint;
         this.serviceType = serviceType;
+        this.declaredProtocol = declaredProtocol;
     }
 
     public ServiceProtocol check() {
@@ -49,21 +68,40 @@ public class ServiceProtocolChecker {
 
 
     private ServiceProtocol checkViewService() {
-        if (checkWMTS()) {
-            return ServiceProtocol.WMTS;
-        } else if (checkWMS()) {
-            return ServiceProtocol.WMS;
+        if (declaredProtocol.toLowerCase().contains("wms")) {
+            if (checkWMS()) {
+                return ServiceProtocol.WMS;
+            } else if (checkWMTS()) {
+                return ServiceProtocol.WMTS;
+            }
+
+        } else {
+            if (checkWMTS()) {
+                return ServiceProtocol.WMTS;
+            } else if (checkWMS()) {
+                return ServiceProtocol.WMS;
+            }
         }
 
         return null;
     }
 
     private ServiceProtocol checkDownloadService() {
-        if (checkWFS()) {
-            return ServiceProtocol.WFS;
+        if (declaredProtocol.toLowerCase().contains("atom")) {
+            if (checkAtom()) {
+                return ServiceProtocol.ATOM;
 
-        } else if (checkAtom()) {
-            return ServiceProtocol.ATOM;
+            } else if (checkWFS()) {
+                return ServiceProtocol.WFS;
+            }
+
+        } else {
+            if (checkWFS()) {
+                return ServiceProtocol.WFS;
+
+            } else if (checkAtom()) {
+                return ServiceProtocol.ATOM;
+            }
         }
 
         return null;
@@ -79,7 +117,7 @@ public class ServiceProtocolChecker {
 
 
     private boolean checkWMTS() {
-        Document doc = retrieve(buildUrl(this.endPoint, "request=GetCapabilities&service=WMS&version=1.3.0"));
+        Document doc = retrieve(buildUrl(this.endPoint, "request=GetCapabilities&service=WMTS&version=1.0.0"));
         if (doc == null) return false;
 
         return hasRootNode(doc, Arrays.asList(new String[]{"WMTS_Capabilities", "ServiceExceptionReport"}));
@@ -107,6 +145,8 @@ public class ServiceProtocolChecker {
      * @return
      */
     private Document retrieve(String url) {
+        log.info("Retrieving url: " + url);
+
         try(CloseableHttpClient httpclient = HttpClients.createDefault()){
             try(CloseableHttpResponse response = httpclient.execute(new HttpGet(url))){
                 String body = EntityUtils.toString(response.getEntity());
@@ -122,6 +162,7 @@ public class ServiceProtocolChecker {
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());
+            this.errorMessage = ex.getMessage();
         }
 
         return null;

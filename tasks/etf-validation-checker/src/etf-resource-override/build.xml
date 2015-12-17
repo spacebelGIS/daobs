@@ -218,10 +218,12 @@
 	<target name="run-ds-tests" depends="init-properties,ds-tests-check" description="Execute Download Service tests" if="DS.serviceEndpoint">
 		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
 		<path id="test.logdir.path">
-			<pathelement location="${basedir}/logs" />
+			<!--Jose García-->
+			<pathelement location="${basedir}/logs/${mapName}" />
 		</path>
 		<path id="test.reportdir.path">
-			<pathelement location="${basedir}/reports/${current.time}" />
+			<!--Jose García -->
+			<pathelement location="${basedir}/reports/${mapName}" />
 		</path>
 		<antcall target="run-test">
 			<param name="soapui_project_file" value="${DS_SOAPUI}" />
@@ -240,10 +242,12 @@
 	<target name="run-dsatom-tests" depends="init-properties,dsatom-tests-check" description="Execute Download Service tests for Atom feed implementation" if="DS.serviceEndpoint">
 		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
 		<path id="test.logdir.path">
-			<pathelement location="${basedir}/logs" />
+			<!--Jose García-->
+			<pathelement location="${basedir}/logs/${mapName}" />
 		</path>
 		<path id="test.reportdir.path">
-			<pathelement location="${basedir}/reports/${current.time}" />
+			<!--Jose García -->
+			<pathelement location="${basedir}/reports/${mapName}" />
 		</path>
 		<antcall target="run-test">
 			<param name="soapui_project_file" value="${DSATOM_SOAPUI}" />
@@ -262,10 +266,12 @@
 	<target name="run-dswfs-tests" depends="init-properties,dswfs-tests-check" description="Execute Download Service tests for Web Feature Service implementations" if="DS.serviceEndpoint">
 		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
 		<path id="test.logdir.path">
-			<pathelement location="${basedir}/logs" />
+			<!--Jose García-->
+			<pathelement location="${basedir}/logs/${mapName}" />
 		</path>
 		<path id="test.reportdir.path">
-			<pathelement location="${basedir}/reports/${current.time}" />
+			<!--Jose García -->
+			<pathelement location="${basedir}/reports/${mapName}" />
 		</path>
 		<antcall target="run-test">
 			<param name="soapui_project_file" value="${DSWFS_SOAPUI}" />
@@ -284,10 +290,12 @@
 	<target name="run-cts-tests" depends="init-properties,cts-tests-check" description="Execute Coordinate Transformation Service tests" if="CTS.serviceEndpoint">
 		<echo message="Running Coordinate Transformation Service tests against endpoint '${CTS.serviceEndpoint}'" />
 		<path id="test.logdir.path">
-			<pathelement location="${basedir}/logs" />
+			<!--Jose García-->
+			<pathelement location="${basedir}/logs/${mapName}" />
 		</path>
 		<path id="test.reportdir.path">
-			<pathelement location="${basedir}/reports/${current.time}" />
+			<!--Jose García -->
+			<pathelement location="${basedir}/reports/${mapName}" />
 		</path>
 		<antcall target="run-test">
 			<param name="soapui_project_file" value="${CTS_SOAPUI}" />
@@ -306,10 +314,12 @@
 	<target name="run-aaa-tests" depends="init-properties,aaa-tests-check" description="Execute AFIS-ALKIS-ATKIS data tests" if="AAA.dataURI">
 		<echo message="Running AAA Data tests against document '${AAA.dataURI}'" />
 		<path id="test.logdir.path">
-			<pathelement location="${basedir}/logs" />
+			<!--Jose García-->
+			<pathelement location="${basedir}/logs/${mapName}" />
 		</path>
 		<path id="test.reportdir.path">
-			<pathelement location="${basedir}/reports/${current.time}" />
+			<!--Jose García -->
+			<pathelement location="${basedir}/reports/${mapName}" />
 		</path>
 		<antcall target="run-test">
 			<param name="soapui_project_file" value="${AAA_SOAPUI}" />

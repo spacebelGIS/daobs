@@ -88,8 +88,10 @@ public class EtfValidatorBean {
             expression = "/doc/arr[@name='linkUrl']/str";
             String url = (String) xPath.compile(expression).evaluate(doc, XPathConstants.STRING);
 
+            expression = "/doc/arr[@name='linkProtocol']/str";
+            String declaredProtocol = (String) xPath.compile(expression).evaluate(doc, XPathConstants.STRING);
 
-            report = validatorClient.validate(url, ServiceType.fromString(serviceType));
+            report = validatorClient.validate(url, ServiceType.fromString(serviceType), declaredProtocol);
 
         } catch (Exception e) {
             log.error(e.getMessage());

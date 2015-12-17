@@ -2,6 +2,7 @@ package org.daobs.tasks.validation.etf;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,16 +69,29 @@ public class EtfValidatorClient {
         this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
     }
 
+    /**
+     * Validates a resource url with ETF tool.
+     *
+     * Note that declared protocol values are used as a reference in the ServiceProtocolChecker
+     * and values are not standarized.
+     *
+     * @param resourceDescriptorUrl
+     * @param serviceType
+     * @param declaredProtocol  Declared protocol for the resource url.
+     * @return
+     */
     public EtfValidationReport validate(String resourceDescriptorUrl,
-                                        ServiceType serviceType) {
+                                        ServiceType serviceType,
+                                        String declaredProtocol) {
 
         log.info("Validating link=" + resourceDescriptorUrl + ", serviceType=" + serviceType);
 
-        ServiceProtocol protocol =
-               new ServiceProtocolChecker(resourceDescriptorUrl, serviceType).check();
+        ServiceProtocolChecker protocolChecker =
+                new ServiceProtocolChecker(resourceDescriptorUrl, serviceType, declaredProtocol);
+
+        ServiceProtocol protocol = protocolChecker.check();
         if (protocol == null) {
-            String message = "Protocol from " + resourceDescriptorUrl +
-                    " (serviceType=" + serviceType.toString() +  ") can't be identified.";
+            String message = protocolChecker.getErrorMessage();
 
             EtfValidationReport report = new EftValidationReportBuilder()
                     .buildErrorReport(resourceDescriptorUrl, message);
@@ -86,26 +100,33 @@ public class EtfValidatorClient {
         }
 
 
-        // Invoke ETF tool
-        String eftResultsPath = executeEtfTool(resourceDescriptorUrl, protocol);
-        File eftResults = new File(eftResultsPath, "TESTS-TestSuites.xml");
+        String eftResultsPath = "";
+        try {
+            // Invoke ETF tool
+            eftResultsPath = executeEtfTool(resourceDescriptorUrl, protocol);
+            File eftResults = new File(eftResultsPath, "TESTS-TestSuites.xml");
 
-        if (!eftResults.exists()) {
-            String message = "Can't find ETF validation report for " + resourceDescriptorUrl +
-                    " (serviceType=" + serviceType.toString() +  ").";
+            if (!eftResults.exists()) {
+                String message = "Can't find ETF validation report for " + resourceDescriptorUrl +
+                        " (serviceType=" + serviceType.toString() +  ").";
 
+                EtfValidationReport report = new EftValidationReportBuilder()
+                        .buildErrorReport(resourceDescriptorUrl, message);
+
+                return report;
+            }
+
+            // Build report
+            String reportUrl = this.etfResourceTesterHtmlReportsUrl + "/" + FilenameUtils.getName(eftResultsPath) + "/index.html";
             EtfValidationReport report = new EftValidationReportBuilder()
-                    .buildErrorReport(resourceDescriptorUrl, message);
+                    .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
 
             return report;
+        } finally {
+            // Cleanup report from ETF folder
+            if (StringUtils.isNotEmpty(eftResultsPath)) FileUtils.deleteQuietly(new File(eftResultsPath));
+
         }
-
-        // Build report
-        String reportUrl = this.etfResourceTesterHtmlReportsUrl + "/" + FilenameUtils.getName(eftResultsPath) + "/index.html";
-        EtfValidationReport report = new EftValidationReportBuilder()
-                .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
-
-        return report;
     }
 
     private String executeEtfTool(String resourceDescriptorUrl,
@@ -114,11 +135,6 @@ public class EtfValidatorClient {
         String reportName = getReportName();
 
         try {
-            File reportDirectory = new File(this.etfResourceTesterPath, "reports");
-            if (reportDirectory.exists()) {
-                FileUtils.cleanDirectory(reportDirectory);
-            }
-
             Runtime rt = Runtime.getRuntime();
 
             String[] envp = new String[1];
@@ -163,6 +179,10 @@ public class EtfValidatorClient {
         } catch (Throwable ex) {
             log.error(ex.getMessage());
             return "";
+
+        } finally {
+            // Clean up temporary folders
+            cleanTemporaryFolders(reportName);
         }
 
     }
@@ -212,5 +232,29 @@ public class EtfValidatorClient {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
         return "report-" + format.format(new Date());
+    }
+
+
+    /**
+     * Removes the temporary folders created by ETF.
+     *
+     */
+    private void cleanTemporaryFolders(String reportName) {
+        try {
+            String tempFolder =  System.getProperty("java.io.tmpdir");
+
+            FileFilter directoryFilter = new FileFilter() {
+                public boolean accept(File file) {
+                    return file.isDirectory() && file.getName().startsWith("xtf_sel_");
+                }
+            };
+
+            File[] files = new File(tempFolder).listFiles(directoryFilter);
+            for (File dir : files) {
+                FileUtils.deleteQuietly(dir);
+            }
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
     }
 }

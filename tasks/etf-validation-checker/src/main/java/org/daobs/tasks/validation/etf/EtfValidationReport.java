@@ -18,6 +18,7 @@ public class EtfValidationReport {
     private int totalFailuresOptional;
     private int totalTestsOptional;
     private double totalTimeOptional;
+    private boolean validationFailed;
 
     /**
      * Validation report. Could be an exception message
@@ -125,19 +126,25 @@ public class EtfValidationReport {
     /**
      * Completeness indicator for mandatory tests.
      *
-     * @return
+     * @return -1 if no tests are available, otherwise the indicator value rounded to 2 decimals.
      */
     public double getCompletenessIndicator() {
-        return 100 - (((totalErrors + totalFailures) * 1.0 / totalTests) * 100);
+        if (totalTests == 0) return -1;
+
+        double indicator = 100 - (((totalErrors + totalFailures) * 1.0 / totalTests) * 100);
+        return (double)(Math.round(indicator * 100)) / 100;
     }
 
     /**
      * Completeness indicator for optional tests.
      *
-     * @return
+     * @return -1 if no tests are available, otherwise the indicator value rounded to 2 decimals.
      */
     public double getCompletenessIndicatorOptional() {
-        return 100 - (((totalErrorsOptional + totalFailuresOptional) * 1.0 / totalTestsOptional) * 100);
+        if (totalTestsOptional == 0) return -1;
+
+        double indicator = 100 - (((totalErrorsOptional + totalFailuresOptional) * 1.0 / totalTestsOptional) * 100);
+        return (double)(Math.round(indicator * 100)) / 100;
     }
 
     public String getReport() {
@@ -164,9 +171,19 @@ public class EtfValidationReport {
         this.reportUrl = reportUrl;
     }
 
+    public boolean isValidationFailed() {
+        return validationFailed;
+    }
+
+    public void setValidationFailed(boolean validationFailed) {
+        this.validationFailed = validationFailed;
+    }
+
+
     public EtfValidationReport(String endPoint, String protocol) {
         this.endPoint = endPoint;
         this.protocol = protocol;
+        this.validationFailed = false;
     }
 
     public String toString() {
@@ -177,6 +194,7 @@ public class EtfValidationReport {
         buffer.append("\nCompleteness indicator (optional): ").append(this.getCompletenessIndicatorOptional());
         buffer.append("\nReport: ").append(this.getReport());
         buffer.append("\nReport URL: ").append(this.getReportUrl());
+        buffer.append("\nValidation failed: ").append(this.isValidationFailed());
         return buffer.toString();
     }
 }

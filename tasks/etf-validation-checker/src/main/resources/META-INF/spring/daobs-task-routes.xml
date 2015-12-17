@@ -211,6 +211,7 @@
                   <field name="etfValidReport"><![CDATA[$simple{body.report}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
                   <field name="etfValidReportUrl" update="set">${body.reportUrl}</field>
                   <field name="etfValidInfo" update="set">${body.info} - ${body.completenessIndicator}</field>
+                  <field name="etfValidationFailed" update="set">${body.validationFailed}</field>
                 </doc>
               </add>]]>
         </cm:simple>
