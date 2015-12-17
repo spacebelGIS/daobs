@@ -13,3 +13,40 @@
 body > nav[role="navigation"] {
 	border-radius: 0px;
 }
+
+
+/**/
+.navbar-no-margin .navbar {
+    margin-bottom: 0px;
+    border-radius: 0px;
+    border: none;
+    min-height: 39px;
+}
+.navbar-no-margin .dashboard {
+    background-color: #357ebd;
+}
+.navbar-no-margin li.dashboard > a  {
+    color: #FFF !important;
+}
+.navbar-dashboard {
+    background-image: none !important;
+    background-color: #357ebd !important;
+    border: none;
+    border-radius: 0px;
+}
+
+.navbar-dashboard .navbar-header > span,
+.navbar-dashboard ul.navbar-nav li > a {
+    color: #fff !important;
+}
+
+.navbar-dashboard ul.navbar-nav ul li > a {
+    color: #337ab7 !important;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #357ebd;
+    color: #FFF !important;
+}

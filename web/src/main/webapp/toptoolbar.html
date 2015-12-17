@@ -1,0 +1,33 @@
+<nav class="navbar navbar-inverse " role="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li data-ng-repeat="link in navLinks"
+            class="{{link.id}}"
+            data-ng-class="navClass('{{link.url}}')">
+          <a href="{{link.url}}"
+                  title="{{(link.id + 'Title') | translate}}"
+                  id="ds-menu-{{link.id}}">
+            <i class="glyphicon" data-ng-class="link.icon"></i>
+            {{link.id | translate}}
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li data-ng-class="navClass('#/logout')">
+          <a href="#/logout"
+             title="{{'signoutTitle' | translate}}"
+             id="ds-menu-signout">
+            <i class="glyphicon glyphicon-user"></i>
+            {{'signout' | translate}}
+          </a>
+        </li>
+        <li>
+          <a data-ng-click="startIntro()">
+            <i class="glyphicon glyphicon-info-sign"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

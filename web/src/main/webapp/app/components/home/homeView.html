@@ -14,37 +14,17 @@
   </div>
   <div class="col-sm-6" id='ds-latest-dashboard'>
 
-    <h3>
-      <!-- TODO: Should be only displayed for identified users -->
-      <span data-ng-if="dashboards.length === 0"
-            data-translate="">noDashboard</span>
-      <div class="btn-group">
-        <button type="button"
-                class="btn btn-link dropdown-toggle"
-                data-toggle="dropdown" aria-expanded="false"
-                title="Load or reload default dashboards">
-          <i class="glyphicon glyphicon-plus"></i>&nbsp;
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li role="presentation"
-              class="dropdown-header"
-              data-translate="">chooseATypeOfDashboardToLoad</li>
-          <li data-ng-repeat="item in listOfDashboardToLoad">
-            <a href=""
-               data-ng-click="loadDashboard(item)">{{item}}</a></li>
-        </ul>
-      </div>
-      <button class="btn btn-link pull-right"
-              data-ng-show="dashboards.length > 1"
-              data-ng-click="removeDashboard()">
-        <span data-translate=""
-              data-translate-values="{number: '{{dashboards.length}}'}">
-          deleteAllDashboards</span>
-        <i class="glyphicon glyphicon-remove text-danger"></i>
-      </button>
-    </h3>
 
+    <div class="alert alert-danger"
+       role="alert"
+       data-ng-if="solrConnectionError !== null">
+      <p data-translate=""
+         data-translate-values="{url: '{{solrConnectionError.config.url}}'}">solrConnectionError</p>
+
+      <p>
+        {{solrConnectionError.statusText}} ({{solrConnectionError.status}})
+      </p>
+    </div>
 
     <p class="alert alert-warning"
        role="alert"
@@ -95,6 +75,37 @@
     </div>
 
 
+    <div class="pull-right">
+      <!-- TODO: Should be only displayed for identified users -->
+      <span data-ng-if="dashboards.length === 0"
+            data-translate="">noDashboard</span>
+      <div class="btn-group">
+        <button type="button"
+                class="btn btn-primary dropdown-toggle"
+                data-toggle="dropdown" aria-expanded="false"
+                title="Load or reload default dashboards">
+          <i class="glyphicon glyphicon-plus"></i>&nbsp;
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li role="presentation"
+              class="dropdown-header"
+              data-translate="">chooseATypeOfDashboardToLoad</li>
+          <li data-ng-repeat="item in listOfDashboardToLoad">
+            <a href=""
+               data-ng-click="loadDashboard(item)">{{item}}</a></li>
+        </ul>
+      </div>
+      <button class="btn btn-primary"
+              data-ng-show="dashboards.length > 1"
+              data-ng-click="removeDashboard()">
+        <span data-translate=""
+              data-translate-values="{number: '{{dashboards.length}}'}">
+          deleteAllDashboards</span>
+        <i class="glyphicon glyphicon-trash"></i>
+      </button>
+    </div>
+    <br/><br/>
 
     <div class="alert alert-info"
        role="alert"

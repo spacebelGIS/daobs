@@ -229,11 +229,13 @@
 
         Take in account gmd:descriptiveKeywords or srv:keywords
         -->
+        <!-- TODO: Some MS may be using a translated version of the thesaurus title -->
+        <xsl:variable name="inspireThemeThesaurusTitle" select="'INSPIRE themes'"/>
         <xsl:for-each
                 select="*/gmd:MD_Keywords[contains(
                      gmd:thesaurusName[1]/gmd:CI_Citation/
                        gmd:title[1]/gco:CharacterString/text(),
-                       'INSPIRE themes')]
+                       $inspireThemeThesaurusTitle)]
                   /gmd:keyword/gco:CharacterString">
 
           <xsl:variable name="inspireTheme" as="xs:string"
@@ -262,7 +264,7 @@
                 select="count(*/gmd:MD_Keywords[contains(
                      gmd:thesaurusName[1]/gmd:CI_Citation/
                        gmd:title[1]/gco:CharacterString/text(),
-                       'GEMET - INSPIRE themes')]
+                       $inspireThemeThesaurusTitle)]
                   /gmd:keyword)"/></field>
 
 
@@ -310,7 +312,7 @@
               <!-- Try to build a thesaurus key based on the name
               by removing space - to be improved. -->
               <xsl:when test="normalize-space($thesaurusName) != ''">
-                <xsl:value-of select="replace($thesaurusName, ' ', '')"/>
+                <xsl:value-of select="replace($thesaurusName, ' ', '-')"/>
               </xsl:when>
             </xsl:choose>
           </xsl:variable>
@@ -504,13 +506,13 @@
 
       <!-- Conformity for data sets -->
       <xsl:choose>
-        <xsl:when test="$isDataset">
+        <xsl:when test="$isService">
           <xsl:for-each-group select="gmd:dataQualityInfo/*/gmd:report"
                               group-by="*/gmd:result/*/gmd:specification/gmd:CI_Citation/
         gmd:title/gco:CharacterString">
 
             <xsl:variable name="title" select="current-grouping-key()"/>
-            <xsl:if test="count($eu10892010/*[lower-case(normalize-space(.)) =
+            <xsl:if test="count($eu9762009/*[lower-case(normalize-space(.)) =
                 lower-case(normalize-space($title))]) = 1">
 
               <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
@@ -525,9 +527,7 @@
         gmd:title/gco:CharacterString">
 
             <xsl:variable name="title" select="current-grouping-key()"/>
-            <xsl:if test="count($eu9762009/*[lower-case(normalize-space(.)) =
-                lower-case(normalize-space($title))]) = 1 or
-                count($eu10892010/*[lower-case(normalize-space(.)) =
+            <xsl:if test="count($eu10892010/*[lower-case(normalize-space(.)) =
                 lower-case(normalize-space($title))]) = 1">
 
               <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
@@ -537,6 +537,15 @@
         </xsl:otherwise>
       </xsl:choose>
 
+      <xsl:for-each-group select="gmd:dataQualityInfo/*/gmd:report"
+                          group-by="*/gmd:result/*/gmd:specification/
+                                      */gmd:title/gco:CharacterString">
+        <xsl:variable name="title" select="current-grouping-key()"/>
+        <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
+        <xsl:if test="$pass">
+          <field name="conformTo_{replace(normalize-space($title), ' ', '-')}"><xsl:value-of select="$pass"/></field>
+        </xsl:if>
+      </xsl:for-each-group>
 
 
       <xsl:for-each select="gmd:dataQualityInfo/*">
@@ -617,25 +626,6 @@
 
         <xsl:if test="$datasetId != ''">
           <field name="recordOperateOn"><xsl:value-of select="$datasetId"/></field>
-
-          <!--<doc>
-            <field name="id"><xsl:value-of
-                    select="concat('association', $identifier,
-              $associationType, $datasetId)"/></field>
-            <field name="documentType">association</field>
-            <field name="record"><xsl:value-of select="$identifier"/></field>
-            <field name="associationType"><xsl:value-of select="$associationType"/></field>
-            <field name="relatedTo"><xsl:value-of select="$datasetId"/></field>
-          </doc>
-          <doc>
-            <field name="id"><xsl:value-of
-                    select="concat('association',
-              $associationType, $datasetId)"/></field>
-            <field name="documentType">association2</field>
-            <field name="record"><xsl:value-of select="$identifier"/></field>
-            <field name="associationType"><xsl:value-of select="concat($associationType, $serviceType)"/></field>
-            <field name="relatedTo"><xsl:value-of select="$datasetId"/></field>
-          </doc>-->
         </xsl:if>
       </xsl:for-each>
 
@@ -668,24 +658,6 @@
           </xsl:analyze-string>
         </xsl:if>
       </xsl:variable>
-      <!--<xsl:message>## child record <xsl:value-of select="$relatedTo"/> </xsl:message>-->
-
-      <xsl:choose>
-        <xsl:when test="$relatedTo">
-          <doc>
-            <field name="id"><xsl:value-of select="$relatedTo"/></field>
-            <field name="metadataIdentifier" update="set"><xsl:value-of select="$relatedTo"/></field>
-            <field name="recordOperatedBy" update="add"><xsl:value-of select="$identifier"/></field>
-            <xsl:for-each select="../srv:serviceType/gco:LocalName">
-              <field name="recordOperatedByType" update="add"><xsl:value-of select="."/></field>
-            </xsl:for-each>
-          </doc>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Failed to extract metadata identifier from @uuidref or xlink:href <xsl:value-of select="@xlink:href"/></xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-
     </xsl:for-each>
   </xsl:template>
 

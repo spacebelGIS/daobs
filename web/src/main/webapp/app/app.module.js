@@ -34,10 +34,6 @@
         id: 'admin',
         icon: 'glyphicon-cog',
         url: '/solr/' // TODO: it may be a different URL
-      }, {
-        id: 'signout',
-        icon: 'glyphicon-user',
-        url: '#/logout'
       }];
 
       // Change class based on route path
