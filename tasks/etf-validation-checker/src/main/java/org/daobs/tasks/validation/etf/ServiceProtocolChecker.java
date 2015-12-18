@@ -161,6 +161,8 @@ public class ServiceProtocolChecker {
 
                 DocumentBuilderFactory factory =
                         DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+
                 DocumentBuilder builder = factory.newDocumentBuilder();
 
                 ByteArrayInputStream input = new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
@@ -187,7 +189,7 @@ public class ServiceProtocolChecker {
         Element rootNode = doc.getDocumentElement();
         if (rootNode == null) return false;
 
-        String rootNodeName = rootNode.getNodeName();
+        String rootNodeName = rootNode.getLocalName();
 
         return (roots.contains(rootNodeName));
     }
