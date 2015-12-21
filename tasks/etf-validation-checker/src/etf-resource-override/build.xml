@@ -19,6 +19,10 @@
 	<property name="soapui.xmx" value="1024M" />
 	<property name="soapui.maxpermsize" value="512m" />
 
+	<!-- Temporary folder. Allows to override the default temporary folder using -DtmpDir parameter -->
+	<!-- Jose García -->
+	<property name="tmpDir" value="${java.io.tmpdir}" />
+
 	<!-- SoapUI paths -->
 	<path id="soapui.classpath">
 		<pathelement location="${SOAPUI_HOME}/bin/soapui-4.5.1.jar" />
@@ -42,8 +46,13 @@
 	<path id="soapui.workspace.path">
 		<pathelement location="${basedir}/ETF/ETF-workspace.xml" />
 	</path>
+
+	<!-- Configuration file. Allows to override the default config.properties using -DconfigurationFile parameter -->
+	<!-- Jose García -->
+	<property name="configurationFile" value="config.properties" />
+
 	<path id="soapui.properties.path">
-		<pathelement location="${basedir}/config.properties" />
+		<pathelement location="${basedir}/${configurationFile}" />
 	</path>
 
 	<target name="init-properties" depends="check-ant,set-serviceEndpoint">        
@@ -56,22 +65,23 @@
 		-->
 		<property name="mapName" value="${current.time}" />
 
+
 		<!-- Set traces_dir in config.properties -->
 		<!-- Edwin Kerkenaar (TNO) -->
 		<property name="traces_dir" location="logs/traces/${mapName}" />
 		<mkdir dir="${traces_dir}" />
-		<propertyfile file="config.properties">
+		<propertyfile file="${configurationFile}">
 			<entry key="traces_dir" value="${traces_dir}" />
 		</propertyfile>
 		<!-- Load user-specified service parameters (endpoints, etc.) -->
-		<property file="config.properties" />
+		<property file="${configurationFile}" />
 	</target>
 	
 	<!-- Thijs Brentjens (Geonovum): add a target that checks if the url of the map has been set already by a property. 
 		If so, set it in the config.properties. This is neceasary if the tests are ran using Maven, as done by TNO.
 	 -->
 	<target name="set-serviceEndpoint" if="map">
-		<propertyfile file="config.properties">
+		<propertyfile file="${configurationFile}">
 			<!--Edwin Kerkenaar (TNO) -->
 			<entry key="VS.serviceEndpoint" value="${map}" />
 			<!-- Jose García: use the property also for download service end-points -->
@@ -349,6 +359,7 @@
 			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
 			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
 			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Djava.io.tmpdir=${tmpDir}" />
 			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
 			<arg value="-r" />
 			<arg value="-f" />
@@ -375,6 +386,7 @@
 			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
 			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
 			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Djava.io.tmpdir=${tmpDir}" />
 			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
 			<arg value="-r" />
 			<arg value="-f" />
@@ -402,6 +414,7 @@
 			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
 			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
 			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Djava.io.tmpdir=${tmpDir}" />
 			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
 			<arg value="-r" />
 			<arg value="-f" />
@@ -439,6 +452,7 @@
 			<jvmarg value="-Dsoapui.ext.listeners=${toString:soapui.extlisteners.path}" />
 			<jvmarg value="-Dsoapui.ext.actions=${toString:soapui.extactions.path}" />
 			<jvmarg value="-Djava.library.path=${toString:soapui.javalibrary.path}" />
+			<jvmarg value="-Djava.io.tmpdir=${tmpDir}" />
 			<jvmarg value="-Dwsi.dir=${toString:soapui.wsidir.path}" />
 			<arg value="-w" />
 			<arg value="${toString:soapui.workspace.path}" />

@@ -2,6 +2,7 @@ package org.daobs.tasks.validation.etf;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -18,10 +19,12 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Simple Java Client for the ETF Validator Tool.
@@ -133,14 +136,22 @@ public class EtfValidatorClient {
                                   ServiceProtocol protocol) {
 
         String reportName = getReportName();
+        Path tmpDir = null;
 
         try {
+            // Create a custom config.properties and temporary directory, to allow parallel executions of ETF.
+            FileUtils.copyFile(new File(this.etfResourceTesterPath, "config.properties"),
+                    new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
+
+            tmpDir = Files.createTempDirectory("ETF");
+
             Runtime rt = Runtime.getRuntime();
 
             String[] envp = new String[1];
             envp[0] = "XTF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
 
-            String command = commandToExecute(resourceDescriptorUrl, protocol, reportName);
+            String command = commandToExecute(resourceDescriptorUrl, protocol,
+                    reportName, tmpDir.toFile().getAbsolutePath());
             if (StringUtils.isEmpty(command)) return "";
 
             log.info("EFT validation command: " + command);
@@ -151,18 +162,29 @@ public class EtfValidatorClient {
 
             if (log.isDebugEnabled()) {
                 // Log process ouput
-                BufferedReader bfr = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-
+                BufferedReader bfr = null;
                 String line = "";
-                while((line = bfr.readLine()) != null) {
-                    log.debug(line);
+
+                try {
+                    bfr = new BufferedReader(new InputStreamReader(pr.getInputStream(), Charset.forName("UTF8")));
+                    while((line = bfr.readLine()) != null) {
+                        log.debug(line);
+                    }
+
+                } finally {
+                    IOUtils.closeQuietly(bfr);
                 }
 
-                bfr = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
-                line = "";
-                while((line = bfr.readLine()) != null) {
-                    log.debug(line);
+                try {
+                    bfr = new BufferedReader(new InputStreamReader(pr.getErrorStream(), Charset.forName("UTF8")));
+                    line = "";
+                    while((line = bfr.readLine()) != null) {
+                        log.debug(line);
+                    }
+                } finally {
+                    IOUtils.closeQuietly(bfr);
                 }
+
             }
 
             int exitVal = pr.waitFor();
@@ -182,7 +204,7 @@ public class EtfValidatorClient {
 
         } finally {
             // Clean up temporary folders
-            cleanTemporaryFolders(reportName);
+            cleanTemporaryFolders(reportName, tmpDir);
         }
 
     }
@@ -195,29 +217,36 @@ public class EtfValidatorClient {
      * @param resourceDescriptorUrl
      * @param protocol
      * @param reportName
+     * @param tmpDir
      * @return
      */
     private String commandToExecute(String resourceDescriptorUrl,
                                     ServiceProtocol protocol,
-                                    String reportName) {
+                                    String reportName,
+                                    String tmpDir) {
 
-        String command = "ant ";
+        String command = "ant set-serviceEndpoint {0} -Dmap={1} -DmapName={2} -DtmpDir={3} -DconfigurationFile={4}";
+
+        String args[] = new String[]{resourceDescriptorUrl, reportName, tmpDir, "config-" + reportName + ".properties"};
+        List<String> argsList = new ArrayList<String>(Arrays.asList(args));
 
         if (protocol.equals(ServiceProtocol.WMS)) {
-            command = command + "set-serviceEndpoint run-vs-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
+            argsList.add(0, "run-vs-tests");
 
         } else if (protocol.equals(ServiceProtocol.WMTS)) {
-            command = command + "set-serviceEndpoint run-wmts-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
+            argsList.add(0, "run-wmts-tests");
 
         } else if (protocol.equals(ServiceProtocol.WFS)) {
-            command = command + "set-serviceEndpoint run-dswfs-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
+            argsList.add(0, "run-dswfs-tests");
 
         } else if (protocol.equals(ServiceProtocol.ATOM)) {
-            command = command + "set-serviceEndpoint run-dsatom-tests -Dmap=" + resourceDescriptorUrl + " -DmapName=" + reportName;
+            argsList.add(0, "run-dsatom-tests");
 
         } else {
             return "";
         }
+
+        command = MessageFormat.format(command, argsList.toArray());
 
         return command;
     }
@@ -236,25 +265,14 @@ public class EtfValidatorClient {
 
 
     /**
-     * Removes the temporary folders created by ETF.
+     * Removes the temporary folders/files created by ETF.
      *
      */
-    private void cleanTemporaryFolders(String reportName) {
-        try {
-            String tempFolder =  System.getProperty("java.io.tmpdir");
-
-            FileFilter directoryFilter = new FileFilter() {
-                public boolean accept(File file) {
-                    return file.isDirectory() && file.getName().startsWith("xtf_sel_");
-                }
-            };
-
-            File[] files = new File(tempFolder).listFiles(directoryFilter);
-            for (File dir : files) {
-                FileUtils.deleteQuietly(dir);
-            }
-        } catch (Exception ex) {
-            log.error(ex.getMessage());
+    private void cleanTemporaryFolders(String reportName, Path tmpDir) {
+        if (tmpDir != null) {
+            FileUtils.deleteQuietly(tmpDir.toFile());
         }
+
+        FileUtils.deleteQuietly(new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
     }
 }

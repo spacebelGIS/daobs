@@ -7,14 +7,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Class to create the validation report from the EFT validation results.
@@ -34,7 +38,8 @@ public class EftValidationReportBuilder {
      * @param reportUrl
      * @return
      */
-    public EtfValidationReport build(File eftResults, String endPoint, ServiceProtocol protocol, String reportUrl) {
+    public EtfValidationReport build(File eftResults, String endPoint,
+                                     ServiceProtocol protocol, String reportUrl) {
         EtfValidationReport report = new EtfValidationReport(endPoint, protocol.toString());
 
         try {
@@ -97,10 +102,11 @@ public class EftValidationReportBuilder {
             report.setReport(FileUtils.readFileToString(eftResults).replace("]]>", "]]]]><![CDATA[>"));
             report.setReportUrl(reportUrl);
 
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             log.error(ex.getMessage());
             report.setInfo(ex.getMessage());
             report.setValidationFailed(true);
+
         }
 
         log.info(report.toString());
