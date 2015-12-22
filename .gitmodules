@@ -1,9 +1,9 @@
 [submodule "dashboard"]
 	path = dashboard
-	url = https://github.com/titellus/banana.git
+	url = https://github.com/INSPIRE-MIF/banana.git
 [submodule "dashboard2"]
 	path = dashboard2
-	url = https://github.com/titellus/banana.git
+	url = https://github.com/INSPIRE-MIF/banana.git
 [submodule "silk"]
 	path = silk
-	url = https://github.com/titellus/silk.git
+	url = https://github.com/INSPIRE-MIF/silk.git
