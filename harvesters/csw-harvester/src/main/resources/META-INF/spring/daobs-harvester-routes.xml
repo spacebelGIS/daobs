@@ -18,11 +18,6 @@
     <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
-  <bean id="activemq"
-        class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="brokerURL" value="vm://localhost" />
-  </bean>
-
   <bean id="cswHarvester" class="org.daobs.harvester.CswHarvester">
     <property name="maxRecords" value="${harvester.csw.getRecords.maxRecords}"/>
   </bean>
@@ -351,6 +346,7 @@
                     parallelProcessing="true">
         <cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>
         <cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>
+        <cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>
       </cm:multicast>
       <!--<cm:to uri="direct:websocketLog"/>-->
     </cm:route>
