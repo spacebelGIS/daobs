@@ -15,6 +15,7 @@ Start Solr.
 Create collection
 ```
 cd solr/solr-5.2.1/bin
+./solr start -p 8984 -c
 ./solr create -p 8984 -c silk -d ../../src/main/solr-cores/silk/
 ./solr create -p 8984 -c data -d ../../src/main/solr-cores/data/
 ./solr create -p 8984 -c dashboard -d ../../src/main/solr-cores/dashboard/
