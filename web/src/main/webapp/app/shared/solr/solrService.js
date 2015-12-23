@@ -2,8 +2,19 @@
   "use strict";
   var app =  angular.module('solr');
 
-  app.factory('solrService', ['$http', 'solrConfig',
-    function ($http, solrConfig) {
+  app.factory('solrService', ['$http', '$q', 'solrConfig',
+    function ($http, $q, solrConfig) {
+      function commit (core) {
+        return $http.post(
+          solrConfig.url + '/' +
+          (core || solrConfig.core) +
+          '/update/json',
+          { 'commit': { 'waitSearcher': false }},
+          {
+            headers: { 'Content-type': 'application/json'}
+          }
+        );
+      };
       return {
         ping: function (core) {
           return $http.get(solrConfig.url +
@@ -21,17 +32,27 @@
             }
           });
         },
+        'commit': commit,
         'delete': function (documentFilter, core) {
-          return $http.post(
+          var deferred = $q.defer();
+
+          $http.post(
             solrConfig.url + '/' +
               (core || solrConfig.core) +
               '/update/json',
             { 'delete': { 'query': documentFilter }},
             {
-                params: { commit: true },
                 headers: { 'Content-type': 'application/json'}
               }
-          );
+          ).then(function(data) {
+            commit(core).then(function (data) {
+              deferred.resolve(data);
+            });
+          }, function (data) {
+            deferred.reject(data);
+          });
+
+          return deferred.promise;
         }
       };
     }]);

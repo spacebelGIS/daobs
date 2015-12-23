@@ -85,7 +85,12 @@
         </td>
       </tr>
       <tr data-ng-repeat="h in harvesterConfig | filter:harvesterSearch | orderBy:'territory'">
-        <td><h1>{{h.territory}}</h1></td>
+        <td>
+          <h1>{{h.territory}}</h1>
+          <small data-ng-show="statsForTerritory[h.territory]">
+            {{statsForTerritory[h.territory]}} <span data-translate="">records</span>
+          </small>
+        </td>
         <td>{{h.name}}</td>
         <td>
           <ul>

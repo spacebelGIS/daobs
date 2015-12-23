@@ -42,18 +42,17 @@
           },
           removeRecords : function (h) {
             var filter = h === undefined ? '' :
-                '+territory:"' + h.territory + '" ' +
-                '+harvesterId:"' + h.url + '"',
+                '+territory:"' + h.territory.trim() + '" ' +
+                '+harvesterId:"' + h.url.trim() + '"',
               metadataFilter =
                 '+(documentType:metadata documentType:association) ' + filter,
               deferred = $q.defer();
 
 
-            solrService.delete(metadataFilter, 'data').success(
+            solrService.delete(metadataFilter, 'data').then(
               function (data) {
                 deferred.resolve('Records deleted.');
-              }
-            ).error(function (response) {
+              }, function (response) {
               deferred.reject(response);
             });
 

@@ -3,9 +3,9 @@
   var app = angular.module('daobs');
 
   app.controller('HarvesterConfigCtrl', [
-    '$scope', '$routeParams', '$translate',
+    '$scope', '$routeParams', '$translate', '$timeout', '$http',
     'harvesterService', 'cfg', 'Notification',
-    function ($scope, $routeParams, $translate,
+    function ($scope, $routeParams, $translate, $timeout, $http,
               harvesterService, cfg, Notification) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
@@ -36,10 +36,35 @@
           $scope.translations = translations;
         });
 
+      $scope.statsForTerritory = {};
+
+      function loadStatsForTerritory() {
+        $http.get(cfg.SERVICES.dataCore +
+          '/select?q=' +
+          'documentType%3Ametadata&' +
+          'start=0&rows=0&wt=json&' +
+          'facet=true&facet.sort=index&facet.field=territory').
+        success(function (data) {
+          $scope.facetValues = {};
+          var i = 0, facet = data.facet_counts.facet_fields.territory;
+          do {
+            if (facet[i + 1] > 0) {
+              $scope.statsForTerritory[facet[i]] = facet[i + 1];
+            }
+            i = i + 2;
+          } while (i < facet.length);
+        });
+
+        $timeout(function () {
+          loadStatsForTerritory()
+        }, 5000);
+      };
+
       function init() {
         harvesterService.getAll().success(function (list) {
           $scope.harvesterConfig = list.harvester;
         });
+        loadStatsForTerritory()
       }
 
       $scope.edit = function (h) {
