@@ -39,20 +39,28 @@
       $scope.statsForTerritory = {};
 
       function loadStatsForTerritory() {
-        $http.get(cfg.SERVICES.dataCore +
-          '/select?q=' +
-          'documentType%3Ametadata&' +
-          'start=0&rows=0&wt=json&' +
-          'facet=true&facet.sort=index&facet.field=territory').
-        success(function (data) {
-          $scope.facetValues = {};
-          var i = 0, facet = data.facet_counts.facet_fields.territory;
-          do {
-            if (facet[i + 1] > 0) {
-              $scope.statsForTerritory[facet[i]] = facet[i + 1];
-            }
-            i = i + 2;
-          } while (i < facet.length);
+        var statsField = ['isValid', 'etfIsValid'], statsFieldConfig = [];
+        for (var i = 0; i < statsField.length; i++) {
+          statsFieldConfig.push(statsField[i] + ": { type : terms, " +
+            "field: " + statsField[i] + ", missing: true }");
+        }
+        $http.get(
+          cfg.SERVICES.dataCore + '/select?' +
+          $.param({
+            'q': '+documentType:metadata',
+            'rows': '0',
+            'wt': 'json',
+            'json.facet':
+              "{'top_territory': { " +
+                  "type: terms, field: territory, missing: true," +
+                  "facet: {" + statsFieldConfig.join(',') +
+              "}}}"
+          })
+        ).then(function (data) {
+          var facets = data.data.facets.top_territory.buckets;
+          for (var i = 0; i < facets.length; i++) {
+            $scope.statsForTerritory[facets[i].val] = facets[i];
+          }
         });
 
         $timeout(function () {

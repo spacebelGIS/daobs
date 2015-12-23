@@ -88,7 +88,22 @@
         <td>
           <h1>{{h.territory}}</h1>
           <small data-ng-show="statsForTerritory[h.territory]">
-            {{statsForTerritory[h.territory]}} <span data-translate="">records</span>
+            <strong>
+              {{statsForTerritory[h.territory].count}}
+              <span data-translate="">records</span>
+            </strong>
+          </small>
+          <small data-ng-repeat="(key, value) in statsForTerritory[h.territory]"
+                 data-ng-if="key !== 'count' && key !== 'val'">
+            <h6>{{key | translate}}</h6>
+            <ul>
+              <li data-ng-repeat="b in value.buckets">
+                {{b.val}} ({{b.count}})
+              </li>
+              <li data-ng-if="value.missing">
+                {{'missing' | translate}} ({{value.missing.count}})
+              </li>
+            </ul>
           </small>
         </td>
         <td>{{h.name}}</td>

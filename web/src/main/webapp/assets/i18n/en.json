@@ -1,6 +1,8 @@
 {
   "dashboard": "Dashboard",
   "admin": "Admin",
+  "isValid": "Validation",
+  "etfIsValid": "ETF Validation",
   "withErrorsIndicators": "Indicator with errors only",
   "nonNullIndicators": "Indicator with non null value",
   "harvestingTitle": "Harvesting configuration",
