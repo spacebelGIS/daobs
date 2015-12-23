@@ -32,13 +32,9 @@
                       logName="daobs.tasks.validation-etf-checker"
                       level="DEBUG"/>
 
-  <cm:camelContext
-          xmlns:gmd="http://www.isotc211.org/2005/gmd"
-          xmlns:gco="http://www.isotc211.org/2005/gco"
-          xmlns:geoportal="http://inspire.ec.europa.eu/schemas/geoportal/1.0"
-          id="task.validation-etf-checker"
-          errorHandlerRef="loggingErrorHandler"
-          useMDCLogging="true">
+  <cm:camelContext id="task.validation-etf-checker"
+                   errorHandlerRef="loggingErrorHandler"
+                   useMDCLogging="true">
 
     <cm:threadPoolProfile id="myDefaultProfile"
                           defaultProfile="true"
@@ -76,9 +72,19 @@
     <cm:route id="route-etf-task-validate-start-jms"
               autoStartup="{{task.validation-etf-checker.startup.jms}}">
       <cm:from uri="activemq:etf-task-validate"/>
-      <cm:setHeader headerName="documentFilter">
-        <cm:simple>${body.fq}</cm:simple>
-      </cm:setHeader>
+      <cm:choice>
+        <cm:when>
+          <cm:simple>${body} is "java.lang.String"</cm:simple>
+          <cm:setHeader headerName="documentFilter">
+            <cm:simple>${body}</cm:simple>
+          </cm:setHeader>
+        </cm:when>
+        <cm:otherwise>
+          <cm:setHeader headerName="documentFilter">
+            <cm:simple>${body.fq}</cm:simple>
+          </cm:setHeader>
+        </cm:otherwise>
+      </cm:choice>
       <cm:setBody>
         <cm:constant></cm:constant>
       </cm:setBody>
@@ -94,15 +100,6 @@
 
     <cm:route id="route-etf-task-validate-start">
       <cm:description>
-        Query all documents
-        +documentType:metadata
-
-        Do HTTP query using
-        http://localhost:8983/solr/data/select?q=%2BdocumentType%3Ametadata&amp;fl=document%2Cid&amp;wt=xml&amp;indent=true
-
-        Loop on all records.
-
-        Check against the XSD.
       </cm:description>
       <cm:from uri="direct:etf-task-validate-start"/>
 
@@ -151,10 +148,6 @@
         <cm:setHeader headerName="CamelHttpMethod">
           <cm:constant>GET</cm:constant>
         </cm:setHeader>
-        <!-- TODO: Improve that part because the number of records to be validated
-        will change over time if isValid is in the search filter and
-        the paging can't be used as such. It would have been
-        better to grab the set of ids to validate and loop over them. -->
         <cm:setHeader headerName="Exchange.HTTP_URI">
           <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
         </cm:setHeader>
@@ -244,7 +237,5 @@
               loggingLevel="DEBUG"
               logName="org.daobs.tasks.validation.etf"/>
     </cm:route>
-
   </cm:camelContext>
-
 </beans>
