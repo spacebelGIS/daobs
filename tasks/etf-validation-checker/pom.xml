@@ -91,7 +91,7 @@
             <executions>
               <execution>
                 <id>copy-resources</id>
-                <phase>pre-integration-test</phase>
+                <phase>integration-test</phase>
                 <goals>
                   <goal>copy-resources</goal>
                 </goals>
