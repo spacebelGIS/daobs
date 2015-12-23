@@ -75,11 +75,18 @@ public class Utility {
         TransformerFactory transFact = TransformerFactory.newInstance();
 
         InputStream streamSource = this.getClass().getResourceAsStream(xslt);
-        URL url = this.getClass().getResource(xslt);
 
         Source stylesheet = new StreamSource(streamSource);
+
+
+        URL url = this.getClass().getResource(xslt);
         // http://stackoverflow.com/questions/3699860/resolving-relative-paths-when-loading-xslt-files
-        stylesheet.setSystemId(url.toExternalForm());
+        if (url != null) {
+            stylesheet.setSystemId(url.toExternalForm());
+        } else {
+            System.out.println("WARNING: Error when setSystemId for XSL: " +
+                    xslt + ". Check resource location.");
+        }
 
         StringWriter sw = new StringWriter();
 

@@ -13,11 +13,6 @@
     <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
-  <bean id="activemq"
-        class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="brokerURL" value="vm://localhost" />
-  </bean>
-
   <bean id="taskPagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${task.service-dataset-indexer.records.per.page}"/>
   </bean>
@@ -283,7 +278,7 @@
           http://camel.465427.n5.nabble.com/camel-xslt-with-saxon-8-7-td5759704.html
           <cm:to uri="xslt:WEB-INF/xslt/index-service-themes.xsl?saxon=false"/>
           -->
-          <cm:to uri="bean:xsltUtility?method=transform(*, 'index-service-themes.xsl')"/>
+          <cm:to uri="bean:xsltUtility?method=transform(*, '/xslt/index-service-themes.xsl')"/>
 
           <cm:log message="Service '$simple{header.serviceIdentifier}' is about to be updated by request '$simple{body}'"
                   loggingLevel="INFO"
