@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                xmlns:gmi="http://www.isotc211.org/2005/gmi"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
                 xmlns:srv="http://www.isotc211.org/2005/srv"
                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
@@ -25,7 +26,11 @@
 
   <xsl:output name="default-serialize-mode"
               indent="no"
-              omit-xml-declaration="yes" />
+              omit-xml-declaration="yes"
+              encoding="utf-8"
+              escape-uri-attributes="yes"/>
+
+  <xsl:param name="indexingIndex" select="'0'"/>
 
   <xsl:variable name="harvester" as="element()?"
                 select="/harvestedContent/daobs:harvester"/>
@@ -50,22 +55,21 @@
 
   <xsl:template match="/">
     <!-- Add a Solr document -->
-    <add>
+    <add commitWithin="10000">
       <!-- For any ISO19139 records in the input XML document
       Some records from IS do not have record identifier. Ignore them.
       -->
       <xsl:variable name="records"
-                    select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString != '']"/>
+                    select="//(gmi:MI_Metadata|gmd:MD_Metadata)[gmd:fileIdentifier/gco:CharacterString != '']"/>
 
       <!-- Check number of records returned and reported -->
       <xsl:message>======================================================</xsl:message>
       <xsl:message>DEBUG: <xsl:value-of select="normalize-space($harvester/daobs:url)"/>.</xsl:message>
-      <xsl:message>DEBUG: <xsl:value-of select="//csw:SearchResults/@numberOfRecordsReturned"/> record(s) returned in CSW response.</xsl:message>
-      <xsl:message>DEBUG: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
+      <xsl:message>Page #<xsl:value-of select="$indexingIndex"/>: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
 
       <!-- Report error on record with null UUID -->
       <xsl:variable name="recordsWithNullUUID"
-                    select="//gmd:MD_Metadata[gmd:fileIdentifier/gco:CharacterString = ''
+                    select="//(gmi:MI_Metadata|gmd:MD_Metadata)[gmd:fileIdentifier/gco:CharacterString = ''
                             or not(gmd:fileIdentifier)]"/>
       <xsl:variable name="numberOfRecordsWithNullUUID"
                     select="count($recordsWithNullUUID)"/>

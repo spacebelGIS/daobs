@@ -24,10 +24,11 @@ public class HarvesterDetailsAggregate implements
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
         // TODO: Use Document.class instead
-        String cswResponse = original.getIn().getBody(String.class);
+        String harvestedContent = original.getIn().getBody(String.class);
         String harvesterDetails = resource.getIn().getBody(String.class);
         String mergeResult = "<harvestedContent>" +
-                harvesterDetails + cswResponse + "</harvestedContent>";
+                                harvesterDetails + harvestedContent +
+                             "</harvestedContent>";
 
         if (original.getPattern().isOutCapable()) {
             original.getOut().setBody(mergeResult);

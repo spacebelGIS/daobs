@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                xmlns:gmi="http://www.isotc211.org/2005/gmi"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
                 xmlns:srv="http://www.isotc211.org/2005/srv"
                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
@@ -26,7 +27,7 @@
   <xsl:import href="metadata-inspire-constant.xsl"/>
   <xsl:include href="metadata-iso19139-medsea.xsl"/>
 
-  <xsl:template match="gmd:MD_Metadata" mode="index">
+  <xsl:template match="gmi:MI_Metadata|gmd:MD_Metadata" mode="index">
     <!-- Main variables for the document -->
     <xsl:variable name="identifier" as="xs:string"
                   select="gmd:fileIdentifier/gco:CharacterString[. != '']"/>
@@ -52,7 +53,7 @@
                   select="
                       count(gmd:hierarchyLevel[gmd:MD_ScopeCode/@codeListValue='service']) > 0"/>
 
-    <xsl:message>#<xsl:value-of select="count(preceding-sibling::gmd:MD_Metadata)"/>. <xsl:value-of select="$identifier"/></xsl:message>
+    <xsl:message>#<xsl:value-of select="count(preceding-sibling::node())"/>. <xsl:value-of select="$identifier"/></xsl:message>
 
     <!-- Create a first document representing the main record. -->
     <doc>
@@ -60,7 +61,7 @@
       <field name="documentStandard">iso19139</field>
 
       <!-- Index the metadata document as XML -->
-      <field name="document"><xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/></field>
+      <!--<field name="document"><xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/></field>-->
       <field name="id"><xsl:value-of select="$identifier"/></field>
       <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
 

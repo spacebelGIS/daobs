@@ -16,6 +16,8 @@
   </parent>
 
   <modules>
+    <module>harvester-common</module>
     <module>csw-harvester</module>
+    <module>local-file-system</module>
   </modules>
 </project>

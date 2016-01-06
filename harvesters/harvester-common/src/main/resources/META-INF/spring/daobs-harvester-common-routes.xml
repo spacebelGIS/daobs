@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the cm Context-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cm="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <!-- bridge spring property placeholder with cm -->
+  <!-- you must NOT use the <context:property-placeholder at the same time,
+  only this bridge bean -->
+  <bean id="bridgePropertyPlaceholder"
+        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+    <property name="location" value="/WEB-INF/config.properties"/>
+  </bean>
+
+
+  <bean id="SolrServer"
+        class="org.daobs.index.SolrServerBean">
+    <property name="solrServerUrl" value="${solr.server.url}/${solr.core.data}"/>
+    <property name="solrServerUsername" value="${solr.server.user}"/>
+    <property name="solrServerPassword" value="${solr.server.password}"/>
+  </bean>
+
+  <bean id="SolrRequest"
+        class="org.daobs.index.SolrRequestBean"/>
+
+  <bean id="xsltUtility" class="org.daobs.routing.utility.Utility"/>
+
+  <cm:errorHandler id="loggingErrorHandler"
+                      type="LoggingErrorHandler"
+                      logName="daobs.harvesters.csw"
+                      level="DEBUG"/>
+
+  <cm:camelContext xmlns:daobs="http://daobs.org"
+          id="harvester.common"
+          errorHandlerRef="loggingErrorHandler"
+          useMDCLogging="true">
+
+    <cm:threadPoolProfile id="myDefaultProfile"
+                          defaultProfile="true"
+                          poolSize="30"
+                          maxPoolSize="30"/>
+
+    <cm:onException>
+      <cm:exception>org.apache.camel.component.http4.HttpOperationFailedException</cm:exception>
+      <cm:continued>
+        <cm:constant>true</cm:constant>
+      </cm:continued>
+      <cm:log message="Oops, something went wrong: $simple{exception.message}."
+              loggingLevel="ERROR"
+              logName="org.daobs.harvester.Harvester"/>
+      <cm:log message="$simple{exception.responseBody}"
+              loggingLevel="ERROR"
+              logName="org.daobs.harvester.Harvester"/>
+      <cm:log message="$simple{exception.stacktrace}"
+              loggingLevel="ERROR"
+              logName="org.daobs.harvester.Harvester"/>
+      <cm:to uri="log:org.daobs.harvester.Harvester?showBody=true"/>
+
+    </cm:onException>
+
+
+    <cm:route id="route-index">
+      <cm:description>
+        Index records in Solr and report any errors.
+      </cm:description>
+      <cm:from uri="direct-vm:indexDocuments"/>
+
+      <!-- From XML response containing ISO19139 records to Solr XML transaction document-->
+      <cm:to uri="bean:xsltUtility?method=transform(*, '/xslt/metadata.xsl')"/>
+
+      <!--
+      <cm:setHeader headerName="transactionFileName">
+        <cm:groovy>java.util.UUID.randomUUID().toString() + '.xml'</cm:groovy>
+      </cm:setHeader>
+      <cm:to uri="file:/tmp/?fileName=solr-request/$simple{header.transactionFileName}.xml&amp;charset=utf-8"/>-->
+
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:simple>text/xml</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
+      <cm:convertBodyTo type="org.w3c.dom.Document" charset="UTF-8"/>
+      <cm:to uri="log:org.daobs.harvester.Harvester?showBody=true"/>
+      <cm:choice>
+        <cm:when>
+          <!-- If records found, next route is direct:cswGetRecords. -->
+          <cm:xpath>/response/lst/int[@name = 'status' and text() = '400']</cm:xpath>
+          <cm:setHeader headerName="indexingError">
+            <cm:xpath resultType="java.lang.String">
+              /response/lst/str[@name = 'msg']/text()
+            </cm:xpath>
+          </cm:setHeader>
+          <cm:log message="Oops, error while indexing record(s) of page #$simple{property.CamelSplitIndex}: $simple{header.indexingError}."
+                  loggingLevel="ERROR"
+                  logName="org.daobs.harvester.Harvester"/>
+        </cm:when>
+        <cm:otherwise>
+          <cm:setHeader headerName="indexingTime">
+            <cm:xpath resultType="java.lang.String">
+              /response/lst/int[@name = 'QTime']/text()
+            </cm:xpath>
+          </cm:setHeader>
+          <cm:log message="Records indexed in $simple{header.indexingTime}ms."
+                  loggingLevel="INFO"
+                  logName="org.daobs.harvester.Harvester"/>
+        </cm:otherwise>
+      </cm:choice>
+    </cm:route>
+
+    <!--<cm:route id="route-delete">
+      <cm:description>
+        Delete all records from the index.
+
+        TODO: Should only delete record for this harvester only
+      </cm:description>
+      <cm:from uri="direct:indexDeleteDocuments"/>
+      <cm:setHeader headerName="SolrOperation">
+        <cm:constant>DELETE_BY_QUERY</cm:constant>
+      </cm:setHeader>
+      <cm:setBody>
+        <cm:simple>{{csw.harvester.delete.filter}}</cm:simple>
+      </cm:setBody>
+      <cm:to uri="solr://{{solr.server.url}}"/>
+    </cm:route>-->
+
+
+    <!--<cm:route id="websocket-log">
+      <cm:from uri="direct:websocketLog"/>
+      &lt;!&ndash;<cm:from uri="websocket://harvester"/>&ndash;&gt;
+      &lt;!&ndash;<cm:log message=">>> Message received from WebSocket Client : ${body}"/>&ndash;&gt;
+      <cm:to uri="websocket://harvester-csw-log?sendToAll=true"/>
+    </cm:route>-->
+  </cm:camelContext>
+</beans>

@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.daobs.harvester</groupId>
-  <artifactId>daobs-harvester-csw</artifactId>
+  <artifactId>daobs-harvester-common</artifactId>
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
-  <name>Harvester / CSW</name>
+  <name>Harvester / Common</name>
   <url></url>
 
   <parent>
@@ -18,9 +18,27 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.daobs.harvester</groupId>
-      <artifactId>daobs-harvester-common</artifactId>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-routing-utility</artifactId>
       <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-logging-deps</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
   </dependencies>
 
@@ -60,14 +78,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <!-- allows the route to be ran via 'mvn camel:run' -->
-      <plugin>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-maven-plugin</artifactId>
-        <configuration>
-          <applicationContextUri>classpath*:META-INF/spring/*.xml</applicationContextUri>
-        </configuration>
       </plugin>
     </plugins>
   </build>
