@@ -76,7 +76,7 @@
         <cm:when>
           <cm:simple>${body} is "java.lang.String"</cm:simple>
           <cm:setHeader headerName="documentFilter">
-            <cm:simple>${body}</cm:simple>
+            <cm:simple>$simple{body} {{task.validation-etf-checker.filter}}</cm:simple>
           </cm:setHeader>
         </cm:when>
         <cm:otherwise>
