@@ -131,5 +131,7 @@
   "cancel": "Cancel",
   "actions": "Actions",
   "restartEtfAll": "ETF validation (all service records)",
-  "restartEtfMissing": "ETF validation (missing service records)"
+  "restartEtfMissing": "ETF validation (missing service records)",
+  "eftValidationStarted": "ETF validation started",
+  "errorStartingEftValidation": "Error while executing ETF validation."
 }
