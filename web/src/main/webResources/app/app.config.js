@@ -19,7 +19,8 @@
       reporting: context + 'daobs/reporting/',
       samples: context + 'daobs/samples/',
       dashboardBaseURL: context + 'dashboard2/#/dashboard/solr/',
-      solrAdmin: solrContext + '/admin.html'
+      solrAdmin: solrContext + '/admin.html',
+      eftValidation: context + 'daobs/etf-validator'
     }
   });
 }());

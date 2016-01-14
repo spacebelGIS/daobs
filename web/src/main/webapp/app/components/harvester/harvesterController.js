@@ -128,6 +128,17 @@
         })
       };
 
+      $scope.eftValidation = function (h, all) {
+        harvesterService.eftValidation(h, all).then(function (response) {
+          Notification.success($scope.translations.eftValidationStarted);
+          init();
+        }, function (response) {
+          Notification.error(
+            $scope.translations.errorStartingEftValidation + ' ' +
+            response.error.msg);
+        });
+      };
+
       init();
     }]);
 }());

@@ -128,5 +128,8 @@
   "uuid-placeholder": "",
   "uuid-help": "Unique identifier",
   "saveHarvester": "Save harvester",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "actions": "Actions",
+  "restartEtfAll": "ETF validation (all service records)",
+  "restartEtfMissing": "ETF validation (missing service records)"
 }
