@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -157,18 +158,24 @@ public class ServiceProtocolChecker {
         try(CloseableHttpClient httpclient = HttpClients.custom().
                 setDefaultRequestConfig(defaultRequestConfig).build()){
             try(CloseableHttpResponse response = httpclient.execute(new HttpGet(url))){
-                String body = EntityUtils.toString(response.getEntity());
 
-                DocumentBuilderFactory factory =
-                        DocumentBuilderFactory.newInstance();
-                factory.setNamespaceAware(true);
+                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    String body = EntityUtils.toString(response.getEntity());
 
-                DocumentBuilder builder = factory.newDocumentBuilder();
+                    DocumentBuilderFactory factory =
+                            DocumentBuilderFactory.newInstance();
+                    factory.setNamespaceAware(true);
 
-                ByteArrayInputStream input = new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
-                Document doc = builder.parse(input);
+                    DocumentBuilder builder = factory.newDocumentBuilder();
 
-                return doc;
+                    ByteArrayInputStream input = new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
+                    Document doc = builder.parse(input);
+
+                    return doc;
+
+                } else {
+                    this.errorMessage = response.getStatusLine().getReasonPhrase();
+                }
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());
