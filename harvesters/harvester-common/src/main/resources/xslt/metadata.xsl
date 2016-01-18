@@ -57,20 +57,6 @@
       <xsl:message>DEBUG: <xsl:value-of select="normalize-space($harvester/daobs:url)"/>.</xsl:message>
       <xsl:message>Page #<xsl:value-of select="$indexingIndex"/>: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
 
-      <!-- Report error on record with null UUID
-      TODO: Support ISO19115-3 check
-      -->
-      <xsl:variable name="recordsWithNullUUID"
-                    select="//(gmi:MI_Metadata|gmd:MD_Metadata)[gmd:fileIdentifier/gco:CharacterString = ''
-                            or not(gmd:fileIdentifier)]"/>
-      <xsl:variable name="numberOfRecordsWithNullUUID"
-                    select="count($recordsWithNullUUID)"/>
-
-      <xsl:if test="$numberOfRecordsWithNullUUID > 0">
-        <xsl:message>WARNING: <xsl:value-of select="$numberOfRecordsWithNullUUID"/> record(s) with null UUID.</xsl:message>
-        <xsl:message><xsl:copy-of select="$recordsWithNullUUID"/></xsl:message>
-      </xsl:if>
-
 
       <!-- Check duplicates
       TODO: Support ISO19115-3 check
@@ -89,7 +75,20 @@
 
 
       <xsl:for-each select="$records">
-        <xsl:apply-templates mode="index" select="."/>
+
+        <xsl:variable name="identifier" as="xs:string">
+          <xsl:apply-templates mode="extract-uuid" select="."/>
+        </xsl:variable>
+
+        <xsl:choose>
+          <xsl:when test="normalize-space($identifier) = ''">
+            <xsl:message>WARNING: Record with null UUID found.</xsl:message>
+            <xsl:message><xsl:copy-of select="."/></xsl:message>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates mode="index" select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </add>
   </xsl:template>
