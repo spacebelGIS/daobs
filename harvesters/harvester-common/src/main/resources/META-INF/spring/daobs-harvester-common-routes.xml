@@ -103,6 +103,17 @@
                   logName="org.daobs.harvester.Harvester"/>
         </cm:when>
         <cm:otherwise>
+          <cm:setBody>
+            <cm:constant><![CDATA[<commit/>]]></cm:constant>
+          </cm:setBody>
+          <cm:setHeader headerName="Exchange.HTTP_URI">
+            <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
+          </cm:setHeader>
+          <cm:setHeader headerName="Content-Type">
+            <cm:simple>text/xml</cm:simple>
+          </cm:setHeader>
+          <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
+
           <cm:setHeader headerName="indexingTime">
             <cm:xpath resultType="java.lang.String">
               /response/lst/int[@name = 'QTime']/text()
