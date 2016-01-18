@@ -38,40 +38,31 @@
       </dependencies>
     </profile>
 
-      <profile>
-        <id>with-tasks</id>
-        <activation>
-          <activeByDefault>true</activeByDefault>
-        </activation>
-        <dependencies>
-          <dependency>
-            <groupId>org.daobs.tasks</groupId>
-            <artifactId>daobs-tasks-service-dataset-indexer</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.daobs.tasks</groupId>
-            <artifactId>daobs-tasks-validation-checker</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-        </dependencies>
-      </profile>
+    <profile>
+      <id>with-tasks</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daobs.tasks</groupId>
+          <artifactId>daobs-tasks-service-dataset-indexer</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.daobs.tasks</groupId>
+          <artifactId>daobs-tasks-validation-checker</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.daobs.tasks</groupId>
+          <artifactId>daobs-tasks-etf-validation-checker</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
-
-      <profile>
-        <id>with-tasks-etf</id>
-        <activation>
-          <activeByDefault>true</activeByDefault>
-        </activation>
-        <dependencies>
-          <dependency>
-            <groupId>org.daobs.tasks</groupId>
-            <artifactId>daobs-tasks-etf-validation-checker</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-        </dependencies>
-      </profile>
-    </profiles>
   <dependencies>
     <dependency>
       <groupId>org.daobs</groupId>
@@ -220,10 +211,11 @@
       <artifactId>daobs-reporting</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.daobs</groupId>
       <artifactId>daobs-messaging</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
