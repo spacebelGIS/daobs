@@ -45,7 +45,7 @@
 
   <xsl:template match="/">
     <!-- Add a Solr document -->
-    <add commitWithin="10000">
+    <add>
       <!-- For any ISO19139 records in the input XML document
       Some records from IS do not have record identifier. Ignore them.
       -->
