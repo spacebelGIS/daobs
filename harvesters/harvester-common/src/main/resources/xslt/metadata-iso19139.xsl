@@ -61,7 +61,7 @@
       <field name="documentStandard">iso19139</field>
 
       <!-- Index the metadata document as XML -->
-      <!--<field name="document"><xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/></field>-->
+      <field name="document"><xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/></field>
       <field name="id"><xsl:value-of select="$identifier"/></field>
       <field name="metadataIdentifier"><xsl:value-of select="$identifier"/></field>
 
