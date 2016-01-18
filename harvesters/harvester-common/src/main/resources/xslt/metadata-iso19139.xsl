@@ -27,6 +27,11 @@
   <xsl:import href="metadata-inspire-constant.xsl"/>
   <xsl:include href="metadata-iso19139-medsea.xsl"/>
 
+  <xsl:template match="gmi:MI_Metadata|gmd:MD_Metadata"
+                mode="extract-uuid">
+    <xsl:value-of select="gmd:fileIdentifier/gco:CharacterString"/>
+  </xsl:template>
+
   <xsl:template match="gmi:MI_Metadata|gmd:MD_Metadata" mode="index">
     <!-- Main variables for the document -->
     <xsl:variable name="identifier" as="xs:string"

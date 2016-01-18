@@ -44,7 +44,12 @@
                 version="2.0">
 
   <xsl:import href="metadata-inspire-constant.xsl"/>
-  <!--<xsl:include href="metadata-medsea.xsl"/>-->
+  <xsl:include href="metadata-iso19115-3-medsea.xsl"/>
+
+  <xsl:template match="mdb:MD_Metadata"
+                mode="extract-uuid">
+    <xsl:value-of select="mdb:metadataIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString[. != '']"/>
+  </xsl:template>
 
   <xsl:template match="mdb:MD_Metadata" mode="index">
     <!-- Main variables for the document -->

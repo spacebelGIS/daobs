@@ -30,7 +30,7 @@
   could be used to index more fields. -->
   <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
 
-    <xsl:if test="contains(gmd:metadataStandardName/gco:CharacterString, 'MedSea')">
+    <xsl:if test="contains(gmd:metadataStandardName/gco:CharacterString, 'Emodnet')">
       <xsl:call-template name="medsea-index-keyword">
         <xsl:with-param name="thesaurusName" select="'Data delivery mechanisms'"/>
         <xsl:with-param name="fieldName" select="'extra_medsea_dataDeliveryMechanism'"/>

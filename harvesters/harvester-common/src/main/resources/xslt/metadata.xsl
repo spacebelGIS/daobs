@@ -4,21 +4,8 @@
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
-                xmlns:srv="http://www.isotc211.org/2005/srv"
-                xmlns:gmx="http://www.isotc211.org/2005/gmx"
-                xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/1.0"
                 xmlns:daobs="http://daobs.org"
-                xmlns:gml="http://www.opengis.net/gml"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:ns3="http://www.w3.org/2001/SMIL20/"
-                xmlns:ns9="http://www.w3.org/2001/SMIL20/Language"
-                xmlns:dct="http://purl.org/dc/terms/"
-                xmlns:ogc="http://www.opengis.net/ogc"
-                xmlns:ows="http://www.opengis.net/ows"
-                xmlns:gn="http://www.fao.org/geonetwork"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:solr="java:org.daobs.index.SolrRequestBean"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
@@ -53,6 +40,9 @@
   <xsl:include href="metadata-iso19115-3.xsl"/>
 
 
+  <xsl:template match="*"
+                mode="extract-uuid"/>
+
   <xsl:template match="/">
     <!-- Add a Solr document -->
     <add commitWithin="10000">
@@ -60,14 +50,16 @@
       Some records from IS do not have record identifier. Ignore them.
       -->
       <xsl:variable name="records"
-                    select="//(gmi:MI_Metadata|gmd:MD_Metadata)[gmd:fileIdentifier/gco:CharacterString != '']"/>
+                    select="//(gmi:MI_Metadata|gmd:MD_Metadata|mdb:MD_Metadata)"/>
 
       <!-- Check number of records returned and reported -->
       <xsl:message>======================================================</xsl:message>
       <xsl:message>DEBUG: <xsl:value-of select="normalize-space($harvester/daobs:url)"/>.</xsl:message>
       <xsl:message>Page #<xsl:value-of select="$indexingIndex"/>: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
 
-      <!-- Report error on record with null UUID -->
+      <!-- Report error on record with null UUID
+      TODO: Support ISO19115-3 check
+      -->
       <xsl:variable name="recordsWithNullUUID"
                     select="//(gmi:MI_Metadata|gmd:MD_Metadata)[gmd:fileIdentifier/gco:CharacterString = ''
                             or not(gmd:fileIdentifier)]"/>
@@ -80,10 +72,14 @@
       </xsl:if>
 
 
-      <!-- Check duplicates -->
+      <!-- Check duplicates
+      TODO: Support ISO19115-3 check
+      -->
       <xsl:for-each select="$records">
-        <xsl:variable name="identifier" as="xs:string"
-                      select="gmd:fileIdentifier/gco:CharacterString[. != '']"/>
+        <xsl:variable name="identifier" as="xs:string">
+          <xsl:apply-templates mode="extract-uuid" select="."/>
+        </xsl:variable>
+
         <xsl:variable name="numberOfRecordWithThatUUID"
                       select="count(../*[gmd:fileIdentifier/gco:CharacterString = $identifier])"/>
         <xsl:if test="$numberOfRecordWithThatUUID > 1">
