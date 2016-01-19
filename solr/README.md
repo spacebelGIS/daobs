@@ -37,3 +37,13 @@ mvn install -Psolr-init
 mvn exec:exec -Dsolr-start
 ```
 
+### Production use
+
+Configure Solr to start on server startup.
+
+Use solr/solr-5.2.1/bin/init.d/solr. Modify the script to start
+Solr in cloud mode:
+
+```
+su -c "SOLR_INCLUDE=$SOLR_ENV $SOLR_INSTALL_DIR/bin/solr $SOLR_CMD -c" - $RUNAS
+```

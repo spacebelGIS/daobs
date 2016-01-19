@@ -248,40 +248,4 @@
       </build>
     </profile>
   </profiles>
-
-  <build>
-    <plugins>
-      <plugin>
-        <!-- Copy Solr cores and config to the build directory.
-        This folder is the solr.solr.home directory.
-        -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>copy-solr-config</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/${solr.core.directory}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/src/main/resources</directory>
-                  <filtering>true</filtering>
-                  <targetPath>${project.build.directory}/${solr.core.directory}</targetPath>
-                  <includes>
-                    <include>solr.xml</include>
-                    <include>zoo.cfg</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 </project>

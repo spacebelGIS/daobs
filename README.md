@@ -33,7 +33,7 @@ The guide for user installing and configuring the application.
 Clone and compile the application:
 
 ```
-git clone --recursive https://github.com/titellus/daobs.git
+git clone --recursive https://github.com/INSPIRE-MIF/daobs.git
 cd daobs
 mvn clean install
 ```
@@ -105,19 +105,6 @@ cp -fr WEB-INF/datadir/* /usr/dashboard/data/.
 ```
 
 
-Copy the default core configuration folder to the solr.solr.home folder.
-
-```
-# If using the source code
-mkdir /usr/dashboard/core
-cp -fr web/target/solr-cores/* /usr/dashboard/core/.
-```
-
-Set the solr.solr.home system property which define the location of the Solr index. Example: For Tomcat set it in the catalina.sh file.
-
-```
-export JAVA_OPTS="$JAVA_OPTS -Dsolr.solr.home=/usr/dashboard/core"
-```
 
 Deploy the WAR file in Tomcat (or any Java container).
 

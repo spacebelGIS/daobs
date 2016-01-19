@@ -239,9 +239,6 @@
     </resources>
     <plugins>
       <plugin>
-        <!-- Copy Solr cores and config to the build directory.
-        This folder is the solr.solr.home directory.
-        -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.6</version>

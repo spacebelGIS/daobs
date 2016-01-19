@@ -290,9 +290,6 @@
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
-    <solr.core.directory>solr-cores</solr.core.directory>
-    <solr.solr.home>${project.basedir}/target/${solr.core.directory}</solr.solr.home>
-
     <solr.version>5.3.1</solr.version>
 
     <etf.installation.path>${project.basedir}/../tasks/etf-validation-checker/ETF/ETF</etf.installation.path>
