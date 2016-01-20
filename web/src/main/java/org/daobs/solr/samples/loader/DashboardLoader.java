@@ -12,8 +12,8 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -104,8 +104,8 @@ public class DashboardLoader {
         JsonNode dashboardConfig = mapper.readTree(json);
 
         SolrInputDocument doc = new SolrInputDocument();
-        doc.addField("id", dashboardConfig.get("title").getTextValue());
-        doc.addField("title", dashboardConfig.get("title").getTextValue());
+        doc.addField("id", dashboardConfig.get("title").asText());
+        doc.addField("title", dashboardConfig.get("title").asText());
         doc.addField("user", "guest");
         doc.addField("group", "guest");
         doc.addField("dashboard", json);

@@ -15,6 +15,7 @@
       dataCore: solrContext + '/${solr.core.data}',
       reportingSubmit: solrContext + '/${solr.core.data}/update',
       harvester: context + 'daobs/harvester',
+      workersStats: context + 'daobs/workers',
       reportingConfig: context + 'daobs/reporting.json',
       reporting: context + 'daobs/reporting/',
       samples: context + 'daobs/samples/',

@@ -308,8 +308,8 @@
     <saxon-dom.version>9.1.0.8</saxon-dom.version>
     <saxon-xpath.version>9.1.0.8</saxon-xpath.version>
 
-    <spring.version>4.0.7.RELEASE</spring.version>
-    <spring-security.version>3.2.5.RELEASE</spring-security.version>
+    <spring.version>4.2.4.RELEASE</spring.version>
+    <spring-security.version>4.0.3.RELEASE</spring-security.version>
 
     <camel.version>2.16.1</camel.version>
 

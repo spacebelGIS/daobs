@@ -32,7 +32,8 @@ public class WorkersManager {
     @RequestMapping(value = "/workers",
             produces = {
                     MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XHTML_XML_VALUE
             },
             method = RequestMethod.GET)
     @ResponseBody
@@ -47,14 +48,21 @@ public class WorkersManager {
                 System.out.println(
                         e.getExchange().getExchangeId() + " " + e.getDuration()
                 );
-                // TODO: testing
+                // TODO:
+                // * Use Unit Of Work
+                // * testing
                 //            inFlightExchanges.remove(e);
                 //            e.getExchange().setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
-                result.add(String.format("%s (%d) - step %s - %s",
+                // http://camel.apache.org/uuidgenerator.html could be customized
+                // to have workers id set by starter app.
+                result.add(String.format("[%s:%s] %s (%dms/%dms) - step %s - Nb of records: %s",
+                        e.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("harvesterUuid"),
+                        e.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("harvesterTerritory"),
                         e.getExchange().getExchangeId(),
+                        e.getElapsed(),
                         e.getDuration(),
                         e.getExchange().getFromRouteId(),
-                        e.getExchange().getProperty("workers-uuid")
+                        e.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("numberOfRecordsMatched")
                 ));
             }
         }

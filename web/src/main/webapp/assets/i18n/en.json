@@ -106,6 +106,8 @@
   "harvesterConfigPage": "Configure harvester here. When starting a harvester, a task is created and will be started in the next {{pollingInterval}}. For the time being, harvester task status can't be monitored",
   "harvest": "Harvest",
   "details": "Details",
+  "harvesterConfiguration": "Configuration",
+  "harvesterMonitoring": "Monitoring",
   "url": "URL",
   "url-placeholder": "http://catalog.organisation.net/csw",
   "url-help": "URL of the CSW service URL without parameters (eg. REQUEST=GetCapabilities",
