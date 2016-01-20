@@ -71,8 +71,10 @@
       function init() {
         harvesterService.getAll().success(function (list) {
           $scope.harvesterConfig = list.harvester;
+          if (list.harvester.length > 0) {
+            loadStatsForTerritory()
+          }
         });
-        loadStatsForTerritory()
       }
 
       $scope.edit = function (h) {
