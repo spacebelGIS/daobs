@@ -311,7 +311,7 @@
     <spring.version>4.0.7.RELEASE</spring.version>
     <spring-security.version>3.2.5.RELEASE</spring-security.version>
 
-    <camel.version>2.14.0</camel.version>
+    <camel.version>2.16.1</camel.version>
 
     <jms.url>tcp://localhost:61616</jms.url>
     <activemq.version>5.6.0</activemq.version>

@@ -18,10 +18,21 @@
   <ctx:component-scan base-package="org.daobs.controller"/>
 
 
-  <import resource="classpath*:META-INF/spring/config-spring-messaging.xml" />
+  <import resource="classpath*:META-INF/spring/config-messaging.xml"/>
   <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml"/>
-  <import resource="classpath*:META-INF/spring/daobs-task-routes.xml" />
+  <!--
+  FIXME: When loading task routes, it looks like Spring reload all
+  the camel route on first page accessed!
+  <import resource="classpath*:META-INF/spring/daobs-task-routes.xml" />-->
 
+
+  <bean id="camelContextStore"
+        class="org.daobs.workers.ContextStore"/>
+
+  <bean id="jmsMessager"
+        class="org.daobs.messaging.JMSMessager">
+    <property name="jmsUrl" value="${jms.url}"/>
+  </bean>
 
   <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
