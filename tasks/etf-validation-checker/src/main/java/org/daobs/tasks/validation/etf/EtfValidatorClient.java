@@ -225,7 +225,7 @@ public class EtfValidatorClient {
                                     String reportName,
                                     String tmpDir) {
 
-        String command = "ant set-serviceEndpoint {0} -Dmap={1} -DmapName={2} -DtmpDir={3} -DconfigurationFile={4}";
+        String command = this.etfResourceTesterPath + "/ant set-serviceEndpoint {0} -Dmap={1} -DmapName={2} -DtmpDir={3} -DconfigurationFile={4}";
 
         String args[] = new String[]{resourceDescriptorUrl, reportName, tmpDir, "config-" + reportName + ".properties"};
         List<String> argsList = new ArrayList<String>(Arrays.asList(args));

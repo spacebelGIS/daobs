@@ -4,9 +4,9 @@ This tasks process the links in the service metadata to validate them with ETF 1
 
 ## Requirements
 The following components are required by this task:
-* Ant
 * Java 7
 * ETF 1.4.1
+* Ant 1.8.2 (provided in ETF)
 
 
 Solr MUST be running in port 8984, with metadata records. See [solr/README.md](../../solr/README.md) for configuration.
@@ -57,4 +57,5 @@ From the webapplication, run validation on all none validated records:
 
 ```
 http://localhost:8080/daobs/etf-validator?fq=-etfCompletenessIndicator:[*%20TO%20*]
+http://localhost:8080/daobs/etf-validator?fq=id:0847036d-cff2-4ee9-a7f5-d8c01d322d11
 ```
