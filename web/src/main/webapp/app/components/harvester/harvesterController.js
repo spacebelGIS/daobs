@@ -2,6 +2,27 @@
   "use strict";
   var app = angular.module('daobs');
 
+  app.config(['$routeProvider', 'cfg',
+    function ($routeProvider, cfg) {
+      $routeProvider.when('/harvesting/:section', {
+        templateUrl : cfg.SERVICES.root +
+        'app/components/harvester/harvesterView.html'
+      }).when('/harvesting/harvesting', {
+        templateUrl : cfg.SERVICES.root +
+        'app/components/harvester/harvesterView.html'
+      });
+    }]);
+
+  app.controller('HarvesterCtrl', ['$scope', '$routeParams',
+    function ($scope, $routeParams) {
+      $scope.section = $routeParams.section || 'harvester';
+
+      $scope.isActive = function (hash) {
+        return location.hash.indexOf("#/" + hash) === 0
+          && location.hash.indexOf("#/" + hash + "/") !== 0;
+      }
+    }]);
+
   app.controller('HarvesterConfigCtrl', [
     '$scope', '$routeParams', '$translate', '$timeout', '$http',
     'harvesterService', 'cfg', 'Notification',
@@ -142,5 +163,25 @@
       };
 
       init();
+    }]);
+
+
+  app.controller('WorkersMonitorCtrl', [
+    '$scope', '$timeout', '$http', 'cfg',
+    function ($scope, $timeout, $http, cfg) {
+
+      function load() {
+        $http.get(
+          cfg.SERVICES.workersStats
+        ).then(function (response) {
+          $scope.workersStats = response.data;
+        });
+
+        $timeout(function () {
+          load()
+        }, 5000);
+      };
+
+      load()
     }]);
 }());

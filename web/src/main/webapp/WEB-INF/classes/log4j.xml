@@ -37,7 +37,7 @@
   </logger>
 
   <logger name="org.daobs.messaging">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.daobs">
@@ -45,15 +45,15 @@
   </logger>
 
   <logger name="org.apache.camel">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
 
   <logger name="org.springframework">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
 
   <logger name="org.apache.activemq">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
 
   <logger name="org.apache">

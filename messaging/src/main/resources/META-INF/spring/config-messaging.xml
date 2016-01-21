@@ -10,7 +10,9 @@
         http://activemq.apache.org/schema/core/activemq-core.xsd">
 
   <!--  Embedded ActiveMQ Broker -->
-  <amq:broker useJmx="false" persistent="false">
+  <amq:broker id="amqBroker" start="true"
+              useJmx="false"
+              persistent="false">
     <amq:transportConnectors>
       <amq:transportConnector uri="${jms.url}" />
     </amq:transportConnectors>
@@ -51,15 +53,4 @@
         class="org.apache.activemq.camel.component.ActiveMQComponent">
     <property name="configuration" ref="jmsConfig"/>
   </bean>
-
-
-  <bean id="jmsTemplate"
-        class="org.springframework.jms.core.JmsTemplate">
-    <constructor-arg ref="pooledConnectionFactory"/>
-    <property name="sessionTransacted" value="false"/>
-    <property name="receiveTimeout" value="5000"/>
-  </bean>
-
-  <bean id="jmsMessager"
-        class="org.daobs.messaging.JMSMessager"/>
 </beans>

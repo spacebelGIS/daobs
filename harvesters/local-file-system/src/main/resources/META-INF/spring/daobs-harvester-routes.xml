@@ -10,11 +10,6 @@
 
   <import resource="classpath*:META-INF/spring/daobs-harvester-common-routes.xml"/>
 
-  <bean id="bridgePropertyPlaceholder"
-        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="/WEB-INF/config.properties"/>
-  </bean>
-
   <bean id="aggregatorStrategy"
         class="org.daobs.harvester.XmlDocumentAggregationStrategy"/>
 
@@ -27,6 +22,8 @@
                    id="harvesters.lfs"
                    errorHandlerRef="loggingErrorHandler"
                    useMDCLogging="true">
+
+    <cm:routeContextRef ref="harvester.common"/>
 
     <cm:threadPoolProfile id="myDefaultProfile"
                           defaultProfile="true"

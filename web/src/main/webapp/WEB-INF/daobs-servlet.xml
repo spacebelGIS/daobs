@@ -14,37 +14,21 @@
           http://activemq.apache.org/schema/core
           http://activemq.apache.org/schema/core/activemq-core.xsd">
 
-  <ctx:annotation-config/>
-  <ctx:component-scan base-package="org.daobs.controller"/>
+  <ctx:property-placeholder location="WEB-INF/config.properties"
+                            file-encoding="UTF-8"
+                            ignore-unresolvable="false"/>
 
-
-  <import resource="classpath*:META-INF/spring/config-spring-messaging.xml" />
+  <import resource="classpath*:META-INF/spring/config-messaging.xml"/>
   <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml"/>
   <import resource="classpath*:META-INF/spring/daobs-task-routes.xml" />
 
+  <bean id="camelContextStore"
+        class="org.daobs.workers.ContextStore"/>
 
-  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
-
-  <bean id="contentNegocationManager"
-          class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-    <property name="defaultContentType" value="application/xml"/>
-
-    <property name="mediaTypes">
-      <map>
-        <entry key="html" value="text/html"/>
-        <entry key="json" value="application/json"/>
-        <entry key="xml" value="application/xml"/>
-      </map>
-    </property>
+  <bean id="jmsMessager"
+        class="org.daobs.messaging.JMSMessager">
+    <property name="jmsUrl" value="${jms.url}"/>
   </bean>
-
-  <mvc:annotation-driven content-negotiation-manager="contentNegocationManager"/>
-
-
-
-  <ctx:property-placeholder location="WEB-INF/config.properties"
-                            file-encoding="UTF-8"
-                            ignore-unresolvable="true"/>
 
   <bean id="SolrServer"
         class="org.daobs.index.SolrServerBean">
@@ -53,6 +37,9 @@
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
 
+  <bean id="SolrRequest"
+        class="org.daobs.index.SolrRequestBean"/>
+
   <bean id="DashboardLoader"
         class="org.daobs.solr.samples.loader.DashboardLoader">
     <property name="solrServerUrl" value="${solr.server.url}/${solr.core.dashboard}"/>
@@ -60,38 +47,10 @@
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
 
-  <bean id="SolrRequest"
-        class="org.daobs.index.SolrRequestBean"/>
-
 
   <bean id="harvesterConfigRepository"
         class="org.daobs.harvester.repository.HarvesterConfigRepository">
     <property name="configurationFilepath" value="${data.dir}/harvester/config-harvesters.xml"/>
     <property name="harvestingTasksFolder" value="${data.dir}/harvester/tasks"/>
   </bean>
-
-
-  <bean id="XSLTViewResolver"
-        class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
-    <property name="order" value="1"/>
-    <property name="sourceKey" value="xmlSource"/>
-    <property name="viewClass" value="org.springframework.web.servlet.view.xslt.XsltView"/>
-    <property name="viewNames">
-      <array>
-        <value>reporting-xslt-inspire</value>
-        <value>reporting-xslt-inspire-first-theme-only</value>
-      </array>
-    </property>
-    <property name="prefix" value="/WEB-INF/xslt/" />
-    <property name="suffix" value=".xsl" />
-    <property name="contentType" value="application/xml;charset=UTF-8"/>
-  </bean>
-
- <!-- <bean id="JSPViewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="order" value="2"/>
-    <property name="prefix" value="/WEB-INF/jsp/" />
-    <property name="suffix" value=".jsp" />
-  </bean>-->
-
 </beans>

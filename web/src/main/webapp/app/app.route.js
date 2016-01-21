@@ -16,9 +16,6 @@
         .when('/', {
           templateUrl: cfg.SERVICES.root +
             'app/components/home/homeView.html'
-        }).when('/harvesting', {
-          templateUrl: cfg.SERVICES.root +
-            'app/components/harvester/harvesterView.html'
         }).when('/logout', {
           controller: 'LogoutCtrl',
           templateUrl: cfg.SERVICES.root +
