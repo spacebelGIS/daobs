@@ -58,7 +58,7 @@
                   select="
                       count(gmd:hierarchyLevel[gmd:MD_ScopeCode/@codeListValue='service']) > 0"/>
 
-    <xsl:message>#<xsl:value-of select="count(preceding-sibling::node())"/>. <xsl:value-of select="$identifier"/></xsl:message>
+    <xsl:message>#<xsl:value-of select="count(preceding-sibling::gmd:MD_Metadata)"/>. <xsl:value-of select="$identifier"/></xsl:message>
 
     <!-- Create a first document representing the main record. -->
     <doc>
