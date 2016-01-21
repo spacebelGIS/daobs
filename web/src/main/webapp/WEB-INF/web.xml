@@ -51,7 +51,8 @@
 
 
 
-  <!-- Spring Security -->
+  <!-- Spring Security
+  TODO: For the time being secure the dashboard installation using a ReverseProxy.
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -60,7 +61,7 @@
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/solr/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping>-->
 
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>

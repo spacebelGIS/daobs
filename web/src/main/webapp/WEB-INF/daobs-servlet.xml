@@ -25,10 +25,15 @@
   <bean id="camelContextStore"
         class="org.daobs.workers.ContextStore"/>
 
-  <bean id="jmsMessager"
-        class="org.daobs.messaging.JMSMessager">
-    <property name="jmsUrl" value="${jms.url}"/>
+  <bean id="jmsTemplate"
+        class="org.springframework.jms.core.JmsTemplate">
+    <constructor-arg ref="pooledConnectionFactory"/>
+    <property name="sessionTransacted" value="false"/>
+    <property name="receiveTimeout" value="5000"/>
   </bean>
+
+  <bean id="jmsMessager"
+        class="org.daobs.messaging.JMSMessager"/>
 
   <bean id="SolrServer"
         class="org.daobs.index.SolrServerBean">

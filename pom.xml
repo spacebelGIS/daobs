@@ -313,7 +313,8 @@
 
     <camel.version>2.16.1</camel.version>
 
-    <jms.url>tcp://localhost:61616</jms.url>
+    <!--<jms.url>tcp://localhost:61616</jms.url>-->
+    <jms.url>vm://internaljmschannel</jms.url>
     <activemq.version>5.6.0</activemq.version>
     <xbean.version>3.18</xbean.version>
 
