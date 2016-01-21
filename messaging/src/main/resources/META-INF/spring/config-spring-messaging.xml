@@ -30,17 +30,36 @@
     </amq:systemUsage>
   </amq:systemUsage>-->
 
+  <bean id="jmsConnectionFactory"
+        class="org.apache.activemq.ActiveMQConnectionFactory">
+    <property name="brokerURL" value="${jms.url}"/>
+  </bean>
+  <bean id="pooledConnectionFactory"
+        class="org.apache.activemq.pool.PooledConnectionFactory"
+        init-method="start" destroy-method="stop">
+    <property name="maxConnections" value="8" />
+    <property name="connectionFactory" ref="jmsConnectionFactory" />
+  </bean>
+
+  <bean id="jmsConfig"
+        class="org.apache.camel.component.jms.JmsConfiguration">
+    <property name="connectionFactory" ref="pooledConnectionFactory"/>
+    <property name="concurrentConsumers" value="10"/>
+  </bean>
+
   <bean id="activemq"
         class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="connectionFactory">
-      <bean class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="${jms.url}"/>
-      </bean>
-    </property>
+    <property name="configuration" ref="jmsConfig"/>
+  </bean>
+
+
+  <bean id="jmsTemplate"
+        class="org.springframework.jms.core.JmsTemplate">
+    <constructor-arg ref="pooledConnectionFactory"/>
+    <property name="sessionTransacted" value="false"/>
+    <property name="receiveTimeout" value="5000"/>
   </bean>
 
   <bean id="jmsMessager"
-        class="org.daobs.messaging.JMSMessager">
-    <property name="jmsUrl" value="${jms.url}"/>
-  </bean>
+        class="org.daobs.messaging.JMSMessager"/>
 </beans>

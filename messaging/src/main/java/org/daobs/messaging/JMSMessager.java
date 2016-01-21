@@ -1,9 +1,13 @@
 package org.daobs.messaging;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 import javax.jms.*;
 
@@ -13,58 +17,25 @@ import javax.jms.*;
 public class JMSMessager {
     private Log log = LogFactory.getLog(this.getClass());
 
+    @Autowired
+    PooledConnectionFactory connectionFactory;
 
-    private String jmsUrl;
+    @Autowired
+    JmsTemplate template;
 
-    public String getJmsUrl() {
-        return jmsUrl;
-    }
-
-    public void setJmsUrl(String jmsUrl) {
-        this.jmsUrl = jmsUrl;
-    }
-
-    public void sendMessage(String queue, ApplicationEvent event) {
-        Connection connection = null;
-        Session session = null;
+    public void sendMessage(final String queue, final ApplicationEvent event) {
         try {
-            // Create a ConnectionFactory
-            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(this.jmsUrl);
-
-            // Create a Connection
-            connection = connectionFactory.createConnection();
-            connection.start();
-
-            // Create a Session
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            // Create the destination (Topic or Queue)
-            Destination destination = session.createQueue(queue);
-
-            // Create a MessageProducer from the Session to the Topic or Queue
-            MessageProducer producer = session.createProducer(destination);
-            producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-            // Create a messages
-            ObjectMessage message = session.createObjectMessage(event);
-
-            // Tell the producer to send the message
-            producer.send(message);
-            log.info("JMSMessanger - message send (" + message.toString() + ") to queue: " + queue);
-
+            template.send(queue, new MessageCreator() {
+                public Message createMessage(Session session)
+                        throws JMSException {
+                    ObjectMessage message = session.createObjectMessage(event);
+                    log.info("JMSMessanger - message send (" + message.toString() + ") to queue: " + queue);
+                    return message;
+                }
+            });
         } catch (Exception e) {
-            log.error("JMSMessanger", e);
+            log.error(this.getClass().getSimpleName(), e);
             e.printStackTrace();
-        } finally {
-            // Clean up
-            try {
-                if (session != null) session.close();
-                if (connection != null) connection.close();
-
-            } catch (JMSException e) {
-                log.error("JMSMessanger", e);
-                e.printStackTrace();
-            }
         }
     }
 }
