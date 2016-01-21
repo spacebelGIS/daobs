@@ -45,9 +45,6 @@ public class WorkersManager {
                     context.getInflightRepository().browse();
 
             for (InflightRepository.InflightExchange e : inFlightExchanges) {
-                System.out.println(
-                        e.getExchange().getExchangeId() + " " + e.getDuration()
-                );
                 // TODO:
                 // * Use Unit Of Work
                 // * testing

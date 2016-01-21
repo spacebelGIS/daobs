@@ -45,24 +45,24 @@
   </logger>
 
   <logger name="org.apache.camel">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.springframework">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.apache.activemq">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.apache">
-    <level value="ERROR"/>
+    <level value="WARN"/>
   </logger>
 
   <root>
     <level value="WARN"/>
     <appender-ref ref="console" />
-    <appender-ref ref="file" />
+    <!--<appender-ref ref="file" />-->
   </root>
 </log4j:configuration>
