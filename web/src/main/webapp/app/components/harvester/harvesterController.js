@@ -78,9 +78,11 @@
               "}}}"
           })
         ).then(function (data) {
-          var facets = data.data.facets.top_territory.buckets;
-          for (var i = 0; i < facets.length; i++) {
-            $scope.statsForTerritory[facets[i].val] = facets[i];
+          if (angular.isDefined(data.data.facets.top_territory.buckets)) {
+            var facets = data.data.facets.top_territory.buckets;
+            for (var i = 0; i < facets.length; i++) {
+              $scope.statsForTerritory[facets[i].val] = facets[i];
+            }
           }
         });
 

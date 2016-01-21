@@ -3,8 +3,11 @@
 
     <div class="jumbotron">
       <p>{{'homeInfo' | translate}}</p>
-      <p><a class="btn btn-primary btn-lg" role="button"
-              href="dashboard2">
+      <p><a class="btn btn-primary btn-lg"
+            data-ng-show="dashboards.length > 0"
+            role="button"
+            title="{{dashboards[0].title}}"
+            data-ng-href="{{dashboardBaseURL}}{{dashboards[0].id}}">
         <i class="glyphicon glyphicon-stats"></i>
         <span data-translate="">viewDashboard</span>
       </a></p>
