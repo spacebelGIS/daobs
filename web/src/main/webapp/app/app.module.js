@@ -21,6 +21,8 @@
       }, {
         id: 'dashboard',
         icon: 'glyphicon-stats',
+        // TODO: Should be displayed only if dashboard available
+        // TODO: Should point to a dashboard that exist
         url: 'dashboard2/#/dashboard/solr/INSPIRE%20Indicator%20trends'
       }, {
         id: 'monitoring',
@@ -33,7 +35,8 @@
       }, {
         id: 'admin',
         icon: 'glyphicon-cog',
-        url: '/solr/' // TODO: it may be a different URL
+        url: '/solr'
+        //TODO cfg.SERVICES.solrRoot + '/' but Solr admin will not be rewritten
       }];
 
       // Change class based on route path

@@ -4,7 +4,7 @@
 
   app.constant('solrConfig',
     {
-      url: '${solr.webapp.name}',
+      url: '/${solr.webapp.name}',
       core: ''
     });
 }());

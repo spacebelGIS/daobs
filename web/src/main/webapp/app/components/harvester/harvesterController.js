@@ -78,7 +78,7 @@
               "}}}"
           })
         ).then(function (data) {
-          if (angular.isDefined(data.data.facets.top_territory.buckets)) {
+          if (data.data.facets.top_territory && data.data.facets.top_territory.buckets) {
             var facets = data.data.facets.top_territory.buckets;
             for (var i = 0; i < facets.length; i++) {
               $scope.statsForTerritory[facets[i].val] = facets[i];

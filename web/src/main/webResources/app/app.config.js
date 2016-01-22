@@ -3,11 +3,12 @@
   var app =  angular.module('daobs');
 
   var context = '${webapp.rootUrl}';
-  var solrContext = '${solr.webapp.name}';
+  var solrContext = '/${solr.webapp.name}';
 
   app.constant('cfg', {
     'SERVICES': {
       root: context,
+      solrRoot: solrContext,
       // TODO: dashboard core should be a parameter
       dashboardCoreName: '${solr.core.dashboard}',
       dashboardCore: solrContext + '/${solr.core.dashboard}',

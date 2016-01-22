@@ -36,7 +36,7 @@
 
   <!-- Spring MVC -->
   <servlet>
-    <servlet-name>SpringDispatcher</servlet-name>
+    <servlet-name>DaobsDispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
@@ -45,7 +45,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>SpringDispatcher</servlet-name>
+    <servlet-name>DaobsDispatcher</servlet-name>
     <url-pattern>/daobs/*</url-pattern>
   </servlet-mapping>
 
