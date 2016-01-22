@@ -16,6 +16,11 @@ associated resources (eg. PDF, JSON, DBF).
 * Generate configurable reports
 
 
+![Dashboard example - INSPIRE reporting]
+(https://raw.githubusercontent.com/INSPIRE-MIF/daobs/doc/img/daobs-sample-dashboard.png)
+
+
+
 # User guide
 
 The guide for user installing and configuring the application.
