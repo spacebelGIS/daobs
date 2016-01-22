@@ -12,7 +12,10 @@ associated resources (eg. PDF, JSON, DBF).
 * Advanced full-text search capabilities
 * Create, share and visualize online dashboards
 * Collect information using the OGC CSW standard
-* Dataset indexing for better search
+* Analyze information:
+ * INSPIRE validation
+ * ETF validation
+ * Dataset indexing for better search
 * Generate configurable reports
 
 
