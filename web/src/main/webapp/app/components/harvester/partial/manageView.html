@@ -87,6 +87,8 @@
       <tr data-ng-repeat="h in harvesterConfig | filter:harvesterSearch | orderBy:'territory'">
         <td>
           <h1>{{h.territory}}</h1>
+        </td>
+        <td>{{h.name}}<br/>
           <small data-ng-show="statsForTerritory[h.territory]">
             <strong>
               {{statsForTerritory[h.territory].count}}
@@ -106,7 +108,6 @@
             </ul>
           </small>
         </td>
-        <td>{{h.name}}</td>
         <td>
           <ul>
             <li data-ng-repeat="(key, value) in h">
@@ -141,6 +142,7 @@
                 <li>
                   <a role="button"
                      title="{{'viewRecords' | translate}}"
+                     data-ng-show="statsForTerritory[h.territory].count > 0"
                      data-ng-href="dashboard2/#/dashboard/solr/Statistics%20(with%20record%20details)?q=%2Bterritory:{{h.territory}}">
                     <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
                     <span data-translate="">viewRecords</span>
@@ -158,6 +160,7 @@
                 <li>
                   <a role="button"
                      data-ng-click="removeRecords(h)"
+                     data-ng-show="statsForTerritory[h.territory].count > 0"
                      title="{{'removeRecords' | translate}}">
                     <i class="glyphicon glyphicon-floppy-remove text-danger"></i>&nbsp;
                     <span data-translate="">removeRecords</span>
@@ -165,10 +168,12 @@
                 </li>
 
 
-                <li role="separator" class="divider"></li>
+                <li role="separator" class="divider"
+                    data-ng-show="statsForTerritory[h.territory].count > 0"></li>
                 <li>
                   <a role="button"
                      data-ng-click="eftValidation(h, true)"
+                     data-ng-show="statsForTerritory[h.territory].count > 0"
                      title="{{'restartEtfAll' | translate}}">
                     <i class="glyphicon glyphicon-fw"></i>&nbsp;
                     <span data-translate="">restartEtfAll</span>
@@ -177,6 +182,7 @@
                 <li>
                   <a role="button"
                      data-ng-click="eftValidation(h, false)"
+                     data-ng-show="statsForTerritory[h.territory].count > 0"
                      title="{{'restartEtfMissing' | translate}}">
                     <i class="glyphicon glyphicon-fw"></i>&nbsp;
                     <span data-translate="">restartEtfMissing</span>

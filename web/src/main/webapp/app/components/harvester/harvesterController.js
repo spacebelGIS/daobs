@@ -24,9 +24,9 @@
     }]);
 
   app.controller('HarvesterConfigCtrl', [
-    '$scope', '$routeParams', '$translate', '$timeout', '$http',
+    '$scope', '$routeParams', '$translate', '$timeout', '$http', '$location',
     'harvesterService', 'cfg', 'Notification',
-    function ($scope, $routeParams, $translate, $timeout, $http,
+    function ($scope, $routeParams, $translate, $timeout, $http, $location,
               harvesterService, cfg, Notification) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
@@ -52,7 +52,9 @@
         'harvesterSaved',
         'errorAddingHarvester',
         'harvesterRecordsDeleted',
-        'errorStartingHarvester']).
+        'errorStartingHarvester',
+        'eftValidationStarted',
+        'errorStartingEftValidation']).
         then(function (translations) {
           $scope.translations = translations;
         });
@@ -60,32 +62,35 @@
       $scope.statsForTerritory = {};
 
       function loadStatsForTerritory() {
-        var statsField = ['isValid', 'etfIsValid'], statsFieldConfig = [];
-        for (var i = 0; i < statsField.length; i++) {
-          statsFieldConfig.push(statsField[i] + ": { type : terms, " +
-            "field: " + statsField[i] + ", missing: true }");
-        }
-        $http.get(
-          cfg.SERVICES.dataCore + '/select?' +
-          $.param({
-            'q': '+documentType:metadata',
-            'rows': '0',
-            'wt': 'json',
-            'json.facet':
-              "{'top_territory': { " +
-                  "type: terms, field: territory, missing: true," +
-                  "facet: {" + statsFieldConfig.join(',') +
-              "}}}"
-          })
-        ).then(function (data) {
-          if (data.data.facets.top_territory && data.data.facets.top_territory.buckets) {
-            var facets = data.data.facets.top_territory.buckets;
-            for (var i = 0; i < facets.length; i++) {
-              $scope.statsForTerritory[facets[i].val] = facets[i];
-            }
+        if ($location.path().indexOf('/harvesting/manage') === 0) {
+          var statsField = ['isValid', 'etfIsValid'], statsFieldConfig = [];
+          for (var i = 0; i < statsField.length; i++) {
+            statsFieldConfig.push(statsField[i] + ": { type : terms, " +
+              "field: " + statsField[i] + ", missing: true }");
           }
-        });
-
+          $http.get(
+            cfg.SERVICES.dataCore + '/select?' +
+            $.param({
+              'q': '+documentType:metadata',
+              'rows': '0',
+              'wt': 'json',
+              'json.facet':
+                "{'top_territory': { " +
+                    "type: terms, field: territory, " +
+                    "limit: " + $scope.harvesterConfig.length +
+                    ", missing: true," +
+                    "facet: {" + statsFieldConfig.join(',') +
+                "}}}"
+            })
+          ).then(function (data) {
+            if (data.data.facets.top_territory && data.data.facets.top_territory.buckets) {
+              var facets = data.data.facets.top_territory.buckets;
+              for (var i = 0; i < facets.length; i++) {
+                $scope.statsForTerritory[facets[i].val] = facets[i];
+              }
+            }
+          });
+        }
         $timeout(function () {
           loadStatsForTerritory()
         }, 5000);
@@ -169,16 +174,17 @@
 
 
   app.controller('WorkersMonitorCtrl', [
-    '$scope', '$timeout', '$http', 'cfg',
-    function ($scope, $timeout, $http, cfg) {
+    '$scope', '$timeout', '$http', '$location', 'cfg',
+    function ($scope, $timeout, $http, $location, cfg) {
 
       function load() {
-        $http.get(
-          cfg.SERVICES.workersStats
-        ).then(function (response) {
-          $scope.workersStats = response.data;
-        });
-
+        if ($location.path().indexOf('/harvesting/monitoring') === 0) {
+          $http.get(
+            cfg.SERVICES.workersStats
+          ).then(function (response) {
+            $scope.workersStats = response.data;
+          });
+        }
         $timeout(function () {
           load()
         }, 5000);
