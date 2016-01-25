@@ -178,7 +178,7 @@
     function ($scope, $timeout, $http, $location, cfg) {
 
       function load() {
-        if ($location.path().indexOf('/harvesting/monitoring') === 0) {
+        if ($location.path().indexOf('/harvesting/monitor') === 0) {
           $http.get(
             cfg.SERVICES.workersStats
           ).then(function (response) {
