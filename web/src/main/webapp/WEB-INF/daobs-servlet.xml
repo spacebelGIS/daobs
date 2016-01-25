@@ -14,6 +14,7 @@
           http://activemq.apache.org/schema/core
           http://activemq.apache.org/schema/core/activemq-core.xsd">
 
+  <ctx:annotation-config/>
   <ctx:property-placeholder location="WEB-INF/config.properties"
                             file-encoding="UTF-8"
                             ignore-unresolvable="false"/>

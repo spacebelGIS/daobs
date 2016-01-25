@@ -18,10 +18,12 @@ public class JMSMessager {
     private Log log = LogFactory.getLog(this.getClass());
 
     @Autowired
-    PooledConnectionFactory connectionFactory;
+    private PooledConnectionFactory connectionFactory;
 
     @Autowired
-    JmsTemplate template;
+    private JmsTemplate template;
+
+    public JMSMessager() {}
 
     public void sendMessage(final String queue, final ApplicationEvent event) {
         try {
