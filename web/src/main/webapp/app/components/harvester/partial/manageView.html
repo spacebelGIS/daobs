@@ -89,13 +89,13 @@
           <h1>{{h.territory}}</h1>
         </td>
         <td>{{h.name}}<br/>
-          <small data-ng-show="statsForTerritory[h.territory]">
+          <small data-ng-show="statsForTerritory[h.uuid]">
             <strong>
-              {{statsForTerritory[h.territory].count}}
+              {{statsForTerritory[h.uuid].count}}
               <span data-translate="">records</span>
             </strong>
           </small>
-          <small data-ng-repeat="(key, value) in statsForTerritory[h.territory]"
+          <small data-ng-repeat="(key, value) in statsForTerritory[h.uuid]"
                  data-ng-if="key !== 'count' && key !== 'val'">
             <h6>{{key | translate}}</h6>
             <ul>

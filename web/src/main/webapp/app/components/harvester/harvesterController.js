@@ -76,7 +76,7 @@
               'wt': 'json',
               'json.facet':
                 "{'top_territory': { " +
-                    "type: terms, field: territory, " +
+                    "type: terms, field: harvesterUuid, " +
                     "limit: " + $scope.harvesterConfig.length +
                     ", missing: true," +
                     "facet: {" + statsFieldConfig.join(',') +
