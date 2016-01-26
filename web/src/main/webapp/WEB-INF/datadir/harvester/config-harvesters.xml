@@ -142,6 +142,17 @@
   </daobs:harvester>
 
   <daobs:harvester>
+    <daobs:uuid>08880fe1-c0a6-4916-bf7d-ae6536edc8e2</daobs:uuid>
+    <daobs:territory>CY</daobs:territory>
+    <daobs:folder>CY</daobs:folder>
+    <daobs:name>Cyprus</daobs:name>
+    <daobs:url>http://213.136.80.55:58086/geonetwork/srv/eng/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      http://213.136.80.55:58086/geonetwork/?uuid={{uuid}}
+    </daobs:pointOfTruthURLPattern>
+  </daobs:harvester>
+
+  <daobs:harvester>
     <daobs:uuid>64490bc7-c90f-4511-9b39-42e60def45cd</daobs:uuid>
     <daobs:territory>BE</daobs:territory>
     <daobs:folder>BE-GEO</daobs:folder>
@@ -383,7 +394,7 @@
     <daobs:name>Geocatalogue Catalogue Server INSPIRE (BRGM)</daobs:name>
     <daobs:url>http://www.geocatalogue.fr/api-public/inspire/servicesRest
     </daobs:url>
-    <daobs:nbOfRecordsPerPage>50</daobs:nbOfRecordsPerPage>
+    <daobs:nbOfRecordsPerPage>200</daobs:nbOfRecordsPerPage>
   </daobs:harvester>
 
   <daobs:harvester>
