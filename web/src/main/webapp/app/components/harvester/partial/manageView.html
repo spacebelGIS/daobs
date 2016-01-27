@@ -142,8 +142,8 @@
                 <li>
                   <a role="button"
                      title="{{'viewRecords' | translate}}"
-                     data-ng-show="statsForTerritory[h.territory].count > 0"
-                     data-ng-href="dashboard2/#/dashboard/solr/Statistics%20(with%20record%20details)?q=%2Bterritory:{{h.territory}}">
+                     data-ng-show="statsForTerritory[h.uuid].count > 0"
+                     data-ng-href="dashboard2/#/dashboard/solr/Statistics%20(with%20record%20details)?q=%2BharvesterUuid:{{h.uuid}}">
                     <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
                     <span data-translate="">viewRecords</span>
                   </a>
@@ -160,7 +160,7 @@
                 <li>
                   <a role="button"
                      data-ng-click="removeRecords(h)"
-                     data-ng-show="statsForTerritory[h.territory].count > 0"
+                     data-ng-show="statsForTerritory[h.uuid].count > 0"
                      title="{{'removeRecords' | translate}}">
                     <i class="glyphicon glyphicon-floppy-remove text-danger"></i>&nbsp;
                     <span data-translate="">removeRecords</span>
@@ -169,11 +169,11 @@
 
 
                 <li role="separator" class="divider"
-                    data-ng-show="statsForTerritory[h.territory].count > 0"></li>
+                    data-ng-show="statsForTerritory[h.uuid].count > 0"></li>
                 <li>
                   <a role="button"
                      data-ng-click="eftValidation(h, true)"
-                     data-ng-show="statsForTerritory[h.territory].count > 0"
+                     data-ng-show="statsForTerritory[h.uuid].count > 0"
                      title="{{'restartEtfAll' | translate}}">
                     <i class="glyphicon glyphicon-fw"></i>&nbsp;
                     <span data-translate="">restartEtfAll</span>
@@ -182,7 +182,7 @@
                 <li>
                   <a role="button"
                      data-ng-click="eftValidation(h, false)"
-                     data-ng-show="statsForTerritory[h.territory].count > 0"
+                     data-ng-show="statsForTerritory[h.uuid].count > 0"
                      title="{{'restartEtfMissing' | translate}}">
                     <i class="glyphicon glyphicon-fw"></i>&nbsp;
                     <span data-translate="">restartEtfMissing</span>
