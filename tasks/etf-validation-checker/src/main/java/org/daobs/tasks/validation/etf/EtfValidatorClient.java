@@ -147,8 +147,9 @@ public class EtfValidatorClient {
 
             Runtime rt = Runtime.getRuntime();
 
-            String[] envp = new String[1];
+            String[] envp = new String[2];
             envp[0] = "XTF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
+            envp[1] = "ETF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
 
             String command = commandToExecute(resourceDescriptorUrl, protocol,
                     reportName, tmpDir.toFile().getAbsolutePath());
