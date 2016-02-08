@@ -1,6 +1,6 @@
 <project name="esdin-wp12-tests" default="run-all-tests" basedir=".">
 
-	<property name="SOAPUI_HOME" location="bin/soapui-4.5.1" />
+	<property name="SOAPUI_HOME" location="bin/soapui-4.6.4" />
 
 	<!-- SoapUI project files -->
 	<property name="AUTHS_SOAPUI" location="ETF/AuthS/AuthServices-EDINA-soapui-project.xml" />
@@ -8,16 +8,19 @@
 	<property name="DS_SOAPUI" location="ETF/DS/ESDIN-DS-testing-soapui-project.xml" />
 	<property name="DSATOM_SOAPUI" location="ETF/DS/ESDIN-DS-Tests-Atom-soapui-project.xml" />
 	<property name="DSWFS_SOAPUI" location="ETF/DS/ESDIN-DS-Tests-ISO19142-soapui-project.xml" />
+	<property name="DSPERF_ATOM_SOAPUI" location="ETF/DS/ATOM-Performance-Tests-soapui-project.xml" />
+	<property name="DSPERF_WFS_SOAPUI" location="ETF/DS/WFS20-Performance-Tests-soapui-project.xml" />
+	<property name="DiscSPERF_SOAPUI" location="ETF/DiscS/Generic-CSW-Performance-Tests-soapui-project.xml" />
 	<property name="EXM_SOAPUI" location="ETF/ExM/ESDIN_ExM_soapUI.xml" />
-	<property name="AAA_SOAPUI" location="ETF/AAA/AAA-data_soapUI-project.xml" />
 	<property name="VS_SOAPUI" location="ETF/VS/ViewServices-EDINA-soapui-project.xml" />
 	<property name="VSPERF_SOAPUI" location="ETF/VS/Generic-WMS-1.3.0-Performance-Tests-soapui-project.xml" />
 	<property name="VSWMTS_SOAPUI" location="ETF/VS/VS-WMTS-soapui-project.xml" />
 
 	<!-- Memory settings -->
-	<property name="soapui.xms" value="256M" />
-	<property name="soapui.xmx" value="1024M" />
-	<property name="soapui.maxpermsize" value="512m" />
+	<property name="soapui.xms" value="1024M" />
+	<property name="soapui.xmx" value="3072M" />
+	<property name="soapui.maxpermsize" value="1024m" />
+
 
 	<!-- Temporary folder. Allows to override the default temporary folder using -DtmpDir parameter -->
 	<!-- Jose García -->
@@ -25,8 +28,9 @@
 
 	<!-- SoapUI paths -->
 	<path id="soapui.classpath">
-		<pathelement location="${SOAPUI_HOME}/bin/soapui-4.5.1.jar" />
+		<pathelement location="${SOAPUI_HOME}/bin/soapui-4.6.4.jar" />
 		<pathelement location="${SOAPUI_HOME}/lib/*" />
+		<pathelement location="${SOAPUI_HOME}/plugins/*" />
 	</path>
 	<path id="soapui.extlibs.path">
 		<pathelement location="${SOAPUI_HOME}/bin/ext" />
@@ -55,17 +59,17 @@
 		<pathelement location="${basedir}/${configurationFile}" />
 	</path>
 
-	<target name="init-properties" depends="check-ant,set-serviceEndpoint">        
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+	<target name="init-properties" depends="check-ant,set-serviceEndpoint,set-customBbox">
 		<tstamp>
 			<format property="current.time" pattern="yyyyMMdd_HHmmss" />
 		</tstamp>
 		<!-- Thijs Brentjens (Geonovum): make sure the mapName is set for creation of the report and logging directories. -->
-		<!-- properties are immutable in Ant, so just try to set the mapName to be the current time. 
+		<!-- properties are immutable in Ant, so just try to set the mapName to be the current time.
 			If the mapName is already set by e.g. Maven (for TNO), the property is not overruled by the line below.
 		-->
 		<property name="mapName" value="${current.time}" />
-
-
 		<!-- Set traces_dir in config.properties -->
 		<!-- Edwin Kerkenaar (TNO) -->
 		<property name="traces_dir" location="logs/traces/${mapName}" />
@@ -76,8 +80,73 @@
 		<!-- Load user-specified service parameters (endpoints, etc.) -->
 		<property file="${configurationFile}" />
 	</target>
-	
-	<!-- Thijs Brentjens (Geonovum): add a target that checks if the url of the map has been set already by a property. 
+
+	<target name="init-properties-discs" depends="check-ant,set-serviceEndpointDiscS">
+		<tstamp>
+			<format property="current.time" pattern="yyyyMMdd_HHmmss" />
+		</tstamp>
+		<!-- Thijs Brentjens (Geonovum): make sure the mapName is set for creation of the report and logging directories. -->
+		<!-- properties are immutable in Ant, so just try to set the mapName to be the current time.
+			If the mapName is already set by e.g. Maven (for TNO), the property is not overruled by the line below.
+		-->
+		<property name="cswName" value="${current.time}" />
+
+		<!-- Set traces_dir in config.properties -->
+		<!-- Edwin Kerkenaar (TNO) -->
+		<property name="traces_dir" location="logs/traces/${cswName}" />
+		<mkdir dir="${traces_dir}" />
+		<propertyfile file="config.properties">
+			<entry key="traces_dir" value="${traces_dir}" />
+		</propertyfile>
+		<!-- Load user-specified service parameters (endpoints, etc.) -->
+		<property file="config.properties" />
+	</target>
+
+	<target name="init-properties-atom" depends="check-ant,set-serviceEndpoint">
+		<tstamp>
+			<format property="current.time" pattern="yyyyMMdd_HHmmss" />
+		</tstamp>
+		<!-- Thijs Brentjens (Geonovum): make sure the mapName is set for creation of the report and logging directories. -->
+		<!-- properties are immutable in Ant, so just try to set the mapName to be the current time.
+			If the mapName is already set by e.g. Maven (for TNO), the property is not overruled by the line below.
+		-->
+		<property name="atomName" value="${current.time}" />
+
+		<!-- Set traces_dir in config.properties -->
+		<property name="traces_dir" location="logs/traces/${atomName}" />
+		<mkdir dir="${traces_dir}" />
+		<propertyfile file="config.properties">
+			<entry key="traces_dir" value="${traces_dir}" />
+		</propertyfile>
+		<!-- Load user-specified service parameters (endpoints, etc.) -->
+		<property file="config.properties" />
+	</target>
+
+	<!-- <target name="init-properties-wfs" depends="check-ant,set-serviceEndpointDS-WFS"> -->
+	<target name="init-properties-wfs" depends="check-ant,set-serviceEndpoint,set-customBbox">
+		<tstamp>
+			<format property="current.time" pattern="yyyyMMdd_HHmmss" />
+		</tstamp>
+		<!-- Thijs Brentjens (Geonovum): make sure the mapName is set for creation of the report and logging directories. -->
+		<!-- properties are immutable in Ant, so just try to set the mapName to be the current time.
+        If the mapName is already set by e.g. Maven (for TNO), the property is not overruled by the line below.
+    -->
+		<property name="wfsName" value="${current.time}" />
+
+		<!-- Set traces_dir in config.properties -->
+		<property name="traces_dir" location="logs/traces/${wfsName}" />
+		<mkdir dir="${traces_dir}" />
+		<propertyfile file="config.properties">
+			<entry key="traces_dir" value="${traces_dir}" />
+			<!-- <entry key="DS.customBbox" default="10000,"/>
+      <entry key="DS.customBboxEPSGCode" default="28992" /> -->
+			<entry key="DS.count" default="1000"/>
+		</propertyfile>
+		<!-- Load user-specified service parameters (endpoints, etc.) -->
+		<property file="config.properties" />
+	</target>
+
+	<!-- Thijs Brentjens (Geonovum): add a target that checks if the url of the map has been set already by a property.
 		If so, set it in the config.properties. This is neceasary if the tests are ran using Maven, as done by TNO.
 	 -->
 	<target name="set-serviceEndpoint" if="map">
@@ -86,6 +155,34 @@
 			<entry key="VS.serviceEndpoint" value="${map}" />
 			<!-- Jose García: use the property also for download service end-points -->
 			<entry key="DS.serviceEndpoint" value="${map}" />
+		</propertyfile>
+	</target>
+	<target name="set-customBbox" if="customBbox">
+		<propertyfile file="config.properties">
+			<!--Edwin Kerkenaar (TNO) -->
+			<entry key="VS.customBbox" value="${customBbox}" />
+			<entry key="VS.customBboxEPSGCode" value="${customBboxEPSGCode}" />
+			<!-- Jose García: use the property also for download service end-points -->
+			<entry key="DS.customBbox" value="${customBbox}" />
+			<entry key="DS.customBboxEPSGCode" value="${customBboxEPSGCode}" />
+		</propertyfile>
+	</target>
+	<target name="set-serviceEndpointDiscS" if="csw">
+		<propertyfile file="config.properties">
+			<!--Thijs Brentjens: add a Discovery Service endpoint  -->
+			<entry key="DiscS.serviceEndpoint" value="${csw}" />
+		</propertyfile>
+	</target>
+	<target name="set-serviceEndpointDS" if="atom">
+		<propertyfile file="config.properties">
+			<!--Thijs Brentjens: add a Download Service endpoint  -->
+			<entry key="DS.serviceEndpoint" value="${atom}" />
+		</propertyfile>
+	</target>
+	<target name="set-serviceEndpointDS-WFS" if="wfs">
+		<propertyfile file="config.properties">
+			<!--Thijs Brentjens: add a Download Service endpoint  -->
+			<entry key="DS.serviceEndpoint" value="${wfs}" />
 		</propertyfile>
 	</target>
 
@@ -112,6 +209,139 @@
 	</target>
 	<target name="as-tests-check" unless="AS.serviceEndpoint">
 		<echo message="In order to run the AuthS Data tests, at least 'AS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- Discovery Service performance tests -->
+	<target name="run-discs-perftests" depends="discs-perftests-init" description="Execute Discovery Service performance tests" if="DiscS.serviceEndpoint">
+		<!-- Thijs Brentjens, for PDOK : don't wait longer than 30 minutes for a run, because the test may hang if it runs longer? Or longer this one -->
+		<limit maxwait="1800">
+			<echo message="Running Discovery Service performance tests against endpoint '${DiscS.serviceEndpoint}'" />
+			<path id="test.logdir.path">
+				<!-- Thijs Brentjens (Brentjens Geo-ICT, for Kadaster) -->
+				<pathelement location="${basedir}/logs/${cswName}" />
+			</path>
+			<path id="test.reportdir.path">
+				<!-- Thijs Brentjens (Brentjens Geo-ICT, for Kadaster) -->
+				<pathelement location="${basedir}/reports/${cswName}" />
+			</path>
+			<antcall target="run-perftest">
+				<param name="soapui_project_file" value="${DiscSPERF_SOAPUI}" />
+				<param name="logdir" value="${toString:test.logdir.path}" />
+			</antcall>
+			<antcall target="create-report">
+				<param name="logdir" value="${toString:test.logdir.path}" />
+				<param name="reportdir" value="${toString:test.reportdir.path}" />
+			</antcall>
+		</limit>
+	</target>
+	<target name="discs-perftests-init" depends="init-properties-discs,discs-perftests-check" if="DiscS.serviceEndpoint">
+		<echo message="Initialising Discovery Service performance tests against endpoint '${DiscS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<!--Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/logs/${cswName}" />
+		</path>
+		<path id="test.reportdir.path">
+			<!--Edwin Kerkenaar (TNO) -->
+			<pathelement location="${basedir}/reports/${cswName}" />
+		</path>
+		<antcall target="run-initperftest">
+			<param name="soapui_project_file" value="${DiscSPERF_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="discs-perftests-check" unless="DiscS.serviceEndpoint">
+		<echo message="In order to run the Discovery Service performance tests, at least 'DiscS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- WFS performance tests -->
+	<target name="run-wfs-perftests" depends="wfs-perftests-init" description="Execute Download Service WFS performance tests" if="DS.serviceEndpoint">
+		<!-- Thijs Brentjens, for PDOK : don't wait longer than 30 minutes for a run, because the test may hang if it runs longer -->
+		<limit maxwait="1800">
+			<echo message="Running Download Service performance tests against endpoint '${DS.serviceEndpoint}'" />
+			<path id="test.logdir.path">
+				<pathelement location="${basedir}/logs/${wfsName}" />
+			</path>
+			<path id="test.reportdir.path">
+				<pathelement location="${basedir}/reports/${wfsName}" />
+			</path>
+			<antcall target="run-perftest">
+				<param name="soapui_project_file" value="${DSPERF_WFS_SOAPUI}" />
+				<param name="logdir" value="${toString:test.logdir.path}" />
+			</antcall>
+			<antcall target="create-report">
+				<param name="logdir" value="${toString:test.logdir.path}" />
+				<param name="reportdir" value="${toString:test.reportdir.path}" />
+			</antcall>
+		</limit>
+	</target>
+	<target name="wfs-perftests-init" depends="init-properties-wfs,wfs-perftests-check" if="DS.serviceEndpoint">
+		<echo message="Initialising Download Service WFS performance tests against endpoint '${DS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs/${wfsName}" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${wfsName}" />
+		</path>
+		<antcall target="run-initperftest">
+			<param name="soapui_project_file" value="${DSPERF_WFS_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="wfs-perftests-check" unless="DS.serviceEndpoint">
+		<echo message="In order to run the Download Service performance tests, at least 'DS.serviceEndpoint' has to be provided in file 'config.properties'." />
+	</target>
+
+	<!-- ATOM feeds performance tests -->
+	<target name="run-atom-perftests" depends="atom-perftests-init" description="Execute Atom feed Download Service performance tests" if="DS.serviceEndpoint">
+		<!-- Thijs Brentjens, for PDOK : don't wait longer than 5 hours for a run, because the test may hang if it runs longer? Or longer this one -->
+		<!-- For Atom feeds: longer than 5 hours -->
+		<limit maxwait="18000">
+			<echo message="Running Atom Download Service performance tests against endpoint '${DS.serviceEndpoint}'" />
+			<path id="test.logdir.path">
+				<!-- Thijs Brentjens (Brentjens Geo-ICT, for Kadaster) -->
+				<pathelement location="${basedir}/logs/${atomName}" />
+			</path>
+			<path id="test.reportdir.path">
+				<!-- Thijs Brentjens (Brentjens Geo-ICT, for Kadaster) -->
+				<pathelement location="${basedir}/reports/${atomName}" />
+			</path>
+			<antcall target="run-perftest">
+				<param name="soapui_project_file" value="${DSPERF_ATOM_SOAPUI}" />
+				<param name="logdir" value="${toString:test.logdir.path}" />
+			</antcall>
+			<antcall target="create-report">
+				<param name="logdir" value="${toString:test.logdir.path}" />
+				<param name="reportdir" value="${toString:test.reportdir.path}" />
+			</antcall>
+		</limit>
+	</target>
+	<target name="atom-perftests-init" depends="init-properties-atom,atom-perftests-check" if="DS.serviceEndpoint">
+		<echo message="Initialising Download Service performance tests against endpoint '${DS.serviceEndpoint}'" />
+		<path id="test.logdir.path">
+			<pathelement location="${basedir}/logs/${atomName}" />
+		</path>
+		<path id="test.reportdir.path">
+			<pathelement location="${basedir}/reports/${atomName}" />
+		</path>
+		<antcall target="run-initperftest">
+			<param name="soapui_project_file" value="${DSPERF_ATOM_SOAPUI}" />
+			<param name="logdir" value="${toString:test.logdir.path}" />
+		</antcall>
+		<antcall target="create-report">
+			<param name="logdir" value="${toString:test.logdir.path}" />
+			<param name="reportdir" value="${toString:test.reportdir.path}" />
+		</antcall>
+	</target>
+	<target name="atom-perftests-check" unless="DS.serviceEndpoint">
+		<echo message="In order to run the ATOM Download Service performance tests, at least 'DS.serviceEndpoint' has to be provided in file 'config.properties'." />
 	</target>
 
 	<!-- ExM tests -->
@@ -160,23 +390,26 @@
 
 	<!-- VS performance tests -->
 	<target name="run-vs-perftests" depends="vs-perftests-init" description="Execute View Service performance tests" if="VS.serviceEndpoint">
-		<echo message="Running View Service performance tests against endpoint '${VS.serviceEndpoint}'" />
-		<path id="test.logdir.path">
-			<!--Edwin Kerkenaar (TNO) -->
-			<pathelement location="${basedir}/logs/${mapName}" />
-		</path>
-		<path id="test.reportdir.path">
-			<!--Edwin Kerkenaar (TNO) -->
-			<pathelement location="${basedir}/reports/${mapName}" />
-		</path>
-		<antcall target="run-perftest">
-			<param name="soapui_project_file" value="${VSPERF_SOAPUI}" />
-			<param name="logdir" value="${toString:test.logdir.path}" />
-		</antcall>
-		<antcall target="create-report">
-			<param name="logdir" value="${toString:test.logdir.path}" />
-			<param name="reportdir" value="${toString:test.reportdir.path}" />
-		</antcall>
+		<!-- Thijs Brentjens, for PDOK : don't wait longer than 30 minutes for a run, because the test may hang if it runs longer -->
+		<limit maxwait="1800">
+			<echo message="Running View Service performance tests against endpoint '${VS.serviceEndpoint}'" />
+			<path id="test.logdir.path">
+				<!--Edwin Kerkenaar (TNO) -->
+				<pathelement location="${basedir}/logs/${mapName}" />
+			</path>
+			<path id="test.reportdir.path">
+				<!--Edwin Kerkenaar (TNO) -->
+				<pathelement location="${basedir}/reports/${mapName}" />
+			</path>
+			<antcall target="run-perftest">
+				<param name="soapui_project_file" value="${VSPERF_SOAPUI}" />
+				<param name="logdir" value="${toString:test.logdir.path}" />
+			</antcall>
+			<antcall target="create-report">
+				<param name="logdir" value="${toString:test.logdir.path}" />
+				<param name="reportdir" value="${toString:test.reportdir.path}" />
+			</antcall>
+		</limit>
 	</target>
 	<target name="vs-perftests-init" depends="init-properties,vs-perftests-check" if="VS.serviceEndpoint">
 		<echo message="Initialising View Service performance tests against endpoint '${VS.serviceEndpoint}'" />
@@ -247,7 +480,7 @@
 	<target name="ds-tests-check" unless="DS.serviceEndpoint">
 		<echo message="In order to run the Download Service tests, at least 'DS.serviceEndpoint' has to be provided in file 'config.properties'." />
 	</target>
-	
+
 	<!-- DS ATOM feed tests -->
 	<target name="run-dsatom-tests" depends="init-properties,dsatom-tests-check" description="Execute Download Service tests for Atom feed implementation" if="DS.serviceEndpoint">
 		<echo message="Running Download Service tests against endpoint '${DS.serviceEndpoint}'" />
@@ -348,6 +581,7 @@
 		<echo message="Running SoapUI project '${soapui_project_file}'" />
 		<java classname="com.eviware.soapui.tools.SoapUITestCaseRunner" fork="true" dir="${SOAPUI_HOME}/bin">
 			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<env key="ETF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
 			<jvmarg value="-Xms${soapui.xms}" />
 			<jvmarg value="-Xmx${soapui.xmx}" />
 			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
@@ -375,6 +609,7 @@
 		<echo message="Running SoapUI project '${soapui_project_file}'" />
 		<java classname="com.eviware.soapui.tools.SoapUITestCaseRunner" fork="true" dir="${SOAPUI_HOME}/bin">
 			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<env key="ETF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
 			<jvmarg value="-Xms${soapui.xms}" />
 			<jvmarg value="-Xmx${soapui.xmx}" />
 			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
@@ -403,6 +638,7 @@
 		<echo message="Running SoapUI project '${soapui_project_file}'" />
 		<java classname="com.eviware.soapui.tools.SoapUILoadTestRunner" fork="true" dir="${SOAPUI_HOME}/bin">
 			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<env key="ETF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
 			<jvmarg value="-Xms${soapui.xms}" />
 			<jvmarg value="-Xmx${soapui.xmx}" />
 			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
@@ -441,6 +677,7 @@
 	<target name="start-soapui" depends="init-properties,check-jvm" description="Start SoapUI and open ESDIN WP12 ETF test projects">
 		<java classname="com.eviware.soapui.SoapUI" dir="${SOAPUI_HOME}/bin" fork="true">
 			<env key="XTF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
+			<env key="ETF_SEL_GROOVY" path="${basedir}/ETF/Groovy" />
 			<jvmarg value="-Xms${soapui.xms}" />
 			<jvmarg value="-Xmx${soapui.xmx}" />
 			<jvmarg value="-XX:MaxPermSize=${soapui.maxpermsize}" />
@@ -463,18 +700,18 @@
 		<!--Edwin Kerkenaar (TNO) -->
 		<echo>Java version: ${ant.java.version}</echo>
 		<condition property="jvm.nok">
-			<matches pattern="^1\.[0-5]\.*$" string="${ant.java.version}" />
+			<matches pattern="^1\.[0-7]\.*$" string="${ant.java.version}" />
 		</condition>
 	</target>
 	<target name="check-jvm" depends="get-jvm" if="jvm.nok">
-		<fail message="Incompatible Java version (${ant.java.version}) – 1.6 or better required" />
+		<fail message="Incompatible Java version (${ant.java.version}) – 1.8 or better required" />
 	</target>
 
 	<target name="get-ant">
 		<!--Edwin Kerkenaar (TNO) -->
 		<echo>ANT version: ${ant.version}</echo>
 		<condition property="ant.nok">
-			<matches pattern="1\.[0-7]\.*" string="${ant.version}" />
+			<matches pattern="1\.[0-8]\.*" string="${ant.version}" />
 		</condition>
 	</target>
 	<target name="check-ant" depends="get-ant" if="ant.nok">
