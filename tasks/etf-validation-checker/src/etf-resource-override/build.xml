@@ -711,7 +711,7 @@
 		<!--Edwin Kerkenaar (TNO) -->
 		<echo>ANT version: ${ant.version}</echo>
 		<condition property="ant.nok">
-			<matches pattern="1\.[0-8]\.*" string="${ant.version}" />
+			<matches pattern="1\.[0-7]\.*" string="${ant.version}" />
 		</condition>
 	</target>
 	<target name="check-ant" depends="get-ant" if="ant.nok">
