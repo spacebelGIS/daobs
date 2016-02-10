@@ -5,7 +5,7 @@ This tasks process the links in the service metadata to validate them with ETF 1
 ## Requirements
 The following components are required by this task:
 
-* Java 7
+* Java 8
 * ETF 1.5
 * Ant 1.8.2 (provided in ETF)
 
