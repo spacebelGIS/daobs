@@ -1,11 +1,12 @@
 # ETF Validation Checker
 
-This tasks process the links in the service metadata to validate them with ETF 1.4.1 (http://www.geostandaarden.nl/validatie/inspire/versies/1.4/ETF1.4.1.zip). The validation information is stored in SOLR.
+This tasks process the links in the service metadata to validate them with ETF 1.5 (http://www.geostandaarden.nl/validatie/inspire/versies/1.5/ETF1.5.zip). The validation information is stored in SOLR.
 
 ## Requirements
 The following components are required by this task:
-* Java 7
-* ETF 1.4.1
+
+* Java 8
+* ETF 1.5
 * Ant 1.8.2 (provided in ETF)
 
 
@@ -15,12 +16,13 @@ Solr MUST be running in port 8984, with metadata records. See [solr/README.md](.
 
 ### Manual installation
 
-Unzip the downloaded file `ETF1.4.1.zip` to a folder, for example:
+Unzip the downloaded file `ETF1.5.zip` to a folder, for example:
+
 ```
-wget http://www.geostandaarden.nl/validatie/inspire/versies/1.4/ETF1.4.1.zip
-unzip ETF1.4.1.zip -d /opt
+wget http://www.geostandaarden.nl/validatie/inspire/versies/1.5/ETF1.5.zip
+unzip ETF1.5.zip -d /opt
 ```
-That creates the following folder `/opt/ETF1.4.1`
+That creates the following folder `/opt/ETF1.5`
 
 ### Installation with maven
 
@@ -34,11 +36,13 @@ mvn install -Petf-download
 The configuration is done in the file `eft-validation-checker/src/main/resources/WEB-INF/config.properties`:
 
 * task.validation-etf-checker.validator.path: Path to ETF tool, for example:
+
 ```
-task.validation-etf-checker.validator.path=/opt/ETF1.4.1/ETF
+task.validation-etf-checker.validator.path=/opt/ETF1.5/ETF
 ```
 
 * task.validation-etf-checker.filter: Filter to query the metadata to process. Configured by default to retrieve the service metadata:
+
 
 ```
 task.validation-etf-checker.filter=+documentType:metadata +resourceType:service
