@@ -1,4 +1,4 @@
-package org.daobs.harvester;
+package org.daobs.routing.utility;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * Created by francois on 05/01/16.
  */
 public class XmlDocumentAggregationStrategy implements AggregationStrategy {
+    private String rootTagName;
+
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         Document newBody = (Document)newExchange.getIn().getBody();
         Document results = null;
@@ -28,7 +30,7 @@ public class XmlDocumentAggregationStrategy implements AggregationStrategy {
             }
 
             results = docBuilder.newDocument();
-            Element rootElement = results.createElement("results");
+            Element rootElement = results.createElement(rootTagName);
             rootElement.appendChild(
                         results.importNode(
                             newBody.getDocumentElement().cloneNode(true), true));
@@ -42,5 +44,13 @@ public class XmlDocumentAggregationStrategy implements AggregationStrategy {
                             newBody.getDocumentElement().cloneNode(true), true));
             return oldExchange;
         }
+    }
+
+    public String getRootTagName() {
+        return rootTagName;
+    }
+
+    public void setRootTagName(String rootTagName) {
+        this.rootTagName = rootTagName;
     }
 }

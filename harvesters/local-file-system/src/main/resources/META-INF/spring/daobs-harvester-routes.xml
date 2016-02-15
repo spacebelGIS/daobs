@@ -11,7 +11,9 @@
   <import resource="classpath*:META-INF/spring/daobs-harvester-common-routes.xml"/>
 
   <bean id="aggregatorStrategy"
-        class="org.daobs.harvester.XmlDocumentAggregationStrategy"/>
+        class="org.daobs.routing.utility.XmlDocumentAggregationStrategy">
+    <property name="rootTagName" value="results"/>
+  </bean>
 
   <cm:errorHandler id="loggingErrorHandler"
                       type="LoggingErrorHandler"

@@ -155,7 +155,7 @@
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
-        <cm:split parallelProcessing="false">
+        <cm:split parallelProcessing="true">
           <cm:xpath>//doc</cm:xpath>
           <!-- Retrieve UUID from Solr response -->
           <cm:setHeader headerName="documentIdentifier">
