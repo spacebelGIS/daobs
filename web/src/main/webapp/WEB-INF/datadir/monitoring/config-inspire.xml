@@ -2030,27 +2030,27 @@
 
     <daobs:variable id="NSv31" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the discovery services</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true +documentType:ai +id:aiuserRequestdiscovery*</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiuserRequestdiscovery*</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv32" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the view services</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiuserRequestview*</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiuserRequestview*</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv33" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the download services</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiuserRequestdownload*</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiuserRequestdownload*</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv34" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the transformation services</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiuserRequesttransformation*</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiuserRequesttransformation*</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv35" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the annual number of network service request for all the invoke services</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiuserRequestinvoke*</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiuserRequestinvoke*</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
 
@@ -2060,32 +2060,32 @@
     -->
     <daobs:variable id="DSv11_ActArea" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex I</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiactualArea* +inspireAnnex:i</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnex:i</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv12_ActArea" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex II</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiactualArea* +inspireAnnex:ii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnex:ii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv13_ActArea" default="0" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data sets of Annex III</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:aiactualArea* +inspireAnnex:iii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:aiactualArea* +inspireAnnex:iii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv11_RelArea" default="0.0001" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex I</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:airelevantArea* +inspireAnnex:i</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnex:i</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv12_RelArea" default="0.0001" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex II</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:airelevantArea* +inspireAnnex:ii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnex:ii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="DSv13_RelArea" default="0.0001" numberFormat="#">
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial data sets of Annex III</daobs:name>
-      <daobs:query stats="sum" statsField="indicatorValue">+disabled:true+documentType:ai +id:airelevantArea* +inspireAnnex:iii</daobs:query>
+      <daobs:query stats="sum" statsField="indicatorValue">+documentType:ai +id:airelevantArea* +inspireAnnex:iii</daobs:query>
       <daobs:comment>Computed from ancillary information if provided.</daobs:comment>
     </daobs:variable>
   </daobs:variables>
