@@ -148,6 +148,7 @@
               <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;sort=id+desc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
             </cm:setHeader>
             <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+
             <cm:convertBodyTo type="org.w3c.dom.Document"/>
             <cm:split parallelProcessing="false">
               <cm:xpath>//doc</cm:xpath>
@@ -161,25 +162,20 @@
               <cm:setHeader headerName="serviceType">
                 <cm:xpath resultType="java.lang.String">doc/arr[@name = 'serviceType']/str/text()</cm:xpath>
               </cm:setHeader>
-              <!-- Compute filename suffix for saving update queries -->
-              <cm:setHeader headerName="stringToEncrypt">
-                <cm:simple>$simple{header.harvesterId}</cm:simple>
-              </cm:setHeader>
-              <cm:setHeader headerName="fileNameSuffix">
-                <cm:simple>bean:utility?method=encrypt</cm:simple>
-              </cm:setHeader>
 
-
-              <cm:log message="Service record identifier is '$simple{header.documentIdentifier}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
-                      loggingLevel="INFO"
-                      logName="org.daobs.task.ServiceDatasetIndexer"/>
 
               <cm:split parallelProcessing="false">
                 <cm:xpath>doc/arr[@name = 'recordOperateOn']/str</cm:xpath>
                 <cm:setBody>
                   <cm:xpath resultType="java.lang.String">normalize-space(.)</cm:xpath>
                 </cm:setBody>
-                <cm:setHeader headerName="idToCheck">
+
+                <cm:multicast parallelProcessing="false">
+                  <cm:to uri="direct:index-association"/>
+                  <cm:to uri="direct:index-inspirethemes-in-service"/>
+                </cm:multicast>
+
+                <!--<cm:setHeader headerName="idToCheck">
                   <cm:groovy>exchange.in.headers.documentIdentifier + '-' + exchange.in.headers.serviceType + '-' + body
                   </cm:groovy>
                 </cm:setHeader>
@@ -192,13 +188,13 @@
                     <cm:to uri="direct:index-association"/>
                     <cm:to uri="direct:index-inspirethemes-in-service"/>
                   </cm:multicast>
-                </cm:idempotentConsumer>
+                </cm:idempotentConsumer>-->
               </cm:split>
             </cm:split>
           </cm:split>
         </cm:when>
         <cm:otherwise>
-          <cm:log message="No record found. ${body}"
+          <cm:log message="No services found."
                   loggingLevel="INFO"
                   logName="org.daobs.task.ServiceDatasetIndexer"/>
         </cm:otherwise>
@@ -235,11 +231,7 @@
         <cm:log message="  aggregated ${property.CamelAggregatedSize} by ${property.CamelAggregatedCompletedBy} ..."
                 loggingLevel="INFO"
                 logName="org.daobs.task.ServiceDatasetIndexer"/>
-        <cm:setHeader headerName="timeStamp">
-          <cm:simple>${date:now:yyyyMMdd'T'HHmmSS}</cm:simple>
-        </cm:setHeader>
-        <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-datasets-$simple{header.fileNameSuffix}-$simple{header.timeStamp}.xml&amp;charset=utf-8"/>
-        <!-- <cm:to uri="direct:save-association"/>-->
+         <cm:to uri="direct:save-association"/>
       </cm:aggregate>
     </cm:route>
 
@@ -257,7 +249,7 @@
       <cm:setHeader headerName="datasetIdentifier">
         <cm:simple>${body}</cm:simple>
       </cm:setHeader>
-      <cm:log message="Get INSPIRE themes from dataset '$simple{header.datasetIdentifier}' and add them to service '$simple{header.serviceIdentifier}' ..."
+      <cm:log message="Get INSPIRE themes from dataset '$simple{header.datasetIdentifier}' and add them to the service '$simple{header.serviceIdentifier}' ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
       <cm:setHeader headerName="CamelHttpMethod">
@@ -272,17 +264,15 @@
           '&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1'</cm:groovy>
       </cm:setHeader>
       <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=true"/>
+
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
-      <cm:log message="SOLR response '$simple{body}'."
-              loggingLevel="INFO"
-              logName="org.daobs.task.ServiceDatasetIndexer"/>
       <cm:choice>
         <cm:when>
           <cm:xpath>count(//doc[arr/@name="inspireTheme"]) = 1</cm:xpath>
           <cm:setHeader headerName="themes">
-            <cm:xpath resultType="java.lang.String">string-join(//doc[arr/@name="inspireTheme"]/str, ',')</cm:xpath>
+            <cm:xpath resultType="java.lang.String">normalize-space(//doc[arr/@name="inspireTheme"])</cm:xpath>
           </cm:setHeader>
-          <cm:log message="INSPIRE themes for dataset '$simple{header.datasetIdentifier}' are '$simple{body}'."
+          <cm:log message="INSPIRE themes for dataset '$simple{header.datasetIdentifier}' are '$simple{header.themes}'."
                   loggingLevel="INFO"
                   logName="org.daobs.task.ServiceDatasetIndexer"/>
           <!-- Camel XSLT issue with Saxon 8
@@ -294,9 +284,6 @@
           <cm:choice>
             <cm:when>
               <cm:groovy>!"".equals(body)</cm:groovy>
-              <cm:log message="Service '$simple{header.serviceIdentifier}' is about to be updated by request '$simple{body}'"
-                      loggingLevel="INFO"
-                      logName="org.daobs.task.ServiceDatasetIndexer"/>
               <cm:convertBodyTo type="org.w3c.dom.Document"/>
               <cm:aggregate strategyRef="solrAddAggregatorStrategy"
                             completionSize="200"
@@ -308,21 +295,15 @@
                 <cm:log message="  aggregated ${property.CamelAggregatedSize} by ${property.CamelAggregatedCompletedBy} ..."
                         loggingLevel="INFO"
                         logName="org.daobs.task.ServiceDatasetIndexer"/>
-                <cm:setHeader headerName="timeStamp">
-                  <cm:simple>${date:now:yyyyMMdd'T'HHmmSS}</cm:simple>
-                </cm:setHeader>
-                <cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-themes-$simple{header.fileNameSuffix}-$simple{header.timeStamp}.xml&amp;charset=utf-8"/>
-                <!-- <cm:to uri="direct:save-association"/>-->
+                <cm:to uri="direct:save-association"/>
               </cm:aggregate>
             </cm:when>
             <cm:otherwise>
-              <cm:log message="No INSPIRE themes found in service '$simple{header.serviceIdentifier}' datasets."
+              <cm:log message="No INSPIRE themes found in dataset '$simple{header.datasetIdentifier}'."
                       loggingLevel="INFO"
                       logName="org.daobs.task.ServiceDatasetIndexer"/>
             </cm:otherwise>
           </cm:choice>
-
-          <!--<cm:to uri="file:{{task.service-dataset-indexer.folder}}?fileName=index-service-themes-$simple{header.fileNameSuffix}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>-->
         </cm:when>
         <cm:otherwise>
           <cm:log message="No INSPIRE themes found for dataset '$simple{header.datasetIdentifier}'."
@@ -330,16 +311,14 @@
                   logName="org.daobs.task.ServiceDatasetIndexer"/>
         </cm:otherwise>
       </cm:choice>
-
     </cm:route>
 
 
 
     <cm:route id="save-association">
-      <cm:from uri="file:{{task.service-dataset-indexer.folder}}?consumer.delay={{task.service-dataset-indexer.delay}}"/>
-      <!--<cm:from uri="direct:save-association"/>-->
+      <cm:from uri="direct:save-association"/>
       <cm:log message="Updating index with '$simple{body}' ..."
-              loggingLevel="INFO"
+              loggingLevel="DEBUG"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
