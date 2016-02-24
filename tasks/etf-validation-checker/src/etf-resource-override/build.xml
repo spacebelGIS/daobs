@@ -698,13 +698,13 @@
 
 	<target name="get-jvm">
 		<!--Edwin Kerkenaar (TNO) -->
-		<echo>Java version: ${ant.java.version}</echo>
+		<echo>Java version: ${java.version}</echo>
 		<condition property="jvm.nok">
-			<matches pattern="^1\.[0-7]\.*$" string="${ant.java.version}" />
+			<matches pattern="^1\.[0-7]\.*$" string="${java.version}" />
 		</condition>
 	</target>
 	<target name="check-jvm" depends="get-jvm" if="jvm.nok">
-		<fail message="Incompatible Java version (${ant.java.version}) – 1.8 or better required" />
+		<fail message="Incompatible Java version (${java.version}) – 1.8 or better required" />
 	</target>
 
 	<target name="get-ant">
