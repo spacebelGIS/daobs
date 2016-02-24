@@ -16,7 +16,7 @@
     The reported value may be more than this. -->
     <daobs:variable id="DSv_Num1" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be underestimated
         if the number of spatial data set does not have metadata or if error occurred
         during harvesting.</daobs:comment>
@@ -24,7 +24,7 @@
 
     <daobs:variable id="DSv_Num2" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:ii</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:ii</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be underestimated
         if the number of spatial data set does not have metadata or if error occurred
         during harvesting.</daobs:comment>
@@ -32,7 +32,7 @@
 
     <daobs:variable id="DSv_Num3" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:iii</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:iii</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be underestimated
         if the number of spatial data set does not have metadata or if error occurred
         during harvesting.</daobs:comment>
@@ -41,91 +41,91 @@
 
     <daobs:variable id="SDSv_Num" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services</daobs:name>
-      <daobs:query>+resourceType:service</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>Only services having an INSPIRE annex are took into account. We may harvest records related to no annex.</daobs:comment>
     </daobs:variable>
 
 
     <daobs:variable id="NSv_NumDiscServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of discovery services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:discovery</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:discovery</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service +inspireServiceType:discovery</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:discovery</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumViewServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of view services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:view</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:view</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service +inspireServiceType:view</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:view</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumDownlServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of download services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:download</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:download</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service +inspireServiceType:download</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:download</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumInvkServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of invoke services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:invoke</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:invoke</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service +inspireServiceType:invoke</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:invoke</daobs:query>-->
     </daobs:variable>
 
     <daobs:variable id="NSv_NumTransfServ" numberFormat="#">
       <daobs:name xml:lang="en">Number of transformation services</daobs:name>
-      <daobs:query>+resourceType:service +inspireServiceType:transformation</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:transformation</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service +inspireServiceType:transformation</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii) +inspireServiceType:transformation</daobs:query>-->
     </daobs:variable>
 
 
 
     <daobs:variable id="MDv11" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="MDv12" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:ii</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:ii</daobs:query>
     </daobs:variable>
 
     <daobs:variable id="MDv13" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:iii</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:iii</daobs:query>
     </daobs:variable>
 
 
 
     <daobs:variable id="MDv14" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services that have metadata</daobs:name>
-      <daobs:query>+resourceType:service</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
     </daobs:variable>
 
 
     <!-- Indicator MDi2 (Conformity of metadata) -->
     <daobs:variable id="MDv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:i</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv22" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex II that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:ii</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:ii</daobs:query>
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv23" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex III that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:iii</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:iii</daobs:query>
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="MDv24" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:service) +isAboveThreshold:true</daobs:query>
-      <!--<daobs:query>+(resourceType:service) +isAboveThreshold:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +(resourceType:service) +isAboveThreshold:true</daobs:query>
+      <!--<daobs:query>+documentType:metadata +(resourceType:service) +isAboveThreshold:true +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>INSPIRE validator is used to validate records.</daobs:comment>
     </daobs:variable>
 
@@ -135,19 +135,19 @@
     <!-- INSPIRE DSi2 (Conformity of spatial data sets) -->
     <daobs:variable id="DSv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex I that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:i +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:i +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 1089/2010 report a conform resource.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv22" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex II that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:ii +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:ii +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 1089/2010 report a conform resource.</daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="DSv23" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant spatial data sets for Annex III that have conformant metadata</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:iii +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +isAboveThreshold:true +inspireAnnexForFirstTheme:iii +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 1089/2010 report a conform resource.</daobs:comment>
     </daobs:variable>
 
@@ -155,13 +155,13 @@
     <!-- INSPIRE NSi1 (Accessibility of metadata through discovery services) -->
     <daobs:variable id="NSv11" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets with metadata for which a discovery service exists</daobs:name>
-      <daobs:query>+(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
       <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to DSv_Num).</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv12" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data services with metadata for which a discovery service exists</daobs:name>
-      <daobs:query>+resourceType:service</daobs:query>
-      <!--<daobs:query>+resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +resourceType:service</daobs:query>
+      <!--<daobs:query>+documentType:metadata +resourceType:service +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment>All records used to build the report are harvested, so all records are available through discovery service (ie. equivalent to SDSv_Num).</daobs:comment>
     </daobs:variable>
 
@@ -169,48 +169,48 @@
     <!-- INSPIRE NSi2 (Accessibility of data sets through view or download services) -->
     <daobs:variable id="NSv21" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a view service exists</daobs:name>
-      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
-      <!--<daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <!--<daobs:query>+documentType:metadata {!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment></daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv22" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a download service exists</daobs:name>
-      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
-      <!--<daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <!--<daobs:query>+documentType:metadata {!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment></daobs:comment>
     </daobs:variable>
 
     <daobs:variable id="NSv23" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for which a view and download service exists</daobs:name>
-      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +recordOperatedByType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
-      <!--<daobs:query>{!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:viewAndDownload +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
+      <daobs:query>+documentType:metadata +documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +recordOperatedByType:download +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>
+      <!--<daobs:query>+documentType:metadata {!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:viewAndDownload +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:comment></daobs:comment>
     </daobs:variable>
 
 
     <daobs:variable id="NSv41" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant discovery network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:discovery +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:service +serviceType:discovery +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv42" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant view network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:view +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:service +serviceType:view +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv43" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant download network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:download +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:service +serviceType:download +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv44" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant transformation network services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:transformation +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:service +serviceType:transformation +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
     <daobs:variable id="NSv45" numberFormat="#">
       <daobs:name xml:lang="en">Number of conformant discovery invoke services</daobs:name>
-      <daobs:query>+resourceType:service +serviceType:invoke +inspireConformResource:true</daobs:query>
+      <daobs:query>+documentType:metadata +resourceType:service +serviceType:invoke +inspireConformResource:true</daobs:query>
       <daobs:comment>Check the metadata record using INSPIRE validator and check that the Commission Regulation (EU) No 976/2009 report a conform resource.</daobs:comment>
     </daobs:variable>
 
