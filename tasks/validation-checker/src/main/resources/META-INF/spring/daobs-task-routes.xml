@@ -106,6 +106,7 @@
 
 
       <!-- Get number of records to validate -->
+      <cm:removeHeaders pattern="harvesterName"/>
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
@@ -178,7 +179,7 @@
                   loggingLevel="INFO"
                   logName="org.daobs.task.ValidationChecker"/>
 
-          <cm:multicast>
+          <cm:multicast parallelProcessing="true">
             <!-- XSD validation-->
             <cm:to uri="direct:validation-xsd"/>
 
@@ -304,6 +305,7 @@
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
+      <cm:removeHeaders pattern="*"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>

@@ -223,6 +223,7 @@
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="INFO"
               logName="org.daobs.tasks.validation.etf"/>
+      <cm:removeHeaders pattern="*"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>

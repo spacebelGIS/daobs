@@ -102,6 +102,7 @@
 
 
       <!-- Get number of services to analyze -->
+      <cm:removeHeaders pattern="harvesterName"/>
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
@@ -320,6 +321,7 @@
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="DEBUG"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
+      <cm:removeHeaders pattern="*"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>

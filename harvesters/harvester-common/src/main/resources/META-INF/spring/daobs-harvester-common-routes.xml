@@ -42,13 +42,14 @@
 
       <!-- From XML response containing ISO19139 records to Solr XML transaction document-->
       <cm:to uri="bean:xsltUtility?method=transform(*, '/xslt/metadata.xsl')"/>
+      <!-- Some header may trigger [Fatal Error] :1:1: Premature end of file.
+      See https://github.com/INSPIRE-MIF/daobs/issues/90 -->
+      <cm:removeHeaders pattern="*"/>
 
-      <!--
-      <cm:setHeader headerName="transactionFileName">
+<!--      <cm:setHeader headerName="transactionFileName">
         <cm:groovy>java.util.UUID.randomUUID().toString() + '.xml'</cm:groovy>
       </cm:setHeader>
-      <cm:to uri="file:/tmp/?fileName=solr-request/$simple{header.transactionFileName}.xml&amp;charset=utf-8"/>-->
-
+      <cm:to uri="file:/tmp/?fileName=solr-request/$simple{header.transactionFileName}&amp;charset=utf-8"/>-->
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>
