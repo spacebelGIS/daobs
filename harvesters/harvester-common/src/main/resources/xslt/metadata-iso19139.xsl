@@ -179,10 +179,10 @@
 
           <xsl:for-each select="gmd:date/gmd:CI_Date[gmd:date/*/text() != '']">
             <xsl:variable name="dateType"
-                          select="gmd:dateType/gmd:CI_DateTypeCode/@codeListValue"
+                          select="gmd:dateType[1]/gmd:CI_DateTypeCode/@codeListValue"
                           as="xs:string?"/>
             <xsl:variable name="date"
-                          select="string(gmd:date/gco:Date|gmd:date/gco:DateTime)"/>
+                          select="string(gmd:date[1]/gco:Date|gmd:date[1]/gco:DateTime)"/>
             <field name="{$dateType}DateForResource"><xsl:value-of select="$date"/></field>
             <field name="{$dateType}YearForResource"><xsl:value-of select="substring($date, 0, 5)"/></field>
             <field name="{$dateType}MonthForResource"><xsl:value-of select="substring($date, 0, 8)"/></field>
