@@ -140,7 +140,8 @@
         <field name="inspireAnnex"><xsl:value-of select="if (name() = 'AnnexIII') then 'iii' else if (name() = 'AnnexII') then 'ii' else 'i'"/></field>
       </xsl:for-each-group>
       <xsl:for-each select="Themes/*">
-        <field name="inspireTheme"><xsl:value-of select="$inspireThemesMap[@monitoring = current()/.]/@theme"/></field>
+        <xsl:variable name="themeKey" select="."/>
+        <field name="inspireTheme"><xsl:value-of select="$inspireThemesMap/map[@monitoring = $themeKey]/@theme"/></field>
       </xsl:for-each>
 
 
