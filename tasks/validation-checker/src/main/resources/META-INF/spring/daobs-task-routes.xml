@@ -23,6 +23,7 @@
   <bean id="pagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${task.validation-checker.records.per.page}"/>
   </bean>
+  <bean id="nullBodyStrategy" class="org.daobs.routing.utility.NullBodyStrategy"/>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
   <bean id="urlEncoder" class="java.net.URLEncoder"/>
 
@@ -127,7 +128,7 @@
               loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
 
-      <cm:split parallelProcessing="false">
+      <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
         <cm:method bean="pagination" method="getPages"/>
         <cm:setHeader headerName="start">
           <cm:simple>${bean:pagination?method=getStart}</cm:simple>
@@ -156,7 +157,7 @@
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
-        <cm:split parallelProcessing="true">
+        <cm:split parallelProcessing="true" strategyRef="nullBodyStrategy">
           <cm:xpath>//doc</cm:xpath>
           <!-- Retrieve UUID from Solr response -->
           <cm:setHeader headerName="documentIdentifier">
@@ -179,7 +180,7 @@
                   loggingLevel="INFO"
                   logName="org.daobs.task.ValidationChecker"/>
 
-          <cm:multicast parallelProcessing="true">
+          <cm:multicast parallelProcessing="false" strategyRef="nullBodyStrategy">
             <!-- XSD validation-->
             <cm:to uri="direct:validation-xsd"/>
 
@@ -188,7 +189,9 @@
           </cm:multicast>
         </cm:split>
       </cm:split>
-
+      <cm:log message="Validation terminated."
+              loggingLevel="INFO"
+              logName="org.daobs.task.ValidationChecker"/>
     </cm:route>
 
 

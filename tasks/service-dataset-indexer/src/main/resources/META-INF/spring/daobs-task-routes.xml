@@ -27,6 +27,8 @@
     <property name="rootTagName" value="add"/>
   </bean>
 
+  <bean id="nullBodyStrategy" class="org.daobs.routing.utility.NullBodyStrategy"/>
+
   <cm:errorHandler id="loggingErrorHandler"
                    type="LoggingErrorHandler"
                    logName="daobs.tasks.service-dataset-indexer"
@@ -126,7 +128,7 @@
                   loggingLevel="INFO"
                   logName="org.daobs.task.ServiceDatasetIndexer"/>
 
-          <cm:split parallelProcessing="false">
+          <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
             <cm:method bean="taskPagination" method="getPages"/>
             <cm:setHeader headerName="start">
               <cm:simple>${bean:taskPagination?method=getStart}</cm:simple>
@@ -151,7 +153,7 @@
             <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
 
             <cm:convertBodyTo type="org.w3c.dom.Document"/>
-            <cm:split parallelProcessing="false">
+            <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
               <cm:xpath>//doc</cm:xpath>
               <!-- Retrieve UUID from Solr response -->
               <cm:setHeader headerName="documentIdentifier">
@@ -171,7 +173,7 @@
                   <cm:xpath resultType="java.lang.String">normalize-space(.)</cm:xpath>
                 </cm:setBody>
 
-                <cm:multicast parallelProcessing="false">
+                <cm:multicast parallelProcessing="false" strategyRef="nullBodyStrategy">
                   <cm:to uri="direct:index-association"/>
                   <cm:to uri="direct:index-inspirethemes-in-service"/>
                 </cm:multicast>

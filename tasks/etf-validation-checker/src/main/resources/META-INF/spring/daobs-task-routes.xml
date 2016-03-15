@@ -25,6 +25,7 @@
     <property name="recordsPerPage" value="${task.validation-etf-checker.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
+  <bean id="nullBodyStrategy" class="org.daobs.routing.utility.NullBodyStrategy"/>
   <bean id="urlEncoder" class="java.net.URLEncoder"/>
 
   <cm:errorHandler id="loggingErrorHandler"
@@ -133,7 +134,7 @@
               loggingLevel="INFO"
               logName="org.daobs.tasks.validation.etf"/>
 
-      <cm:split parallelProcessing="false">
+      <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
         <cm:method bean="pagination" method="getPages"/>
         <cm:setHeader headerName="start">
           <cm:simple>${bean:pagination?method=getStart}</cm:simple>
@@ -158,7 +159,7 @@
         </cm:setHeader>
         <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
-        <cm:split parallelProcessing="false">
+        <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
           <cm:xpath>//doc</cm:xpath>
 
           <cm:setHeader headerName="documentIdentifier">
