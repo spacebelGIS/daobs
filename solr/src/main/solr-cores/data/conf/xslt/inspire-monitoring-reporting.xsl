@@ -92,9 +92,11 @@
   <!-- Index row data like metadata records -->
   <xsl:template match="SpatialDataService">
     <doc>
-      <xsl:variable name="uuid" select="if (uuid != '') then uuid else concat('nouuid', position())"/>
+      <xsl:variable name="uuid" select="if (uuid != '') then uuid else 'nouuid'"/>
       <field name="id"><xsl:value-of
-              select="concat('monitoring', $reportingTerritory, $reportingDate, $uuid)"/></field>
+              select="concat('monitoring',
+                        $reportingTerritory, $reportingDate,
+                        $uuid, '-', position())"/></field>
       <field name="metadataIdentifier"><xsl:value-of select="$uuid"/></field>
       <field name="documentType">monitoringMetadata</field>
       <field name="resourceType">service</field>
@@ -124,9 +126,12 @@
 
   <xsl:template match="SpatialDataSet">
     <doc>
-      <xsl:variable name="uuid" select="if (uuid != '') then uuid else concat('nouuid', position())"/>
+      <xsl:variable name="uuid" select="if (uuid != '') then uuid else 'nouuid'"/>
+      <!-- Append position to all uuids to make them unique -->
       <field name="id"><xsl:value-of
-              select="concat('monitoring', $reportingTerritory, $reportingDate, $uuid)"/></field>
+              select="concat('monitoring',
+                        $reportingTerritory, $reportingDate,
+                        $uuid, '-', position())"/></field>
       <field name="metadataIdentifier"><xsl:value-of select="$uuid"/></field>
       <field name="documentType">monitoringMetadata</field>
       <field name="resourceType">dataset</field>
