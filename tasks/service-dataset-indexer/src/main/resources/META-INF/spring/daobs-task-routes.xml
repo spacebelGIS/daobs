@@ -13,7 +13,7 @@
     <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
-  <bean id="taskPagination" class="org.daobs.routing.utility.Pagination">
+  <bean id="serviceDatasetIndexerPagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${task.service-dataset-indexer.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
@@ -129,9 +129,9 @@
                   logName="org.daobs.task.ServiceDatasetIndexer"/>
 
           <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
-            <cm:method bean="taskPagination" method="getPages"/>
+            <cm:method bean="serviceDatasetIndexerPagination" method="getPages"/>
             <cm:setHeader headerName="start">
-              <cm:simple>${bean:taskPagination?method=getStart}</cm:simple>
+              <cm:simple>${bean:serviceDatasetIndexerPagination?method=getStart}</cm:simple>
             </cm:setHeader>
             <cm:setHeader headerName="row">
               <cm:simple>{{task.service-dataset-indexer.records.per.page}}</cm:simple>

@@ -21,7 +21,7 @@
     <property name="etfResourceTesterHtmlReportsUrl" value="${task.validation-etf-checker.validator.htmlreports.url}"/>
   </bean>
 
-  <bean id="pagination" class="org.daobs.routing.utility.Pagination">
+  <bean id="etfPagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${task.validation-etf-checker.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
@@ -135,9 +135,9 @@
               logName="org.daobs.tasks.validation.etf"/>
 
       <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
-        <cm:method bean="pagination" method="getPages"/>
+        <cm:method bean="etfPagination" method="getPages"/>
         <cm:setHeader headerName="start">
-          <cm:simple>${bean:pagination?method=getStart}</cm:simple>
+          <cm:simple>${bean:etfPagination?method=getStart}</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="row">
           <cm:simple>{{task.validation-etf-checker.records.per.page}}</cm:simple>

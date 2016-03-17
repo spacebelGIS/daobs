@@ -13,7 +13,7 @@
     <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
-  <bean id="pagination" class="org.daobs.routing.utility.Pagination">
+  <bean id="dataIndexerPagination" class="org.daobs.routing.utility.Pagination">
     <property name="recordsPerPage" value="${task.data-indexer.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
@@ -109,9 +109,9 @@
               logName="org.daobs.task.DataIndexer"/>
 
       <cm:split parallelProcessing="false">
-        <cm:method bean="pagination" method="getPages"/>
+        <cm:method bean="dataIndexerPagination" method="getPages"/>
         <cm:setHeader headerName="start">
-          <cm:simple>${bean:pagination?method=getStart}</cm:simple>
+          <cm:simple>${bean:dataIndexerPagination?method=getStart}</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="row">
           <cm:simple>{{task.data-indexer.records.per.page}}</cm:simple>

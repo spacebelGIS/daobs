@@ -331,7 +331,7 @@
         <cm:simple>+harvesterUuid:"${header.harvesterUuid}"</cm:simple>
       </cm:setBody>
       <cm:multicast stopOnException="false"
-                    parallelProcessing="true">
+                    parallelProcessing="false">
         <cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>
         <cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>
         <!--<cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>-->

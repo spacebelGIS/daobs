@@ -45,6 +45,7 @@ public class Pagination {
      * @return
      */
     public List<String> getPages(@Header("numberOfRecordsMatched") int records) {
+        // TODO: This maybe synchronised ?
         List<String> pages = new ArrayList<>();
         int numberOfPages = records / recordsPerPage;
         int remainingRecords = records - (numberOfPages * recordsPerPage);
