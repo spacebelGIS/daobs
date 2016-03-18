@@ -238,13 +238,15 @@
         Take in account gmd:descriptiveKeywords or srv:keywords
         -->
         <!-- TODO: Some MS may be using a translated version of the thesaurus title -->
-        <xsl:variable name="inspireThemeThesaurusTitle" select="'INSPIRE themes'"/>
+        <xsl:variable name="inspireThemeThesaurusTitle" select="'inspire themes'"/>
         <xsl:for-each
                 select="*/gmd:MD_Keywords[contains(
+                     lower-case(
                      gmd:thesaurusName[1]/gmd:CI_Citation/
-                       gmd:title[1]/gco:CharacterString/text(),
-                       $inspireThemeThesaurusTitle)]
-                  /gmd:keyword/gco:CharacterString">
+                       gmd:title[1]/*/text()
+                     ),
+                     $inspireThemeThesaurusTitle)]
+                  /gmd:keyword/*">
 
           <xsl:variable name="inspireTheme" as="xs:string"
                         select="solr:analyzeField('inspireTheme_syn', text())"/>
@@ -270,8 +272,10 @@
 
         <field name="numberOfInspireTheme"><xsl:value-of
                 select="count(*/gmd:MD_Keywords[contains(
-                     gmd:thesaurusName[1]/gmd:CI_Citation/
-                       gmd:title[1]/gco:CharacterString/text(),
+                       lower-case(
+                       gmd:thesaurusName[1]/gmd:CI_Citation/
+                         gmd:title[1]/*/text()
+                       ),
                        $inspireThemeThesaurusTitle)]
                   /gmd:keyword)"/></field>
 
