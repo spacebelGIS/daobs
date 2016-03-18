@@ -246,7 +246,7 @@
                        gmd:title[1]/*/text()
                      ),
                      $inspireThemeThesaurusTitle)]
-                  /gmd:keyword/*">
+                  /gmd:keyword/gco:CharacterString">
 
           <xsl:variable name="inspireTheme" as="xs:string"
                         select="solr:analyzeField('inspireTheme_syn', text())"/>
