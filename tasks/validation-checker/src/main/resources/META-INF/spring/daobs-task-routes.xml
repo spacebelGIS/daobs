@@ -82,9 +82,64 @@
 
 
     <cm:route id="route-task-validate-check-regularly" autoStartup="{{task.validation-checker.startup.background}}">
-      <cm:from uri="quartz2://task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
-      <cm:to uri="direct:task-validate-start"/>
+      <cm:from uri="quartz2://task-validate/check-not-validated-records?cron={{task.validation-checker.background.frequency}}"/>
+      <!--<cm:to uri="direct:task-validate-start"/>-->
+      <cm:log message="Background validation starts (frequency: {{task.validation-checker.background.frequency}})."
+              loggingLevel="INFO"
+              logName="org.daobs.task.ValidationChecker"/>
+
+      <cm:setHeader headerName="CamelHttpMethod">
+        <cm:constant>GET</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_QUERY">
+        <cm:groovy>'q=' + URLEncoder.encode('{{task.validation-checker.background.filter}}', 'UTF-8') +
+          '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=0&amp;rows={{task.validation-checker.background.records}}'</cm:groovy>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+      <cm:setHeader headerName="numberOfRecordsMatched">
+        <cm:xpath resultType="java.lang.String">
+          //result/@numFound
+        </cm:xpath>
+      </cm:setHeader>
+      <cm:choice>
+        <cm:when>
+          <cm:xpath>//result/@numFound and //result/@numFound > 0</cm:xpath>
+          <cm:log message="$simple{header.numberOfRecordsMatched} record(s) with no validation info. Processing the first {{task.validation-checker.background.records}} in background."
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.ValidationChecker"/>
+
+          <cm:split parallelProcessing="true" strategyRef="nullBodyStrategy">
+            <cm:xpath>//doc</cm:xpath>
+            <!-- Retrieve UUID from Solr response -->
+            <cm:setHeader headerName="documentIdentifier">
+              <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
+            </cm:setHeader>
+            <!-- Compute filename suffix for saving update queries -->
+            <cm:setHeader headerName="stringToEncrypt">
+              <cm:simple>$simple{header.documentIdentifier}</cm:simple>
+            </cm:setHeader>
+            <cm:setHeader headerName="fileNameSuffix">
+              <cm:simple>bean:utility?method=encrypt</cm:simple>
+            </cm:setHeader>
+            <!-- Retrieve XML document from Solr document -->
+            <cm:setBody>
+              <cm:xpath resultType="java.lang.String">doc/str[@name = 'document']/text()</cm:xpath>
+            </cm:setBody>
+            <cm:log message="Record identifier is '$simple{header.documentIdentifier}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
+                    loggingLevel="INFO"
+                    logName="org.daobs.task.ValidationChecker"/>
+
+            <cm:to uri="direct:validation-inspire"/>
+          </cm:split>
+        </cm:when>
+      </cm:choice>
     </cm:route>
+
+
 
     <cm:route id="route-get-non-validated-records">
       <cm:description>

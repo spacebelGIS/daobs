@@ -4,8 +4,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -118,35 +122,56 @@ public class OnlineServiceValidatorClient {
             File resourceDescriptorFile) throws MalformedURLException {
         HttpResponse retVal = null;
 
-        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpClient httpClient = HttpClientBuilder.create()
+//                .setRedirectStrategy(new LaxRedirectStrategy())
+                .build();
 
         ValidationReport report = new ValidationReport(threshold);
         URL validatorUrl = new URL(this.inspireResourceTesterURL);
         HttpPost httpPost = new HttpPost(this.inspireResourceTesterURL);
         httpPost.addHeader("Accept", "application/xml");
 
-        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder
-                .create()
-                .addTextBody("dontGenerateLayerPreviews",
-                        String.valueOf(this.dontGenerateLayerPreviews))
-                .addTextBody("dontGenerateHtmlFiles",
-                        String.valueOf(this.dontGenerateHtmlFiles))
-                .addTextBody("probeNetworkServices",
-                        String.valueOf(this.probeNetworkServices))
-                .addTextBody("probeDataResourceLocators",
-                        String.valueOf(this.probeDataResourceLocators));
+        MultipartEntity reqEntity = new MultipartEntity();
 
         if (resourceDescriptorFile != null) {
-            multipartEntityBuilder.addBinaryBody(
-                    "uploadedFile",
-                    resourceDescriptorFile);
-        }
-        if (resourceDescriptorText != null) {
-            // For text/plain mode use
-            multipartEntityBuilder.addTextBody("resourceRepresentation", resourceDescriptorText);
+            FileBody dataFile = new FileBody(resourceDescriptorFile);
+            reqEntity.addPart("uploadedFile", dataFile);
         }
 
-        httpPost.setEntity(multipartEntityBuilder.build());
+        if (resourceDescriptorText != null) {
+            StringBody stringPart = null;
+            try {
+                stringPart = new StringBody(resourceDescriptorText);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            reqEntity.addPart("resourceRepresentation", stringPart);
+        }
+
+        httpPost.setEntity(reqEntity);
+
+//        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder
+//                .create()
+//                .addTextBody("dontGenerateLayerPreviews",
+//                        String.valueOf(this.dontGenerateLayerPreviews))
+//                .addTextBody("dontGenerateHtmlFiles",
+//                        String.valueOf(this.dontGenerateHtmlFiles))
+//                .addTextBody("probeNetworkServices",
+//                        String.valueOf(this.probeNetworkServices))
+//                .addTextBody("probeDataResourceLocators",
+//                        String.valueOf(this.probeDataResourceLocators));
+//
+//        if (resourceDescriptorFile != null) {
+//            multipartEntityBuilder.addBinaryBody(
+//                    "uploadedFile",
+//                    resourceDescriptorFile);
+//        }
+//        if (resourceDescriptorText != null) {
+//            // For text/plain mode use
+//            multipartEntityBuilder.addTextBody("resourceRepresentation", resourceDescriptorText);
+//        }
+//
+//        httpPost.setEntity(multipartEntityBuilder.build());
 
         try {
             report.start();
@@ -195,9 +220,13 @@ public class OnlineServiceValidatorClient {
                 //XML representation of the validation report or of the resource metadata if no issues were found
                 String xml = org.apache.commons.io.IOUtils.toString(validatorResponse.getEntity().getContent(), "UTF-8");
                 report.setReport(xml);
+            } else {
+                report.setInfo(String.format(
+                        "Exception. HTTP status is %d expected 201.", responseStatusCode
+                ));
             }
         } catch (IOException ex) {
-            report.setInfo(ex.getMessage());
+            report.setInfo("Exception: " + ex.getMessage());
         }
     }
 }

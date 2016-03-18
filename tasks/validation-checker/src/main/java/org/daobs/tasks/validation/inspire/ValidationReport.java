@@ -56,7 +56,7 @@ public class ValidationReport {
         return completenessIndicator;
     }
 
-    private double completenessIndicator;
+    private double completenessIndicator = -1;
     private double timeWaitingForResponseSeconds;
     private double totalTimeSeconds;
     private StopWatch watch = new StopWatch();
@@ -148,17 +148,20 @@ public class ValidationReport {
     public ValidationReport setReport(String report) {
         this.report = report;
 
-        // Quick hack to retrive completeness indicator
+        // Quick hack to retrieve completeness indicator
         // Xpath may be better
         try {
             Matcher matcher = completenessPattern.matcher(report);
             if (matcher.find()) {
                 String completeness = matcher.group(1);
                 this.completenessIndicator = Double.parseDouble(completeness);
-                this.isAboveThreshold = this.completenessIndicator >= this.threshold;
+                if (this.completenessIndicator >= 0) {
+                    this.isAboveThreshold =
+                            this.completenessIndicator >= this.threshold;
+                }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            setInfo(getInfo() + ". Exception" + e.getMessage());
         }
         return this;
     }
