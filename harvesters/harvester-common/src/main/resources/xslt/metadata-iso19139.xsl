@@ -246,28 +246,30 @@
                        gmd:title[1]/*/text()
                      ),
                      $inspireThemeThesaurusTitle)]
-                  /gmd:keyword/gco:CharacterString">
+                  /gmd:keyword">
+          <xsl:for-each select="gco:CharacterString[. != '']|
+                                gmx:Anchor[. != '']">
+            <xsl:variable name="inspireTheme" as="xs:string"
+                          select="solr:analyzeField('inspireTheme_syn', text())"/>
 
-          <xsl:variable name="inspireTheme" as="xs:string"
-                        select="solr:analyzeField('inspireTheme_syn', text())"/>
+            <field name="inspireTheme_syn"><xsl:value-of select="text()"/></field>
+            <field name="inspireTheme"><xsl:value-of select="$inspireTheme"/></field>
 
-          <field name="inspireTheme_syn"><xsl:value-of select="text()"/></field>
-          <field name="inspireTheme"><xsl:value-of select="$inspireTheme"/></field>
-
-          <!--
-          WARNING: Here we only index the first keyword in order
-          to properly compute one INSPIRE annex.
-          -->
-          <xsl:if test="position() = 1">
-            <field name="inspireThemeFirst_syn"><xsl:value-of select="text()"/></field>
-            <field name="inspireThemeFirst"><xsl:value-of select="$inspireTheme"/></field>
-            <field name="inspireAnnexForFirstTheme">
+            <!--
+            WARNING: Here we only index the first keyword in order
+            to properly compute one INSPIRE annex.
+            -->
+            <xsl:if test="position() = 1">
+              <field name="inspireThemeFirst_syn"><xsl:value-of select="text()"/></field>
+              <field name="inspireThemeFirst"><xsl:value-of select="$inspireTheme"/></field>
+              <field name="inspireAnnexForFirstTheme">
+                <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
+              </field>
+            </xsl:if>
+            <field name="inspireAnnex">
               <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
             </field>
-          </xsl:if>
-          <field name="inspireAnnex">
-            <xsl:value-of select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
-          </field>
+          </xsl:for-each>
         </xsl:for-each>
 
         <field name="numberOfInspireTheme"><xsl:value-of
