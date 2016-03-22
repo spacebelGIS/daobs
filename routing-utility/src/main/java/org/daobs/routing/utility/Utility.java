@@ -6,8 +6,10 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Header;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.w3c.dom.Document;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,11 +25,14 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created by francois on 10/12/14.
  */
 public class Utility {
+    Logger log = Logger.getLogger("org.daobs.utility");
+
     /**
      * Encrypt a string using sha256Hex
      *
@@ -38,12 +43,11 @@ public class Utility {
         return DigestUtils.sha256Hex(stringToEncrypt);
     }
 
-
     /**
      * Run XSLT transformation on the body of the Exchange
      * and set the output body to the results of the transformation.
      */
-    public StreamResult transform(Exchange exchange, String xslt)  {
+    public void transform(Exchange exchange, String xslt)  {
         String xml = exchange.getIn().getBody(String.class);
 
         exchange.getOut().setHeaders(exchange.getIn().getHeaders());
@@ -54,6 +58,25 @@ public class Utility {
         DocumentBuilder builder = null;
         try {
             builder = domFactory.newDocumentBuilder();
+            builder.setErrorHandler(new org.xml.sax.ErrorHandler() {
+                @Override
+                public void warning(SAXParseException e) throws SAXException {
+                    log.warning(e.getMessage());
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void error(SAXParseException e) throws SAXException {
+                    log.warning(e.getMessage());
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void fatalError(SAXParseException e) throws SAXException {
+                    log.warning(e.getMessage());
+                    e.printStackTrace();
+                }
+            });
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
@@ -84,7 +107,7 @@ public class Utility {
         if (url != null) {
             stylesheet.setSystemId(url.toExternalForm());
         } else {
-            System.out.println("WARNING: Error when setSystemId for XSL: " +
+            log.warning("WARNING: Error when setSystemId for XSL: " +
                     xslt + ". Check resource location.");
         }
 
@@ -99,8 +122,7 @@ public class Utility {
             // Add the following to get timing info on xslt transformations
             transFact.setAttribute(FeatureKeys.TIMING,true);
         } catch (IllegalArgumentException e) {
-            System.out.println("WARNING: transformerfactory doesnt like saxon attributes!");
-            //e.printStackTrace();
+            log.warning("WARNING: transformerfactory doesnt like saxon attributes!");
         } finally {
             Transformer t = null;
             try {
@@ -116,12 +138,11 @@ public class Utility {
             }
             try {
                 t.transform(source, result);
-
                 exchange.getOut().setBody(result.getWriter().toString());
             } catch (TransformerException e) {
+                log.warning(e.getMessage());
                 e.printStackTrace();
             }
-            return result;
         }
     }
 }
