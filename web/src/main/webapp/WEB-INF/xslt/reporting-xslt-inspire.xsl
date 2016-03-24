@@ -250,35 +250,67 @@
 
       <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
       <xsl:variable name="inspireConformResource" select="arr[@name = 'inspireConformResource']/bool[1]"/>
-      <xsl:for-each select="distinct-values(arr[@name = 'linkUrl']/str/text())">
-        <NetworkService>
-          <!-- TODO: Here we could ping the service and set the value ?
-          Usage restriction in the metadata record ?
-          -->
-          <xsl:comment>By default, directlyAccessible is set to true. Adapt the value for restricted access service.</xsl:comment>
-          <directlyAccessible>true</directlyAccessible>
 
-          <!-- All online resources are taken into account,
-          we should maybe restrict it ? TODO: improve
+      <!-- Based on service type try to identify
+      bast match based on protocol .... -->
+      <xsl:variable name="links" select="arr[@name = 'link']"/>
+      <xsl:variable name="linkBasedOnServiceType">
+        <xsl:for-each select="$links/str">
+          <xsl:variable name="token"
+                        select="tokenize(text(), '\|')"/>
+          <xsl:choose>
+            <xsl:when test="$serviceType = 'view' and contains($token[1], 'WMS')">
+              <xsl:copy-of select="."/>
+            </xsl:when>
+            <xsl:when test="$serviceType = 'download' and (
+                contains($token[1], 'WFS') or contains($token[1], 'SOS') or contains($token[1], 'WCS'))">
+              <xsl:copy-of select="."/>
+            </xsl:when>
+            <xsl:when test="$serviceType = 'discovery' and contains($token[1], 'CSW')">
+              <xsl:copy-of select="."/>
+            </xsl:when>
+            <xsl:when test="$serviceType = 'transformation' and contains($token[1], 'WPS')">
+              <xsl:copy-of select="."/>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:variable>
 
-          Resource Locator for data sets and dataset series
-          - a link to a web with further instructions
-          - a link to a service capabilities document
-          - a link to the service WSDL document (SOAP Binding)
-          - a link to a client application that directly accesses the service
-          -->
-          <URL><xsl:value-of select="."/></URL>
+      <NetworkService>
+        <xsl:comment>By default, directlyAccessible is set to true. Adapt the value for restricted access service.</xsl:comment>
+        <directlyAccessible>true</directlyAccessible>
 
-          <!-- -1 indicate unkown. Maybe some methodology
-          could be adopted to populate the value in the
-          metadata record ? -->
-          <userRequest>-1</userRequest>
+        <!-- All online resources are taken into account,
+        Resource Locator for data sets and dataset series
+        - a link to a web with further instructions
+        - a link to a service capabilities document
+        - a link to the service WSDL document (SOAP Binding)
+        - a link to a client application that directly accesses the service
+        -->
 
-          <nnConformity><xsl:value-of select="$inspireConformResource"/></nnConformity>
+        <xsl:choose>
+          <xsl:when test="normalize-space($linkBasedOnServiceType) != ''">
+            <xsl:variable name="link"
+                          select="tokenize($linkBasedOnServiceType[1], '\|')"/>
+            <xsl:comment>Found best match based on protocol (<xsl:value-of select="$link[1]"/>)
+              for service type '<xsl:value-of select="$serviceType"/>'.</xsl:comment>
+            <URL><xsl:value-of select="$link[2]"/></URL>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:comment>First link in the service metadata record.</xsl:comment>
+            <URL><xsl:value-of select="arr[@name = 'linkUrl']/str[1]/text()"/></URL>
+          </xsl:otherwise>
+        </xsl:choose>
 
-          <NnServiceType><xsl:value-of select="$serviceType"/></NnServiceType>
-        </NetworkService>
-      </xsl:for-each>
+        <!-- -1 indicate unkown. Maybe some methodology
+        could be adopted to populate the value in the
+        metadata record ? -->
+        <userRequest>-1</userRequest>
+
+        <nnConformity><xsl:value-of select="$inspireConformResource"/></nnConformity>
+
+        <NnServiceType><xsl:value-of select="$serviceType"/></NnServiceType>
+      </NetworkService>
     </SpatialDataService>
   </xsl:template>
 

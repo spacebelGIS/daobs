@@ -37,7 +37,7 @@ public class CustomReportingController {
             "start=0&rows=%d&" +
             "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
             "inspireAnnex,inspireTheme,inspireConformResource," +
-            "serviceType,linkUrl," +
+            "serviceType,linkUrl,link," +
             "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final List<String> BOOLEAN_PARAMETERS = new ArrayList<>(

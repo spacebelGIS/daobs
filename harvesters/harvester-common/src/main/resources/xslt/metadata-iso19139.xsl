@@ -247,6 +247,7 @@
                      ),
                      $inspireThemeThesaurusTitle)]
                   /gmd:keyword">
+          <xsl:variable name="position" select="position()"/>
           <xsl:for-each select="gco:CharacterString[. != '']|
                                 gmx:Anchor[. != '']">
             <xsl:variable name="inspireTheme" as="xs:string"
@@ -259,7 +260,7 @@
             WARNING: Here we only index the first keyword in order
             to properly compute one INSPIRE annex.
             -->
-            <xsl:if test="position() = 1">
+            <xsl:if test="$position = 1">
               <field name="inspireThemeFirst_syn"><xsl:value-of select="text()"/></field>
               <field name="inspireThemeFirst"><xsl:value-of select="$inspireTheme"/></field>
               <field name="inspireAnnexForFirstTheme">
