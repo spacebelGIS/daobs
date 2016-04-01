@@ -9,7 +9,7 @@ DAOBS is using:
 * [Solr](http://lucene.apache.org/solr/) licensed under the terms of Apache License, Version 2.0
 * [Banana](https://github.com/lucidworks/banana) licensed under the terms of Apache License, Version 2.0 
 * [Camel](http://camel.apache.org/) licensed under the terms of Apache License, Version 2.0 
-* and [Other dependencies](THIRD-PARTY.txt)
+* and [Other dependencies](THIRD-PARTY.md)
 
 # Licence template
 
