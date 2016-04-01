@@ -1,22 +1,35 @@
-
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.indicator.config;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -32,8 +45,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -59,11 +72,11 @@ public class Reporting {
 
     /**
      * Gets the value of the identification property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Identification }
-     *     
+     *
      */
     public Identification getIdentification() {
         return identification;
@@ -71,11 +84,11 @@ public class Reporting {
 
     /**
      * Sets the value of the identification property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Identification }
-     *     
+     *
      */
     public void setIdentification(Identification value) {
         this.identification = value;
@@ -83,11 +96,11 @@ public class Reporting {
 
     /**
      * Gets the value of the variables property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Variables }
-     *     
+     *
      */
     public Variables getVariables() {
         return variables;
@@ -95,11 +108,11 @@ public class Reporting {
 
     /**
      * Sets the value of the variables property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Variables }
-     *     
+     *
      */
     public void setVariables(Variables value) {
         this.variables = value;
@@ -107,11 +120,11 @@ public class Reporting {
 
     /**
      * Gets the value of the indicators property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Indicators }
-     *     
+     *
      */
     public Indicators getIndicators() {
         return indicators;
@@ -119,11 +132,11 @@ public class Reporting {
 
     /**
      * Sets the value of the indicators property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Indicators }
-     *     
+     *
      */
     public void setIndicators(Indicators value) {
         this.indicators = value;
@@ -131,11 +144,11 @@ public class Reporting {
 
     /**
      * Gets the value of the computationTime property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Integer }
-     *     
+     *
      */
     public Integer getComputationTime() {
         return computationTime;
@@ -143,11 +156,11 @@ public class Reporting {
 
     /**
      * Sets the value of the computationTime property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Integer }
-     *     
+     *
      */
     public void setComputationTime(Integer value) {
         this.computationTime = value;
@@ -155,11 +168,11 @@ public class Reporting {
 
     /**
      * Gets the value of the id property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getId() {
         return id;
@@ -167,11 +180,11 @@ public class Reporting {
 
     /**
      * Sets the value of the id property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setId(String value) {
         this.id = value;

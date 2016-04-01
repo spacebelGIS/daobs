@@ -1,3 +1,25 @@
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <daobs:harvesters xmlns:daobs="http://daobs.org"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:noNamespaceSchemaLocation="../../daobsHarvesterConfig.xsd">
@@ -65,7 +87,9 @@
     <daobs:uuid>37300ca5-fffc-4214-9a10-34e32ed25b8b</daobs:uuid>
     <daobs:territory>IT</daobs:territory>
     <daobs:folder>IT</daobs:folder>
-    <daobs:name>RNDT - Repertorio Nazionale dei Dati Territoriali - Servizio di ricerca</daobs:name>
+    <daobs:name>RNDT - Repertorio Nazionale dei Dati Territoriali - Servizio di
+      ricerca
+    </daobs:name>
     <daobs:url>http://www.rndt.gov.it/RNDT/CSW/POST</daobs:url>
   </daobs:harvester>
 
@@ -75,7 +99,8 @@
     <daobs:folder>EL</daobs:folder>
     <daobs:name>ΚΑΤΑΛΟΓΟΣ (Elena)</daobs:name>
     <daobs:url>http://www1.okxe.gr:80/geonetwork/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www1.okxe.gr:80/geonetwork/?uuid={{uuid}}
+    <daobs:pointOfTruthURLPattern>
+      http://www1.okxe.gr:80/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -103,8 +128,11 @@
     <daobs:uuid>4d1adfec-73a8-4036-a633-c83b6b12fad9</daobs:uuid>
     <daobs:territory>BE</daobs:territory>
     <daobs:folder>BE-METAWAL</daobs:folder>
-    <daobs:name>Metawal -  Catalogue pour l'information géographique de Wallonie</daobs:name>
-    <daobs:url>http://metawal.wallonie.be/geonetwork/srv/fre/csw-inspire</daobs:url>
+    <daobs:name>Metawal - Catalogue pour l'information géographique de
+      Wallonie
+    </daobs:name>
+    <daobs:url>http://metawal.wallonie.be/geonetwork/srv/fre/csw-inspire
+    </daobs:url>
     <daobs:pointOfTruthURLPattern>
       http://metawal.wallonie.be/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
@@ -170,7 +198,8 @@
     <daobs:folder>NO</daobs:folder>
     <daobs:name>Geonorge metadataportal (SKLD)</daobs:name>
     <daobs:url>http://www.geonorge.no/geonetwork/srv/nor/csw-inspire</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www.geonorge.no/geonetwork/?uuid={{uuid}}
+    <daobs:pointOfTruthURLPattern>
+      http://www.geonorge.no/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -216,7 +245,8 @@
     <daobs:folder>HU</daobs:folder>
     <daobs:name>FÖMI catalog service / FÖMI katalógus szolgáltatás</daobs:name>
     <daobs:url>http://www.geoshop.hu:80/geonetwork/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://www.geoshop.hu:80/geonetwork?uuid={{uuid}}
+    <daobs:pointOfTruthURLPattern>
+      http://www.geoshop.hu:80/geonetwork?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -227,7 +257,8 @@
     <daobs:name>UK Location Catalogue Publishing Service (Ordnance Survey, GB)
     </daobs:name>
     <daobs:url>http://csw.data.gov.uk/geonetwork/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://csw.data.gov.uk/geonetwork/?uuid={{uuid}}
+    <daobs:pointOfTruthURLPattern>
+      http://csw.data.gov.uk/geonetwork/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -254,7 +285,8 @@
     <daobs:name>Pilot kataloškog servera (Otišao)</daobs:name>
     <daobs:url>http://geoportal.nipp.hr/geonetwork/srv/hrv/csw-inspire
     </daobs:url>
-    <daobs:pointOfTruthURLPattern>http://geoportal.nipp.hr/geonetwork?uuid={{uuid}}
+    <daobs:pointOfTruthURLPattern>
+      http://geoportal.nipp.hr/geonetwork?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -433,7 +465,9 @@
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-00</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-00</daobs:folder>
-    <daobs:name>Portal Geostatystyczny - Usługa wyszukiwania metadanych (Główny Urząd Statystyczny)</daobs:name>
+    <daobs:name>Portal Geostatystyczny - Usługa wyszukiwania metadanych (Główny
+      Urząd Statystyczny)
+    </daobs:name>
     <daobs:url>https://geo.stat.gov.pl/soapServices/CSWStartup</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -443,24 +477,32 @@
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-01</daobs:folder>
     <daobs:name>metadane.gison.pl / csw-zawoja</daobs:name>
-    <daobs:url>http://metadane.gison.pl/geonetwork/srv/eng/csw-zawoja</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://metadane.gison.pl/geonetwork/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:url>http://metadane.gison.pl/geonetwork/srv/eng/csw-zawoja
+    </daobs:url>
+    <daobs:pointOfTruthURLPattern>http://metadane.gison.pl/geonetwork/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-03</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-03</daobs:folder>
-    <daobs:name>G-SIP Konstancin-Jeziorna Metadata Catalog (Urząd Miasta i Gminy Konstancin-Jeziorna)</daobs:name>
-    <daobs:url>http://gsip.konstancinjeziorna.pl/geonetwork/srv/eng/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://gsip.konstancinjeziorna.pl/geonetwork/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:name>G-SIP Konstancin-Jeziorna Metadata Catalog (Urząd Miasta i Gminy
+      Konstancin-Jeziorna)
+    </daobs:name>
+    <daobs:url>http://gsip.konstancinjeziorna.pl/geonetwork/srv/eng/csw
+    </daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      http://gsip.konstancinjeziorna.pl/geonetwork/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-04</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-04</daobs:folder>
-    <daobs:name>GDOŚ Geoportal usługa katalogowa - INSPIRE Usługa wyszukania</daobs:name>
+    <daobs:name>GDOŚ Geoportal usługa katalogowa - INSPIRE Usługa wyszukania
+    </daobs:name>
     <daobs:url>http://sdi.gdos.gov.pl/soapServices/CSWStartup</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -470,8 +512,10 @@
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-05</daobs:folder>
     <daobs:name>metadane.gison.pl / csw-zabierzow</daobs:name>
-    <daobs:url>http://metadane.gison.pl/geonetwork/srv/eng/csw-zabierzow</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://metadane.gison.pl/geonetwork/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:url>http://metadane.gison.pl/geonetwork/srv/eng/csw-zabierzow
+    </daobs:url>
+    <daobs:pointOfTruthURLPattern>http://metadane.gison.pl/geonetwork/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
@@ -480,14 +524,16 @@
     <daobs:folder>PL-06</daobs:folder>
     <daobs:name>Katalog metadanych firmy J.O.C.GIS (J.O.C.GIS)</daobs:name>
     <daobs:url>http://metadane.jocgis.pl/geonetwork/srv/eng/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://metadane.jocgis.pl/geonetwork/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:pointOfTruthURLPattern>http://metadane.jocgis.pl/geonetwork/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-07</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-07</daobs:folder>
-    <daobs:name>Usługa wyszukiwania INSPIRE - Catalogue Services for Web (CSW)</daobs:name>
+    <daobs:name>Usługa wyszukiwania INSPIRE - Catalogue Services for Web (CSW)
+    </daobs:name>
     <daobs:url>http://inspire.gios.gov.pl/aquarius-csw/post</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -497,8 +543,11 @@
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-08</daobs:folder>
     <daobs:name>metadane-inspire.pgi.gov.pl</daobs:name>
-    <daobs:url>http://metadane-inspire.pgi.gov.pl/geonetwork/srv/eng/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://metadane-inspire.pgi.gov.pl/geonetwork/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:url>http://metadane-inspire.pgi.gov.pl/geonetwork/srv/eng/csw
+    </daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      http://metadane-inspire.pgi.gov.pl/geonetwork/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
@@ -506,15 +555,18 @@
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-09</daobs:folder>
     <daobs:name>metadane.gison.pl / csw-mszanadolna</daobs:name>
-    <daobs:url>http://metadane.gison.pl/geonetwork/srv/eng/csw-mszanadolna</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://metadane.gison.pl/geonetwork/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:url>http://metadane.gison.pl/geonetwork/srv/eng/csw-mszanadolna
+    </daobs:url>
+    <daobs:pointOfTruthURLPattern>http://metadane.gison.pl/geonetwork/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-10</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-10</daobs:folder>
-    <daobs:name>Narodowy Instytut Dziedzictwa - discovery service (CSW)</daobs:name>
+    <daobs:name>Narodowy Instytut Dziedzictwa - discovery service (CSW)
+    </daobs:name>
     <daobs:url>http://mapy.zabytek.gov.pl/CSW_NID/Service.svc/post</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -523,7 +575,8 @@
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-11</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-11</daobs:folder>
-    <daobs:name>Usługa wyszukiwania INSPIRE - Catalogue Services for Web (CSW)</daobs:name>
+    <daobs:name>Usługa wyszukiwania INSPIRE - Catalogue Services for Web (CSW)
+    </daobs:name>
     <daobs:url>http://inspire.gios.gov.pl/aquarius-csw/post</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -532,7 +585,9 @@
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-12</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-12</daobs:folder>
-    <daobs:name>Usługa wyszukiwania Systemu Informacji Przestrzennej Urzędu Miasta Racibórz</daobs:name>
+    <daobs:name>Usługa wyszukiwania Systemu Informacji Przestrzennej Urzędu
+      Miasta Racibórz
+    </daobs:name>
     <daobs:url>http://esim.raciborz.pl/geoportal/csw</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -543,14 +598,18 @@
     <daobs:folder>PL-13</daobs:folder>
     <daobs:name>Serwer katalogowy Geo-System (Geo)</daobs:name>
     <daobs:url>http://metadane.podgik.pl/geonetwork26/srv/en/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://metadane.podgik.pl/geonetwork26/?uuid=</daobs:pointOfTruthURLPattern>
+    <daobs:pointOfTruthURLPattern>
+      http://metadane.podgik.pl/geonetwork26/?uuid=
+    </daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
   <daobs:harvester>
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-14</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-14</daobs:folder>
-    <daobs:name>Miasto Głogów - usługa wyszukiwania CSW - zagospodarowanie przestrzenne</daobs:name>
+    <daobs:name>Miasto Głogów - usługa wyszukiwania CSW - zagospodarowanie
+      przestrzenne
+    </daobs:name>
     <daobs:url>http://sit.glogow.pl/CSW/Service.svc/post</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
@@ -559,7 +618,9 @@
     <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-15</daobs:uuid>
     <daobs:territory>PL</daobs:territory>
     <daobs:folder>PL-15</daobs:folder>
-    <daobs:name>Usługa wyszukiwania Systemu Informacji Przestrzennej Związku Miast i Gmin Dorzecza Parsęty</daobs:name>
+    <daobs:name>Usługa wyszukiwania Systemu Informacji Przestrzennej Związku
+      Miast i Gmin Dorzecza Parsęty
+    </daobs:name>
     <daobs:url>http://gis.parseta.pl/geoportal/csw</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>

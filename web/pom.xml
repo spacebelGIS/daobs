@@ -1,9 +1,31 @@
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.daobs</groupId>
   <artifactId>daobs-web</artifactId>
-  <name>Solr and web application</name>
+  <name>Web application</name>
   <packaging>war</packaging>
   <version>0.1-SNAPSHOT</version>
 
@@ -233,6 +255,11 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>2.3.1</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>${war.name}</finalName>
@@ -243,6 +270,21 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <header>${project.basedir}/../doc/licence.tpl</header>
+          <excludes>
+            <exclude>activemq-data</exclude>
+            <exclude>logs</exclude>
+            <exclude>src/main/webapp/api-doc/**</exclude>
+            <exclude>**/partial/*.html</exclude>
+            <exclude>src/main/webapp/assets/libs/**</exclude>
+            <exclude>src/main/webapp/toptoolbar.html</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>

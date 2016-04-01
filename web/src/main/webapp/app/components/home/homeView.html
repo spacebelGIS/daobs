@@ -1,16 +1,30 @@
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <div class="row" data-ng-controller="HomeCtrl">
   <div class="col-sm-6">
 
     <div class="jumbotron">
       <p>{{'homeInfo' | translate}}</p>
-      <p><a class="btn btn-primary btn-lg"
-            data-ng-show="dashboards.length > 0"
-            role="button"
-            title="{{dashboards[0].title}}"
-            data-ng-href="{{dashboardBaseURL}}{{dashboards[0].id}}">
-        <i class="glyphicon glyphicon-stats"></i>
-        <span data-translate="">viewDashboard</span>
-      </a></p>
     </div>
 
 
@@ -19,10 +33,11 @@
 
 
     <div class="alert alert-danger"
-       role="alert"
-       data-ng-if="solrConnectionError !== null">
+         role="alert"
+         data-ng-if="solrConnectionError !== null">
       <p data-translate=""
-         data-translate-values="{url: '{{solrConnectionError.config.url}}'}">solrConnectionError</p>
+         data-translate-values="{url: '{{solrConnectionError.config.url}}'}">
+        solrConnectionError</p>
 
       <p>
         {{solrConnectionError.statusText}} ({{solrConnectionError.status}})
@@ -93,7 +108,8 @@
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
           <li role="presentation"
               class="dropdown-header"
-              data-translate="">chooseATypeOfDashboardToLoad</li>
+              data-translate="">chooseATypeOfDashboardToLoad
+          </li>
           <li data-ng-repeat="item in listOfDashboardToLoad">
             <a href=""
                data-ng-click="loadDashboard(item)">{{item}}</a></li>
@@ -111,8 +127,8 @@
     <br/><br/>
 
     <div class="alert alert-info"
-       role="alert"
-       data-ng-if="dashboardsLoaded !== null">
+         role="alert"
+         data-ng-if="dashboardsLoaded !== null">
       <button type="button" class="close"
               data-dismiss="alert"
               aria-label="{{'close' | translate}}">

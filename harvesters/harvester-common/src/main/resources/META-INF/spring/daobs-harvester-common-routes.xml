@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <!-- Configures the cm Context-->
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:cm="http://camel.apache.org/schema/spring"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -21,7 +43,8 @@
 
   <bean id="SolrServer"
         class="org.daobs.index.SolrServerBean">
-    <property name="solrServerUrl" value="${solr.server.url}/${solr.core.data}"/>
+    <property name="solrServerUrl"
+              value="${solr.server.url}/${solr.core.data}"/>
     <property name="solrServerUsername" value="${solr.server.user}"/>
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
@@ -31,8 +54,8 @@
 
   <bean id="xsltUtility" class="org.daobs.routing.utility.Utility"/>
 
-  <cm:routeContext xmlns:daobs="http://daobs.org"
-                   id="harvester.common">
+  <cm:routeContext
+    id="harvester.common">
 
     <cm:route id="route-index">
       <cm:description>
@@ -46,31 +69,34 @@
       See https://github.com/INSPIRE-MIF/daobs/issues/90 -->
       <cm:removeHeaders pattern="*"/>
 
-<!--      <cm:setHeader headerName="transactionFileName">
-        <cm:groovy>java.util.UUID.randomUUID().toString() + '.xml'</cm:groovy>
-      </cm:setHeader>
-      <cm:to uri="file:/tmp/?fileName=solr-request/$simple{header.transactionFileName}&amp;charset=utf-8"/>-->
+      <!--      <cm:setHeader headerName="transactionFileName">
+              <cm:groovy>java.util.UUID.randomUUID().toString() + '.xml'</cm:groovy>
+            </cm:setHeader>
+            <cm:to uri="file:/tmp/?fileName=solr-request/$simple{header.transactionFileName}&amp;charset=utf-8"/>-->
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Content-Type">
         <cm:simple>text/xml</cm:simple>
       </cm:setHeader>
-      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
+      <cm:to
+        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document" charset="UTF-8"/>
       <cm:to uri="log:org.daobs.harvester.Harvester?showBody=true"/>
       <cm:choice>
         <cm:when>
           <!-- If records found, next route is direct:cswGetRecords. -->
-          <cm:xpath>/response/lst/int[@name = 'status' and text() = '400']</cm:xpath>
+          <cm:xpath>/response/lst/int[@name = 'status' and text() = '400']
+          </cm:xpath>
           <cm:setHeader headerName="indexingError">
             <cm:xpath resultType="java.lang.String">
               /response/lst/str[@name = 'msg']/text()
             </cm:xpath>
           </cm:setHeader>
-          <cm:log message="Oops, error while indexing record(s) of page #$simple{property.CamelSplitIndex}: $simple{header.indexingError}."
-                  loggingLevel="ERROR"
-                  logName="org.daobs.harvester.Harvester"/>
+          <cm:log
+            message="Oops, error while indexing record(s) of page #$simple{property.CamelSplitIndex}: $simple{header.indexingError}."
+            loggingLevel="ERROR"
+            logName="org.daobs.harvester.Harvester"/>
         </cm:when>
         <cm:otherwise>
           <cm:setBody>
@@ -82,7 +108,8 @@
           <cm:setHeader headerName="Content-Type">
             <cm:simple>text/xml</cm:simple>
           </cm:setHeader>
-          <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
+          <cm:to
+            uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
 
           <cm:setHeader headerName="indexingTime">
             <cm:xpath resultType="java.lang.String">

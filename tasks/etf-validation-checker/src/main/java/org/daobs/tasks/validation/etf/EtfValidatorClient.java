@@ -1,30 +1,44 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.tasks.validation.etf;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Simple Java Client for the ETF Validator Tool.
@@ -32,11 +46,19 @@ import java.util.*;
  * @author Jose García
  */
 public class EtfValidatorClient {
-    private Log log = LogFactory.getLog(this.getClass());
-
     String etfResourceTesterPath;
     String etfResourceTesterHtmlReportsPath;
     String etfResourceTesterHtmlReportsUrl;
+    private Log log = LogFactory.getLog(this.getClass());
+
+    public EtfValidatorClient(String etfResourceTesterPath,
+                              String etfResourceTesterHtmlReportsPath,
+                              String etfResourceTesterHtmlReportsUrl) {
+
+        this.etfResourceTesterPath = etfResourceTesterPath;
+        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
+        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
+    }
 
     public String getEtfResourceTesterPath() {
         return etfResourceTesterPath;
@@ -62,16 +84,6 @@ public class EtfValidatorClient {
         this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
     }
 
-
-    public EtfValidatorClient(String etfResourceTesterPath,
-                              String etfResourceTesterHtmlReportsPath,
-                              String etfResourceTesterHtmlReportsUrl) {
-
-        this.etfResourceTesterPath = etfResourceTesterPath;
-        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
-        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
-    }
-
     /**
      * Validates a resource url with ETF tool.
      *
@@ -90,14 +102,14 @@ public class EtfValidatorClient {
         log.info("Validating link=" + resourceDescriptorUrl + ", serviceType=" + serviceType);
 
         ServiceProtocolChecker protocolChecker =
-                new ServiceProtocolChecker(resourceDescriptorUrl, serviceType, declaredProtocol);
+            new ServiceProtocolChecker(resourceDescriptorUrl, serviceType, declaredProtocol);
 
         ServiceProtocol protocol = protocolChecker.check();
         if (protocol == null) {
             String message = protocolChecker.getErrorMessage();
 
             EtfValidationReport report = new EftValidationReportBuilder()
-                    .buildErrorReport(resourceDescriptorUrl, message);
+                .buildErrorReport(resourceDescriptorUrl, message);
 
             return report;
         }
@@ -111,10 +123,10 @@ public class EtfValidatorClient {
 
             if (!eftResults.exists()) {
                 String message = "Can't find ETF validation report for " + resourceDescriptorUrl +
-                        " (serviceType=" + serviceType.toString() +  ").";
+                    " (serviceType=" + serviceType.toString() + ").";
 
                 EtfValidationReport report = new EftValidationReportBuilder()
-                        .buildErrorReport(resourceDescriptorUrl, message);
+                    .buildErrorReport(resourceDescriptorUrl, message);
 
                 return report;
             }
@@ -122,12 +134,13 @@ public class EtfValidatorClient {
             // Build report
             String reportUrl = this.etfResourceTesterHtmlReportsUrl + "/" + FilenameUtils.getName(eftResultsPath) + "/index.html";
             EtfValidationReport report = new EftValidationReportBuilder()
-                    .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
+                .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
 
             return report;
         } finally {
             // Cleanup report from ETF folder
-            if (StringUtils.isNotEmpty(eftResultsPath)) FileUtils.deleteQuietly(new File(eftResultsPath));
+            if (StringUtils.isNotEmpty(eftResultsPath))
+                FileUtils.deleteQuietly(new File(eftResultsPath));
 
         }
     }
@@ -141,7 +154,7 @@ public class EtfValidatorClient {
         try {
             // Create a custom config.properties and temporary directory, to allow parallel executions of ETF.
             FileUtils.copyFile(new File(this.etfResourceTesterPath, "config.properties"),
-                    new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
+                new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
 
             tmpDir = Files.createTempDirectory("ETF");
 
@@ -152,14 +165,14 @@ public class EtfValidatorClient {
             envp[1] = "ETF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
 
             String command = commandToExecute(resourceDescriptorUrl, protocol,
-                    reportName, tmpDir.toFile().getAbsolutePath());
+                reportName, tmpDir.toFile().getAbsolutePath());
             if (StringUtils.isEmpty(command)) return "";
 
             log.info("EFT validation command: " + command);
 
             Process pr = rt.exec(command,
-                    envp,
-                    new File(this.etfResourceTesterPath));
+                envp,
+                new File(this.etfResourceTesterPath));
 
             if (log.isDebugEnabled()) {
                 // Log process ouput
@@ -168,7 +181,7 @@ public class EtfValidatorClient {
 
                 try {
                     bfr = new BufferedReader(new InputStreamReader(pr.getInputStream(), Charset.forName("UTF8")));
-                    while((line = bfr.readLine()) != null) {
+                    while ((line = bfr.readLine()) != null) {
                         log.debug(line);
                     }
 
@@ -179,7 +192,7 @@ public class EtfValidatorClient {
                 try {
                     bfr = new BufferedReader(new InputStreamReader(pr.getErrorStream(), Charset.forName("UTF8")));
                     line = "";
-                    while((line = bfr.readLine()) != null) {
+                    while ((line = bfr.readLine()) != null) {
                         log.debug(line);
                     }
                 } finally {
@@ -195,7 +208,7 @@ public class EtfValidatorClient {
 
             // Move the html folder to the html reports folder, accessible with http
             FileUtils.moveDirectory(new File(eftResultsPath, "html"),
-                    new File(this.etfResourceTesterHtmlReportsPath, reportName));
+                new File(this.etfResourceTesterHtmlReportsPath, reportName));
 
             return eftResultsPath;
 
@@ -209,7 +222,6 @@ public class EtfValidatorClient {
         }
 
     }
-
 
 
     /**

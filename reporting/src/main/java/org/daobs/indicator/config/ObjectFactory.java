@@ -1,4 +1,23 @@
-
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.indicator.config;
 
 import javax.xml.bind.JAXBElement;
@@ -8,18 +27,18 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the org.daobs.indicator.config package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the org.daobs.indicator.config package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -34,14 +53,14 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.daobs.indicator.config
-     * 
+     *
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link Reports }
-     * 
+     *
      */
     public Reports createReports() {
         return new Reports();
@@ -49,7 +68,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Reporting }
-     * 
+     *
      */
     public Reporting createReporting() {
         return new Reporting();
@@ -57,7 +76,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Identification }
-     * 
+     *
      */
     public Identification createIdentification() {
         return new Identification();
@@ -65,7 +84,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Title }
-     * 
+     *
      */
     public Title createTitle() {
         return new Title();
@@ -73,7 +92,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Variables }
-     * 
+     *
      */
     public Variables createVariables() {
         return new Variables();
@@ -81,7 +100,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Variable }
-     * 
+     *
      */
     public Variable createVariable() {
         return new Variable();
@@ -89,7 +108,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Name }
-     * 
+     *
      */
     public Name createName() {
         return new Name();
@@ -97,7 +116,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Query }
-     * 
+     *
      */
     public Query createQuery() {
         return new Query();
@@ -105,7 +124,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Indicators }
-     * 
+     *
      */
     public Indicators createIndicators() {
         return new Indicators();
@@ -113,7 +132,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Indicator }
-     * 
+     *
      */
     public Indicator createIndicator() {
         return new Indicator();
@@ -121,7 +140,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Parameters }
-     * 
+     *
      */
     public Parameters createParameters() {
         return new Parameters();
@@ -129,7 +148,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Parameter }
-     * 
+     *
      */
     public Parameter createParameter() {
         return new Parameter();
@@ -137,7 +156,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "author")
     public JAXBElement<String> createAuthor(String value) {
@@ -146,7 +165,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "expression")
     public JAXBElement<String> createExpression(String value) {
@@ -155,7 +174,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "status")
     public JAXBElement<String> createStatus(String value) {
@@ -164,7 +183,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "format")
     public JAXBElement<String> createFormat(String value) {
@@ -173,7 +192,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "value")
     public JAXBElement<String> createValue(String value) {
@@ -182,7 +201,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "url")
     public JAXBElement<String> createUrl(String value) {
@@ -191,7 +210,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://daobs.org", name = "comment")
     public JAXBElement<String> createComment(String value) {

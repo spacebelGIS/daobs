@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
@@ -8,29 +30,80 @@
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Data analyzer and observer</name>
+  <organization>
+    <name>INSPIRE MIF</name>
+    <url>https://github.com/INSPIRE-MIF</url>
+  </organization>
+  <inceptionYear>2014</inceptionYear>
   <description>Data analyzer and observer application.</description>
-  <url>https://github.com/titellus/daobs</url>
+  <url>https://github.com/INSPIRE-MIF/daobs</url>
   <scm>
     <connection>
-      scm:git:https://github.com/titellus/daobs
+      scm:git:https://github.com/INSPIRE-MIF/daobs
     </connection>
-    <url>https://github.com/titellus/daobs</url>
+    <url>https://github.com/INSPIRE-MIF/daobs</url>
   </scm>
-  <inceptionYear>2014</inceptionYear>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/titellus/daobs/issues</url>
+    <url>https://github.com/INSPIRE-MIF/daobs/issues</url>
   </issueManagement>
-
+  <developers>
+    <developer>
+      <name>François Prunayre</name>
+      <organization>titellus</organization>
+      <organizationUrl>http://titellus.net</organizationUrl>
+      <email>fx.prunayre@titellus.net</email>
+    </developer>
+    <developer>
+      <name>Jose Garcia</name>
+      <organization>GeoCat BV</organization>
+      <organizationUrl>https://www.geocat.net/</organizationUrl>
+      <email>jose.garcia@geocat.net</email>
+    </developer>
+    <developer>
+      <name>Paul van Genuchten</name>
+      <organization>GeoCat BV</organization>
+      <organizationUrl>https://www.geocat.net/</organizationUrl>
+      <email>paul.vangenuchten@geocat.net</email>
+    </developer>
+    <developer>
+      <name>Maria Arias de Reyna</name>
+      <organization>GeoCat BV</organization>
+      <organizationUrl>https://www.geocat.net/</organizationUrl>
+      <email>maria.arias@geocat.net</email>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <organization>European Environment Agency (EEA)</organization>
+      <organizationUrl>http://www.eea.europa.eu</organizationUrl>
+    </contributor>
+    <contributor>
+      <organization>Geonovum</organization>
+      <organizationUrl>http://www.geonovum.nl</organizationUrl>
+    </contributor>
+    <contributor>
+      <organization>Ifremer</organization>
+      <organizationUrl>http://wwz.ifremer.fr/</organizationUrl>
+    </contributor>
+    <contributor>
+      <organization>GeoCat BV</organization>
+      <organizationUrl>https://www.geocat.net/</organizationUrl>
+    </contributor>
+    <contributor>
+      <organization>titellus</organization>
+      <organizationUrl>http://titellus.net</organizationUrl>
+    </contributor>
+  </contributors>
+  <licenses>
+    <license>
+      <name>EUPL</name>
+      <url>https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11</url>
+    </license>
+  </licenses>
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.apache.solr</groupId>
-        <artifactId>solr</artifactId>
-        <version>${solr.version}</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
+      <!--<dependency>
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-velocity</artifactId>
         <version>${solr.version}</version>
@@ -39,7 +112,7 @@
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-dataimporthandler</artifactId>
         <version>${solr.version}</version>
-      </dependency>
+      </dependency>-->
       <dependency>
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-solrj</artifactId>
@@ -167,12 +240,11 @@
     </dependencies>
   </dependencyManagement>
 
-
-  <!-- Needed for Saxon dependency -->
+  <!-- Needed for Saxon dependency-->
   <repositories>
     <repository>
-      <id>pentaho-releases</id>
-      <url>http://repository.pentaho.org/artifactory/repo/</url>
+      <id>jbossrepo</id>
+      <url>https://repository.jboss.org/nexus/content/repositories/root_repository/maven2/</url>
     </repository>
   </repositories>
 
@@ -213,6 +285,35 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.6</version>
       </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <header>${project.basedir}/doc/licence.tpl</header>
+          <includes>
+            <include>**/*.java</include>
+            <include>**/*.properties</include>
+            <include>**/*.jsp</include>
+            <include>**/*.xsd</include>
+            <include>**/*.xml</include>
+            <include>**/*.xsl</include>
+            <include>**/*.html</include>
+            <include>**/*.js</include>
+            <include>pom.xml</include>
+          </includes>
+        </configuration>
+      </plugin>
+      <!--
+      To get list of licences from third-party libs:
+
+      mvn license:add-third-party
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>1.8</version>
+      </plugin>-->
     </plugins>
   </build>
 
@@ -230,15 +331,19 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.5</version>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.9</version>
       </plugin>
     </plugins>
   </reporting>
 
   <modules>
     <module>core</module>
-    <module>core-deps</module>
     <module>logging-deps</module>
     <module>routing-deps</module>
     <module>routing-utility</module>

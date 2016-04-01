@@ -1,5 +1,27 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.solr.samples.loader;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import org.apache.http.auth.AuthScope;
@@ -8,16 +30,11 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +50,11 @@ import java.util.regex.Pattern;
  */
 public class DashboardLoader {
 
+    /**
+     * Sample dashboard file format should be
+     */
+    public static final String dashboardSampleFilePattern = "([A-Z]*)-.*.json";
+    private static final Pattern p = Pattern.compile(dashboardSampleFilePattern);
     private String solrServerUsername;
     private String solrServerPassword;
     private String solrServerUrl;
@@ -55,16 +77,16 @@ public class DashboardLoader {
         report.put("errors", new ArrayList<String>());
 
         try (DirectoryStream<Path> directoryStream =
-                     Files.newDirectoryStream(Paths.get(directory), fileFilter)) {
+                 Files.newDirectoryStream(Paths.get(directory), fileFilter)) {
             for (Path path : directoryStream) {
                 try {
                     loadData(path.toString());
                     report.get("success").add(path.getFileName().toString());
                 } catch (Exception e) {
                     report.get("errors").add(
-                            String.format("Failed to load %s. Error is %s",
-                                    path.getFileName().toString(),
-                                    e.getMessage()));
+                        String.format("Failed to load %s. Error is %s",
+                            path.getFileName().toString(),
+                            e.getMessage()));
                 }
             }
         } catch (Exception e) {
@@ -92,9 +114,9 @@ public class DashboardLoader {
         if (!StringUtils.isEmpty(solrServerUsername) && !StringUtils.isEmpty(solrServerPassword)) {
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(AuthScope.ANY,
-                    new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
+                new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
             CloseableHttpClient httpClient =
-                    HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+                HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
             server = new HttpSolrClient(solrServerUrl, httpClient);
         } else {
             server = new HttpSolrClient(solrServerUrl);
@@ -127,13 +149,6 @@ public class DashboardLoader {
         this.solrServerUrl = solrServerUrl;
     }
 
-
-    /**
-     * Sample dashboard file format should be
-     */
-    public static final String dashboardSampleFilePattern = "([A-Z]*)-.*.json";
-    private static final Pattern p = Pattern.compile(dashboardSampleFilePattern);
-
     /**
      * Browse the folder for resources and return a sorted list of values.
      *
@@ -144,7 +159,7 @@ public class DashboardLoader {
     public Set<String> getListOfResources(String directory, boolean aggregateByFilePattern) {
         Set<String> listOfDashboards = new TreeSet<>();
         try (DirectoryStream<Path> directoryStream =
-                     Files.newDirectoryStream(Paths.get(directory))) {
+                 Files.newDirectoryStream(Paths.get(directory))) {
             for (Path path : directoryStream) {
                 String fileName = path.toFile().getName();
                 if (aggregateByFilePattern) {

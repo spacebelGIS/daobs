@@ -1,23 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:ctx="http://www.springframework.org/schema/context"
-       xmlns:amq="http://activemq.apache.org/schema/core"
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
+<beans xmlns:ctx="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-          http://www.springframework.org/schema/beans
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context-3.0.xsd
           http://www.springframework.org/schema/mvc
-          http://www.springframework.org/schema/mvc/spring-mvc.xsd
-          http://activemq.apache.org/schema/core
-          http://activemq.apache.org/schema/core/activemq-core.xsd">
+          http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
   <ctx:annotation-config/>
-  <ctx:component-scan base-package="org.daobs.controller"/>
+  <ctx:component-scan base-package="org.daobs.controller,org.daobs.api"/>
 
-  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+  <bean
+    class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
   <!--<bean id="contentNegocationManager"
           class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
@@ -35,34 +54,33 @@
   <mvc:annotation-driven/>
 
 
-
   <ctx:property-placeholder location="WEB-INF/config.properties"
                             file-encoding="UTF-8"
                             ignore-unresolvable="true"/>
-
 
 
   <bean id="XSLTViewResolver"
         class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
     <property name="order" value="1"/>
     <property name="sourceKey" value="xmlSource"/>
-    <property name="viewClass" value="org.springframework.web.servlet.view.xslt.XsltView"/>
+    <property name="viewClass"
+              value="org.springframework.web.servlet.view.xslt.XsltView"/>
     <property name="viewNames">
       <array>
         <value>reporting-xslt-inspire</value>
         <value>reporting-xslt-inspire-first-theme-only</value>
       </array>
     </property>
-    <property name="prefix" value="/WEB-INF/xslt/" />
-    <property name="suffix" value=".xsl" />
+    <property name="prefix" value="/WEB-INF/xslt/"/>
+    <property name="suffix" value=".xsl"/>
     <property name="contentType" value="application/xml;charset=UTF-8"/>
   </bean>
 
- <!-- <bean id="JSPViewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="order" value="2"/>
-    <property name="prefix" value="/WEB-INF/jsp/" />
-    <property name="suffix" value=".jsp" />
-  </bean>-->
+  <!-- <bean id="JSPViewResolver"
+         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+     <property name="order" value="2"/>
+     <property name="prefix" value="/WEB-INF/jsp/" />
+     <property name="suffix" value=".jsp" />
+   </bean>-->
 
 </beans>

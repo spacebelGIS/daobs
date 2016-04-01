@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
@@ -53,8 +75,7 @@
                     select="//(gmi:MI_Metadata|gmd:MD_Metadata|mdb:MD_Metadata)"/>
 
       <!-- Check number of records returned and reported -->
-      <xsl:message>======================================================</xsl:message>
-      <xsl:message>DEBUG: <xsl:value-of select="normalize-space($harvester/daobs:url)"/>.</xsl:message>
+      <xsl:message>## DEBUG: <xsl:value-of select="normalize-space($harvester/daobs:url)"/>.</xsl:message>
       <xsl:message>Page #<xsl:value-of select="$indexingIndex"/>: <xsl:value-of select="count($records)"/> record(s) to index.</xsl:message>
 
 
@@ -69,7 +90,10 @@
         <xsl:variable name="numberOfRecordWithThatUUID"
                       select="count(../*[gmd:fileIdentifier/gco:CharacterString = $identifier])"/>
         <xsl:if test="$numberOfRecordWithThatUUID > 1">
-          <xsl:message>WARNING: <xsl:value-of select="$numberOfRecordWithThatUUID"/> record(s) having UUID '<xsl:value-of select="$identifier"/>' in that set.</xsl:message>
+          <xsl:message>WARNING:
+            <xsl:value-of select="$numberOfRecordWithThatUUID"/> record(s)
+            having UUID '<xsl:value-of select="$identifier"/>' in that set.
+          </xsl:message>
         </xsl:if>
       </xsl:for-each>
 
@@ -83,7 +107,9 @@
         <xsl:choose>
           <xsl:when test="normalize-space($identifier) = ''">
             <xsl:message>WARNING: Record with null UUID found.</xsl:message>
-            <xsl:message><xsl:copy-of select="."/></xsl:message>
+            <xsl:message>
+              <xsl:copy-of select="."/>
+            </xsl:message>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates mode="index" select="."/>

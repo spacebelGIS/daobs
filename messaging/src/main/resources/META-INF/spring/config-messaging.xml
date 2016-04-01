@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <beans
-        xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:amq="http://activemq.apache.org/schema/core"
-        xsi:schemaLocation="
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://activemq.apache.org/schema/core
@@ -14,7 +36,7 @@
               useJmx="false"
               persistent="false">
     <amq:transportConnectors>
-      <amq:transportConnector uri="${jms.url}" />
+      <amq:transportConnector uri="${jms.url}"/>
     </amq:transportConnectors>
   </amq:broker>
 
@@ -39,8 +61,8 @@
   <bean id="pooledConnectionFactory"
         class="org.apache.activemq.pool.PooledConnectionFactory"
         init-method="start" destroy-method="stop">
-    <property name="maxConnections" value="8" />
-    <property name="connectionFactory" ref="jmsConnectionFactory" />
+    <property name="maxConnections" value="8"/>
+    <property name="connectionFactory" ref="jmsConnectionFactory"/>
   </bean>
 
   <bean id="jmsConfig"

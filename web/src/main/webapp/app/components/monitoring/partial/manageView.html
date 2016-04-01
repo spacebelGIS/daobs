@@ -7,7 +7,7 @@
         <ul>
           <li data-ng-repeat="v in value">
             <a href="" data-ng-click="setMonitoringFilter(key, v.label)">
-            {{v.label | translate}} ({{v.count}})
+              {{v.label | translate}} ({{v.count}})
             </a>
           </li>
           <li>
@@ -28,7 +28,8 @@
        data-translate="">
       noMonitoringAvailable
     </p>
-    <table class="table table-striped" data-ng-show="listOfMonitoring.length > 0">
+    <table class="table table-striped"
+           data-ng-show="listOfMonitoring.length > 0">
       <tr>
         <th data-translate="">monitoringYear</th>
         <th data-translate="">monitoringDate</th>
@@ -36,12 +37,12 @@
         <th data-translate="">org</th>
         <th>
           <a class="btn btn-link"
-               href="" role="button"
-               title="{{'removeAllMonitoring' | translate}}"
-               data-ng-show="listOfMonitoring.length"
-               data-ng-mouseenter="monitoringDanger = true"
-               data-ng-mouseleave="monitoringDanger = false"
-               data-ng-click="removeMonitoring()">
+             href="" role="button"
+             title="{{'removeAllMonitoring' | translate}}"
+             data-ng-show="listOfMonitoring.length"
+             data-ng-mouseenter="monitoringDanger = true"
+             data-ng-mouseleave="monitoringDanger = false"
+             data-ng-click="removeMonitoring()">
             <i class="glyphicon glyphicon-remove text-danger"></i>
           </a>
         </th>

@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.index;
 
 import org.apache.http.auth.AuthScope;
@@ -29,10 +49,18 @@ public class SolrServerBean implements InitializingBean {
     private boolean connectionChecked = false;
 
     /**
+     *
+     * @return Return the bean instance
+     */
+    public static SolrServerBean get() {
+        return instance;
+    }
+
+    /**
      * The first time this method is called, ping the
      * client to check connection status.
      *
-     * @return  The Solr client instance.
+     * @return The Solr client instance.
      */
     public SolrClient getServer() throws Exception {
         if (!connectionChecked) {
@@ -59,9 +87,9 @@ public class SolrServerBean implements InitializingBean {
             if (!StringUtils.isEmpty(solrServerUsername) && !StringUtils.isEmpty(solrServerPassword)) {
                 CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(AuthScope.ANY,
-                        new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
+                    new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
                 CloseableHttpClient httpClient =
-                        HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+                    HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
                 client = new HttpSolrClient(this.solrServerUrl, httpClient);
             } else {
                 client = new HttpSolrClient(this.solrServerUrl);
@@ -70,7 +98,7 @@ public class SolrServerBean implements InitializingBean {
             instance = this;
         } else {
             throw new Exception(String.format("No Solr client URL defined in %s. " +
-                    "Check bean configuration.", this.solrServerUrl));
+                "Check bean configuration.", this.solrServerUrl));
         }
     }
 
@@ -84,19 +112,11 @@ public class SolrServerBean implements InitializingBean {
             client.ping();
         } catch (Exception e) {
             throw new Exception(
-                    String.format("Failed to ping Solr client at URL %s. " +
+                String.format("Failed to ping Solr client at URL %s. " +
                         "Check bean configuration.",
-                        this.solrServerUrl),
-                    e);
+                    this.solrServerUrl),
+                e);
         }
-    }
-
-    /**
-     *
-     * @return  Return the bean instance
-     */
-    public static SolrServerBean get() {
-        return instance;
     }
 
     /**

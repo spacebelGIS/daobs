@@ -1,3 +1,23 @@
+/*
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 (function () {
   "use strict";
   var app = angular.module('daobs');
@@ -5,20 +25,20 @@
   app.config(['$routeProvider', 'cfg',
     function ($routeProvider, cfg) {
       $routeProvider.when('/monitoring', {
-        templateUrl : cfg.SERVICES.root +
-          'app/components/monitoring/monitoringView.html'
+        templateUrl: cfg.SERVICES.root +
+        'app/components/monitoring/monitoringView.html'
       }).when('/monitoring/:section', {
-        templateUrl : cfg.SERVICES.root +
-          'app/components/monitoring/monitoringView.html',
+        templateUrl: cfg.SERVICES.root +
+        'app/components/monitoring/monitoringView.html',
         reloadOnSearch: false
       }).when('/monitoring/manage', {
-        controller : 'MonitoringCtrl',
-        templateUrl : cfg.SERVICES.root +
-          'app/components/monitoring/monitoringView.html'
+        controller: 'MonitoringCtrl',
+        templateUrl: cfg.SERVICES.root +
+        'app/components/monitoring/monitoringView.html'
       }).when('/monitoring/submit', {
-        controller : 'MonitoringCtrl',
-        templateUrl : cfg.SERVICES.root +
-          'app/components/monitoring/monitoringView.html'
+        controller: 'MonitoringCtrl',
+        templateUrl: cfg.SERVICES.root +
+        'app/components/monitoring/monitoringView.html'
       });
     }]);
 
@@ -50,7 +70,7 @@
     function ($scope, $http, cfg, solrService, monitoringService) {
       $scope.listOfMonitoring = null;
       $scope.monitoringFacet = null;
-      $scope.monitoringFilter = {};
+      $scope.monitoringFilter = {};
 
       var init = function () {
         monitoringService.loadMonitoring().then(function (response) {
@@ -93,7 +113,7 @@
       $scope.listOfTerritory = [];
       $scope.filterCount = null;
       $scope.fq = null;
-      $scope.facetFields = ['resourceType','Org',
+      $scope.facetFields = ['resourceType', 'Org',
         'OrgForResource', 'isValid', 'territory'];
       var facetParam = '';
       $.each($scope.facetFields, function (item) {
@@ -129,7 +149,7 @@
         {code: 'swe', label: 'swe'}
       ];
 
-      $scope.setLanguage = function(l) {
+      $scope.setLanguage = function (l) {
         $scope.monitoringLanguage = l.code;
       };
 
@@ -151,71 +171,68 @@
           'documentType%3Ametadata&' +
           'start=0&rows=0&' +
           'wt=json&indent=true&' +
-          'facet=true&facet.sort=index' + facetParam, {cache: true}).
-            success(function (data) {
-            $scope.facetValues = {};
-            var i = 0, facet = data.facet_counts.facet_fields.territory;
+          'facet=true&facet.sort=index' + facetParam, {cache: true}).success(function (data) {
+          $scope.facetValues = {};
+          var i = 0, facet = data.facet_counts.facet_fields.territory;
 
-            // The facet response contains an array
-            // with [value1, countFor1, value2, countFor2, ...]
-            do {
-              // If it has records
-              if (facet[i + 1] > 0) {
-                $scope.listOfTerritory.push({
-                  label: facet[i],
-                  count: facet[i + 1]
-                });
-              }
-              i = i + 2;
-            } while (i < facet.length);
-
-            var territoryParam = $location.search().territory,
-              filterParam = $location.search().filter;
-
-            if (territoryParam) {
-              angular.forEach($scope.listOfTerritory, function (item) {
-                if (item.label === territoryParam) {
-                  $scope.territory = item;
-                }
+          // The facet response contains an array
+          // with [value1, countFor1, value2, countFor2, ...]
+          do {
+            // If it has records
+            if (facet[i + 1] > 0) {
+              $scope.listOfTerritory.push({
+                label: facet[i],
+                count: facet[i + 1]
               });
             }
-            if (filterParam) {
-              $scope.filter = filterParam;
-            }
-          });
+            i = i + 2;
+          } while (i < facet.length);
 
+          var territoryParam = $location.search().territory,
+            filterParam = $location.search().filter;
+
+          if (territoryParam) {
+            angular.forEach($scope.listOfTerritory, function (item) {
+              if (item.label === territoryParam) {
+                $scope.territory = item;
+              }
+            });
+          }
+          if (filterParam) {
+            $scope.filter = filterParam;
+          }
+        });
 
 
         // Get the list of monitoring types
-        $http.get(cfg.SERVICES.reportingConfig, {cache: true}).
-          success(function (data) {
-            $scope.reportingConfig = data.reporting;
+        $http.get(cfg.SERVICES.reportingConfig, {cache: true}).success(function (data) {
+          $scope.reportingConfig = data.reporting;
 
-            // If reporting param defined in URL
-            // check if it's available in the
-            // monitoring config and set it.
-            var reportingParam = $location.search().reporting;
-            if (reportingParam) {
-              angular.forEach($scope.reportingConfig, function (item) {
-                if (item.id === reportingParam) {
-                  $scope.reporting = item;
-                  //return;
-                }
-              });
-            }
+          // If reporting param defined in URL
+          // check if it's available in the
+          // monitoring config and set it.
+          var reportingParam = $location.search().reporting;
+          if (reportingParam) {
+            angular.forEach($scope.reportingConfig, function (item) {
+              if (item.id === reportingParam) {
+                $scope.reporting = item;
+                //return;
+              }
+            });
+          }
 
-            // If not, use the first one from the configuration.
-            if (!$scope.reporting) {
-              $scope.reporting = $scope.reportingConfig[0];
-            }
-          });
+          // If not, use the first one from the configuration.
+          if (!$scope.reporting) {
+            $scope.reporting = $scope.reportingConfig[0];
+          }
+        });
 
       };
 
       function getMatchingRecord() {
         var fq =
-          ($scope.filter ? $scope.filter  : '') +
-          ($scope.territory ? ' +territory:' + $scope.territory.label  : '');
+          ($scope.filter ? $scope.filter : '') +
+          ($scope.territory ? ' +territory:' + $scope.territory.label : '');
         $scope.filterCount = null;
         $scope.filterError = null;
         $scope.fq = encodeURIComponent(fq);
@@ -225,16 +242,15 @@
           'documentType%3Ametadata&' +
           'start=0&rows=0&' +
           'facet=true&facet.sort=index&facet.mincount=1' + facetParam +
-          '&wt=json&indent=true&fq=' + encodeURIComponent(fq)).
-            success(function (data) {
-              $scope.filterCount = data.response.numFound;
-              $scope.facetValues = {};
-              $scope.facetValues = data.facet_counts.facet_fields;
-              $scope.preview();
-            }).error(function (response) {
-              $scope.filterError = response.error.msg;
-            });
-        };
+          '&wt=json&indent=true&fq=' + encodeURIComponent(fq)).success(function (data) {
+          $scope.filterCount = data.response.numFound;
+          $scope.facetValues = {};
+          $scope.facetValues = data.facet_counts.facet_fields;
+          $scope.preview();
+        }).error(function (response) {
+          $scope.filterError = response.error.msg;
+        });
+      };
 
       function setReport(data) {
         $scope.report = data;
@@ -257,9 +273,9 @@
         //$scope.territory = null;
         return $http.get(cfg.SERVICES.reporting +
           $scope.reporting.id + '.json').success(function (data) {
-            setReport(data);
-            $scope.overview = true;
-          });
+          setReport(data);
+          $scope.overview = true;
+        });
       };
 
       // Preview report
@@ -267,13 +283,13 @@
         $scope.overview = false;
         $scope.report = null;
         var area = $scope.territory && $scope.territory.label,
-          filterParameter = $scope.filter ? '?fq=' + encodeURIComponent($scope.filter)  : '?';
+          filterParameter = $scope.filter ? '?fq=' + encodeURIComponent($scope.filter) : '?';
         return $http.get(cfg.SERVICES.reporting +
           $scope.reporting.id +
-          (area ? '/' +  area : '') +
+          (area ? '/' + area : '') +
           '.json' + filterParameter).success(function (data) {
-            setReport(data);
-          });
+          setReport(data);
+        });
       };
       $scope.$watch('reporting', function () {
         $scope.reporting && $location.search('reporting', $scope.reporting.id);
@@ -330,7 +346,8 @@
       $scope.responseMessages = [];
 
       var listOfDeffered;
-      function addMessage (text, name) {
+
+      function addMessage(text, name) {
         $translate(text, {
           filename: name
         }).then(function (translation) {
@@ -343,7 +360,7 @@
         });
       };
 
-      $scope.uploadMonitoring = function(){
+      $scope.uploadMonitoring = function () {
         if ($scope.monitoringFiles.length === 0) {
           return;
         }
@@ -359,12 +376,12 @@
         );
 
         angular.forEach(listOfDeffered, function (item) {
-          item.promise.then(function(data){
+          item.promise.then(function (data) {
             addMessage('monitoringSubmitSuccess', item.file.name);
-          }, function(response){
+          }, function (response) {
             addMessage('monitoringSubmitError', item.file.name);
           });
         });
       }
-  }]);
+    }]);
 }());

@@ -1,6 +1,8 @@
 {
-  "initArgs":{"ignoreCase":true},
-  "managedList":[
+  "initArgs": {
+    "ignoreCase": true
+  },
+  "managedList": [
     "a",
     "an",
     "and",
@@ -35,4 +37,6 @@
     "to",
     "was",
     "will",
-    "with"]}
+    "with"
+  ]
+}

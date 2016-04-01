@@ -1,4 +1,26 @@
 <?xml version="1.0"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:daobs="http://daobs.org"
@@ -48,151 +70,361 @@
   <xsl:param name="spatialDataServices" as="node()?"/>
 
 
-
   <xsl:variable name="dateFormat" as="xs:string"
                 select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z'"/>
 
 
   <xsl:template match="/">
 
-    <ns2:Monitoring xmlns:ns2="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring http://dd.eionet.europa.eu/schemas/inspire-monitoring/monitoring.xsd">
+    <ns2:Monitoring
+      xmlns:ns2="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring http://dd.eionet.europa.eu/schemas/inspire-monitoring/monitoring.xsd">
       <documentYear>
-        <day><xsl:value-of select="format-dateTime($creationDate, '[D01]')"/></day>
-        <month><xsl:value-of select="format-dateTime($creationDate, '[M01]')"/></month>
-        <year><xsl:value-of select="format-dateTime($creationDate, '[Y0001]')"/></year>
+        <day>
+          <xsl:value-of select="format-dateTime($creationDate, '[D01]')"/>
+        </day>
+        <month>
+          <xsl:value-of select="format-dateTime($creationDate, '[M01]')"/>
+        </month>
+        <year>
+          <xsl:value-of select="format-dateTime($creationDate, '[Y0001]')"/>
+        </year>
       </documentYear>
-      <memberState><xsl:value-of select="upper-case($territory)"/></memberState>
+      <memberState>
+        <xsl:value-of select="upper-case($territory)"/>
+      </memberState>
       <MonitoringMD>
-        <organizationName><xsl:value-of select="$organizationName"/></organizationName>
-        <email><xsl:value-of select="$email"/></email>
+        <organizationName>
+          <xsl:value-of select="$organizationName"/>
+        </organizationName>
+        <email>
+          <xsl:value-of select="$email"/>
+        </email>
         <monitoringDate>
-          <day><xsl:value-of select="format-dateTime($reportingDate, '[D01]')"/></day>
-          <month><xsl:value-of select="format-dateTime($reportingDate, '[M01]')"/></month>
-          <year><xsl:value-of select="format-dateTime($reportingDate, '[Y0001]')"/></year>
+          <day>
+            <xsl:value-of select="format-dateTime($reportingDate, '[D01]')"/>
+          </day>
+          <month>
+            <xsl:value-of select="format-dateTime($reportingDate, '[M01]')"/>
+          </month>
+          <year>
+            <xsl:value-of select="format-dateTime($reportingDate, '[Y0001]')"/>
+          </year>
         </monitoringDate>
-        <language><xsl:value-of select="$language"/></language>
+        <language>
+          <xsl:value-of select="$language"/>
+        </language>
       </MonitoringMD>
       <Indicators>
         <NnConformityIndicators>
-          <NSi41><xsl:value-of select="//daobs:indicator[@id='NSi41']/daobs:value"/></NSi41>
-          <NSi42><xsl:value-of select="//daobs:indicator[@id='NSi42']/daobs:value"/></NSi42>
-          <NSi43><xsl:value-of select="//daobs:indicator[@id='NSi43']/daobs:value"/></NSi43>
-          <NSi44><xsl:value-of select="//daobs:indicator[@id='NSi44']/daobs:value"/></NSi44>
-          <NSi45><xsl:value-of select="//daobs:indicator[@id='NSi45']/daobs:value"/></NSi45>
-          <NSi4><xsl:value-of select="//daobs:indicator[@id='NSi4']/daobs:value"/></NSi4>
+          <NSi41>
+            <xsl:value-of select="//daobs:indicator[@id='NSi41']/daobs:value"/>
+          </NSi41>
+          <NSi42>
+            <xsl:value-of select="//daobs:indicator[@id='NSi42']/daobs:value"/>
+          </NSi42>
+          <NSi43>
+            <xsl:value-of select="//daobs:indicator[@id='NSi43']/daobs:value"/>
+          </NSi43>
+          <NSi44>
+            <xsl:value-of select="//daobs:indicator[@id='NSi44']/daobs:value"/>
+          </NSi44>
+          <NSi45>
+            <xsl:value-of select="//daobs:indicator[@id='NSi45']/daobs:value"/>
+          </NSi45>
+          <NSi4>
+            <xsl:value-of select="//daobs:indicator[@id='NSi4']/daobs:value"/>
+          </NSi4>
           <NnConformity>
-            <NSv41><xsl:value-of select="//daobs:variable[@id='NSv41']/daobs:value"/></NSv41>
-            <NSv42><xsl:value-of select="//daobs:variable[@id='NSv42']/daobs:value"/></NSv42>
-            <NSv43><xsl:value-of select="//daobs:variable[@id='NSv43']/daobs:value"/></NSv43>
-            <NSv44><xsl:value-of select="//daobs:variable[@id='NSv44']/daobs:value"/></NSv44>
-            <NSv45><xsl:value-of select="//daobs:variable[@id='NSv45']/daobs:value"/></NSv45>
-            <NSv4><xsl:value-of select="//daobs:indicator[@id='NSv4']/daobs:value"/></NSv4>
+            <NSv41>
+              <xsl:value-of select="//daobs:variable[@id='NSv41']/daobs:value"/>
+            </NSv41>
+            <NSv42>
+              <xsl:value-of select="//daobs:variable[@id='NSv42']/daobs:value"/>
+            </NSv42>
+            <NSv43>
+              <xsl:value-of select="//daobs:variable[@id='NSv43']/daobs:value"/>
+            </NSv43>
+            <NSv44>
+              <xsl:value-of select="//daobs:variable[@id='NSv44']/daobs:value"/>
+            </NSv44>
+            <NSv45>
+              <xsl:value-of select="//daobs:variable[@id='NSv45']/daobs:value"/>
+            </NSv45>
+            <NSv4>
+              <xsl:value-of select="//daobs:indicator[@id='NSv4']/daobs:value"/>
+            </NSv4>
           </NnConformity>
         </NnConformityIndicators>
         <GeoCoverageIndicators>
-          <DSi11><xsl:value-of select="//daobs:indicator[@id='DSi11']/daobs:value"/></DSi11>
-          <DSi12><xsl:value-of select="//daobs:indicator[@id='DSi12']/daobs:value"/></DSi12>
-          <DSi13><xsl:value-of select="//daobs:indicator[@id='DSi13']/daobs:value"/></DSi13>
-          <DSi1><xsl:value-of select="//daobs:indicator[@id='DSi1']/daobs:value"/></DSi1>
+          <DSi11>
+            <xsl:value-of select="//daobs:indicator[@id='DSi11']/daobs:value"/>
+          </DSi11>
+          <DSi12>
+            <xsl:value-of select="//daobs:indicator[@id='DSi12']/daobs:value"/>
+          </DSi12>
+          <DSi13>
+            <xsl:value-of select="//daobs:indicator[@id='DSi13']/daobs:value"/>
+          </DSi13>
+          <DSi1>
+            <xsl:value-of select="//daobs:indicator[@id='DSi1']/daobs:value"/>
+          </DSi1>
           <GeoCoverageSDS>
-            <DSv11_ActArea><xsl:value-of select="//daobs:indicator[@id='DSv11_ActArea']/daobs:value"/></DSv11_ActArea>
-            <DSv12_ActArea><xsl:value-of select="//daobs:indicator[@id='DSv12_ActArea']/daobs:value"/></DSv12_ActArea>
-            <DSv13_ActArea><xsl:value-of select="//daobs:indicator[@id='DSv13_ActArea']/daobs:value"/></DSv13_ActArea>
-            <DSv1_ActArea><xsl:value-of select="//daobs:indicator[@id='DSv1_ActArea']/daobs:value"/></DSv1_ActArea>
-            <DSv11_RelArea><xsl:value-of select="//daobs:indicator[@id='DSv11_RelArea']/daobs:value"/></DSv11_RelArea>
-            <DSv12_RelArea><xsl:value-of select="//daobs:indicator[@id='DSv12_RelArea']/daobs:value"/></DSv12_RelArea>
-            <DSv13_RelArea><xsl:value-of select="//daobs:indicator[@id='DSv13_RelArea']/daobs:value"/></DSv13_RelArea>
-            <DSv1_RelArea><xsl:value-of select="//daobs:indicator[@id='DSv1_RelArea']/daobs:value"/></DSv1_RelArea>
+            <DSv11_ActArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv11_ActArea']/daobs:value"/>
+            </DSv11_ActArea>
+            <DSv12_ActArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv12_ActArea']/daobs:value"/>
+            </DSv12_ActArea>
+            <DSv13_ActArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv13_ActArea']/daobs:value"/>
+            </DSv13_ActArea>
+            <DSv1_ActArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv1_ActArea']/daobs:value"/>
+            </DSv1_ActArea>
+            <DSv11_RelArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv11_RelArea']/daobs:value"/>
+            </DSv11_RelArea>
+            <DSv12_RelArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv12_RelArea']/daobs:value"/>
+            </DSv12_RelArea>
+            <DSv13_RelArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv13_RelArea']/daobs:value"/>
+            </DSv13_RelArea>
+            <DSv1_RelArea>
+              <xsl:value-of
+                select="//daobs:indicator[@id='DSv1_RelArea']/daobs:value"/>
+            </DSv1_RelArea>
           </GeoCoverageSDS>
         </GeoCoverageIndicators>
         <UseNNindicators>
-          <NSi31><xsl:value-of select="//daobs:indicator[@id='NSi31']/daobs:value"/></NSi31>
-          <NSi32><xsl:value-of select="//daobs:indicator[@id='NSi32']/daobs:value"/></NSi32>
-          <NSi33><xsl:value-of select="//daobs:indicator[@id='NSi33']/daobs:value"/></NSi33>
-          <NSi34><xsl:value-of select="//daobs:indicator[@id='NSi34']/daobs:value"/></NSi34>
-          <NSi35><xsl:value-of select="//daobs:indicator[@id='NSi35']/daobs:value"/></NSi35>
-          <NSi3><xsl:value-of select="//daobs:indicator[@id='NSi3']/daobs:value"/></NSi3>
+          <NSi31>
+            <xsl:value-of select="//daobs:indicator[@id='NSi31']/daobs:value"/>
+          </NSi31>
+          <NSi32>
+            <xsl:value-of select="//daobs:indicator[@id='NSi32']/daobs:value"/>
+          </NSi32>
+          <NSi33>
+            <xsl:value-of select="//daobs:indicator[@id='NSi33']/daobs:value"/>
+          </NSi33>
+          <NSi34>
+            <xsl:value-of select="//daobs:indicator[@id='NSi34']/daobs:value"/>
+          </NSi34>
+          <NSi35>
+            <xsl:value-of select="//daobs:indicator[@id='NSi35']/daobs:value"/>
+          </NSi35>
+          <NSi3>
+            <xsl:value-of select="//daobs:indicator[@id='NSi3']/daobs:value"/>
+          </NSi3>
           <UseNN>
-            <NSv31><xsl:value-of select="//daobs:variable[@id='NSv31']/daobs:value"/></NSv31>
-            <NSv32><xsl:value-of select="//daobs:variable[@id='NSv32']/daobs:value"/></NSv32>
-            <NSv33><xsl:value-of select="//daobs:variable[@id='NSv33']/daobs:value"/></NSv33>
-            <NSv34><xsl:value-of select="//daobs:variable[@id='NSv34']/daobs:value"/></NSv34>
-            <NSv35><xsl:value-of select="//daobs:variable[@id='NSv35']/daobs:value"/></NSv35>
-            <NSv3><xsl:value-of select="//daobs:indicator[@id='NSv3']/daobs:value"/></NSv3>
+            <NSv31>
+              <xsl:value-of select="//daobs:variable[@id='NSv31']/daobs:value"/>
+            </NSv31>
+            <NSv32>
+              <xsl:value-of select="//daobs:variable[@id='NSv32']/daobs:value"/>
+            </NSv32>
+            <NSv33>
+              <xsl:value-of select="//daobs:variable[@id='NSv33']/daobs:value"/>
+            </NSv33>
+            <NSv34>
+              <xsl:value-of select="//daobs:variable[@id='NSv34']/daobs:value"/>
+            </NSv34>
+            <NSv35>
+              <xsl:value-of select="//daobs:variable[@id='NSv35']/daobs:value"/>
+            </NSv35>
+            <NSv3>
+              <xsl:value-of select="//daobs:indicator[@id='NSv3']/daobs:value"/>
+            </NSv3>
           </UseNN>
         </UseNNindicators>
         <MetadataExistenceIndicators>
-          <MDi11><xsl:value-of select="//daobs:indicator[@id='MDi11']/daobs:value"/></MDi11>
-          <MDi12><xsl:value-of select="//daobs:indicator[@id='MDi12']/daobs:value"/></MDi12>
-          <MDi13><xsl:value-of select="//daobs:indicator[@id='MDi13']/daobs:value"/></MDi13>
-          <MDi14><xsl:value-of select="//daobs:indicator[@id='MDi14']/daobs:value"/></MDi14>
-          <MDi1><xsl:value-of select="//daobs:indicator[@id='MDi1']/daobs:value"/></MDi1>
+          <MDi11>
+            <xsl:value-of select="//daobs:indicator[@id='MDi11']/daobs:value"/>
+          </MDi11>
+          <MDi12>
+            <xsl:value-of select="//daobs:indicator[@id='MDi12']/daobs:value"/>
+          </MDi12>
+          <MDi13>
+            <xsl:value-of select="//daobs:indicator[@id='MDi13']/daobs:value"/>
+          </MDi13>
+          <MDi14>
+            <xsl:value-of select="//daobs:indicator[@id='MDi14']/daobs:value"/>
+          </MDi14>
+          <MDi1>
+            <xsl:value-of select="//daobs:indicator[@id='MDi1']/daobs:value"/>
+          </MDi1>
           <MetadataExistence>
-            <MDv11><xsl:value-of select="//daobs:*[@id='MDv11']/daobs:value"/></MDv11>
-            <MDv12><xsl:value-of select="//daobs:*[@id='MDv12']/daobs:value"/></MDv12>
-            <MDv13><xsl:value-of select="//daobs:*[@id='MDv13']/daobs:value"/></MDv13>
-            <MDv1_DS><xsl:value-of select="//daobs:indicator[@id='MDv1_DS']/daobs:value"/></MDv1_DS>
-            <MDv14><xsl:value-of select="//daobs:variable[@id='MDv14']/daobs:value"/></MDv14>
+            <MDv11>
+              <xsl:value-of select="//daobs:*[@id='MDv11']/daobs:value"/>
+            </MDv11>
+            <MDv12>
+              <xsl:value-of select="//daobs:*[@id='MDv12']/daobs:value"/>
+            </MDv12>
+            <MDv13>
+              <xsl:value-of select="//daobs:*[@id='MDv13']/daobs:value"/>
+            </MDv13>
+            <MDv1_DS>
+              <xsl:value-of
+                select="//daobs:indicator[@id='MDv1_DS']/daobs:value"/>
+            </MDv1_DS>
+            <MDv14>
+              <xsl:value-of select="//daobs:variable[@id='MDv14']/daobs:value"/>
+            </MDv14>
           </MetadataExistence>
         </MetadataExistenceIndicators>
         <DiscoveryMetadataIndicators>
-          <NSi11><xsl:value-of select="//daobs:indicator[@id='NSi11']/daobs:value"/></NSi11>
-          <NSi12><xsl:value-of select="//daobs:indicator[@id='NSi12']/daobs:value"/></NSi12>
-          <NSi1><xsl:value-of select="//daobs:indicator[@id='NSi1']/daobs:value"/></NSi1>
+          <NSi11>
+            <xsl:value-of select="//daobs:indicator[@id='NSi11']/daobs:value"/>
+          </NSi11>
+          <NSi12>
+            <xsl:value-of select="//daobs:indicator[@id='NSi12']/daobs:value"/>
+          </NSi12>
+          <NSi1>
+            <xsl:value-of select="//daobs:indicator[@id='NSi1']/daobs:value"/>
+          </NSi1>
           <DiscoveryMetadata>
-            <NSv11><xsl:value-of select="//daobs:*[@id='NSv11']/daobs:value"/></NSv11>
-            <NSv12><xsl:value-of select="//daobs:variable[@id='NSv12']/daobs:value"/></NSv12>
+            <NSv11>
+              <xsl:value-of select="//daobs:*[@id='NSv11']/daobs:value"/>
+            </NSv11>
+            <NSv12>
+              <xsl:value-of select="//daobs:variable[@id='NSv12']/daobs:value"/>
+            </NSv12>
           </DiscoveryMetadata>
         </DiscoveryMetadataIndicators>
         <ViewDownloadAccessibilityIndicators>
-          <NSi21><xsl:value-of select="//daobs:indicator[@id='NSi21']/daobs:value"/></NSi21>
-          <NSi22><xsl:value-of select="//daobs:indicator[@id='NSi22']/daobs:value"/></NSi22>
-          <NSi2><xsl:value-of select="//daobs:indicator[@id='NSi2']/daobs:value"/></NSi2>
+          <NSi21>
+            <xsl:value-of select="//daobs:indicator[@id='NSi21']/daobs:value"/>
+          </NSi21>
+          <NSi22>
+            <xsl:value-of select="//daobs:indicator[@id='NSi22']/daobs:value"/>
+          </NSi22>
+          <NSi2>
+            <xsl:value-of select="//daobs:indicator[@id='NSi2']/daobs:value"/>
+          </NSi2>
           <ViewDownloadAccessibility>
-            <NSv21><xsl:value-of select="//daobs:*[@id='NSv21']/daobs:value"/></NSv21>
-            <NSv22><xsl:value-of select="//daobs:*[@id='NSv22']/daobs:value"/></NSv22>
-            <NSv23><xsl:value-of select="//daobs:*[@id='NSv23']/daobs:value"/></NSv23>
+            <NSv21>
+              <xsl:value-of select="//daobs:*[@id='NSv21']/daobs:value"/>
+            </NSv21>
+            <NSv22>
+              <xsl:value-of select="//daobs:*[@id='NSv22']/daobs:value"/>
+            </NSv22>
+            <NSv23>
+              <xsl:value-of select="//daobs:*[@id='NSv23']/daobs:value"/>
+            </NSv23>
           </ViewDownloadAccessibility>
         </ViewDownloadAccessibilityIndicators>
         <SpatialDataAndService>
-          <DSv_Num1><xsl:value-of select="//daobs:*[@id='DSv_Num1']/daobs:value"/></DSv_Num1>
-          <DSv_Num2><xsl:value-of select="//daobs:*[@id='DSv_Num2']/daobs:value"/></DSv_Num2>
-          <DSv_Num3><xsl:value-of select="//daobs:*[@id='DSv_Num3']/daobs:value"/></DSv_Num3>
-          <DSv_Num><xsl:value-of select="//daobs:indicator[@id='DSv_Num']/daobs:value"/></DSv_Num>
-          <SDSv_Num><xsl:value-of select="//daobs:variable[@id='SDSv_Num']/daobs:value"/></SDSv_Num>
-          <NSv_NumDiscServ><xsl:value-of select="//daobs:variable[@id='NSv_NumDiscServ']/daobs:value"/></NSv_NumDiscServ>
-          <NSv_NumViewServ><xsl:value-of select="//daobs:variable[@id='NSv_NumViewServ']/daobs:value"/></NSv_NumViewServ>
-          <NSv_NumDownServ><xsl:value-of select="//daobs:variable[@id='NSv_NumDownlServ']/daobs:value"/></NSv_NumDownServ>
-          <NSv_NumInvkServ><xsl:value-of select="//daobs:variable[@id='NSv_NumInvkServ']/daobs:value"/></NSv_NumInvkServ>
-          <NSv_NumAllServ><xsl:value-of select="//daobs:indicator[@id='NSv_NumAllServ']/daobs:value"/></NSv_NumAllServ>
-          <NSv_NumTransfServ><xsl:value-of select="//daobs:indicator[@id='NSv_NumTransfServ']/daobs:value"/></NSv_NumTransfServ>
+          <DSv_Num1>
+            <xsl:value-of select="//daobs:*[@id='DSv_Num1']/daobs:value"/>
+          </DSv_Num1>
+          <DSv_Num2>
+            <xsl:value-of select="//daobs:*[@id='DSv_Num2']/daobs:value"/>
+          </DSv_Num2>
+          <DSv_Num3>
+            <xsl:value-of select="//daobs:*[@id='DSv_Num3']/daobs:value"/>
+          </DSv_Num3>
+          <DSv_Num>
+            <xsl:value-of
+              select="//daobs:indicator[@id='DSv_Num']/daobs:value"/>
+          </DSv_Num>
+          <SDSv_Num>
+            <xsl:value-of
+              select="//daobs:variable[@id='SDSv_Num']/daobs:value"/>
+          </SDSv_Num>
+          <NSv_NumDiscServ>
+            <xsl:value-of
+              select="//daobs:variable[@id='NSv_NumDiscServ']/daobs:value"/>
+          </NSv_NumDiscServ>
+          <NSv_NumViewServ>
+            <xsl:value-of
+              select="//daobs:variable[@id='NSv_NumViewServ']/daobs:value"/>
+          </NSv_NumViewServ>
+          <NSv_NumDownServ>
+            <xsl:value-of
+              select="//daobs:variable[@id='NSv_NumDownlServ']/daobs:value"/>
+          </NSv_NumDownServ>
+          <NSv_NumInvkServ>
+            <xsl:value-of
+              select="//daobs:variable[@id='NSv_NumInvkServ']/daobs:value"/>
+          </NSv_NumInvkServ>
+          <NSv_NumAllServ>
+            <xsl:value-of
+              select="//daobs:indicator[@id='NSv_NumAllServ']/daobs:value"/>
+          </NSv_NumAllServ>
+          <NSv_NumTransfServ>
+            <xsl:value-of
+              select="//daobs:indicator[@id='NSv_NumTransfServ']/daobs:value"/>
+          </NSv_NumTransfServ>
         </SpatialDataAndService>
         <MetadataConformityIndicators>
-          <MDi21><xsl:value-of select="//daobs:indicator[@id='MDi21']/daobs:value"/></MDi21>
-          <MDi22><xsl:value-of select="//daobs:indicator[@id='MDi22']/daobs:value"/></MDi22>
-          <MDi23><xsl:value-of select="//daobs:indicator[@id='MDi23']/daobs:value"/></MDi23>
-          <MDi24><xsl:value-of select="//daobs:indicator[@id='MDi24']/daobs:value"/></MDi24>
-          <MDi2><xsl:value-of select="//daobs:indicator[@id='MDi2']/daobs:value"/></MDi2>
+          <MDi21>
+            <xsl:value-of select="//daobs:indicator[@id='MDi21']/daobs:value"/>
+          </MDi21>
+          <MDi22>
+            <xsl:value-of select="//daobs:indicator[@id='MDi22']/daobs:value"/>
+          </MDi22>
+          <MDi23>
+            <xsl:value-of select="//daobs:indicator[@id='MDi23']/daobs:value"/>
+          </MDi23>
+          <MDi24>
+            <xsl:value-of select="//daobs:indicator[@id='MDi24']/daobs:value"/>
+          </MDi24>
+          <MDi2>
+            <xsl:value-of select="//daobs:indicator[@id='MDi2']/daobs:value"/>
+          </MDi2>
           <MetadataConformity>
-            <MDv21><xsl:value-of select="//daobs:*[@id='MDv21']/daobs:value"/></MDv21>
-            <MDv22><xsl:value-of select="//daobs:*[@id='MDv22']/daobs:value"/></MDv22>
-            <MDv23><xsl:value-of select="//daobs:*[@id='MDv23']/daobs:value"/></MDv23>
-            <MDv2_DS><xsl:value-of select="//daobs:indicator[@id='MDv2_DS']/daobs:value"/></MDv2_DS>
-            <MDv24><xsl:value-of select="//daobs:variable[@id='MDv24']/daobs:value"/></MDv24>
+            <MDv21>
+              <xsl:value-of select="//daobs:*[@id='MDv21']/daobs:value"/>
+            </MDv21>
+            <MDv22>
+              <xsl:value-of select="//daobs:*[@id='MDv22']/daobs:value"/>
+            </MDv22>
+            <MDv23>
+              <xsl:value-of select="//daobs:*[@id='MDv23']/daobs:value"/>
+            </MDv23>
+            <MDv2_DS>
+              <xsl:value-of
+                select="//daobs:indicator[@id='MDv2_DS']/daobs:value"/>
+            </MDv2_DS>
+            <MDv24>
+              <xsl:value-of select="//daobs:variable[@id='MDv24']/daobs:value"/>
+            </MDv24>
           </MetadataConformity>
         </MetadataConformityIndicators>
         <SdsConformantIndicators>
-          <DSi21><xsl:value-of select="//daobs:indicator[@id='DSi21']/daobs:value"/></DSi21>
-          <DSi22><xsl:value-of select="//daobs:indicator[@id='DSi22']/daobs:value"/></DSi22>
-          <DSi23><xsl:value-of select="//daobs:indicator[@id='DSi23']/daobs:value"/></DSi23>
-          <DSi2><xsl:value-of select="//daobs:indicator[@id='DSi2']/daobs:value"/></DSi2>
+          <DSi21>
+            <xsl:value-of select="//daobs:indicator[@id='DSi21']/daobs:value"/>
+          </DSi21>
+          <DSi22>
+            <xsl:value-of select="//daobs:indicator[@id='DSi22']/daobs:value"/>
+          </DSi22>
+          <DSi23>
+            <xsl:value-of select="//daobs:indicator[@id='DSi23']/daobs:value"/>
+          </DSi23>
+          <DSi2>
+            <xsl:value-of select="//daobs:indicator[@id='DSi2']/daobs:value"/>
+          </DSi2>
           <SdsConformant>
-            <DSv21><xsl:value-of select="//daobs:*[@id='DSv21']/daobs:value"/></DSv21>
-            <DSv22><xsl:value-of select="//daobs:*[@id='DSv22']/daobs:value"/></DSv22>
-            <DSv23><xsl:value-of select="//daobs:*[@id='DSv23']/daobs:value"/></DSv23>
-            <DSv2><xsl:value-of select="//daobs:indicator[@id='DSv2']/daobs:value"/></DSv2>
+            <DSv21>
+              <xsl:value-of select="//daobs:*[@id='DSv21']/daobs:value"/>
+            </DSv21>
+            <DSv22>
+              <xsl:value-of select="//daobs:*[@id='DSv22']/daobs:value"/>
+            </DSv22>
+            <DSv23>
+              <xsl:value-of select="//daobs:*[@id='DSv23']/daobs:value"/>
+            </DSv23>
+            <DSv2>
+              <xsl:value-of select="//daobs:indicator[@id='DSv2']/daobs:value"/>
+            </DSv2>
           </SdsConformant>
         </SdsConformantIndicators>
       </Indicators>
@@ -204,8 +436,9 @@
                                select="$spatialDataServices/result/doc"/>
           <xsl:choose>
             <xsl:when test="$datasetMode = 'asManyDatasetsAsInspireThemes'">
-              <xsl:apply-templates mode="SpatialDataSetFactoryForEachInspireTheme"
-                                   select="$spatialDataSets/result/doc"/>
+              <xsl:apply-templates
+                mode="SpatialDataSetFactoryForEachInspireTheme"
+                select="$spatialDataSets/result/doc"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates mode="SpatialDataSetFactory"
@@ -224,11 +457,15 @@
                 as="node()">
     <SpatialDataService>
       <!-- gmd:identificationInfo[1]/*[1]/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString -->
-      <name><xsl:value-of select="str[@name = 'resourceTitle']/text()"/></name>
+      <name>
+        <xsl:value-of select="str[@name = 'resourceTitle']/text()"/>
+      </name>
 
       <xsl:call-template name="respAuthorityFactory"/>
 
-      <uuid><xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/></uuid>
+      <uuid>
+        <xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/>
+      </uuid>
 
       <!-- For services, all INSPIRE themes are reported (and that was also the
       case in the excel reporting mode. -->
@@ -239,17 +476,22 @@
 
 
       <MdServiceExistence>
-        <mdConformity><xsl:value-of select="bool[@name = 'isAboveThreshold']"/></mdConformity>
+        <mdConformity>
+          <xsl:value-of select="bool[@name = 'isAboveThreshold']"/>
+        </mdConformity>
 
         <!-- The metadata record was harvested using CSW -->
         <discoveryAccessibility>true</discoveryAccessibility>
 
         <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
-        <discoveryAccessibilityUuid><xsl:value-of select="str[@name = 'harvesterUuid']/text()"/></discoveryAccessibilityUuid>
+        <discoveryAccessibilityUuid>
+          <xsl:value-of select="str[@name = 'harvesterUuid']/text()"/>
+        </discoveryAccessibilityUuid>
       </MdServiceExistence>
 
       <xsl:variable name="serviceType" select="arr[@name = 'serviceType']/str"/>
-      <xsl:variable name="inspireConformResource" select="arr[@name = 'inspireConformResource']/bool[1]"/>
+      <xsl:variable name="inspireConformResource"
+                    select="arr[@name = 'inspireConformResource']/bool[1]"/>
 
       <!-- Based on service type try to identify
       bast match based on protocol .... -->
@@ -259,17 +501,20 @@
           <xsl:variable name="token"
                         select="tokenize(text(), '\|')"/>
           <xsl:choose>
-            <xsl:when test="$serviceType = 'view' and contains($token[1], 'WMS')">
+            <xsl:when
+              test="$serviceType = 'view' and contains($token[1], 'WMS')">
               <xsl:copy-of select="."/>
             </xsl:when>
             <xsl:when test="$serviceType = 'download' and (
                 contains($token[1], 'WFS') or contains($token[1], 'SOS') or contains($token[1], 'WCS'))">
               <xsl:copy-of select="."/>
             </xsl:when>
-            <xsl:when test="$serviceType = 'discovery' and contains($token[1], 'CSW')">
+            <xsl:when
+              test="$serviceType = 'discovery' and contains($token[1], 'CSW')">
               <xsl:copy-of select="."/>
             </xsl:when>
-            <xsl:when test="$serviceType = 'transformation' and contains($token[1], 'WPS')">
+            <xsl:when
+              test="$serviceType = 'transformation' and contains($token[1], 'WPS')">
               <xsl:copy-of select="."/>
             </xsl:when>
           </xsl:choose>
@@ -277,7 +522,9 @@
       </xsl:variable>
 
       <NetworkService>
-        <xsl:comment>By default, directlyAccessible is set to true. Adapt the value for restricted access service.</xsl:comment>
+        <xsl:comment>By default, directlyAccessible is set to true. Adapt the
+          value for restricted access service.
+        </xsl:comment>
         <directlyAccessible>true</directlyAccessible>
 
         <!-- All online resources are taken into account,
@@ -292,13 +539,20 @@
           <xsl:when test="normalize-space($linkBasedOnServiceType) != ''">
             <xsl:variable name="link"
                           select="tokenize($linkBasedOnServiceType[1], '\|')"/>
-            <xsl:comment>Found best match based on protocol (<xsl:value-of select="$link[1]"/>)
-              for service type '<xsl:value-of select="$serviceType"/>'.</xsl:comment>
-            <URL><xsl:value-of select="$link[2]"/></URL>
+            <xsl:comment>Found best match based on protocol (<xsl:value-of
+              select="$link[1]"/>)
+              for service type '<xsl:value-of select="$serviceType"/>'.
+            </xsl:comment>
+            <URL>
+              <xsl:value-of select="$link[2]"/>
+            </URL>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:comment>First link in the service metadata record.</xsl:comment>
-            <URL><xsl:value-of select="arr[@name = 'linkUrl']/str[1]/text()"/></URL>
+            <xsl:comment>First link in the service metadata record.
+            </xsl:comment>
+            <URL>
+              <xsl:value-of select="arr[@name = 'linkUrl']/str[1]/text()"/>
+            </URL>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -307,25 +561,30 @@
         metadata record ? -->
         <userRequest>-1</userRequest>
 
-        <nnConformity><xsl:value-of select="$inspireConformResource"/></nnConformity>
+        <nnConformity>
+          <xsl:value-of select="$inspireConformResource"/>
+        </nnConformity>
 
-        <NnServiceType><xsl:value-of select="$serviceType"/></NnServiceType>
+        <NnServiceType>
+          <xsl:value-of select="$serviceType"/>
+        </NnServiceType>
       </NetworkService>
     </SpatialDataService>
   </xsl:template>
 
 
-
-
-
   <xsl:template mode="SpatialDataSetFactory"
                 match="doc">
     <SpatialDataSet>
-      <name><xsl:value-of select="str[@name = 'resourceTitle']/text()"/></name>
+      <name>
+        <xsl:value-of select="str[@name = 'resourceTitle']/text()"/>
+      </name>
 
       <xsl:call-template name="respAuthorityFactory"/>
 
-      <uuid><xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/></uuid>
+      <uuid>
+        <xsl:value-of select="str[@name = 'metadataIdentifier']/text()"/>
+      </uuid>
 
       <!-- For dataset the list of INSPIRE themes could be based
       on the first one only or on all values depending on the datasetMode parameter.
@@ -334,11 +593,13 @@
       <xsl:if test="$datasetMode = 'onlyFirstInspireTheme' and
                     count(distinct-values(arr[@name = 'inspireTheme']/str)) > 1">
         <xsl:comment>Only the first INSPIRE theme is reported among all
-          (ie. <xsl:value-of select="string-join(distinct-values(arr[@name = 'inspireTheme']/str), ', ')"/>).</xsl:comment>
+          (ie. <xsl:value-of
+            select="string-join(distinct-values(arr[@name = 'inspireTheme']/str), ', ')"/>).
+        </xsl:comment>
       </xsl:if>
       <xsl:call-template name="InspireAnnexAndThemeFactory">
         <xsl:with-param name="inspireThemes"
-                      select="if ($datasetMode = 'onlyFirstInspireTheme')
+                        select="if ($datasetMode = 'onlyFirstInspireTheme')
                               then arr[@name = 'inspireTheme']/str[1]
                               else distinct-values(arr[@name = 'inspireTheme']/str)"/>
 
@@ -356,24 +617,31 @@
                   select="count(distinct-values(arr[@name = 'inspireTheme']/str))"/>
 
     <xsl:if test="$numberOfInspireThemes > 1">
-      <xsl:comment>This data set contains <xsl:value-of select="$numberOfInspireThemes"/> INSPIRE themes.
-        It was duplicated for each themes.</xsl:comment>
+      <xsl:comment>This data set contains
+        <xsl:value-of select="$numberOfInspireThemes"/> INSPIRE themes.
+        It was duplicated for each themes.
+      </xsl:comment>
     </xsl:if>
     <xsl:variable name="document" select="."/>
 
 
     <xsl:for-each select="distinct-values(arr[@name = 'inspireTheme']/str)">
       <SpatialDataSet>
-        <name><xsl:value-of select="$document/str[@name = 'resourceTitle']/text()"/></name>
+        <name>
+          <xsl:value-of select="$document/str[@name = 'resourceTitle']/text()"/>
+        </name>
 
         <xsl:apply-templates mode="respAuthorityFactory"
                              select="$document"/>
 
-        <uuid><xsl:value-of select="$document/str[@name = 'metadataIdentifier']/text()"/></uuid>
+        <uuid>
+          <xsl:value-of
+            select="$document/str[@name = 'metadataIdentifier']/text()"/>
+        </uuid>
 
         <xsl:call-template name="InspireAnnexAndThemeFactory">
           <xsl:with-param name="inspireThemes"
-                        select="."/>
+                          select="."/>
         </xsl:call-template>
 
         <xsl:apply-templates mode="SpatialDataSetDetailsFactory"
@@ -409,12 +677,15 @@
         <!-- Uuids are for each services operating the resource ?
         They could be multiple in some situation ? TODO ? -->
 
-        <xsl:variable name="recordOperatedByType" select="arr[@name = 'recordOperatedByType']"/>
+        <xsl:variable name="recordOperatedByType"
+                      select="arr[@name = 'recordOperatedByType']"/>
 
         <!-- The record was harvested -->
         <discovery>true</discovery>
         <!-- ... the UUID of the CSW service is the one set in the harvester configuration -->
-        <discoveryUuid><xsl:value-of select="str[@name = 'harvesterUuid']/text()"/></discoveryUuid>
+        <discoveryUuid>
+          <xsl:value-of select="str[@name = 'harvesterUuid']/text()"/>
+        </discoveryUuid>
 
         <!-- Is the data set accessible using a view -->
         <xsl:choose>
@@ -429,7 +700,8 @@
                 <xsl:value-of select="$nbOfServices"/> view services
                 (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypeview']/
                     str), ', ')"/>').
-                Only the first one reported.</xsl:comment>
+                Only the first one reported.
+              </xsl:comment>
             </xsl:if>
             <viewUuid>
               <xsl:value-of select="arr[@name = 'recordOperatedByTypeview']/
@@ -453,7 +725,8 @@
                 <xsl:value-of select="$nbOfServices"/> download services
                 (ie. '<xsl:value-of select="string-join(distinct-values(arr[@name = 'recordOperatedByTypedownload']/
                     str), ', ')"/>').
-                Only the first one reported.</xsl:comment>
+                Only the first one reported.
+              </xsl:comment>
             </xsl:if>
             <downloadUuid>
               <xsl:value-of select="arr[@name = 'recordOperatedByTypedownload']/
@@ -466,9 +739,11 @@
         </xsl:choose>
 
 
-        <viewDownload><xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
+        <viewDownload>
+          <xsl:value-of select="if (count($recordOperatedByType[str = 'view']) > 0 and
                                                   count($recordOperatedByType[str = 'download']) > 0)
-                                              then true() else false()"/></viewDownload>
+                                              then true() else false()"/>
+        </viewDownload>
       </MdAccessibility>
     </MdDataSetExistence>
   </xsl:template>
@@ -500,8 +775,6 @@
   </xsl:template>
 
 
-
-  
   <xsl:variable name="inspireThemesMap">
     <map theme="Coordinate reference systems"
          monitoring="coordinateReferenceSystems" annex="I"/>
@@ -536,8 +809,10 @@
     <!--<map theme="Population distribution — demography"-->
     <map theme="Population distribution.*"
          monitoring="populationDistributionDemography" annex="III"/>
-    <map theme="Area management/restriction/regulation zones and reporting units"
-         monitoring="areaManagementRestrictionRegulationZonesAndReportingUnits" annex="III"/>
+    <map
+      theme="Area management/restriction/regulation zones and reporting units"
+      monitoring="areaManagementRestrictionRegulationZonesAndReportingUnits"
+      annex="III"/>
     <map theme="Natural risk zones"
          monitoring="naturalRiskZones" annex="III"/>
     <map theme="Atmospheric conditions"
@@ -584,7 +859,8 @@
 
     <xsl:for-each select="$inspireThemes">
       <xsl:variable name="theme" select="."/>
-      <xsl:variable name="mapping" select="$inspireThemesMap/map[matches($theme, @theme, 'i')]"/>
+      <xsl:variable name="mapping"
+                    select="$inspireThemesMap/map[matches($theme, @theme, 'i')]"/>
 
       <xsl:if test="$mapping/@annex != ''">
         <Themes>

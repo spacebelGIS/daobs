@@ -38,7 +38,8 @@
                           id="ds-report-view"
                           class="btn btn-default"
                           data-ng-click="getReportDetails()"
-                          data-translate="">viewRules</button>
+                          data-translate="">viewRules
+                  </button>
                 </div>
               </div>
             </div>
@@ -46,7 +47,7 @@
           <div class="form-group" id="ds-reportarea-choose">
             <label for="ds-reportarea-field"
                    class="col-sm-2 control-label"
-                    data-translate="">chooseTerritory</label>
+                   data-translate="">chooseTerritory</label>
             <div class="col-sm-10">
               <select id="ds-reportarea-field"
                       class="form-control"
@@ -98,15 +99,17 @@
               <div class="col-sm-8">
                 <div class="input-group">
                   <input id="ds-language-field"
-                       data-ng-model="monitoringLanguage"
-                       class="form-control"/>
+                         data-ng-model="monitoringLanguage"
+                         class="form-control"/>
                   <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle"
+                    <button type="button"
+                            class="btn btn-default dropdown-toggle"
                             data-toggle="dropdown" aria-expanded="false">
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                      <li data-ng-repeat="l in listOfLanguages | orderBy:'label'">
+                      <li
+                        data-ng-repeat="l in listOfLanguages | orderBy:'label'">
                         <a href="" data-ng-click="setLanguage(l)">
                           {{l.label}}
                         </a>
@@ -137,7 +140,8 @@
                        class="form-control"/>
               </div>
             </div>
-            <p class="help-block" data-translate="">inspireMonitoringInstructions</p>
+            <p class="help-block" data-translate="">
+              inspireMonitoringInstructions</p>
           </fieldset>
         </div>
       </div>
@@ -160,33 +164,36 @@
                         data-ng-disabled="!filterCount"
                         data-toggle="dropdown">
                   <i class="glyphicon glyphicon-download-alt"></i>&nbsp;
-                  <span data-translate="">download</span> <span class="caret"></span>
+                  <span data-translate="">download</span> <span
+                  class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                   <li data-ng-show="reporting.id.indexOf('inspire') !== -1">
                     <a target="_blank"
-                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}"
-                         data-translate=""
-                         title="{{('inspireMonitoringFormat-help' | translate) !== '' ? ('inspireMonitoringFormat-help' | translate) : ''}}">
-                        inspireMonitoringFormat</a></li>
+                       data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}"
+                       data-translate=""
+                       title="{{('inspireMonitoringFormat-help' | translate) !== '' ? ('inspireMonitoringFormat-help' | translate) : ''}}">
+                      inspireMonitoringFormat</a></li>
                   <li data-ng-show="reporting.id.indexOf('inspire') !== -1">
                     <a target="_blank"
-                         data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}"
-                         data-translate=""
-                         title="{{('inspireMonitoringFormatWithRowData-help' | translate) !== '' ? ('inspireMonitoringFormatWithRowData-help' | translate) : ''}}">
+                       data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}"
+                       data-translate=""
+                       title="{{('inspireMonitoringFormatWithRowData-help' | translate) !== '' ? ('inspireMonitoringFormatWithRowData-help' | translate) : ''}}">
                       inspireMonitoringFormatWithRowData</a></li>
                   <li data-ng-show="reporting.id.indexOf('inspire') !== -1">
                     <a target="_blank"
                        data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}&datasetMode=onlyFirstInspireTheme"
                        data-translate=""
                        title="{{('inspireMonitoringFormatWithRowDataDatasetOnlyFirstTheme-help' | translate) !== '' ? ('inspireMonitoringFormatWithRowDataDatasetOnlyFirstTheme-help' | translate) : ''}}">
-                       inspireMonitoringFormatWithRowDataDatasetOnlyFirstTheme</a></li>
+                      inspireMonitoringFormatWithRowDataDatasetOnlyFirstTheme</a>
+                  </li>
                   <li data-ng-show="reporting.id.indexOf('inspire') !== -1">
                     <a target="_blank"
                        data-ng-href="daobs/reporting/custom/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}?{{fq ? 'fq=' + fq : ''}}&withRowData=true&organizationName={{organizationName}}&email={{email}}&language={{monitoringLanguage}}&datasetMode=asManyDatasetsAsInspireThemes"
                        data-translate=""
                        title="{{('inspireMonitoringFormatWithRowDataDatasetWithMultipleThemes-help' | translate) !== '' ? ('inspireMonitoringFormatWithRowDataDatasetWithMultipleThemes-help' | translate) : ''}}">
-                       inspireMonitoringFormatWithRowDataDatasetWithMultipleThemes</a></li>
+                      inspireMonitoringFormatWithRowDataDatasetWithMultipleThemes</a>
+                  </li>
                   <li><a target="_blank"
                          data-ng-href="daobs/reporting/{{reporting.id}}{{territory.label ? '/' + territory.label : ''}}.xml{{fq ? '?fq=' + fq : ''}}"
                          data-translate="">XML</a></li>
@@ -240,7 +247,8 @@
                    data-ng-model="reportConfigSearch.$"/>
           </th>
         </tr>
-        <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
+        <tr
+          data-ng-repeat="v in rules | orderBy:'id' | filter:reportConfigSearch">
           <td>{{v.id}}</td>
           <td><strong>{{v.name.content}}</strong></td>
           <td>
@@ -252,7 +260,9 @@
               {{v.query.value}}
             </samp>
             <ul data-ng-show="v.query.stats != null6  ">
-              <li><label data-translate="">Statistics field</label> {{v.query.statsField}}</li>
+              <li><label data-translate="">Statistics field</label>
+                {{v.query.statsField}}
+              </li>
               <li><label data-translate="">Type</label> {{v.query.stats}}</li>
             </ul>
             <samp>
@@ -310,21 +320,25 @@
             </form>
           </th>
         </tr>
-        <tr data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch | filter:checkboxFilters">
+        <tr
+          data-ng-repeat="v in rules | orderBy:'id' | filter:reportSearch | filter:checkboxFilters">
           <td>{{v.id}}</td>
-          <td title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
+          <td
+            title="{{v.comment}} - Expression or query is: {{v.query}}{{v.expression}}">
             {{v.name.content}}
             <div class="alert alert-danger"
                  data-ng-show="v.status.indexOf('Error')"
                  role="alert">
               <strong data-ng-show="v.comment">{{v.comment}}</strong>
               <p>{{v.status}}</p>
-              <span data-ng-show="v.parameters" data-translate="">parameters</span>
+              <span data-ng-show="v.parameters"
+                    data-translate="">parameters</span>
               <ul>
                 <li data-ng-repeat="p in v.parameters.parameter">
                   {{p.id}}
                   <span data-ng-show="p.status === 'set'">{{p.status}} with value {{p.value}}</span>
-                  <span data-ng-show="p.status === 'undefined'">{{p.status}}</span>
+                  <span
+                    data-ng-show="p.status === 'undefined'">{{p.status}}</span>
                 </li>
               </ul>
             </div>

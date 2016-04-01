@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.tasks.validation.inspire;
 
 import org.apache.http.HttpResponse;
@@ -5,13 +25,13 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.LaxRedirectStrategy;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -23,68 +43,12 @@ import java.net.URL;
 public class OnlineServiceValidatorClient {
 
     String inspireResourceTesterURL;
-
-    public String getInspireResourceTesterURL() {
-        return inspireResourceTesterURL;
-    }
-
-    public OnlineServiceValidatorClient setInspireResourceTesterURL(String inspireResourceTesterURL) {
-        this.inspireResourceTesterURL = inspireResourceTesterURL;
-        return this;
-    }
-
     boolean dontGenerateLayerPreviews = true;
-
-
-    public boolean isDontGenerateLayerPreviews() {
-        return dontGenerateLayerPreviews;
-    }
-
-    public void setDontGenerateLayerPreviews(boolean dontGenerateLayerPreviews) {
-        this.dontGenerateLayerPreviews = dontGenerateLayerPreviews;
-    }
-
-
-    public double getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(double threshold) {
-        this.threshold = threshold;
-    }
-
+    boolean dontGenerateHtmlFiles = true;
+    boolean probeNetworkServices = false;
+    boolean probeDataResourceLocators = false;
     private double threshold = 100.0;
 
-    boolean dontGenerateHtmlFiles = true;
-
-
-    public boolean isDontGenerateHtmlFiles() {
-        return dontGenerateHtmlFiles;
-    }
-
-    public void setDontGenerateHtmlFiles(boolean dontGenerateHtmlFiles) {
-        this.dontGenerateHtmlFiles = dontGenerateHtmlFiles;
-    }
-
-    boolean probeNetworkServices = false;
-
-    public boolean isProbeNetworkServices() {
-        return probeNetworkServices;
-    }
-
-    public void setProbeNetworkServices(boolean probeNetworkServices) {
-        this.probeNetworkServices = probeNetworkServices;
-    }
-
-    boolean probeDataResourceLocators = false;
-
-    public boolean isProbeDataResourceLocators() {
-        return probeDataResourceLocators;
-    }
-
-    public void setProbeDataResourceLocators(boolean probeDataResourceLocators) {
-        this.probeDataResourceLocators = probeDataResourceLocators;
-    }
 
     OnlineServiceValidatorClient() {
     }
@@ -104,10 +68,59 @@ public class OnlineServiceValidatorClient {
         this.probeNetworkServices = probeNetworkServices;
     }
 
+    public String getInspireResourceTesterURL() {
+        return inspireResourceTesterURL;
+    }
+
+    public OnlineServiceValidatorClient setInspireResourceTesterURL(String inspireResourceTesterURL) {
+        this.inspireResourceTesterURL = inspireResourceTesterURL;
+        return this;
+    }
+
+    public boolean isDontGenerateLayerPreviews() {
+        return dontGenerateLayerPreviews;
+    }
+
+    public void setDontGenerateLayerPreviews(boolean dontGenerateLayerPreviews) {
+        this.dontGenerateLayerPreviews = dontGenerateLayerPreviews;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public boolean isDontGenerateHtmlFiles() {
+        return dontGenerateHtmlFiles;
+    }
+
+    public void setDontGenerateHtmlFiles(boolean dontGenerateHtmlFiles) {
+        this.dontGenerateHtmlFiles = dontGenerateHtmlFiles;
+    }
+
+    public boolean isProbeNetworkServices() {
+        return probeNetworkServices;
+    }
+
+    public void setProbeNetworkServices(boolean probeNetworkServices) {
+        this.probeNetworkServices = probeNetworkServices;
+    }
+
+    public boolean isProbeDataResourceLocators() {
+        return probeDataResourceLocators;
+    }
+
+    public void setProbeDataResourceLocators(boolean probeDataResourceLocators) {
+        this.probeDataResourceLocators = probeDataResourceLocators;
+    }
 
     public ValidationReport validate(String resourceDescriptorText) throws UnsupportedEncodingException, MalformedURLException {
         return validate(resourceDescriptorText, null);
     }
+
     public ValidationReport validate(String resourceDescriptorText, boolean zipContent) throws UnsupportedEncodingException, MalformedURLException {
         return validate(resourceDescriptorText, null);
     }
@@ -118,13 +131,13 @@ public class OnlineServiceValidatorClient {
     }
 
     private ValidationReport validate(
-            String resourceDescriptorText,
-            File resourceDescriptorFile) throws MalformedURLException {
+        String resourceDescriptorText,
+        File resourceDescriptorFile) throws MalformedURLException {
         HttpResponse retVal = null;
 
         HttpClient httpClient = HttpClientBuilder.create()
 //                .setRedirectStrategy(new LaxRedirectStrategy())
-                .build();
+            .build();
 
         ValidationReport report = new ValidationReport(threshold);
         URL validatorUrl = new URL(this.inspireResourceTesterURL);
@@ -192,7 +205,7 @@ public class OnlineServiceValidatorClient {
     }
 
     private void getResponse(HttpResponse validatorResponse,
-                                        ValidationReport report) {
+                             ValidationReport report) {
         try {
             //The HTTP response status codes can be:
             //HTTP STATUS CODE 201 (Created)               - a validation report is created or just the resource representation if no issues are found
@@ -222,7 +235,7 @@ public class OnlineServiceValidatorClient {
                 report.setReport(xml);
             } else {
                 report.setInfo(String.format(
-                        "Exception. HTTP status is %d expected 201.", responseStatusCode
+                    "Exception. HTTP status is %d expected 201.", responseStatusCode
                 ));
             }
         } catch (IOException ex) {

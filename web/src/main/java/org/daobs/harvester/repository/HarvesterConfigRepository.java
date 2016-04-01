@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.harvester.repository;
 
 import org.daobs.controller.exception.InvalidHarvesterException;
@@ -7,28 +27,17 @@ import org.daobs.utility.UUIDFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A really simple harvester repository based on the
@@ -37,13 +46,12 @@ import java.util.UUID;
  * Created by francois on 11/02/15.
  */
 public class HarvesterConfigRepository implements InitializingBean {
-    private Harvesters harvesters;
-    private String configurationFilepath;
     private static final SimpleDateFormat dateFormat =
-            new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-
+        new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
     @Autowired
     ResourceLoader resourceLoader;
+    private Harvesters harvesters;
+    private String configurationFilepath;
     private String harvestingTasksFolder;
 
     public HarvesterConfigRepository() {
@@ -54,7 +62,7 @@ public class HarvesterConfigRepository implements InitializingBean {
         loadConfig();
     }
 
-    private boolean loadConfig () {
+    private boolean loadConfig() {
         JAXBContext jaxbContext = null;
 
         try {
@@ -65,7 +73,7 @@ public class HarvesterConfigRepository implements InitializingBean {
                 harvesters = (Harvesters) unmarshaller.unmarshal(configurationFile);
             } else {
                 System.out.println("No configuration file available. " +
-                        "Creating empty configuration file.");
+                    "Creating empty configuration file.");
                 harvesters = new Harvesters();
                 commit();
             }
@@ -75,11 +83,12 @@ public class HarvesterConfigRepository implements InitializingBean {
         }
         return true;
     }
+
     public boolean reload() {
         return loadConfig();
     }
 
-    public Harvesters getAll () {
+    public Harvesters getAll() {
         return harvesters;
     }
 
@@ -124,30 +133,30 @@ public class HarvesterConfigRepository implements InitializingBean {
         }
         if (harvester.getUrl() == null) {
             listOfErrors.add(String.format("Harvester with UUID '%s' does not have URL.",
-                    harvester.getUuid()));
+                harvester.getUuid()));
         }
         if (harvester.getFolder() == null) {
             listOfErrors.add(String.format("Harvester with UUID '%s' does not have folder.",
-                    harvester.getUuid()));
+                harvester.getUuid()));
         }
         if (harvester.getTerritory() == null) {
             listOfErrors.add(String.format("Harvester with UUID '%s' does not have territory.",
-                    harvester.getUuid()));
+                harvester.getUuid()));
         }
-        String filter = (String) harvester.getFilter();
-        if (filter != null) {
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(true);
-            try {
-                DocumentBuilder builder = domFactory.newDocumentBuilder();
-                builder.parse(new InputSource(
-                                new StringReader(filter)));
-            } catch (Exception e) {
-                listOfErrors.add(String.format("Harvester with UUID '%s' does not have " +
-                                "a valid filter '%s'. Error is: %s.",
-                        harvester.getUuid(), filter, e.getMessage()));
-            }
-        }
+//        String filter = (String) harvester.getFilter();
+//        if (filter != null) {
+//            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+//            domFactory.setNamespaceAware(true);
+//            try {
+//                DocumentBuilder builder = domFactory.newDocumentBuilder();
+//                builder.parse(new InputSource(
+//                                new StringReader(filter)));
+//            } catch (Exception e) {
+//                listOfErrors.add(String.format("Harvester with UUID '%s' does not have " +
+//                                "a valid filter '%s'. Error is: %s.",
+//                        harvester.getUuid(), filter, e.getMessage()));
+//            }
+//        }
         return listOfErrors;
     }
 
@@ -173,9 +182,9 @@ public class HarvesterConfigRepository implements InitializingBean {
         Harvester harvester = findByUuid(harvesterUuid);
         if (harvester == null) {
             throw new Exception(
-                    String.format(
-                            "No harvester with UUID '%s' found. Can't start it.",
-                            harvesterUuid));
+                String.format(
+                    "No harvester with UUID '%s' found. Can't start it.",
+                    harvesterUuid));
         } else {
             harvesters.getHarvester().remove(harvester);
             commit();
@@ -199,9 +208,9 @@ public class HarvesterConfigRepository implements InitializingBean {
         Harvester harvester = findByUuid(harvesterUuid);
         if (harvester == null) {
             throw new Exception(
-                    String.format(
-                            "No harvester with UUID '%s' found. Can't start it.",
-                            harvesterUuid));
+                String.format(
+                    "No harvester with UUID '%s' found. Can't start it.",
+                    harvesterUuid));
         }
 
         Harvesters harvestingConfig = new Harvesters();
@@ -221,7 +230,7 @@ public class HarvesterConfigRepository implements InitializingBean {
 
             marshaller.marshal(harvestingConfig, file);
         } catch (Exception e) {
-          e.printStackTrace();
+            e.printStackTrace();
         } finally {
             if (file != null) {
                 file.close();
@@ -235,8 +244,8 @@ public class HarvesterConfigRepository implements InitializingBean {
         Date dataStamp = new Date();
         String dataStampString = dateFormat.format(dataStamp);
         return harvestingTasksFolder + File.separator +
-                harvesterUuid + "_" +
-                dataStampString + ".xml";
+            harvesterUuid + "_" +
+            dataStampString + ".xml";
     }
 
     public Harvester findByUuid(String harvesterUuid) {
@@ -256,11 +265,11 @@ public class HarvesterConfigRepository implements InitializingBean {
         this.configurationFilepath = configurationFilepath;
     }
 
-    public void setHarvestingTasksFolder(String harvestingTasksFolder) {
-        this.harvestingTasksFolder = harvestingTasksFolder;
-    }
-
     public String getHarvestingTasksFolder() {
         return harvestingTasksFolder;
+    }
+
+    public void setHarvestingTasksFolder(String harvestingTasksFolder) {
+        this.harvestingTasksFolder = harvestingTasksFolder;
     }
 }

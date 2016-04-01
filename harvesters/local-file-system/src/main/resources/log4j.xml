@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration debug="false">
   <appender name="console" class="org.apache.log4j.ConsoleAppender">
     <param name="Target" value="System.out"/>
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d [%-15.15t] %-5p %-30.30c{1} - %10.10X{camel.exchangeId}#%-24.24X{camel.routeId} - %m%n"/>
+      <param name="ConversionPattern"
+             value="%d [%-15.15t] %-5p %-30.30c{1} - %10.10X{camel.exchangeId}#%-24.24X{camel.routeId} - %m%n"/>
     </layout>
   </appender>
 
   <appender name="file" class="org.apache.log4j.RollingFileAppender">
-    <param name="Threshold" value="ALL" />
-    <param name="File" value="logs/daobs-harvester-lfs.log" />
+    <param name="Threshold" value="ALL"/>
+    <param name="File" value="logs/daobs-harvester-lfs.log"/>
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d %-5p %10.10X{camel.exchangeId}#%-24.24X{camel.routeId} - %m%n"/>
+      <param name="ConversionPattern"
+             value="%d %-5p %10.10X{camel.exchangeId}#%-24.24X{camel.routeId} - %m%n"/>
     </layout>
   </appender>
 
@@ -25,15 +49,15 @@
   </logger>
   <logger name="org.daobs.harvester.lfs">
     <level value="WARN"/>
-    <appender-ref ref="file" />
+    <appender-ref ref="file"/>
   </logger>
   <logger name="org.daobs.harvester.common">
     <level value="WARN"/>
-    <appender-ref ref="file" />
+    <appender-ref ref="file"/>
   </logger>
 
   <root>
     <level value="OFF"/>
-    <appender-ref ref="console" />
+    <appender-ref ref="console"/>
   </root>
 </log4j:configuration>

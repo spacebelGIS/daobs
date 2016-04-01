@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.controller;
 
 import org.daobs.solr.samples.loader.DashboardLoader;
@@ -33,17 +53,17 @@ public class SamplesController {
      * @return
      */
     @RequestMapping(value = "/samples/dashboard",
-            produces = {
-                    MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
-            },
-            method = RequestMethod.GET)
+        produces = {
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_JSON_VALUE
+        },
+        method = RequestMethod.GET)
     @ResponseBody
     public Set<String> getDashboards(HttpServletRequest request) {
         return loader.getListOfResources(
-                request.getSession()
-                        .getServletContext()
-                        .getRealPath(DASHBOARD_FOLDER), false);
+            request.getSession()
+                .getServletContext()
+                .getRealPath(DASHBOARD_FOLDER), false);
     }
 
     /**
@@ -56,17 +76,17 @@ public class SamplesController {
      * @return
      */
     @RequestMapping(value = "/samples/dashboardType",
-            produces = {
-                    MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
-            },
-            method = RequestMethod.GET)
+        produces = {
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_JSON_VALUE
+        },
+        method = RequestMethod.GET)
     @ResponseBody
     public Set<String> getTypes(HttpServletRequest request) {
         return loader.getListOfResources(
-                request.getSession()
-                        .getServletContext()
-                        .getRealPath(DASHBOARD_FOLDER), true);
+            request.getSession()
+                .getServletContext()
+                .getRealPath(DASHBOARD_FOLDER), true);
     }
 
     /**
@@ -78,20 +98,20 @@ public class SamplesController {
      * @throws IOException
      */
     @RequestMapping(value = "/samples/dashboard/{dashboardFilePrefix}",
-            produces = {
-                    MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
-            },
-            method = RequestMethod.PUT)
+        produces = {
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_JSON_VALUE
+        },
+        method = RequestMethod.PUT)
     @ResponseBody
     public Map<String, List<String>> get(HttpServletRequest request,
-                            @PathVariable(value = "dashboardFilePrefix")
-                                String dashboardFilePrefix)
-            throws IOException {
+                                         @PathVariable(value = "dashboardFilePrefix")
+                                             String dashboardFilePrefix)
+        throws IOException {
         return loader.load(
-                request.getSession()
-                        .getServletContext()
-                        .getRealPath(DASHBOARD_FOLDER),
-                dashboardFilePrefix);
+            request.getSession()
+                .getServletContext()
+                .getRealPath(DASHBOARD_FOLDER),
+            dashboardFilePrefix);
     }
 }

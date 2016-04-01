@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.harvester;
 
 import com.google.common.base.Charsets;
@@ -32,12 +52,195 @@ import java.util.logging.Logger;
  */
 public class CswHarvester {
     Logger log = Logger.getLogger("org.daobs.harvester.csw");
+    private Map<String, Config> harvesters = new HashMap<String, Config>();
+    private String getRecordsTemplate = "";
+    private String getRecordsHitsTemplate = "";
+    private int maxRecords = 100;
+
+    public CswHarvester() {
+        String fileName = "csw-get-records.xml";
+        try {
+            InputStream stream = this.getClass().getResourceAsStream("/" + fileName);
+            getRecordsTemplate = IOUtils.toString(stream,
+                Charsets.UTF_8);
+        } catch (IOException e) {
+            log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
+        }
+        String fileNameHits = "csw-get-records-hits.xml";
+        try {
+            InputStream stream = this.getClass().getResourceAsStream("/" + fileNameHits);
+            getRecordsHitsTemplate = IOUtils.toString(stream,
+                Charsets.UTF_8);
+        } catch (IOException e) {
+            log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
+        }
+    }
+
+    public int getMaxRecords() {
+        return maxRecords;
+    }
+
+    public void setMaxRecords(int maxRecords) {
+        this.maxRecords = maxRecords;
+    }
+
+    public Config initialize(@Header("harvesterUrl") String identifier,
+                             @Header("harvesterFilter") Document filter,
+                             @Header("harvesterNbRecordsPerPage") int nbRecordsPerPage) {
+
+        log.info(String.format("Initializing configuration for %s.", identifier));
+        Config config = new Config();
+        if (nbRecordsPerPage != -1) {
+            config.setMaxRecords(nbRecordsPerPage);
+        } else {
+            config.setMaxRecords(maxRecords);
+        }
+        config.setRecordsFilter(filter.getFirstChild());
+        harvesters.put(identifier, config);
+        return config;
+    }
+
+    private Config getConfig(@Header("harvesterUrl") String identifier) {
+        Config config = harvesters.get(identifier);
+        if (config == null) {
+            config = new Config();
+            config.setMaxRecords(maxRecords);
+            harvesters.put(identifier, config);
+
+        }
+        return config;
+    }
+
+    public void setNumberOfRecords(@Header("harvesterUrl") String identifier, String numberOfRecordsMatched) {
+        Config config = getConfig(identifier);
+        config.setNumberOfRecordsMatched(Integer.parseInt(numberOfRecordsMatched));
+
+    }
+
+    public List<String> getPages(@Header("harvesterUrl") String identifier) {
+        Config config = getConfig(identifier);
+        return config.computeNumberOfPages();
+    }
+
+    public int getNumberOfPages(@Header("harvesterUrl") String identifier) {
+        Config config = getConfig(identifier);
+        return config.getPages().size();
+    }
+
+    private String buildGetRecordsQuery(Node filter,
+                                        boolean forHits,
+                                        int startPosition,
+                                        int maxRecords) {
+
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        domFactory.setNamespaceAware(true); // never forget this!
+        try {
+            DocumentBuilder builder = domFactory.newDocumentBuilder();
+            Document getRecordsRequest =
+                builder.parse(
+                    new InputSource(
+                        new StringReader(
+                            forHits ?
+                                this.getRecordsHitsTemplate :
+                                this.getRecordsTemplate)));
+
+            // Append the optional CSW filter to the query element
+            if (filter != null && filter.getFirstChild() != null) {
+                String CSW_NS = "http://www.opengis.net/cat/csw/2.0.2";
+                String OGC_NS = "http://www.opengis.net/ogc";
+                Node children =
+                    getRecordsRequest.getDocumentElement()
+                        .getElementsByTagNameNS(CSW_NS,
+                            "Query").item(0);
+                if (children != null) {
+                    // <csw:Constraint version="1.1.0">
+                    // <Filter xmlns="http://www.opengis.net/ogc"/>
+                    // </csw:Constraint>
+
+                    Element constraintElement = getRecordsRequest.createElementNS(CSW_NS, "Constraint");
+                    constraintElement.setAttribute("version", "1.1.0");
+
+                    Node filterNode = getRecordsRequest.importNode(filter, true);
+                    constraintElement.appendChild(filterNode);
+                    children.appendChild(constraintElement);
+                }
+            }
+
+            if (!forHits) {
+                // Set the start position and max record
+                NamedNodeMap attributes = getRecordsRequest.getFirstChild().getAttributes();
+                Node maxRecordsNode = attributes.getNamedItem("maxRecords");
+                if (maxRecordsNode != null) {
+                    maxRecordsNode.setTextContent(maxRecords + "");
+                }
+
+
+                Node startPositionNode = attributes.getNamedItem("startPosition");
+                if (startPositionNode != null) {
+                    startPositionNode.setTextContent(startPosition + "");
+                }
+            }
+            StringWriter sw = new StringWriter();
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+            transformer.transform(
+                new DOMSource(getRecordsRequest),
+                new StreamResult(sw));
+            String response = sw.toString();
+            log.info(response);
+            return response;
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String generateGetRecordsHitsQuery(
+        @Header("harvesterUrl") String identifier,
+        Exchange exchange) {
+        Config config = getConfig(identifier);
+        return buildGetRecordsQuery(config.getRecordsFilter(),
+            true,
+            0,
+            0
+        );
+
+    }
+
+    public synchronized String generateGetRecordsQuery(
+        @Header("harvesterUrl") String identifier,
+        Exchange exchange) {
+        int page = (Integer) exchange.getProperty("CamelSplitIndex");
+        Config config = getConfig(identifier);
+        return buildGetRecordsQuery(config.getRecordsFilter(),
+            false,
+            page * config.getMaxRecords() + 1,
+            config.getMaxRecords());
+    }
 
     class Config {
+        List<String> pages = new ArrayList<String>();
+        private int maxRecords = 20;
+        private int startPosition = 1;
+        private int numberOfRecordsMatched;
+        private Node getRecordsFilter;
+
         public void Config() {
 
         }
-        List<String> pages = new ArrayList<String>();
 
         public int getMaxRecords() {
             return maxRecords;
@@ -57,12 +260,6 @@ public class CswHarvester {
             return this;
         }
 
-        private int maxRecords = 20;
-        private int startPosition = 1;
-        private int numberOfRecordsMatched;
-
-        private Node getRecordsFilter;
-
         public int getNumberOfPages() {
             return pages.size();
         }
@@ -70,6 +267,7 @@ public class CswHarvester {
         public List<String> getPages() {
             return pages;
         }
+
         public List<String> computeNumberOfPages() {
             int numberOfPages = numberOfRecordsMatched / maxRecords;
             int remainingRecords = numberOfRecordsMatched - (numberOfPages * maxRecords);
@@ -100,182 +298,10 @@ public class CswHarvester {
         public Node getRecordsFilter() {
             return this.getRecordsFilter;
         }
+
         public Config setRecordsFilter(Node getRecordsFilter) {
             this.getRecordsFilter = getRecordsFilter;
             return this;
         }
-    }
-
-    private Map<String, Config> harvesters = new HashMap<String, Config>();
-    private String getRecordsTemplate = "";
-    private String getRecordsHitsTemplate = "";
-
-    private int maxRecords = 100;
-    public int getMaxRecords() {
-        return maxRecords;
-    }
-    public void setMaxRecords(int maxRecords) {
-        this.maxRecords = maxRecords;
-    }
-
-    public CswHarvester() {
-        String fileName = "csw-get-records.xml";
-        try {
-            InputStream stream  = this.getClass().getResourceAsStream("/" + fileName);
-            getRecordsTemplate = IOUtils.toString(stream,
-                            Charsets.UTF_8);
-        } catch (IOException e) {
-            log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
-        }
-        String fileNameHits = "csw-get-records-hits.xml";
-        try {
-            InputStream stream  = this.getClass().getResourceAsStream("/" + fileNameHits);
-            getRecordsHitsTemplate = IOUtils.toString(stream,
-                    Charsets.UTF_8);
-        } catch (IOException e) {
-            log.warning("Can't find '" + fileName + "'. Error is: " + e.getMessage());
-        }
-    }
-
-    public Config initialize(@Header("harvesterUrl") String identifier,
-                             @Header("harvesterFilter") Document filter,
-                             @Header("harvesterNbRecordsPerPage") int nbRecordsPerPage) {
-
-        log.info(String.format("Initializing configuration for %s.", identifier));
-        Config config = new Config();
-        if (nbRecordsPerPage != -1) {
-            config.setMaxRecords(nbRecordsPerPage);
-        } else {
-            config.setMaxRecords(maxRecords);
-        }
-        config.setRecordsFilter(filter.getFirstChild());
-        harvesters.put(identifier, config);
-        return config;
-    }
-    private Config getConfig(@Header("harvesterUrl") String identifier) {
-        Config config = harvesters.get(identifier);
-        if (config == null) {
-            config = new Config();
-            config.setMaxRecords(maxRecords);
-            harvesters.put(identifier, config);
-
-        }
-        return config;
-    }
-
-    public void setNumberOfRecords(@Header("harvesterUrl") String identifier, String numberOfRecordsMatched) {
-        Config config = getConfig(identifier);
-        config.setNumberOfRecordsMatched(Integer.parseInt(numberOfRecordsMatched));
-
-    }
-    public List<String> getPages(@Header("harvesterUrl") String identifier) {
-        Config config = getConfig(identifier);
-        return config.computeNumberOfPages();
-    }
-    public int getNumberOfPages(@Header("harvesterUrl") String identifier) {
-        Config config = getConfig(identifier);
-        return config.getPages().size();
-    }
-
-    private String buildGetRecordsQuery(Node filter,
-                                        boolean forHits,
-                                        int startPosition,
-                                        int maxRecords) {
-
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true); // never forget this!
-        try {
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document getRecordsRequest =
-                    builder.parse(
-                            new InputSource(
-                                    new StringReader(
-                                            forHits ?
-                                                    this.getRecordsHitsTemplate :
-                                                    this.getRecordsTemplate)));
-
-            // Append the optional CSW filter to the query element
-            if (filter != null && filter.getFirstChild() != null) {
-                String CSW_NS = "http://www.opengis.net/cat/csw/2.0.2";
-                String OGC_NS = "http://www.opengis.net/ogc";
-                Node children =
-                        getRecordsRequest.getDocumentElement()
-                                .getElementsByTagNameNS(CSW_NS,
-                                        "Query").item(0);
-                if (children != null) {
-                    // <csw:Constraint version="1.1.0">
-                    // <Filter xmlns="http://www.opengis.net/ogc"/>
-                    // </csw:Constraint>
-
-                    Element constraintElement = getRecordsRequest.createElementNS(CSW_NS, "Constraint");
-                    constraintElement.setAttribute("version", "1.1.0");
-
-                    Node filterNode = getRecordsRequest.importNode(filter,true);
-                    constraintElement.appendChild(filterNode);
-                    children.appendChild(constraintElement);
-                }
-            }
-
-            if (!forHits) {
-                // Set the start position and max record
-                NamedNodeMap attributes = getRecordsRequest.getFirstChild().getAttributes();
-                Node maxRecordsNode = attributes.getNamedItem("maxRecords");
-                if (maxRecordsNode != null) {
-                    maxRecordsNode.setTextContent(maxRecords + "");
-                }
-
-
-                Node startPositionNode = attributes.getNamedItem("startPosition");
-                if (startPositionNode != null) {
-                    startPositionNode.setTextContent(startPosition + "");
-                }
-            }
-            StringWriter sw = new StringWriter();
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-            transformer.transform(
-                    new DOMSource(getRecordsRequest),
-                    new StreamResult(sw));
-            String response = sw.toString();
-            log.info(response);
-            return response;
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public String generateGetRecordsHitsQuery(
-            @Header("harvesterUrl") String identifier,
-            Exchange exchange) {
-        Config config = getConfig(identifier);
-        return buildGetRecordsQuery(config.getRecordsFilter(),
-                true,
-                0,
-                0
-        );
-
-    }
-    public synchronized String generateGetRecordsQuery(
-            @Header("harvesterUrl") String identifier,
-            Exchange exchange) {
-        int page = (Integer) exchange.getProperty("CamelSplitIndex");
-        Config config = getConfig(identifier);
-        return buildGetRecordsQuery(config.getRecordsFilter(),
-                false,
-                page * config.getMaxRecords() + 1,
-                config.getMaxRecords());
     }
 }

@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.controller;
 
 import de.congrace.exp4j.Calculable;
@@ -50,7 +70,7 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
         }
         if (!configurationFile.exists()) {
             throw new FileNotFoundException(String.format("'%s' does not exist.",
-                    configurationFile));
+                configurationFile));
         }
 
         this.lastModificationDate = configurationFile.lastModified();
@@ -66,8 +86,8 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
         }
 
         indicatorResults = new HashMap<String, Double>(
-                reporting.getVariables().getVariable().size() +
-                        reporting.getIndicators().getIndicator().size());
+            reporting.getVariables().getVariable().size() +
+                reporting.getIndicators().getIndicator().size());
         return this;
     }
 
@@ -83,14 +103,15 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
 
     @Override
     public IndicatorCalculator computeIndicators(String... filterQuery) {
+        long start = System.currentTimeMillis();
         Iterator<Variable> iterator = reporting.getVariables().getVariable().iterator();
         while (iterator.hasNext()) {
             Variable variable = iterator.next();
             logger.log(java.util.logging.Level.FINE,
-                    String.format("Compute variable for '%s'.", variable.getId())
+                String.format("Compute variable for '%s'.", variable.getId())
             );
             logger.log(java.util.logging.Level.FINE,
-                    String.format("  Expression '%s'.", variable.getQuery())
+                String.format("  Expression '%s'.", variable.getQuery())
             );
             Double statValue;
             Double defaultValue = variable.getDefault();
@@ -104,18 +125,18 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                 String statsField = query.getStatsField();
                 if (statsField != null) {
                     statValue = SolrRequestBean.getStats(
-                            variable.getQuery().getValue(),
-                            filterQuery,
-                            statsField,
-                            query.getStats());
+                        variable.getQuery().getValue(),
+                        filterQuery,
+                        statsField,
+                        query.getStats());
                 } else {
                     statValue = SolrRequestBean.getNumFound(
-                            variable.getQuery().getValue(),
-                            filterQuery);
+                        variable.getQuery().getValue(),
+                        filterQuery);
                 }
 
                 logger.log(java.util.logging.Level.FINE,
-                        String.format("  Results '%s'.", statValue)
+                    String.format("  Results '%s'.", statValue)
                 );
                 if (statValue != null) {
                     String valueAsText = formatValue(statValue, format);
@@ -123,7 +144,7 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                     variable.setValue(valueAsText);
                 } else if (defaultValue != null) {
                     logger.log(java.util.logging.Level.FINE,
-                            String.format("  Set to default value '%s'.", defaultValue)
+                        String.format("  Set to default value '%s'.", defaultValue)
                     );
                     String valueAsText = formatValue(defaultValue, format);
                     indicatorResults.put(variable.getId(), defaultValue);
@@ -137,14 +158,14 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
         }
 
         Iterator<Indicator> iteratorIndicator =
-                reporting.getIndicators().getIndicator().iterator();
+            reporting.getIndicators().getIndicator().iterator();
         while (iteratorIndicator.hasNext()) {
             Indicator indicator = iteratorIndicator.next();
             logger.log(java.util.logging.Level.FINE,
-                    String.format("Compute indicator for '%s'.", indicator.getId())
+                String.format("Compute indicator for '%s'.", indicator.getId())
             );
             logger.log(java.util.logging.Level.FINE,
-                    String.format("  Expression '%s'.", indicator.getExpression())
+                String.format("  Expression '%s'.", indicator.getExpression())
             );
             Calculable e = null;
             double result;
@@ -153,8 +174,8 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             String format = indicator.getNumberFormat();
             if (expression == null) {
                 String message = String.format("  Null expression for indicator '%s'. " +
-                                "Check the reporting configuration file.",
-                        indicator.getId());
+                        "Check the reporting configuration file.",
+                    indicator.getId());
                 logger.log(Level.WARNING, message);
                 indicator.setStatus(message);
                 continue;
@@ -167,9 +188,9 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
 
                     if (paramValue == null) {
                         logger.log(Level.FINE,
-                                String.format("  Parameter '%s' not defined in " +
-                                                "variables or failed to compute value.",
-                                        indicator.getId())
+                            String.format("  Parameter '%s' not defined in " +
+                                    "variables or failed to compute value.",
+                                indicator.getId())
                         );
                         param.setStatus("undefined");
                     } else {
@@ -177,8 +198,8 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                         param.setStatus("set");
                         param.setValue(valueAsText);
                         expressionBuilder.withVariable(
-                                param.getId(),
-                                paramValue
+                            param.getId(),
+                            paramValue
                         );
                     }
                 }
@@ -186,17 +207,17 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
             } catch (UnknownFunctionException e1) {
                 e1.printStackTrace();
                 String message = String.format("  Unknown function in expression '%s'. " +
-                                ". Error is %s.",
-                        indicator.getExpression(),
-                        e1.getMessage());
+                        ". Error is %s.",
+                    indicator.getExpression(),
+                    e1.getMessage());
                 logger.log(Level.WARNING, message);
                 indicator.setStatus(message);
             } catch (UnparsableExpressionException e1) {
                 e1.printStackTrace();
                 String message = String.format("  Error parsing expression '%s'. " +
-                                "Error is %s.",
-                        indicator.getExpression(),
-                        e1.getMessage());
+                        "Error is %s.",
+                    indicator.getExpression(),
+                    e1.getMessage());
                 logger.log(Level.WARNING, message);
                 indicator.setStatus(message);
             }
@@ -209,15 +230,17 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
                 } catch (ArithmeticException e1) {
                     e1.printStackTrace();
                     String message = String.format("  Arithmetic exception. Check expression (%s) or " +
-                                    "parameter values. Error is %s.",
-                            indicator.getExpression(),
-                            e1.getMessage());
+                            "parameter values. Error is %s.",
+                        indicator.getExpression(),
+                        e1.getMessage());
                     logger.log(Level.WARNING, message);
                     indicator.setStatus(message);
                 }
             }
         }
-
+        long elapsed = System.currentTimeMillis() - start;
+        // new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").format(new Date())
+        reporting.setComputationTime(Math.round(elapsed));
         return null;
     }
 
@@ -280,9 +303,9 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
         while (keySetIterator.hasNext()) {
             String key = keySetIterator.next();
             string.append(key)
-                    .append("\t\t\t")
-                    .append(indicatorResults.get(key))
-                    .append("\n");
+                .append("\t\t\t")
+                .append(indicatorResults.get(key))
+                .append("\n");
         }
         return string.toString();
     }

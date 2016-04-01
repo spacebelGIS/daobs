@@ -1,8 +1,24 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.tasks.validation.etf;
-
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -20,6 +36,9 @@ import scala.actors.threadpool.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Class to identify the service protocol.
@@ -41,20 +60,20 @@ public class ServiceProtocolChecker {
     private String declaredProtocol;
 
 
+    public ServiceProtocolChecker(String endPoint, ServiceType serviceType, String declaredProtocol) {
+        this.endPoint = endPoint;
+        this.serviceType = serviceType;
+        this.declaredProtocol = declaredProtocol;
+    }
+
     public String getErrorMessage() {
         if (StringUtils.isNotEmpty(this.errorMessage)) {
             return this.errorMessage;
 
         } else {
             return "Protocol from " + this.endPoint +
-                    " (serviceType=" + this.serviceType.toString() +  ") can't be identified.";
+                " (serviceType=" + this.serviceType.toString() + ") can't be identified.";
         }
-    }
-
-    public ServiceProtocolChecker(String endPoint, ServiceType serviceType, String declaredProtocol) {
-        this.endPoint = endPoint;
-        this.serviceType = serviceType;
-        this.declaredProtocol = declaredProtocol;
     }
 
     public ServiceProtocol check() {
@@ -150,20 +169,20 @@ public class ServiceProtocolChecker {
         log.info("Retrieving url: " + url);
 
         RequestConfig defaultRequestConfig = RequestConfig.custom()
-                .setSocketTimeout(5000)
-                .setConnectTimeout(5000)
-                .setConnectionRequestTimeout(5000)
-                .build();
+            .setSocketTimeout(5000)
+            .setConnectTimeout(5000)
+            .setConnectionRequestTimeout(5000)
+            .build();
 
-        try(CloseableHttpClient httpclient = HttpClients.custom().
-                setDefaultRequestConfig(defaultRequestConfig).build()){
-            try(CloseableHttpResponse response = httpclient.execute(new HttpGet(url))){
+        try (CloseableHttpClient httpclient = HttpClients.custom().
+            setDefaultRequestConfig(defaultRequestConfig).build()) {
+            try (CloseableHttpResponse response = httpclient.execute(new HttpGet(url))) {
 
                 if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                     String body = EntityUtils.toString(response.getEntity());
 
                     DocumentBuilderFactory factory =
-                            DocumentBuilderFactory.newInstance();
+                        DocumentBuilderFactory.newInstance();
                     factory.setNamespaceAware(true);
 
                     DocumentBuilder builder = factory.newDocumentBuilder();
@@ -210,6 +229,6 @@ public class ServiceProtocolChecker {
      * @return
      */
     private String buildUrl(String url, String params) {
-        return url + (url.endsWith("?")?"":"?") + params;
+        return url + (url.endsWith("?") ? "" : "?") + params;
     }
 }

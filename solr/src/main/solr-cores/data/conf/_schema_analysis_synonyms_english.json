@@ -1,11 +1,19 @@
 {
-  "initArgs":{
-    "ignoreCase":true,
-    "format":"solr"
+  "initArgs": {
+    "ignoreCase": true,
+    "format": "solr"
   },
-  "managedMap":{
-    "GB":["GiB","Gigabyte"],
-    "happy":["glad","joyful"],
-    "TV":["Television"]
+  "managedMap": {
+    "GB": [
+      "GiB",
+      "Gigabyte"
+    ],
+    "happy": [
+      "glad",
+      "joyful"
+    ],
+    "TV": [
+      "Television"
+    ]
   }
 }

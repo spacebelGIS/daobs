@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:cm="http://camel.apache.org/schema/spring"
@@ -13,25 +35,31 @@
     <property name="location" value="/WEB-INF/config.properties"/>
   </bean>
 
-  <bean id="etfValidationClient" class="org.daobs.tasks.validation.etf.EtfValidatorBean">
-    <property name="etfResourceTesterPath" value="${task.validation-etf-checker.validator.path}"/>
+  <bean id="etfValidationClient"
+        class="org.daobs.tasks.validation.etf.EtfValidatorBean">
+    <property name="etfResourceTesterPath"
+              value="${task.validation-etf-checker.validator.path}"/>
     <!-- Destination to copy the html reports -->
-    <property name="etfResourceTesterHtmlReportsPath" value="${task.validation-etf-checker.validator.htmlreports.path}"/>
+    <property name="etfResourceTesterHtmlReportsPath"
+              value="${task.validation-etf-checker.validator.htmlreports.path}"/>
     <!-- Url to the html reports -->
-    <property name="etfResourceTesterHtmlReportsUrl" value="${task.validation-etf-checker.validator.htmlreports.url}"/>
+    <property name="etfResourceTesterHtmlReportsUrl"
+              value="${task.validation-etf-checker.validator.htmlreports.url}"/>
   </bean>
 
   <bean id="etfPagination" class="org.daobs.routing.utility.Pagination">
-    <property name="recordsPerPage" value="${task.validation-etf-checker.records.per.page}"/>
+    <property name="recordsPerPage"
+              value="${task.validation-etf-checker.records.per.page}"/>
   </bean>
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
-  <bean id="nullBodyStrategy" class="org.daobs.routing.utility.NullBodyStrategy"/>
+  <bean id="nullBodyStrategy"
+        class="org.daobs.routing.utility.NullBodyStrategy"/>
   <bean id="urlEncoder" class="java.net.URLEncoder"/>
 
   <cm:errorHandler id="loggingErrorHandler"
-                      type="LoggingErrorHandler"
-                      logName="daobs.tasks.validation-etf-checker"
-                      level="DEBUG"/>
+                   type="LoggingErrorHandler"
+                   logName="daobs.tasks.validation-etf-checker"
+                   level="DEBUG"/>
 
   <cm:camelContext id="task.validation-etf-checker"
                    errorHandlerRef="loggingErrorHandler"
@@ -43,7 +71,9 @@
                           maxPoolSize="10"/>
 
     <cm:onException>
-      <cm:exception>org.apache.camel.component.http4.HttpOperationFailedException</cm:exception>
+      <cm:exception>
+        org.apache.camel.component.http4.HttpOperationFailedException
+      </cm:exception>
       <cm:continued>
         <cm:constant>true</cm:constant>
       </cm:continued>
@@ -58,7 +88,6 @@
               logName="org.daobs.tasks.validation.etf"/>
       <cm:to uri="log:org.daobs.tasks.validation.etf?showBody=true"/>
     </cm:onException>
-
 
 
     <cm:route id="route-etf-task-validate-start-cli"
@@ -77,7 +106,8 @@
         <cm:when>
           <cm:simple>${body} is "java.lang.String"</cm:simple>
           <cm:setHeader headerName="documentFilter">
-            <cm:simple>$simple{body} {{task.validation-etf-checker.filter}}</cm:simple>
+            <cm:simple>$simple{body} {{task.validation-etf-checker.filter}}
+            </cm:simple>
           </cm:setHeader>
         </cm:when>
         <cm:otherwise>
@@ -95,7 +125,8 @@
 
     <cm:route id="route-etf-task-validate-check-regularly"
               autoStartup="{{task.validation-etf-checker.startup.background}}">
-      <cm:from uri="quartz2://etf-task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
+      <cm:from
+        uri="quartz2://etf-task-validate/check-not-validated-records?cron=0+0/5+*+*+*+?"/>
       <cm:to uri="direct:etf-task-validate-start"/>
     </cm:route>
 
@@ -104,13 +135,15 @@
       </cm:description>
       <cm:from uri="direct:etf-task-validate-start"/>
 
-      <cm:log message="Background task checking document ETF validation status ..."
-              loggingLevel="INFO"
-              logName="org.daobs.tasks.validation.etf"/>
+      <cm:log
+        message="Background task checking document ETF validation status ..."
+        loggingLevel="INFO"
+        logName="org.daobs.tasks.validation.etf"/>
 
-      <cm:log message="Searching for documents with filter '$simple{header.documentFilter}'."
-              loggingLevel="INFO"
-              logName="org.daobs.tasks.validation.etf"/>
+      <cm:log
+        message="Searching for documents with filter '$simple{header.documentFilter}'."
+        loggingLevel="INFO"
+        logName="org.daobs.tasks.validation.etf"/>
 
 
       <!-- Get number of records to validate -->
@@ -123,16 +156,18 @@
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
         <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-etf-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'</cm:groovy>
       </cm:setHeader>
-      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:to
+        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:convertBodyTo type="org.w3c.dom.Document"/>
       <cm:setHeader headerName="numberOfRecordsMatched">
         <cm:xpath resultType="java.lang.String">
           //result/@numFound
         </cm:xpath>
       </cm:setHeader>
-      <cm:log message="$simple{header.numberOfRecordsMatched} record(s) to validate."
-              loggingLevel="INFO"
-              logName="org.daobs.tasks.validation.etf"/>
+      <cm:log
+        message="$simple{header.numberOfRecordsMatched} record(s) to validate."
+        loggingLevel="INFO"
+        logName="org.daobs.tasks.validation.etf"/>
 
       <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
         <cm:method bean="etfPagination" method="getPages"/>
@@ -140,11 +175,13 @@
           <cm:simple>${bean:etfPagination?method=getStart}</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="row">
-          <cm:simple>{{task.validation-etf-checker.records.per.page}}</cm:simple>
+          <cm:simple>{{task.validation-etf-checker.records.per.page}}
+          </cm:simple>
         </cm:setHeader>
-        <cm:log message="Validating page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row} | total: $simple{header.numberOfRecordsMatched}."
-                loggingLevel="INFO"
-                logName="org.daobs.tasks.validation.etf"/>
+        <cm:log
+          message="Validating page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row} | total: $simple{header.numberOfRecordsMatched}."
+          loggingLevel="INFO"
+          logName="org.daobs.tasks.validation.etf"/>
 
         <cm:setHeader headerName="CamelHttpMethod">
           <cm:constant>GET</cm:constant>
@@ -153,17 +190,17 @@
           <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
-          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') +
-                      '&amp;fl={{task.validation-etf-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=' +
-                      exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-etf-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
-        <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+        <cm:to
+          uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
         <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
           <cm:xpath>//doc</cm:xpath>
 
           <cm:setHeader headerName="documentIdentifier">
-            <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
+            <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']
+            </cm:xpath>
           </cm:setHeader>
           <!-- Compute filename suffix for saving update queries -->
           <cm:setHeader headerName="stringToEncrypt">
@@ -173,9 +210,10 @@
             <cm:simple>bean:utility?method=encrypt</cm:simple>
           </cm:setHeader>
 
-          <cm:log message="Record identifier is '$simple{header.documentIdentifier}' '$simple{header.link}' '$simple{body}' '$simple{header.documentStandard}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
-                  loggingLevel="INFO"
-                  logName="org.daobs.tasks.validation.etf"/>
+          <cm:log
+            message="Record identifier is '$simple{header.documentIdentifier}' '$simple{header.link}' '$simple{body}' '$simple{header.documentStandard}'. Query file name suffix is '$simple{header.fileNameSuffix}'."
+            loggingLevel="INFO"
+            logName="org.daobs.tasks.validation.etf"/>
 
           <cm:to uri="direct:validation-etf"/>
         </cm:split>
@@ -183,14 +221,15 @@
     </cm:route>
 
 
-    <cm:route  id="route-validation-etf-checker">
+    <cm:route id="route-validation-etf-checker">
       <cm:from uri="direct:validation-etf"/>
       <cm:setHeader headerName="beginTime">
         <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
       </cm:setHeader>
-      <cm:log message="Checking record with UUID '$simple{header.documentIdentifier}'. Start at $simple{header.beginTime}. Body: $simple{body}"
-              loggingLevel="INFO"
-              logName="org.daobs.tasks.validation.etf"/>
+      <cm:log
+        message="Checking record with UUID '$simple{header.documentIdentifier}'. Start at $simple{header.beginTime}. Body: $simple{body}"
+        loggingLevel="INFO"
+        logName="org.daobs.tasks.validation.etf"/>
 
 
       <cm:bean ref="etfValidationClient" method="validateBody"/>
@@ -214,13 +253,14 @@
         </cm:simple>
       </cm:setBody>
 
-      <cm:to uri="file:{{task.validation-etf-checker.folder}}?fileName=etf-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+      <cm:to
+        uri="file:{{task.validation-etf-checker.folder}}?fileName=etf-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
     </cm:route>
 
 
-
     <cm:route id="save-validation-status">
-      <cm:from uri="file:{{task.validation-etf-checker.folder}}?consumer.delay={{task.validation-etf-checker.delay}}"/>
+      <cm:from
+        uri="file:{{task.validation-etf-checker.folder}}?consumer.delay={{task.validation-etf-checker.delay}}"/>
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="INFO"
               logName="org.daobs.tasks.validation.etf"/>
@@ -234,7 +274,8 @@
       <cm:setHeader headerName="Content-Type">
         <cm:constant>application/xml</cm:constant>
       </cm:setHeader>
-      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:to
+        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
       <cm:log message="Solr response: ${body}."
               loggingLevel="DEBUG"
               logName="org.daobs.tasks.validation.etf"/>

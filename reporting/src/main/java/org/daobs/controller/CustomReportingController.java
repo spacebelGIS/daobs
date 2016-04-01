@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.controller;
 
 import org.daobs.index.SolrRequestBean;
@@ -8,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Node;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.TransformerFactory;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -21,27 +40,27 @@ public class CustomReportingController {
 
     // TODO: config should move to configuration file
     public static final String SPATIALDATASETS_QUERY_URL = "/select?" +
-            "q=%%2BdocumentType%%3Ametadata+" +
-                "%%2B(resourceType%%3Adataset+" +
-                "resourceType%%3Aseries)&" +
-            "fq=%s&" +
-            "start=0&rows=%d&" +
-            "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
-            "inspireAnnex,inspireTheme,inspireConformResource," +
-            "recordOperatedByType,recordOperatedByTypeview,recordOperatedByTypedownload," +
-            "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
+        "q=%%2BdocumentType%%3Ametadata+" +
+        "%%2B(resourceType%%3Adataset+" +
+        "resourceType%%3Aseries)&" +
+        "fq=%s&" +
+        "start=0&rows=%d&" +
+        "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
+        "inspireAnnex,inspireTheme,inspireConformResource," +
+        "recordOperatedByType,recordOperatedByTypeview,recordOperatedByTypedownload," +
+        "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final String SPATIALDATASERVICE_QUERY_URL = "/select?" +
-            "q=%%2BdocumentType%%3Ametadata+%%2BresourceType%%3Aservice&" +
-            "fq=%s&" +
-            "start=0&rows=%d&" +
-            "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
-            "inspireAnnex,inspireTheme,inspireConformResource," +
-            "serviceType,linkUrl,link," +
-            "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
+        "q=%%2BdocumentType%%3Ametadata+%%2BresourceType%%3Aservice&" +
+        "fq=%s&" +
+        "start=0&rows=%d&" +
+        "fl=metadataIdentifier,resourceTitle,isAboveThreshold," +
+        "inspireAnnex,inspireTheme,inspireConformResource," +
+        "serviceType,linkUrl,link," +
+        "OrgForResource,custodianOrgForResource,ownerOrgForResource,pointOfContactOrgForResource,harvesterUuid";
 
     public static final List<String> BOOLEAN_PARAMETERS = new ArrayList<>(
-            Arrays.asList("withRowData")
+        Arrays.asList("withRowData")
     );
 
 
@@ -55,27 +74,27 @@ public class CustomReportingController {
      * @throws java.io.IOException
      */
     @RequestMapping(value = "/reporting/custom/{reporting}",
-            produces = {
-                    MediaType.APPLICATION_XML_VALUE
-            },
-            method = RequestMethod.GET)
+        produces = {
+            MediaType.APPLICATION_XML_VALUE
+        },
+        method = RequestMethod.GET)
     public ModelAndView generateMonitoring(HttpServletRequest request,
-                                           @RequestParam Map<String,String> allRequestParams,
+                                           @RequestParam Map<String, String> allRequestParams,
                                            @PathVariable(value = "reporting") String reporting,
                                            @RequestParam(
-                                                   value = "withRowData",
-                                                   required = false) Boolean withRowData,
+                                               value = "withRowData",
+                                               required = false) Boolean withRowData,
                                            @RequestParam(
-                                                   value = "fq",
-                                                   defaultValue = "",
-                                                   required = false) String fq,
+                                               value = "fq",
+                                               defaultValue = "",
+                                               required = false) String fq,
                                            @RequestParam(
-                                                   value = "rows",
-                                                   defaultValue = "10000",
-                                                   required = false) int rows)
-            throws IOException {
+                                               value = "rows",
+                                               defaultValue = "10000",
+                                               required = false) int rows)
+        throws IOException {
         IndicatorCalculatorImpl indicatorCalculator =
-                ReportingController.generateReporting(request, reporting, fq, true);
+            ReportingController.generateReporting(request, reporting, fq, true);
 
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
         model.addObject("xmlSource", indicatorCalculator.toSource());
@@ -86,7 +105,6 @@ public class CustomReportingController {
 
         return model;
     }
-
 
 
     /**
@@ -105,30 +123,30 @@ public class CustomReportingController {
      * @throws IOException
      */
     @RequestMapping(value = "/reporting/custom/{reporting}/{territory}",
-            produces = {
-                    MediaType.APPLICATION_XML_VALUE
-            },
-            method = RequestMethod.GET)
+        produces = {
+            MediaType.APPLICATION_XML_VALUE
+        },
+        method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView generateMonitoring(HttpServletRequest request,
-                                           @RequestParam Map<String,String> allRequestParams,
+                                           @RequestParam Map<String, String> allRequestParams,
                                            @RequestParam(
-                                                   value = "withRowData",
-                                                   required = false) Boolean withRowData,
+                                               value = "withRowData",
+                                               required = false) Boolean withRowData,
                                            @RequestParam(
-                                                   value = "fq",
-                                                   defaultValue = "",
-                                                   required = false) String fq,
+                                               value = "fq",
+                                               defaultValue = "",
+                                               required = false) String fq,
                                            @RequestParam(
-                                                   value = "rows",
-                                                   defaultValue = "20000",
-                                                   required = false) int rows,
+                                               value = "rows",
+                                               defaultValue = "20000",
+                                               required = false) int rows,
                                            @PathVariable(value = "reporting") String reporting,
                                            @PathVariable(value = "territory") String territory)
-            throws IOException {
+        throws IOException {
         String filter = fq + " +territory:" + territory;
         IndicatorCalculatorImpl indicatorCalculator =
-                ReportingController.generateReporting(request, reporting, filter, true);
+            ReportingController.generateReporting(request, reporting, filter, true);
 
 
         ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
@@ -160,16 +178,16 @@ public class CustomReportingController {
         // build the raw data section
         if (withRowData) {
             Node spatialDataSets = SolrRequestBean.query(
-                    String.format(
-                            SPATIALDATASETS_QUERY_URL,
-                            fq, rows));
+                String.format(
+                    SPATIALDATASETS_QUERY_URL,
+                    fq, rows));
             model.addObject("spatialDataSets", spatialDataSets);
 
 
             Node spatialDataServices = SolrRequestBean.query(
-                    String.format(
-                            SPATIALDATASERVICE_QUERY_URL,
-                            fq, rows));
+                String.format(
+                    SPATIALDATASERVICE_QUERY_URL,
+                    fq, rows));
             model.addObject("spatialDataServices", spatialDataServices);
         }
     }
@@ -182,9 +200,9 @@ public class CustomReportingController {
         while (iterator.hasNext()) {
             Map.Entry<String, String> parameter = (Map.Entry<String, String>) iterator.next();
             String parameterName = parameter.getKey();
-            Object parameterValue = (String)parameter.getValue();
+            Object parameterValue = (String) parameter.getValue();
             if (BOOLEAN_PARAMETERS.contains(parameterName)) {
-                parameterValue = Boolean.parseBoolean((String)parameterValue);
+                parameterValue = Boolean.parseBoolean((String) parameterValue);
             }
             model.addObject(parameterName, parameterValue);
         }

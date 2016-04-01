@@ -1,14 +1,38 @@
 <?xml version="1.0" ?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
 <gmd:MD_Metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.isotc211.org/2005/gmd ../../main/resources/schemas/iso19139/schema.xsd"
- xmlns:gco="http://www.isotc211.org/2005/gco" 
- xmlns:gmx="http://www.isotc211.org/2005/gmx" 
- xmlns:gmd="http://www.isotc211.org/2005/gmd">
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xsi:schemaLocation="http://www.isotc211.org/2005/gmd ../../main/resources/schemas/iso19139/schema.xsd">
   <gmd:fileIdentifier>
-    <gco:CharacterString>85c655c8-8b41-4f98-a4cb-684e0e938416</gco:CharacterString>
+    <gco:CharacterString>85c655c8-8b41-4f98-a4cb-684e0e938416
+    </gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="LanguageCode" codeListValue="slo">slo</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="LanguageCode" codeListValue="slo">slo
+    </gmd:LanguageCode>
   </gmd:language>
   <gmd:hierarchyLevel>
     <gmd:MD_ScopeCode codeList="MD_ScopeCode" codeListValue="dataset"/>
@@ -22,7 +46,8 @@
         <gco:CharacterString>Kristína Královičová</gco:CharacterString>
       </gmd:individualName>
       <gmd:organisationName>
-        <gco:CharacterString>Štátny geologický ústav Dionýza Štúra</gco:CharacterString>
+        <gco:CharacterString>Štátny geologický ústav Dionýza Štúra
+        </gco:CharacterString>
       </gmd:organisationName>
       <gmd:positionName>
         <gco:CharacterString>GIS špecialista</gco:CharacterString>
@@ -54,7 +79,8 @@
                 <gco:CharacterString>Slovenská republika</gco:CharacterString>
               </gmd:country>
               <gmd:electronicMailAddress>
-                <gco:CharacterString>kristina.kralovicova@geology.sk</gco:CharacterString>
+                <gco:CharacterString>kristina.kralovicova@geology.sk
+                </gco:CharacterString>
               </gmd:electronicMailAddress>
             </gmd:CI_Address>
           </gmd:address>
@@ -78,11 +104,13 @@
     <gco:CharacterString>-</gco:CharacterString>
   </gmd:dataSetURI>
   <gmd:spatialRepresentationInfo>
-    <gmd:MD_VectorSpatialRepresentation xsi:type="gmd:MD_VectorSpatialRepresentation_Type">
+    <gmd:MD_VectorSpatialRepresentation
+      xsi:type="gmd:MD_VectorSpatialRepresentation_Type">
       <gmd:geometricObjects>
         <gmd:MD_GeometricObjects>
           <gmd:geometricObjectType>
-            <gmd:MD_GeometricObjectTypeCode codeList="MD_GeometricObjectTypeCode" codeListValue="composite"/>
+            <gmd:MD_GeometricObjectTypeCode
+              codeList="MD_GeometricObjectTypeCode" codeListValue="composite"/>
           </gmd:geometricObjectType>
         </gmd:MD_GeometricObjects>
       </gmd:geometricObjects>
@@ -110,7 +138,8 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Významné geologické lokality M 1 : 1 000 000</gco:CharacterString>
+            <gco:CharacterString>Významné geologické lokality M 1 : 1 000 000
+            </gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -118,7 +147,8 @@
                 <gco:Date>2002-01-01</gco:Date>
               </gmd:date>
               <gmd:dateType>
-                <gmd:CI_DateTypeCode codeList="CI_DateTypeCode" codeListValue="creation"/>
+                <gmd:CI_DateTypeCode codeList="CI_DateTypeCode"
+                                     codeListValue="creation"/>
               </gmd:dateType>
             </gmd:CI_Date>
           </gmd:date>
@@ -128,23 +158,29 @@
                 <gco:Date>2008-04-01</gco:Date>
               </gmd:date>
               <gmd:dateType>
-                <gmd:CI_DateTypeCode codeList="CI_DateTypeCode" codeListValue="publication"/>
+                <gmd:CI_DateTypeCode codeList="CI_DateTypeCode"
+                                     codeListValue="publication"/>
               </gmd:dateType>
             </gmd:CI_Date>
           </gmd:date>
           <gmd:identifier>
             <gmd:MD_Identifier>
               <gmd:code>
-                <gco:CharacterString>sk:gov:mzp:sguds:GEPOIS:Atlas_krajiny_VGL_1000</gco:CharacterString>
+                <gco:CharacterString>
+                  sk:gov:mzp:sguds:GEPOIS:Atlas_krajiny_VGL_1000
+                </gco:CharacterString>
               </gmd:code>
             </gmd:MD_Identifier>
           </gmd:identifier>
         </gmd:CI_Citation>
       </gmd:citation>
       <gmd:abstract>
-        <gco:CharacterString>Významné geologické lokality, P. Liščák, M. Polák, P. Pauditš, I. Baráth, 2002, M 1 : 1 000
-          000, Atlas krajiny Slovenskej republiky. Podľa charakteru sú rozdelené do 9 kategórií, pričom niektoré
-          lokality môžu byť zaradené aj do viacerých kategórií. Obsahuje bodové informácie.
+        <gco:CharacterString>Významné geologické lokality, P. Liščák, M. Polák,
+          P. Pauditš, I. Baráth, 2002, M 1 : 1 000
+          000, Atlas krajiny Slovenskej republiky. Podľa charakteru sú rozdelené
+          do 9 kategórií, pričom niektoré
+          lokality môžu byť zaradené aj do viacerých kategórií. Obsahuje bodové
+          informácie.
         </gco:CharacterString>
       </gmd:abstract>
       <gmd:pointOfContact>
@@ -153,7 +189,8 @@
             <gco:CharacterString>Kristína Královičová</gco:CharacterString>
           </gmd:individualName>
           <gmd:organisationName>
-            <gco:CharacterString>Štátny geologický ústav Dionýza Štúra</gco:CharacterString>
+            <gco:CharacterString>Štátny geologický ústav Dionýza Štúra
+            </gco:CharacterString>
           </gmd:organisationName>
           <gmd:positionName>
             <gco:CharacterString>GIS špecialista</gco:CharacterString>
@@ -182,17 +219,20 @@
                     <gco:CharacterString>817 04</gco:CharacterString>
                   </gmd:postalCode>
                   <gmd:country>
-                    <gco:CharacterString>Slovenská republika</gco:CharacterString>
+                    <gco:CharacterString>Slovenská republika
+                    </gco:CharacterString>
                   </gmd:country>
                   <gmd:electronicMailAddress>
-                    <gco:CharacterString>kristina.kralovicova@geology.sk</gco:CharacterString>
+                    <gco:CharacterString>kristina.kralovicova@geology.sk
+                    </gco:CharacterString>
                   </gmd:electronicMailAddress>
                 </gmd:CI_Address>
               </gmd:address>
             </gmd:CI_Contact>
           </gmd:contactInfo>
           <gmd:role>
-            <gmd:CI_RoleCode codeList="CI_RoleCode" codeListValue="pointOfContact"/>
+            <gmd:CI_RoleCode codeList="CI_RoleCode"
+                             codeListValue="pointOfContact"/>
           </gmd:role>
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
@@ -212,12 +252,14 @@
             <gco:CharacterString>geológia</gco:CharacterString>
           </gmd:keyword>
           <gmd:type>
-            <gmd:MD_KeywordTypeCode codeList="MD_KeywordTypeCode" codeListValue="theme"/>
+            <gmd:MD_KeywordTypeCode codeList="MD_KeywordTypeCode"
+                                    codeListValue="theme"/>
           </gmd:type>
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>GEMET - INSPIRE themes, version 1.0</gco:CharacterString>
+                <gco:CharacterString>GEMET - INSPIRE themes, version 1.0
+                </gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
@@ -225,14 +267,16 @@
                     <gco:Date>2008-06-01</gco:Date>
                   </gmd:date>
                   <gmd:dateType>
-                    <gmd:CI_DateTypeCode codeList="CI_DateType" codeListValue="publication"/>
+                    <gmd:CI_DateTypeCode codeList="CI_DateType"
+                                         codeListValue="publication"/>
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
               <gmd:identifier>
                 <gmd:RS_Identifier>
                   <gmd:code>
-                    <gmx:Anchor xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href=""></gmx:Anchor>
+                    <gmx:Anchor xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href=""></gmx:Anchor>
                   </gmd:code>
                 </gmd:RS_Identifier>
               </gmd:identifier>
@@ -250,7 +294,8 @@
       <gmd:resourceConstraints>
         <gmd:MD_LegalConstraints>
           <gmd:useLimitation>
-            <gco:CharacterString>Verejne prístupné data bez obmedzenia pri publikovaní s copyrightom
+            <gco:CharacterString>Verejne prístupné data bez obmedzenia pri
+              publikovaní s copyrightom
             </gco:CharacterString>
           </gmd:useLimitation>
         </gmd:MD_LegalConstraints>
@@ -258,12 +303,14 @@
       <gmd:resourceConstraints>
         <gmd:MD_SecurityConstraints>
           <gmd:classification>
-            <gmd:MD_ClassificationCode codeList="MD_ClassificationCode" codeListValue="unclassified"/>
+            <gmd:MD_ClassificationCode codeList="MD_ClassificationCode"
+                                       codeListValue="unclassified"/>
           </gmd:classification>
         </gmd:MD_SecurityConstraints>
       </gmd:resourceConstraints>
       <gmd:spatialRepresentationType>
-        <gmd:MD_SpatialRepresentationTypeCode codeList="MD_SpatialRepresentationType" codeListValue="vector"/>
+        <gmd:MD_SpatialRepresentationTypeCode
+          codeList="MD_SpatialRepresentationType" codeListValue="vector"/>
       </gmd:spatialRepresentationType>
       <gmd:spatialResolution>
         <gmd:MD_Resolution>
@@ -280,15 +327,18 @@
         <gmd:LanguageCode codeList="LanguageCode" codeListValue="slo"/>
       </gmd:language>
       <gmd:characterSet>
-        <gmd:MD_CharacterSetCode codeList="MD_CharacterSetCode" codeListValue="utf8"/>
+        <gmd:MD_CharacterSetCode codeList="MD_CharacterSetCode"
+                                 codeListValue="utf8"/>
       </gmd:characterSet>
       <gmd:topicCategory>
-        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation
+        </gmd:MD_TopicCategoryCode>
       </gmd:topicCategory>
       <gmd:extent>
         <gmd:EX_Extent>
           <gmd:geographicElement>
-            <gmd:EX_GeographicBoundingBox xsi:type="gmd:EX_GeographicBoundingBox_Type">
+            <gmd:EX_GeographicBoundingBox
+              xsi:type="gmd:EX_GeographicBoundingBox_Type">
               <gmd:westBoundLongitude>
                 <gco:Decimal>16.35242</gco:Decimal>
               </gmd:westBoundLongitude>
@@ -327,7 +377,8 @@
                 <gco:CharacterString>Kristína Královičová</gco:CharacterString>
               </gmd:individualName>
               <gmd:organisationName>
-                <gco:CharacterString>Štátny geologický ústav Dionýza Štúra</gco:CharacterString>
+                <gco:CharacterString>Štátny geologický ústav Dionýza Štúra
+                </gco:CharacterString>
               </gmd:organisationName>
               <gmd:positionName>
                 <gco:CharacterString>GIS špecialista</gco:CharacterString>
@@ -337,17 +388,20 @@
                   <gmd:phone>
                     <gmd:CI_Telephone>
                       <gmd:voice>
-                        <gco:CharacterString>+421 2 59375 470</gco:CharacterString>
+                        <gco:CharacterString>+421 2 59375 470
+                        </gco:CharacterString>
                       </gmd:voice>
                       <gmd:facsimile>
-                        <gco:CharacterString>+421 2 54771 940</gco:CharacterString>
+                        <gco:CharacterString>+421 2 54771 940
+                        </gco:CharacterString>
                       </gmd:facsimile>
                     </gmd:CI_Telephone>
                   </gmd:phone>
                   <gmd:address>
                     <gmd:CI_Address>
                       <gmd:deliveryPoint>
-                        <gco:CharacterString>Mlynská dolina 1</gco:CharacterString>
+                        <gco:CharacterString>Mlynská dolina 1
+                        </gco:CharacterString>
                       </gmd:deliveryPoint>
                       <gmd:city>
                         <gco:CharacterString>Bratislava</gco:CharacterString>
@@ -356,17 +410,20 @@
                         <gco:CharacterString>817 04</gco:CharacterString>
                       </gmd:postalCode>
                       <gmd:country>
-                        <gco:CharacterString>Slovenská republika</gco:CharacterString>
+                        <gco:CharacterString>Slovenská republika
+                        </gco:CharacterString>
                       </gmd:country>
                       <gmd:electronicMailAddress>
-                        <gco:CharacterString>kristina.kralovicova@geology.sk</gco:CharacterString>
+                        <gco:CharacterString>kristina.kralovicova@geology.sk
+                        </gco:CharacterString>
                       </gmd:electronicMailAddress>
                     </gmd:CI_Address>
                   </gmd:address>
                 </gmd:CI_Contact>
               </gmd:contactInfo>
               <gmd:role>
-                <gmd:CI_RoleCode codeList="CI_RoleCode" codeListValue="pointOfContact"/>
+                <gmd:CI_RoleCode codeList="CI_RoleCode"
+                                 codeListValue="pointOfContact"/>
               </gmd:role>
             </gmd:CI_ResponsibleParty>
           </gmd:distributorContact>
@@ -386,7 +443,9 @@
       <gmd:lineage>
         <gmd:LI_Lineage>
           <gmd:statement>
-            <gco:CharacterString>Gis vrstva bola prevzatá z Atlasu krajiny SR, 2002.</gco:CharacterString>
+            <gco:CharacterString>Gis vrstva bola prevzatá z Atlasu krajiny SR,
+              2002.
+            </gco:CharacterString>
           </gmd:statement>
         </gmd:LI_Lineage>
       </gmd:lineage>

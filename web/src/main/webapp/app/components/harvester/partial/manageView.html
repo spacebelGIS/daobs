@@ -3,7 +3,8 @@
     <br/>
     <p class="alert alert-info"
        data-translate=""
-       data-translate-values="{pollingInterval: '{{pollingInterval}}'}">harvesterConfigPage</p>
+       data-translate-values="{pollingInterval: '{{pollingInterval}}'}">
+      harvesterConfigPage</p>
   </div>
   <div class="col-md-10">
     <br/>
@@ -33,7 +34,8 @@
         </td>
         <td>
           <form class="form-horizontal">
-            <div class="form-group" data-ng-repeat="(key, value) in harvesterTpl">
+            <div class="form-group"
+                 data-ng-repeat="(key, value) in harvesterTpl">
               <label for="field-{{key}}"
                      class="col-sm-4 control-label">
                 {{key | translate}}</label>
@@ -84,7 +86,8 @@
                  placeholder="{{'filter'}}">
         </td>
       </tr>
-      <tr data-ng-repeat="h in harvesterConfig | filter:harvesterSearch | orderBy:'territory'">
+      <tr
+        data-ng-repeat="h in harvesterConfig | filter:harvesterSearch | orderBy:'territory'">
         <td>
           <h1>{{h.territory}}</h1>
         </td>
@@ -133,7 +136,8 @@
             </button>
             <div class="btn-group" role="group">
               <button class="btn btn-default dropdown-toggle" type="button"
-                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                      data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="true"
                       title="{{'actions' | translate}}">
                 <i class="glyphicon glyphicon-cog"/>
                 <span class="caret"></span>
@@ -162,7 +166,8 @@
                      data-ng-click="removeRecords(h)"
                      data-ng-show="statsForTerritory[h.uuid].count > 0"
                      title="{{'removeRecords' | translate}}">
-                    <i class="glyphicon glyphicon-floppy-remove text-danger"></i>&nbsp;
+                    <i
+                      class="glyphicon glyphicon-floppy-remove text-danger"></i>&nbsp;
                     <span data-translate="">removeRecords</span>
                   </a>
                 </li>

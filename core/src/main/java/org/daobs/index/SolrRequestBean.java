@@ -1,26 +1,44 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.index;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.solr.client.solrj.*;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.FieldAnalysisRequest;
-import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.AnalysisResponseBase;
 import org.apache.solr.client.solrj.response.FieldAnalysisResponse;
 import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.AnalysisParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
-import org.apache.solr.common.params.SolrParams;
-import org.apache.solr.common.util.NamedList;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -44,8 +62,8 @@ public class SolrRequestBean {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             InputSource is = new InputSource(
-                                new ByteArrayInputStream(
-                                        xmlResponse.getBytes("UTF-8")));
+                new ByteArrayInputStream(
+                    xmlResponse.getBytes("UTF-8")));
             return builder.parse(is).getFirstChild();
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +91,7 @@ public class SolrRequestBean {
             SolrClient solrServer = serverBean.getServer();
 
             QueryResponse solrResponse = solrServer.query(solrQuery);
-            return (double)solrResponse.getResults().getNumFound();
+            return (double) solrResponse.getResults().getNumFound();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,15 +118,15 @@ public class SolrRequestBean {
 
             if (fieldStatsInfo != null) {
                 if ("min".equals(stats)) {
-                    return (Double)fieldStatsInfo.getMin();
+                    return (Double) fieldStatsInfo.getMin();
                 } else if ("max".equals(stats)) {
-                    return (Double)fieldStatsInfo.getMax();
+                    return (Double) fieldStatsInfo.getMax();
                 } else if ("count".equals(stats)) {
                     return fieldStatsInfo.getCount().doubleValue();
                 } else if ("missing".equals(stats)) {
                     return fieldStatsInfo.getMissing().doubleValue();
                 } else if ("mean".equals(stats)) {
-                    return (Double)fieldStatsInfo.getMean();
+                    return (Double) fieldStatsInfo.getMean();
                 } else if ("sum".equals(stats)) {
                     return (Double) fieldStatsInfo.getSum();
                 } else if ("stddev".equals(stats)) {
@@ -160,7 +178,7 @@ public class SolrRequestBean {
      * @param filterClass   The filter class the response should be extracted from
      * @param tokenPosition The position of the token to extract
      *
-     * @return  The analyzed string value if found or the field value if not found.
+     * @return The analyzed string value if found or the field value if not found.
      */
     public static String analyzeField(String fieldName,
                                       String fieldValue,
@@ -192,21 +210,21 @@ public class SolrRequestBean {
                 return fieldValue;
             }
             FieldAnalysisResponse.Analysis analysis =
-                    res.getFieldNameAnalysis(fieldName);
+                res.getFieldNameAnalysis(fieldName);
 
             Iterable<AnalysisResponseBase.AnalysisPhase> phases =
-                    PHASE_INDEX.equals(analysisPhaseName) ?
-                            analysis.getIndexPhases() : analysis.getQueryPhases();
+                PHASE_INDEX.equals(analysisPhaseName) ?
+                    analysis.getIndexPhases() : analysis.getQueryPhases();
             if (phases != null) {
                 Iterator<AnalysisResponseBase.AnalysisPhase> iterator =
-                        phases.iterator();
+                    phases.iterator();
                 while (iterator.hasNext()) {
                     AnalysisResponseBase.AnalysisPhase analysisPhase = iterator.next();
                     if (analysisPhase.getClassName()
-                            .equals(filterClass) &&
-                            analysisPhase.getTokens().size() > 0) {
+                        .equals(filterClass) &&
+                        analysisPhase.getTokens().size() > 0) {
                         AnalysisResponseBase.TokenInfo token =
-                                analysisPhase.getTokens().get(tokenPosition);
+                            analysisPhase.getTokens().get(tokenPosition);
                         return token.getText();
                     }
                 }

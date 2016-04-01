@@ -1,3 +1,23 @@
+/**
+ * Copyright 2014-2016 European Environment Agency
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon
+ * they will be approved by the European Commission -
+ * subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ * See the Licence for the specific language governing
+ * permissions and limitations under the Licence.
+ */
 package org.daobs.tasks;
 
 import org.apache.camel.Exchange;
@@ -5,7 +25,6 @@ import org.apache.camel.Header;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
@@ -21,12 +40,10 @@ import java.util.logging.Logger;
  */
 public class DataIndexer {
 
+    private static final String SEPARATOR = "\\|";
     Logger log = Logger.getLogger("org.daobs.task.DataIndexer");
 
-    private static final String SEPARATOR = "\\|";
-
     /**
-     *
      * @param exchange
      */
     public void splitLink(Exchange exchange) {
@@ -43,7 +60,7 @@ public class DataIndexer {
             exchange.getOut().setHeader("linkDesc", linkInfoArray[3]);
         } else {
             log.info(String.format("  Link not properly formatted. Length != 4 is %s",
-                    linkInfoArray.length));
+                linkInfoArray.length));
         }
     }
 
@@ -55,7 +72,7 @@ public class DataIndexer {
      * @param exchange
      */
     public void parseDocument(@Header("linkUrl") String linkUrl,
-                                  Exchange exchange) {
+                              Exchange exchange) {
         ContentHandler handler = new ToXMLContentHandler();
         exchange.getOut().setHeaders(exchange.getIn().getHeaders());
         try {
@@ -71,15 +88,15 @@ public class DataIndexer {
             }
         } catch (IOException ioe) {
             log.warning(String.format("File '%s' not found. Error is %s",
-                    linkUrl, ioe.getMessage()));
+                linkUrl, ioe.getMessage()));
             ioe.printStackTrace();
         } catch (SAXException se) {
             log.warning(String.format("SAX exception when opening '%s' not found. " +
-                    "Error is %s", linkUrl, se.getMessage()));
+                "Error is %s", linkUrl, se.getMessage()));
             se.printStackTrace();
         } catch (TikaException te) {
             log.warning(String.format("Tika exception when opening '%s' not found. " +
-                    "Error is %s", linkUrl, te.getMessage()));
+                "Error is %s", linkUrl, te.getMessage()));
             te.printStackTrace();
         }
     }
