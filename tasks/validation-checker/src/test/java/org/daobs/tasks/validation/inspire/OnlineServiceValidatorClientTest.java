@@ -53,7 +53,7 @@ public class OnlineServiceValidatorClientTest extends TestCase {
 
         ValidationReport report = validator.validate(file);
         assertNotNull(report);
-        assertEquals(report.getCompletenessIndicator(), 100.0);
+        assertEquals(89, Math.round(report.getCompletenessIndicator()));
     }
 
     /**
@@ -91,43 +91,6 @@ public class OnlineServiceValidatorClientTest extends TestCase {
     }
 
 
-    @org.junit.Test
-    public void testValidateService() throws Exception {
-
-        // Invalid document
-        File file = new File(Thread.currentThread()
-            .getContextClassLoader()
-            .getResource("service.xml").toURI());
-
-        String xml = Files.toString(file, Charsets.UTF_8);
-        validator.setProbeDataResourceLocators(false);
-        validator.setProbeNetworkServices(false);
-        ValidationReport report = validator.validate(xml, false);
-        assertNotNull(report);
-        System.out.println("Service with no probe: " + report.getTotalTimeSeconds());
-
-        validator.setProbeDataResourceLocators(true);
-        validator.setProbeNetworkServices(true);
-        report = validator.validate(xml, false);
-        assertNotNull(report);
-        System.out.println("Service with probe: " + report.getTotalTimeSeconds());
-
-    }
-
-    /*@Ignore
-    @Test
-    public void testValidateZipFile() throws Exception {
-        File file = new File(getClass()
-                .getResource("inspirevalid.xml.zip").toURI());
-
-        ValidationReport report = validator.validate(file);
-        report.toString();
-        assertNotNull(report);
-        assertEquals(201, report.getHTTPStatus());
-        assertTrue("Report contains GeoportalExceptionMessage.",
-                report.getReport().contains("GeoportalExceptionMessage"));
-    }*/
-
 
     /**
      * Test to investigate performance
@@ -142,13 +105,13 @@ public class OnlineServiceValidatorClientTest extends TestCase {
             .getResource("invalid.xml").toURI());
         String xml = Files.toString(file, Charsets.UTF_8);
         ValidationReport report = validator.validate(xml, false);
-        System.out.println("Invalid fast: " + report.getTotalTimeSeconds());
+//        System.out.println("Invalid fast: " + report.getTotalTimeSeconds());
 
         validator.setDontGenerateHtmlFiles(false);
         validator.setDontGenerateLayerPreviews(false);
         validator.setProbeDataResourceLocators(false);
         report = validator.validate(xml, false);
-        System.out.println("Invalid slow: " + report.getTotalTimeSeconds());
+//        System.out.println("Invalid slow: " + report.getTotalTimeSeconds());
 
 
         file = new File(Thread.currentThread()
@@ -159,53 +122,16 @@ public class OnlineServiceValidatorClientTest extends TestCase {
         validator.setDontGenerateLayerPreviews(true);
         validator.setProbeDataResourceLocators(true);
         report = validator.validate(xml, false);
-        System.out.println("Valid fast: " + report.getTotalTimeSeconds());
+//        System.out.println("Valid fast: " + report.getTotalTimeSeconds());
 
         validator.setDontGenerateHtmlFiles(false);
         validator.setDontGenerateLayerPreviews(false);
         validator.setProbeDataResourceLocators(false);
         report = validator.validate(xml, false);
-        System.out.println("Valid slow: " + report.getTotalTimeSeconds());
+//        System.out.println("Valid slow: " + report.getTotalTimeSeconds());
 
 
         assertNotNull(report);
         assertEquals(201, report.getHTTPStatus());
-//        assertTrue("Report contains GeoportalExceptionMessage.",
-//                report.getReport().contains("GeoportalExceptionMessage"));
     }
-
-
-    /*@Ignore
-    @Test
-    public void testDomException() throws Exception {
-
-        CamelContext context = new DefaultCamelContext();
-        context.addRoutes(new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                String testFilePath = getClass()
-                        .getResource("test").getPath();
-                String testXSDPath = getClass()
-                        .getResource("/schemas/iso19139/schema.xsd").getPath();
-
-                from("file://" + testFilePath)
-//                        .filter().xpath("//doc")
-                        .setBody().xpath("//doc/str[@name = 'document']/text()", String.class)
-//                        .setHeader("document").xpath("doc/str[@name = 'document']/text()", String.class)
-//                        .log("${header.document}")
-//                        .transform().header("document")
-                        .log("############# ${body}")
-//                        .convertBodyTo(org.w3c.dom.Document.class)
-//                        .log("${body}")
-                        .to("validator:file:" + testXSDPath + "?useDom=false")
-                        .log("############# ${body}");
-
-            }
-        });
-        context.start();
-        Thread.sleep(10000);
-        context.stop();
-        assert (true);
-    }*/
-
 }
