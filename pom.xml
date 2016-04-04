@@ -253,13 +253,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
+        <version>3.5.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
           <debug>true</debug>
           <encoding>UTF-8</encoding>
-          <compilerArgument>-proc:none</compilerArgument> <!-- disable automatic annotation processing accoring to: http://docs.jboss.org/hibernate/jpamodelgen/1.0/reference/en-US/html_single/#d0e261 -->
+          <compilerArgument>-proc:none</compilerArgument>
         </configuration>
       </plugin>
       <plugin>
@@ -416,14 +416,14 @@
     <spring.version>4.2.4.RELEASE</spring.version>
     <spring-security.version>4.0.3.RELEASE</spring-security.version>
 
-    <camel.version>2.16.1</camel.version>
+    <camel.version>2.17.0</camel.version>
 
     <!--<jms.url>tcp://localhost:61616</jms.url>-->
     <jms.url>vm://internaljmschannel</jms.url>
     <activemq.version>5.6.0</activemq.version>
     <xbean.version>3.18</xbean.version>
 
-    <java.version>1.7</java.version>
+    <java.version>1.8</java.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
