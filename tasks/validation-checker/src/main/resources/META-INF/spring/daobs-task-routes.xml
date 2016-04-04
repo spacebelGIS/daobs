@@ -344,8 +344,7 @@
             <cm:simple>
               <![CDATA[<add commitWithin="10000">
               <doc>
-                <field name="id"><![CDATA[$simple{header.documentIdentifier}]]>
-              <![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
+                <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
                 <field name="schemaValidDate" update="set">$simple{header.beginTime}</field>
                 <field name="isSchemaValid" update="set">false</field>
                 <field name="schemaValidReport" update="set"><![CDATA[$simple{body}]]>
