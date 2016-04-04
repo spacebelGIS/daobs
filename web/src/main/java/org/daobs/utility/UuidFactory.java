@@ -9,23 +9,15 @@
  * the Licence.
  */
 
-package org.daobs.controller.exception;
+package org.daobs.utility;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import java.util.UUID;
 
-import java.util.List;
-
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid harvester")
-public class InvalidHarvesterException extends RuntimeException {
-  private List<String> errors;
-
-  public InvalidHarvesterException(List<String> errors) {
-    super();
-    this.errors = errors;
-  }
-
-  public List<String> getErrors() {
-    return errors;
+/**
+ * Created by francois on 12/02/15.
+ */
+public class UuidFactory {
+  public static String getUuid() {
+    return UUID.randomUUID().toString();
   }
 }

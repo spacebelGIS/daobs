@@ -49,7 +49,7 @@
   </bean>
 
   <bean id="jmsMessager"
-        class="org.daobs.messaging.JMSMessager"/>
+        class="org.daobs.messaging.JmsMessager"/>
 
   <bean id="SolrServer"
         class="org.daobs.index.SolrServerBean">

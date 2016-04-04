@@ -1,29 +1,20 @@
 /**
- * Copyright 2014-2016 European Environment Agency
- *
- * Licensed under the EUPL, Version 1.1 or – as soon
- * they will be approved by the European Commission -
- * subsequent versions of the EUPL (the "Licence");
- * You may not use this work except in compliance
- * with the Licence.
- * You may obtain a copy of the Licence at:
- *
- * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ * Copyright 2014-2016 European Environment Agency <p> Licensed under the EUPL, Version 1.1 or – as
+ * soon they will be approved by the European Commission - subsequent versions of the EUPL (the
+ * "Licence"); You may not use this work except in compliance with the Licence. You may obtain a
+ * copy of the Licence at: <p> https://joinup.ec.europa.eu/community/eupl/og_page/eupl <p> Unless
+ * required by applicable law or agreed to in writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the Licence for the specific language governing permissions and limitations under
+ * the Licence.
  */
+
 package org.daobs.solr;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.MapSolrParams;
 import org.apache.solr.common.params.UpdateParams;
@@ -41,7 +32,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.FileSystemResource;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -54,12 +44,12 @@ import java.util.Map;
  */
 
 public class AbstractSolrDaobsTestCase
-        extends AbstractSolrTestCase {
-    protected SolrServer server;
+  extends AbstractSolrTestCase {
+  protected SolrServer server;
 
-    @Before
-    @Override
-    public void setUp() throws Exception {
+  @Before
+  @Override
+  public void setUp() throws Exception {
 /*
         // Setup XSLT Transformer Factory
         System.setProperty("javax.xml.transform.TransformerFactory",
@@ -88,87 +78,86 @@ public class AbstractSolrDaobsTestCase
 
 
         initBeans();*/
-    }
+  }
 
-    public void initBeans() {
-        // Initialize the server bean which may be used
-        // in XSLT java calls for example.
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring-configuration.xml");
+  public void initBeans() {
+    // Initialize the server bean which may be used
+    // in XSLT java calls for example.
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring-configuration.xml");
 
-        SolrServerBean message = (SolrServerBean) applicationContext.getBean("SolrServer");
-        SolrServerBean.get().setServer(server);
-    }
+    SolrServerBean message = (SolrServerBean) applicationContext.getBean("SolrServer");
+    SolrServerBean.get().setServer(server);
+  }
 
-    @After
-    public void destroy() {
-        h.getCoreContainer().shutdown();
-    }
+  @After
+  public void destroy() {
+    h.getCoreContainer().shutdown();
+  }
 
 
+  /**
+   * Load an ISO19139 document.
+   *
+   * @param fileToLoad
+   * @return
+   * @throws Exception
+   */
+  public String loadMetadata(String fileToLoad) throws Exception {
+    String xsltTransformation = "metadata-iso19139.xsl";
+    return loadData(fileToLoad, xsltTransformation);
+  }
 
-    /**
-     * Load an ISO19139 document.
-     *
-     * @param fileToLoad
-     * @return
-     * @throws Exception
-     */
-    public String loadMetadata(String fileToLoad) throws Exception {
-        String xsltTransformation = "metadata-iso19139.xsl";
-        return loadData(fileToLoad, xsltTransformation);
-    }
+  /**
+   * Load an INSPIRE reporting or ancillary information.
+   *
+   * @param fileToLoad
+   * @return
+   * @throws Exception
+   */
+  public String loadReporting(String fileToLoad) throws Exception {
+    String xsltTransformation = "inspire-monitoring-reporting.xsl";
+    return loadData(fileToLoad, xsltTransformation);
+  }
 
-    /**
-     * Load an INSPIRE reporting or ancillary information.
-     *
-     * @param fileToLoad
-     * @return
-     * @throws Exception
-     */
-    public String loadReporting(String fileToLoad) throws Exception {
-        String xsltTransformation = "inspire-monitoring-reporting.xsl";
-        return loadData(fileToLoad, xsltTransformation);
-    }
+  /**
+   * Load an XML document to Solr using an XSLT transformation
+   * which has to be define in the Solr core configuration (see conf/xslt/).
+   *
+   * @param fileToLoad The XML file name to load.
+   * @param xsltTransformation The XSLT name to use.
+   *
+   * @return The Solr response.
+   *
+   * @throws Exception
+   */
+  public String loadData(String fileToLoad, String xsltTransformation) throws Exception {
+    File file = new File(Thread.currentThread()
+      .getContextClassLoader()
+      .getResource(fileToLoad).toURI());
 
-    /**
-     * Load an XML document to Solr using an XSLT transformation
-     * which has to be define in the Solr core configuration (see conf/xslt/).
-     *
-     * @param fileToLoad The XML file name to load.
-     * @param xsltTransformation The XSLT name to use.
-     *
-     * @return  The Solr response.
-     *
-     * @throws Exception
-     */
-    public String loadData(String fileToLoad, String xsltTransformation) throws Exception {
-        File file = new File(Thread.currentThread()
-                .getContextClassLoader()
-                .getResource(fileToLoad).toURI());
+    String xml = Files.toString(file, Charsets.UTF_8);
 
-        String xml = Files.toString(file, Charsets.UTF_8);
+    Map<String, String> args = new HashMap<String, String>();
+    args.put(CommonParams.TR, xsltTransformation);
+    args.put(UpdateParams.ASSUME_CONTENT_TYPE, "application/xml");
 
-        Map<String, String> args = new HashMap<String, String>();
-        args.put(CommonParams.TR, xsltTransformation);
-        args.put(UpdateParams.ASSUME_CONTENT_TYPE, "application/xml");
+    SolrCore core = h.getCore();
+    LocalSolrQueryRequest req =
+      new LocalSolrQueryRequest(core, new MapSolrParams(args));
+    ArrayList<ContentStream> streams = new ArrayList<ContentStream>();
+    streams.add(new ContentStreamBase.StringStream(xml));
+    req.setContentStreams(streams);
+    SolrQueryResponse rsp = new SolrQueryResponse();
 
-        SolrCore core = h.getCore();
-        LocalSolrQueryRequest req =
-                new LocalSolrQueryRequest(core, new MapSolrParams(args));
-        ArrayList<ContentStream> streams = new ArrayList<ContentStream>();
-        streams.add(new ContentStreamBase.StringStream(xml));
-        req.setContentStreams(streams);
-        SolrQueryResponse rsp = new SolrQueryResponse();
+    UpdateRequestHandler handler = new UpdateRequestHandler();
+    handler.init(new NamedList<String>());
+    handler.handleRequestBody(req, rsp);
 
-        UpdateRequestHandler handler = new UpdateRequestHandler();
-        handler.init(new NamedList<String>());
-        handler.handleRequestBody(req, rsp);
+    StringWriter sw = new StringWriter(32000);
+    QueryResponseWriter responseWriter = core.getQueryResponseWriter(req);
+    responseWriter.write(sw, req, rsp);
+    req.close();
 
-        StringWriter sw = new StringWriter(32000);
-        QueryResponseWriter responseWriter = core.getQueryResponseWriter(req);
-        responseWriter.write(sw, req, rsp);
-        req.close();
-
-        return sw.toString();
-    }
+    return sw.toString();
+  }
 }

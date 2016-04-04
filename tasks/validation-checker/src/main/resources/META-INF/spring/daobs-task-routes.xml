@@ -37,7 +37,7 @@
 
   <bean id="inspireValidationClient"
         class="org.daobs.tasks.validation.inspire.OnlineServiceValidatorBean">
-    <property name="inspireResourceTesterURL"
+    <property name="inspireResourceTesterUrl"
               value="${task.validation-checker.inspire.validator.url}"/>
     <property name="threshold"
               value="${task.validation-checker.inspire.threshold}"/>

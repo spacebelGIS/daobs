@@ -1,23 +1,14 @@
 /**
- * Copyright 2014-2016 European Environment Agency
- *
- * Licensed under the EUPL, Version 1.1 or – as soon
- * they will be approved by the European Commission -
- * subsequent versions of the EUPL (the "Licence");
- * You may not use this work except in compliance
- * with the Licence.
- * You may obtain a copy of the Licence at:
- *
- * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ * Copyright 2014-2016 European Environment Agency <p> Licensed under the EUPL, Version 1.1 or – as
+ * soon they will be approved by the European Commission - subsequent versions of the EUPL (the
+ * "Licence"); You may not use this work except in compliance with the Licence. You may obtain a
+ * copy of the Licence at: <p> https://joinup.ec.europa.eu/community/eupl/og_page/eupl <p> Unless
+ * required by applicable law or agreed to in writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the Licence for the specific language governing permissions and limitations under
+ * the Licence.
  */
+
 package org.daobs.tasks.validation.etf;
 
 import org.apache.commons.io.FileUtils;
@@ -46,246 +37,252 @@ import java.util.List;
  * @author Jose García
  */
 public class EtfValidatorClient {
-    String etfResourceTesterPath;
-    String etfResourceTesterHtmlReportsPath;
-    String etfResourceTesterHtmlReportsUrl;
-    private Log log = LogFactory.getLog(this.getClass());
+  String etfResourceTesterPath;
+  String etfResourceTesterHtmlReportsPath;
+  String etfResourceTesterHtmlReportsUrl;
+  private Log log = LogFactory.getLog(this.getClass());
 
-    public EtfValidatorClient(String etfResourceTesterPath,
-                              String etfResourceTesterHtmlReportsPath,
-                              String etfResourceTesterHtmlReportsUrl) {
-
-        this.etfResourceTesterPath = etfResourceTesterPath;
-        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
-        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
-    }
-
-    public String getEtfResourceTesterPath() {
-        return etfResourceTesterPath;
-    }
-
-    public void setEtfResourceTesterPath(String etfResourceTesterPath) {
-        this.etfResourceTesterPath = etfResourceTesterPath;
-    }
-
-    public String getEtfResourceTesterHtmlReportsPath() {
-        return etfResourceTesterHtmlReportsPath;
-    }
-
-    public void setEtfResourceTesterHtmlReportsPath(String etfResourceTesterHtmlReportsPath) {
-        this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
-    }
-
-    public String getEtfResourceTesterHtmlReportsUrl() {
-        return etfResourceTesterHtmlReportsUrl;
-    }
-
-    public void setEtfResourceTesterHtmlReportsUrl(String etfResourceTesterHtmlReportsUrl) {
-        this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
-    }
-
-    /**
-     * Validates a resource url with ETF tool.
-     *
-     * Note that declared protocol values are used as a reference in the ServiceProtocolChecker
-     * and values are not standarized.
-     *
-     * @param resourceDescriptorUrl
-     * @param serviceType
-     * @param declaredProtocol  Declared protocol for the resource url.
-     * @return
+  /**
+   * ETF validator client.
      */
-    public EtfValidationReport validate(String resourceDescriptorUrl,
-                                        ServiceType serviceType,
-                                        String declaredProtocol) {
+  public EtfValidatorClient(String etfResourceTesterPath,
+                            String etfResourceTesterHtmlReportsPath,
+                            String etfResourceTesterHtmlReportsUrl) {
 
-        log.info("Validating link=" + resourceDescriptorUrl + ", serviceType=" + serviceType);
+    this.etfResourceTesterPath = etfResourceTesterPath;
+    this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
+    this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
+  }
 
-        ServiceProtocolChecker protocolChecker =
-            new ServiceProtocolChecker(resourceDescriptorUrl, serviceType, declaredProtocol);
+  public String getEtfResourceTesterPath() {
+    return etfResourceTesterPath;
+  }
 
-        ServiceProtocol protocol = protocolChecker.check();
-        if (protocol == null) {
-            String message = protocolChecker.getErrorMessage();
+  public void setEtfResourceTesterPath(String etfResourceTesterPath) {
+    this.etfResourceTesterPath = etfResourceTesterPath;
+  }
 
-            EtfValidationReport report = new EftValidationReportBuilder()
-                .buildErrorReport(resourceDescriptorUrl, message);
+  public String getEtfResourceTesterHtmlReportsPath() {
+    return etfResourceTesterHtmlReportsPath;
+  }
 
-            return report;
-        }
+  public void setEtfResourceTesterHtmlReportsPath(String etfResourceTesterHtmlReportsPath) {
+    this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
+  }
 
+  public String getEtfResourceTesterHtmlReportsUrl() {
+    return etfResourceTesterHtmlReportsUrl;
+  }
 
-        String eftResultsPath = "";
-        try {
-            // Invoke ETF tool
-            eftResultsPath = executeEtfTool(resourceDescriptorUrl, protocol);
-            File eftResults = new File(eftResultsPath, "TESTS-TestSuites.xml");
+  public void setEtfResourceTesterHtmlReportsUrl(String etfResourceTesterHtmlReportsUrl) {
+    this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
+  }
 
-            if (!eftResults.exists()) {
-                String message = "Can't find ETF validation report for " + resourceDescriptorUrl +
-                    " (serviceType=" + serviceType.toString() + ").";
+  /**
+   * Validates a resource url with ETF tool.
+   * <p>
+   * Note that declared protocol values are used as a reference in the ServiceProtocolChecker
+   * and values are not standarized.
+   * </p>
+   *
+   * @param declaredProtocol  Declared protocol for the resource url.
+   */
+  public EtfValidationReport validate(String resourceDescriptorUrl,
+                                      ServiceType serviceType,
+                                      String declaredProtocol) {
 
-                EtfValidationReport report = new EftValidationReportBuilder()
-                    .buildErrorReport(resourceDescriptorUrl, message);
+    log.info("Validating link=" + resourceDescriptorUrl + ", serviceType=" + serviceType);
 
-                return report;
-            }
+    ServiceProtocolChecker protocolChecker =
+        new ServiceProtocolChecker(resourceDescriptorUrl, serviceType, declaredProtocol);
 
-            // Build report
-            String reportUrl = this.etfResourceTesterHtmlReportsUrl + "/" + FilenameUtils.getName(eftResultsPath) + "/index.html";
-            EtfValidationReport report = new EftValidationReportBuilder()
-                .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
+    ServiceProtocol protocol = protocolChecker.check();
+    if (protocol == null) {
+      String message = protocolChecker.getErrorMessage();
 
-            return report;
-        } finally {
-            // Cleanup report from ETF folder
-            if (StringUtils.isNotEmpty(eftResultsPath))
-                FileUtils.deleteQuietly(new File(eftResultsPath));
+      EtfValidationReport report = new EftValidationReportBuilder()
+          .buildErrorReport(resourceDescriptorUrl, message);
 
-        }
+      return report;
     }
 
-    private String executeEtfTool(String resourceDescriptorUrl,
-                                  ServiceProtocol protocol) {
 
-        String reportName = getReportName();
-        Path tmpDir = null;
+    String eftResultsPath = "";
+    try {
+      // Invoke ETF tool
+      eftResultsPath = executeEtfTool(resourceDescriptorUrl, protocol);
+      File eftResults = new File(eftResultsPath, "TESTS-TestSuites.xml");
+
+      if (!eftResults.exists()) {
+        String message = "Can't find ETF validation report for " + resourceDescriptorUrl
+            + " (serviceType=" + serviceType.toString() + ").";
+
+        EtfValidationReport report = new EftValidationReportBuilder()
+            .buildErrorReport(resourceDescriptorUrl, message);
+
+        return report;
+      }
+
+      // Build report
+      String reportUrl = this.etfResourceTesterHtmlReportsUrl + "/"
+          + FilenameUtils.getName(eftResultsPath) + "/index.html";
+      EtfValidationReport report = new EftValidationReportBuilder()
+          .build(eftResults, resourceDescriptorUrl, protocol, reportUrl);
+
+      return report;
+    } finally {
+      // Cleanup report from ETF folder
+      if (StringUtils.isNotEmpty(eftResultsPath)) {
+        FileUtils.deleteQuietly(new File(eftResultsPath));
+      }
+    }
+  }
+
+  private String executeEtfTool(String resourceDescriptorUrl,
+                                ServiceProtocol protocol) {
+
+    String reportName = getReportName();
+    Path tmpDir = null;
+
+    try {
+      // Create a custom config.properties and temporary directory,
+      // to allow parallel executions of ETF.
+      FileUtils.copyFile(new File(this.etfResourceTesterPath, "config.properties"),
+          new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
+
+      tmpDir = Files.createTempDirectory("ETF");
+
+      String[] envp = new String[2];
+      envp[0] = "XTF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
+      envp[1] = "ETF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
+
+      String command = commandToExecute(resourceDescriptorUrl, protocol,
+          reportName, tmpDir.toFile().getAbsolutePath());
+      if (StringUtils.isEmpty(command)) {
+        return "";
+      }
+
+      log.info("EFT validation command: " + command);
+
+      Runtime rt = Runtime.getRuntime();
+      Process pr = rt.exec(command,
+          envp,
+          new File(this.etfResourceTesterPath));
+
+      if (log.isDebugEnabled()) {
+        // Log process ouput
+        BufferedReader bfr = null;
+        String line = "";
 
         try {
-            // Create a custom config.properties and temporary directory, to allow parallel executions of ETF.
-            FileUtils.copyFile(new File(this.etfResourceTesterPath, "config.properties"),
-                new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
-
-            tmpDir = Files.createTempDirectory("ETF");
-
-            Runtime rt = Runtime.getRuntime();
-
-            String[] envp = new String[2];
-            envp[0] = "XTF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
-            envp[1] = "ETF_SEL_GROOVY=" + this.etfResourceTesterPath + "/ETF/Groovy";
-
-            String command = commandToExecute(resourceDescriptorUrl, protocol,
-                reportName, tmpDir.toFile().getAbsolutePath());
-            if (StringUtils.isEmpty(command)) return "";
-
-            log.info("EFT validation command: " + command);
-
-            Process pr = rt.exec(command,
-                envp,
-                new File(this.etfResourceTesterPath));
-
-            if (log.isDebugEnabled()) {
-                // Log process ouput
-                BufferedReader bfr = null;
-                String line = "";
-
-                try {
-                    bfr = new BufferedReader(new InputStreamReader(pr.getInputStream(), Charset.forName("UTF8")));
-                    while ((line = bfr.readLine()) != null) {
-                        log.debug(line);
-                    }
-
-                } finally {
-                    IOUtils.closeQuietly(bfr);
-                }
-
-                try {
-                    bfr = new BufferedReader(new InputStreamReader(pr.getErrorStream(), Charset.forName("UTF8")));
-                    line = "";
-                    while ((line = bfr.readLine()) != null) {
-                        log.debug(line);
-                    }
-                } finally {
-                    IOUtils.closeQuietly(bfr);
-                }
-
-            }
-
-            int exitVal = pr.waitFor();
-            log.info("Process exitValue: " + exitVal);
-
-            String eftResultsPath = this.etfResourceTesterPath + "/reports/" + reportName;
-
-            // Move the html folder to the html reports folder, accessible with http
-            FileUtils.moveDirectory(new File(eftResultsPath, "html"),
-                new File(this.etfResourceTesterHtmlReportsPath, reportName));
-
-            return eftResultsPath;
-
-        } catch (Throwable ex) {
-            log.error(ex.getMessage());
-            return "";
+          bfr = new BufferedReader(new InputStreamReader(
+              pr.getInputStream(), Charset.forName("UTF8")));
+          while ((line = bfr.readLine()) != null) {
+            log.debug(line);
+          }
 
         } finally {
-            // Clean up temporary folders
-            cleanTemporaryFolders(reportName, tmpDir);
+          IOUtils.closeQuietly(bfr);
         }
 
-    }
-
-
-    /**
-     * Creates the command to execute for the link report.
-     *
-     * @param resourceDescriptorUrl
-     * @param protocol
-     * @param reportName
-     * @param tmpDir
-     * @return
-     */
-    private String commandToExecute(String resourceDescriptorUrl,
-                                    ServiceProtocol protocol,
-                                    String reportName,
-                                    String tmpDir) {
-
-        String command = this.etfResourceTesterPath + "/ant set-serviceEndpoint {0} -Dmap={1} -DmapName={2} -DtmpDir={3} -DconfigurationFile={4}";
-
-        String args[] = new String[]{resourceDescriptorUrl, reportName, tmpDir, "config-" + reportName + ".properties"};
-        List<String> argsList = new ArrayList<String>(Arrays.asList(args));
-
-        if (protocol.equals(ServiceProtocol.WMS)) {
-            argsList.add(0, "run-vs-tests");
-
-        } else if (protocol.equals(ServiceProtocol.WMTS)) {
-            argsList.add(0, "run-wmts-tests");
-
-        } else if (protocol.equals(ServiceProtocol.WFS)) {
-            argsList.add(0, "run-dswfs-tests");
-
-        } else if (protocol.equals(ServiceProtocol.ATOM)) {
-            argsList.add(0, "run-dsatom-tests");
-
-        } else {
-            return "";
+        try {
+          bfr = new BufferedReader(new InputStreamReader(
+              pr.getErrorStream(), Charset.forName("UTF8")));
+          line = "";
+          while ((line = bfr.readLine()) != null) {
+            log.debug(line);
+          }
+        } finally {
+          IOUtils.closeQuietly(bfr);
         }
 
-        command = MessageFormat.format(command, argsList.toArray());
+      }
 
-        return command;
+      int exitVal = pr.waitFor();
+      log.info("Process exitValue: " + exitVal);
+
+      String eftResultsPath = this.etfResourceTesterPath + "/reports/" + reportName;
+
+      // Move the html folder to the html reports folder, accessible with http
+      FileUtils.moveDirectory(new File(eftResultsPath, "html"),
+          new File(this.etfResourceTesterHtmlReportsPath, reportName));
+
+      return eftResultsPath;
+
+    } catch (Throwable ex) {
+      log.error(ex.getMessage());
+      return "";
+
+    } finally {
+      // Clean up temporary folders
+      cleanTemporaryFolders(reportName, tmpDir);
     }
 
+  }
 
-    /**
-     * Generates a name for the report folder.
-     *
-     * @return Report name.
-     */
-    private String getReportName() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
-        return "report-" + format.format(new Date());
+  /**
+   * Creates the command to execute for the link report.
+   *
+   */
+  private String commandToExecute(String resourceDescriptorUrl,
+                                  ServiceProtocol protocol,
+                                  String reportName,
+                                  String tmpDir) {
+
+    String command = this.etfResourceTesterPath
+        + "/ant set-serviceEndpoint {0} "
+        + "-Dmap={1} -DmapName={2} -DtmpDir={3} -DconfigurationFile={4}";
+
+    String[] args = new String[]{resourceDescriptorUrl,
+        reportName, tmpDir, "config-" + reportName + ".properties"};
+    List<String> argsList = new ArrayList<String>(Arrays.asList(args));
+
+    if (protocol.equals(ServiceProtocol.WMS)) {
+      argsList.add(0, "run-vs-tests");
+
+    } else if (protocol.equals(ServiceProtocol.WMTS)) {
+      argsList.add(0, "run-wmts-tests");
+
+    } else if (protocol.equals(ServiceProtocol.WFS)) {
+      argsList.add(0, "run-dswfs-tests");
+
+    } else if (protocol.equals(ServiceProtocol.ATOM)) {
+      argsList.add(0, "run-dsatom-tests");
+
+    } else {
+      return "";
     }
 
+    command = MessageFormat.format(command, argsList.toArray());
 
-    /**
-     * Removes the temporary folders/files created by ETF.
-     *
-     */
-    private void cleanTemporaryFolders(String reportName, Path tmpDir) {
-        if (tmpDir != null) {
-            FileUtils.deleteQuietly(tmpDir.toFile());
-        }
+    return command;
+  }
 
-        FileUtils.deleteQuietly(new File(this.etfResourceTesterPath, "config-" + reportName + ".properties"));
+
+  /**
+   * Generates a name for the report folder.
+   *
+   * @return Report name.
+   */
+  private String getReportName() {
+    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
+    return "report-" + format.format(new Date());
+  }
+
+
+  /**
+   * Removes the temporary folders/files created by ETF.
+   *
+   */
+  private void cleanTemporaryFolders(String reportName, Path tmpDir) {
+    if (tmpDir != null) {
+      FileUtils.deleteQuietly(tmpDir.toFile());
     }
+
+    FileUtils.deleteQuietly(new File(
+        this.etfResourceTesterPath,
+        "config-" + reportName + ".properties"));
+  }
 }

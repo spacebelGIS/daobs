@@ -1,23 +1,14 @@
 /**
- * Copyright 2014-2016 European Environment Agency
- *
- * Licensed under the EUPL, Version 1.1 or – as soon
- * they will be approved by the European Commission -
- * subsequent versions of the EUPL (the "Licence");
- * You may not use this work except in compliance
- * with the Licence.
- * You may obtain a copy of the Licence at:
- *
- * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ * Copyright 2014-2016 European Environment Agency <p> Licensed under the EUPL, Version 1.1 or – as
+ * soon they will be approved by the European Commission - subsequent versions of the EUPL (the
+ * "Licence"); You may not use this work except in compliance with the Licence. You may obtain a
+ * copy of the Licence at: <p> https://joinup.ec.europa.eu/community/eupl/og_page/eupl <p> Unless
+ * required by applicable law or agreed to in writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the Licence for the specific language governing permissions and limitations under
+ * the Licence.
  */
+
 package org.daobs.controller;
 
 import org.apache.camel.CamelContext;
@@ -36,53 +27,57 @@ import java.util.List;
 
 /**
  * Draft camel workers prototype.
- *
+ * <p>
  * Another option could be to use JMX and
- * Jolokia REST API ?
+ * Jolokia REST Api ?
  * https://jolokia.org/reference/html/index.html
- *
+ * </p>
  * Created by francois on 20/01/16.
  */
 @Controller
 public class WorkersManager {
 
-    @Autowired
-    ContextStore camelContextStore;
+  @Autowired
+  ContextStore camelContextStore;
 
-    @RequestMapping(value = "/workers",
-        produces = {
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XHTML_XML_VALUE
-        },
-        method = RequestMethod.GET)
-    @ResponseBody
-    public List<String> getDashboards() {
-        ArrayList<String> result = new ArrayList<>();
+  /**
+   * Get inflight exchanges.
+   */
+  @RequestMapping(value = "/workers",
+      produces = {
+        MediaType.APPLICATION_XML_VALUE,
+        MediaType.APPLICATION_JSON_VALUE,
+        MediaType.APPLICATION_XHTML_XML_VALUE
+      },
+      method = RequestMethod.GET)
+  @ResponseBody
+  public List<String> getExchangess() {
+    ArrayList<String> result = new ArrayList<>();
 
-        for (CamelContext context : camelContextStore.getCamelContexts()) {
-            Collection<InflightRepository.InflightExchange> inFlightExchanges =
-                context.getInflightRepository().browse();
+    for (CamelContext context : camelContextStore.getCamelContexts()) {
+      Collection<InflightRepository.InflightExchange> inFlightExchanges =
+          context.getInflightRepository().browse();
 
-            for (InflightRepository.InflightExchange e : inFlightExchanges) {
-                // TODO:
-                // * Use Unit Of Work
-                // * testing
-                //            inFlightExchanges.remove(e);
-                //            e.getExchange().setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
-                // http://camel.apache.org/uuidgenerator.html could be customized
-                // to have workers id set by starter app.
-                result.add(String.format("[%s:%s] %s (%dms/%dms) - step %s - Nb of records: %s",
-                    e.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("harvesterUuid"),
-                    e.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("harvesterTerritory"),
-                    e.getExchange().getExchangeId(),
-                    e.getElapsed(),
-                    e.getDuration(),
-                    e.getExchange().getFromRouteId(),
-                    e.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("numberOfRecordsMatched")
-                ));
-            }
-        }
-        return result;
+      for (InflightRepository.InflightExchange ex : inFlightExchanges) {
+        // TODO:
+        // * Use Unit Of Work
+        // * testing
+        //            inFlightExchanges.remove(e);
+        //            e.getExchange().setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
+        // http://camel.apache.org/uuidgenerator.html could be customized
+        // to have workers id set by starter app.
+        result.add(String.format("[%s:%s] %s (%dms/%dms) - step %s - Nb of records: %s",
+            ex.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("harvesterUuid"),
+            ex.getExchange().getUnitOfWork().getOriginalInMessage().getHeader("harvesterTerritory"),
+            ex.getExchange().getExchangeId(),
+            ex.getElapsed(),
+            ex.getDuration(),
+            ex.getExchange().getFromRouteId(),
+            ex.getExchange().getUnitOfWork()
+              .getOriginalInMessage().getHeader("numberOfRecordsMatched")
+        ));
+      }
     }
+    return result;
+  }
 }
