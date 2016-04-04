@@ -290,16 +290,17 @@
         Take in account gmd:descriptiveKeywords or srv:keywords
         -->
         <!-- TODO: Some MS may be using a translated version of the thesaurus title -->
-        <xsl:variable name="inspireThemeThesaurusTitle"
-                      select="'inspire themes'"/>
+        <xsl:variable name="inspireKeywords"
+                      select="*/gmd:MD_Keywords[
+                      contains(lower-case(
+                       gmd:thesaurusName[1]/*/gmd:title[1]/*/text()
+                       ), 'gemet') and
+                       contains(lower-case(
+                       gmd:thesaurusName[1]/*/gmd:title[1]/*/text()
+                       ), 'inspire')]
+                  /gmd:keyword"/>
         <xsl:for-each
-          select="*/gmd:MD_Keywords[contains(
-                     lower-case(
-                     gmd:thesaurusName[1]/gmd:CI_Citation/
-                       gmd:title[1]/*/text()
-                     ),
-                     $inspireThemeThesaurusTitle)]
-                  /gmd:keyword">
+          select="$inspireKeywords">
           <xsl:variable name="position" select="position()"/>
           <xsl:for-each select="gco:CharacterString[. != '']|
                                 gmx:Anchor[. != '']">
@@ -336,15 +337,12 @@
           </xsl:for-each>
         </xsl:for-each>
 
+        <!-- For services, the count does not take into account
+        dataset's INSPIRE themes which are transfered to the service
+        by service-dataset-task. -->
         <field name="numberOfInspireTheme">
           <xsl:value-of
-            select="count(*/gmd:MD_Keywords[contains(
-                       lower-case(
-                       gmd:thesaurusName[1]/gmd:CI_Citation/
-                         gmd:title[1]/*/text()
-                       ),
-                       $inspireThemeThesaurusTitle)]
-                  /gmd:keyword)"/>
+            select="count($inspireKeywords)"/>
         </field>
 
 

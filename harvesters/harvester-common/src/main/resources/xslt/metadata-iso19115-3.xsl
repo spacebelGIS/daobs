@@ -305,11 +305,17 @@
 
         Take in account gmd:descriptiveKeywords or srv:keywords
         -->
+        <xsl:variable name="inspireKeywords"
+                      select="*/mri:MD_Keywords[
+                      contains(lower-case(
+                       mri:thesaurusName[1]/*/cit:title[1]/*/text()
+                       ), 'gemet') and
+                       contains(lower-case(
+                       mri:thesaurusName[1]/*/cit:title[1]/*/text()
+                       ), 'inspire')]
+                  /mri:keyword/gco:CharacterString"/>
         <xsl:for-each
-          select="*/mri:MD_Keywords[contains(
-                     mri:thesaurusName[1]/cit:CI_Citation/
-                       cit:title[1]/gco:CharacterString/text(),
-                       'INSPIRE themes')]/mri:keyword/gco:CharacterString">
+          select="$inspireKeywords">
 
           <xsl:variable name="inspireTheme" as="xs:string"
                         select="solr:analyzeField('inspireTheme_syn', text())"/>
@@ -345,11 +351,7 @@
 
         <field name="numberOfInspireTheme">
           <xsl:value-of
-            select="count(*/mri:MD_Keywords[contains(
-                     mri:thesaurusName[1]/cit:CI_Citation/
-                       cit:title[1]/gco:CharacterString/text(),
-                       'GEMET - INSPIRE themes')]
-                  /mri:keyword)"/>
+            select="count($inspireKeywords)"/>
         </field>
 
 
