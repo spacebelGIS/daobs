@@ -1,4 +1,8 @@
 
+
+[![Build Status](https://travis-ci.org/INSPIRE-MIF/daobs.svg?branch=daobs-1.0.x)](https://travis-ci.org/INSPIRE-MIF/daobs)
+
+
 # Overview
 
 Collect information and configure indicators to generate reporting. Build dashboards 
