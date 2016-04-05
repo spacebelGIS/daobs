@@ -33,6 +33,9 @@
 
   <artifactId>solr-cores</artifactId>
   <name>Solr cores</name>
+  <properties>
+    <solr.executable>solr</solr.executable>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -171,7 +174,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>solr-${solr.version}/bin/solr</executable>
+                  <executable>solr-${solr.version}/bin/${solr.executable}</executable>
                   <arguments>
                     <argument>start</argument>
                     <argument>-c</argument>
@@ -187,7 +190,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>solr-${solr.version}/bin/solr</executable>
+                  <executable>solr-${solr.version}/bin/${solr.executable}</executable>
                   <workingDirectory>${project.basedir}</workingDirectory>
                   <arguments>
                     <argument>create</argument>
@@ -207,7 +210,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>solr-${solr.version}/bin/solr</executable>
+                  <executable>solr-${solr.version}/bin/${solr.executable}</executable>
                   <workingDirectory>${project.basedir}</workingDirectory>
                   <arguments>
                     <argument>create</argument>
@@ -227,7 +230,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>solr-${solr.version}/bin/solr</executable>
+                  <executable>solr-${solr.version}/bin/${solr.executable}</executable>
                   <workingDirectory>${project.basedir}</workingDirectory>
                   <arguments>
                     <argument>create</argument>
@@ -247,7 +250,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>solr-${solr.version}/bin/solr</executable>
+                  <executable>solr-${solr.version}/bin/${solr.executable}</executable>
                   <arguments>
                     <argument>stop</argument>
                   </arguments>
@@ -271,7 +274,7 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
             <configuration>
-              <executable>solr-${solr.version}/bin/solr</executable>
+              <executable>solr-${solr.version}/bin/${solr.executable}</executable>
               <arguments>
                 <argument>start</argument>
                 <!-- In foreground -->
@@ -284,6 +287,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <solr.executable>solr.cmd</solr.executable>
+      </properties>
     </profile>
   </profiles>
   <build>
