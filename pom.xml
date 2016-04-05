@@ -233,6 +233,32 @@
       </dependency>
 
       <dependency>
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.9</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.4</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.5.2</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.daobs</groupId>
         <artifactId>daobs-routing-utility</artifactId>
         <version>${project.version}</version>
@@ -393,6 +419,7 @@
     <module>web</module>
     <module>messaging</module>
     <module>reporting</module>
+    <module>http-proxy</module>
   </modules>
 
 
