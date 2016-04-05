@@ -135,6 +135,7 @@
         }
       };
       function getHitsNumber (h) {
+        $scope.statsForRemote[h.uuid] = {};
         cswService.getHitsNumber(h.url, h.filter).then(function (nbHits) {
           $scope.statsForRemote[h.uuid] = {
             count: nbHits,

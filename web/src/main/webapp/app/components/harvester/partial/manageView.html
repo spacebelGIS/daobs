@@ -115,6 +115,7 @@
               <span data-translate="">records</span>
             </strong>
           </small>
+          <small data-ng-show="statsForTerritory[h.uuid] && statsForRemote[h.uuid].count">&nbsp;/&nbsp;</small>
           <small data-ng-show="statsForRemote[h.uuid].count"
                  title="{{statsForRemote[h.uuid].when | date:'M/d/yyyy HH:mm:ss'}}">
             <span>
@@ -172,7 +173,7 @@
                      title="{{'viewRecords' | translate}}"
                      data-ng-show="statsForTerritory[h.uuid].count > 0"
                      data-ng-href="dashboard2/#/dashboard/solr/Statistics%20(with%20record%20details)?q=%2BharvesterUuid:{{h.uuid}}">
-                    <i class="fa fa-eye-open"></i>&nbsp;
+                    <i class="fa fa-eye"></i>&nbsp;
                     <span data-translate="">viewRecords</span>
                   </a>
                 </li>
@@ -198,7 +199,7 @@
                      data-ng-show="statsForTerritory[h.uuid].count > 0"
                      title="{{'removeRecords' | translate}}">
                     <i
-                      class="fa fa-floppy-remove text-danger"></i>&nbsp;
+                      class="fa fa-remove text-danger"></i>&nbsp;
                     <span data-translate="">removeRecords</span>
                   </a>
                 </li>
