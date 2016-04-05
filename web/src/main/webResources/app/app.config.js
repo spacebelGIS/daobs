@@ -29,12 +29,12 @@
     'SERVICES': {
       root: context,
       solrRoot: solrContext,
-      // TODO: dashboard core should be a parameter
       dashboardCoreName: '${solr.core.dashboard}',
       dashboardCore: solrContext + '/${solr.core.dashboard}',
       dataCoreName: '${solr.core.data}',
       dataCore: solrContext + '/${solr.core.data}',
       reportingSubmit: solrContext + '/${solr.core.data}/update',
+      proxy: context + 'proxy?url=',
       harvester: context + 'daobs/harvester',
       workersStats: context + 'daobs/workers',
       reportingConfig: context + 'daobs/reporting.json',

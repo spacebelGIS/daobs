@@ -8,7 +8,7 @@
           <a href="{{link.url}}"
              title="{{(link.id + 'Title') | translate}}"
              id="ds-menu-{{link.id}}">
-            <i class="glyphicon" data-ng-class="link.icon"></i>
+            <i class="fa" data-ng-class="link.icon"></i>
             {{link.id | translate}}
           </a>
         </li>
@@ -18,13 +18,13 @@
           <a href="#/logout"
              title="{{'signoutTitle' | translate}}"
              id="ds-menu-signout">
-            <i class="glyphicon glyphicon-user"></i>
+            <i class="fa fa-user"></i>
             {{'signout' | translate}}
           </a>
         </li>
         <li>
           <a data-ng-click="startIntro()">
-            <i class="glyphicon glyphicon-info-sign"></i>
+            <i class="fa fa-info-sign"></i>
           </a>
         </li>
       </ul>

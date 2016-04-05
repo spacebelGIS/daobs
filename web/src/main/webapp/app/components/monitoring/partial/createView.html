@@ -67,8 +67,10 @@
                        class="form-control"/>
                 <div class="input-group-btn">
                   <button type="submit"
-                          class="btn btn-default glyphicon glyphicon-remove"
-                          data-ng-click="filter = ''"></button>
+                          class="btn btn-default"
+                          data-ng-click="filter = ''">
+                    <i class="fa fa-eraser"/>
+                  </button>
                 </div>
               </div>
             </div>
@@ -90,7 +92,7 @@
         <div class="col-sm-5">
           <fieldset data-ng-show="reporting.id.indexOf('inspire') !== -1">
             <legend>
-              <i class="glyphicon glyphicon-user"></i>&nbsp;
+              <i class="fa fa-user"></i>&nbsp;
               <span data-translate="">contactDetails</legend>
             <div class="form-group" id="ds-language-filter">
               <label for="ds-language-field"
@@ -154,7 +156,7 @@
                       class="btn btn-primary"
                       data-ng-disabled="!filterCount"
                       data-ng-click="preview()">
-                <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
+                <i class="fa fa-eye-open"></i>&nbsp;
                 <span data-translate="">preview</span>
               </button>
               <div class="btn-group">
@@ -163,7 +165,7 @@
                         class="btn btn-default dropdown-toggle"
                         data-ng-disabled="!filterCount"
                         data-toggle="dropdown">
-                  <i class="glyphicon glyphicon-download-alt"></i>&nbsp;
+                  <i class="fa fa-download-alt"></i>&nbsp;
                   <span data-translate="">download</span> <span
                   class="caret"></span>
                 </button>
@@ -208,7 +210,7 @@
                       data-ng-click="submit()"
                       data-toggle="tooltip"
                       data-placement="bottom">
-                <i class="glyphicon glyphicon-time"></i>&nbsp;
+                <i class="fa fa-time"></i>&nbsp;
                 <span data-translate="">schedule</button>-->
             </div>
           </div>

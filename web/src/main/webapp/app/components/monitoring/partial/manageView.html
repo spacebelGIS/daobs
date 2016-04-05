@@ -36,15 +36,22 @@
         <th data-translate="">territory</th>
         <th data-translate="">org</th>
         <th>
-          <a class="btn btn-link"
-             href="" role="button"
-             title="{{'removeAllMonitoring' | translate}}"
-             data-ng-show="listOfMonitoring.length"
-             data-ng-mouseenter="monitoringDanger = true"
-             data-ng-mouseleave="monitoringDanger = false"
-             data-ng-click="removeMonitoring()">
-            <i class="glyphicon glyphicon-remove text-danger"></i>
-          </a>
+          <div class="btn-group pull-right" role="group">
+            <a class="btn btn-default"
+               href="#/monitoring/submit"
+               title="{{'submitMonitoring' | translate}}">
+              <i class="fa fa-plus"></i>
+            </a>
+            <a class="btn btn-default"
+               href="" role="button"
+               title="{{'removeAllMonitoring' | translate}}"
+               data-ng-show="listOfMonitoring.length"
+               data-ng-mouseenter="monitoringDanger = true"
+               data-ng-mouseleave="monitoringDanger = false"
+               data-ng-click="removeMonitoring()">
+              <i class="fa fa-remove text-danger"></i>
+            </a>
+          </div>
         </th>
       </tr>
       <tr>
@@ -76,21 +83,21 @@
           <a class="btn btn-link"
              role="button"
              data-ng-href="dashboard2/#/dashboard/solr/INSPIRE%20Dashboard?q=%2Bterritory:{{m.territory}} %2BreportingYear:{{m.reportingYear}}">
-            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;
+            <i class="fa fa-eye"></i>&nbsp;
             <span data-translate="">viewRecords</span>
           </a><br/>
-          <a class="btn btn-link"
+          <!--<a class="btn btn-link"
              href="" role="button"
              title="{{'isOfficial' | translate}}"
              data-ng-class="m.isOfficial ? '' : 'disabled'"
              data-ng-click="setAsOfficialMonitoring(m)">
-            <i class="glyphicon glyphicon-pushpin"></i>&nbsp;
+            <i class="fa fa-pushpin"></i>&nbsp;
             <span data-translate="">setAsOfficial</span>
-          </a><br/>
+          </a><br/>-->
           <a class="btn btn-link"
              href="" role="button"
              data-ng-click="removeMonitoring(m)">
-            <i class="glyphicon glyphicon-remove text-danger"></i>&nbsp;
+            <i class="fa fa-remove text-danger"></i>&nbsp;
             <span data-translate="">remove</span>
           </a>
         </td>

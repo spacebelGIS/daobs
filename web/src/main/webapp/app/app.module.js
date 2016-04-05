@@ -29,6 +29,7 @@
     'ngRoute',
     'pascalprecht.translate',
     'solr',
+    'csw',
     'ui-notification']);
 
   app.controller('RootController', [
@@ -36,25 +37,25 @@
     function ($scope, $location, $http, cfg) {
       $scope.navLinks = [{
         id: 'home',
-        icon: 'glyphicon-home',
+        icon: 'fa-home',
         url: '#/'
       }, {
         id: 'dashboard',
-        icon: 'glyphicon-stats',
+        icon: 'fa-stats',
         // TODO: Should be displayed only if dashboard available
         // TODO: Should point to a dashboard that exist
         url: 'dashboard2/#/dashboard/solr/INSPIRE%20Indicator%20trends'
       }, {
         id: 'monitoring',
-        icon: 'glyphicon-list-alt',
+        icon: 'fa-list-alt',
         url: '#/monitoring/manage'
       }, {
         id: 'harvesting',
-        icon: 'glyphicon-download-alt',
+        icon: 'fa-cloud-download',
         url: '#/harvesting/manage'
       }, {
         id: 'admin',
-        icon: 'glyphicon-cog',
+        icon: 'fa-cog',
         url: '/solr'
         //TODO cfg.SERVICES.solrRoot + '/' but Solr admin will not be rewritten
       }];

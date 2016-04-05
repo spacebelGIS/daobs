@@ -45,9 +45,9 @@
 
   app.controller('HarvesterConfigCtrl', [
     '$scope', '$routeParams', '$translate', '$timeout', '$http', '$location',
-    'harvesterService', 'cfg', 'Notification',
+    'harvesterService', 'cfg', 'Notification', 'cswService',
     function ($scope, $routeParams, $translate, $timeout, $http, $location,
-              harvesterService, cfg, Notification) {
+              harvesterService, cfg, Notification, cswService) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
       $scope.adding = false;
@@ -70,6 +70,7 @@
         'harvesterStarted',
         'harvesterDeleted',
         'harvesterSaved',
+        'errorGettingRemoteHits',
         'errorAddingHarvester',
         'harvesterRecordsDeleted',
         'errorStartingHarvester',
@@ -79,6 +80,7 @@
       });
 
       $scope.statsForTerritory = {};
+      $scope.statsForRemote = {};
 
       function loadStatsForTerritory() {
         if ($location.path().indexOf('/harvesting/manage') === 0) {
@@ -122,6 +124,29 @@
           }
         });
       }
+
+      $scope.getHitsNumber = function (h) {
+        if (h) {
+          getHitsNumber(h);
+        } else {
+          angular.forEach($scope.harvesterConfig, function (h) {
+            getHitsNumber(h);
+          });
+        }
+      };
+      function getHitsNumber (h) {
+        cswService.getHitsNumber(h.url, h.filter).then(function (nbHits) {
+          $scope.statsForRemote[h.uuid] = {
+            count: nbHits,
+            when: new Date()
+          };
+        }, function (response) {
+          Notification.error(
+            $scope.translations.errorGettingRemoteHits + ' ' +
+            response.data + ' (' + response.status + ').');
+          console.log(response);
+        });
+      };
 
       $scope.edit = function (h) {
         $scope.adding = true;

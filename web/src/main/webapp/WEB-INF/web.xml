@@ -41,7 +41,7 @@
   </context-param>
 
 
-  <!-- Spring MVC -->
+
   <servlet>
     <servlet-name>DaobsDispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet
@@ -58,6 +58,45 @@
   </servlet-mapping>
 
 
+
+  <servlet>
+    <servlet-name>HttpProxy</servlet-name>
+    <servlet-class>org.geonetwork.http.proxy.HttpProxyServlet</servlet-class>
+    <init-param>
+      <param-name>AllowedContentTypes</param-name>
+      <param-value>
+        application/xml,text/xml,
+        text/html,
+        text/plain,
+        application/vnd.ogc.se_xml,
+        application/vnd.ogc.se+xml,
+        application/vnd.ogc.success+xml,
+        application/vnd.ogc.wms_xml,
+        application/vnd.ogc.context+xml,
+        application/vnd.ogc.gml,
+        application/vnd.ogc.sld+xml,
+        application/vnd.google-earth.kml+xml,
+        application/vnd.google-earth.kmz,
+        application/json
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>AllowedHosts</param-name>
+      <param-value />
+    </init-param>
+    <init-param>
+      <param-name>DefaultProxyUrl</param-name>
+      <param-value></param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HttpProxy</servlet-name>
+    <url-pattern>/proxy</url-pattern>
+  </servlet-mapping>
+
+
+
   <!-- Spring Security
   TODO: For the time being secure the dashboard installation using a ReverseProxy.
   <filter>
@@ -69,6 +108,8 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/solr/*</url-pattern>
   </filter-mapping>-->
+
+
 
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>
@@ -84,9 +125,7 @@
       <param-name>logLevel</param-name>
       <param-value>WARN</param-value>
     </init-param>
-
   </filter>
-
   <filter-mapping>
     <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>

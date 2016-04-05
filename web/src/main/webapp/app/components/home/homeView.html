@@ -67,7 +67,7 @@
           </a>
           <button class="btn btn-link btn-sm pull-right"
                   data-ng-click="removeDashboard(dashboard.id)">
-            <i class="glyphicon glyphicon-remove text-danger"></i>
+            <i class="fa fa-remove text-danger"></i>
           </button>
         </li>
       </ul>
@@ -86,7 +86,7 @@
           </a>
           <button class="btn btn-link btn-sm pull-right"
                   data-ng-click="removeDashboard(dashboard.id)">
-            <i class="glyphicon glyphicon-remove text-danger"></i>
+            <i class="fa fa-remove text-danger"></i>
           </button>
         </li>
       </ul>
@@ -101,8 +101,8 @@
         <button type="button"
                 class="btn btn-primary dropdown-toggle"
                 data-toggle="dropdown" aria-expanded="false"
-                title="Load or reload default dashboards">
-          <i class="glyphicon glyphicon-plus"></i>&nbsp;
+                title="{{'reloadDashboards' | translate}}">
+          <i class="fa fa-plus"></i>&nbsp;
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -121,7 +121,7 @@
         <span data-translate=""
               data-translate-values="{number: '{{dashboards.length}}'}">
           deleteAllDashboards</span>
-        <i class="glyphicon glyphicon-trash"></i>
+        <i class="fa fa-times"></i>
       </button>
     </div>
     <br/><br/>
