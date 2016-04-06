@@ -21,8 +21,6 @@
     permissions and limitations under the Licence.
 
 -->
-<!-- Configures the cm Context-->
-
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:cm="http://camel.apache.org/schema/spring"
        xmlns="http://www.springframework.org/schema/beans"
@@ -31,14 +29,6 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring
         http://camel.apache.org/schema/spring/camel-spring.xsd">
-
-  <!-- bridge spring property placeholder with cm -->
-  <!-- you must NOT use the <context:property-placeholder at the same time,
-  only this bridge bean -->
-  <bean id="bridgePropertyPlaceholder"
-        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="/WEB-INF/config.properties"/>
-  </bean>
 
 
   <bean id="SolrServer"

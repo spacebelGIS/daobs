@@ -384,7 +384,7 @@ To trigger the validation:
 
 ```
 cd tasks/service-dataset-indexer
-mvn camel:run
+mvn camel:run -Pcli
 ```
 
 By default, the task analyze all services.
@@ -411,7 +411,7 @@ To trigger the data analysis:
 
 ```
 cd tasks/data-indexer
-mvn camel:run
+mvn camel:run -Pcli
 ```
 
 

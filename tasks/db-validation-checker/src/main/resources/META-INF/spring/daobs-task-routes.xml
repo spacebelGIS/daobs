@@ -32,16 +32,16 @@
 
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="WEB-INF/config.properties"/>
+    <property name="location" value="${config.properties.path}"/>
   </bean>
 
   <bean id="dbValidator"
-        class="org.daobs.tasks.validation.inspire.DBValidatorBean">
+        class="org.daobs.tasks.validation.inspire.DbValidatorBean">
     <constructor-arg ref="dbValidationClient"/>
   </bean>
 
   <bean id="dbValidationClient"
-        class="org.daobs.tasks.validation.inspire.DBValidatorClient">
+        class="org.daobs.tasks.validation.inspire.DbValidatorClient">
     <property name="dataSource"
               ref="dataSource"/>
     <property name="validRuleResult"

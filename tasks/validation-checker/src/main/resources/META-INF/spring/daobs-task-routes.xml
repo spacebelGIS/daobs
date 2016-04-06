@@ -32,7 +32,7 @@
 
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="/WEB-INF/config.properties"/>
+    <property name="location" value="${config.properties.path}"/>
   </bean>
 
   <bean id="inspireValidationClient"
@@ -310,7 +310,7 @@
 
       <!-- Check document against an XSD -->
       <cm:doTry>
-        <cm:to uri="validator:WEB-INF/xsd/iso19139/schema.xsd?useDom=false"/>
+        <cm:to uri="validator:xsd/iso19139/schema.xsd?useDom=false"/>
         <cm:setBody>
           <cm:simple>
             <![CDATA[<add commitWithin="10000">

@@ -1,0 +1,58 @@
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
+<daobs:harvesters xmlns:daobs="http://daobs.org"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="../daobsHarvesterConfig.xsd">
+
+ <!-- <daobs:harvester>
+    <daobs:uuid>0a8b54e3-a216-43aa-a132-096eb72197cc</daobs:uuid>
+    <daobs:territory>NL</daobs:territory>
+    <daobs:folder>NL</daobs:folder>
+    <daobs:name>Nationaal Georegister (BeheerPDOK)</daobs:name>
+    <daobs:url>http://www.nationaalgeoregister.nl/geonetwork/srv/dut/inspire
+    </daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      http://www.nationaalgeoregister.nl/geonetwork/?uuid={{uuid}}
+    </daobs:pointOfTruthURLPattern>
+  </daobs:harvester>-->
+
+  <daobs:harvester>
+    <daobs:uuid>6f77b9f1-aa4f-4688-ab32-2e721bcfefd9</daobs:uuid>
+    <daobs:territory>FI</daobs:territory>
+    <daobs:folder>FI</daobs:folder>
+    <daobs:name>Paikkatietohakemisto (Maanmittauslaitos)</daobs:name>
+    <daobs:url>http://www.paikkatietohakemisto.fi:80/geonetwork/srv/fi/csw
+    </daobs:url>
+    <daobs:filter>
+      <ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">
+        <ogc:PropertyIsNotEqualTo>
+          <ogc:PropertyName>Subject</ogc:PropertyName>
+          <ogc:Literal>Ei-Inspire</ogc:Literal>
+        </ogc:PropertyIsNotEqualTo>
+      </ogc:Filter>
+    </daobs:filter>
+    <daobs:pointOfTruthURLPattern>
+      http://www.paikkatietohakemisto.fi:80/geonetwork/?uuid={{uuid}}
+    </daobs:pointOfTruthURLPattern>
+  </daobs:harvester>
+</daobs:harvesters>

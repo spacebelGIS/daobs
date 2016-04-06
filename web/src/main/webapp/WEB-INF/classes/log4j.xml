@@ -56,6 +56,10 @@
     <level value="DEBUG"/>
   </logger>
 
+  <logger name="org.daobs.task.DBValidationChecker">
+    <level value="DEBUG"/>
+  </logger>
+
   <logger name="org.daobs.tasks.validation.etf">
     <level value="DEBUG"/>
   </logger>

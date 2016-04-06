@@ -98,7 +98,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>conf-daobs.properties</exclude>
+            <exclude>config.properties</exclude>
             <exclude>log4j.*</exclude>
             <exclude>rebel.xml</exclude>
           </excludes>

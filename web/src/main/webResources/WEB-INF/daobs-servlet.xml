@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
+<beans xmlns:ctx="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+  <ctx:annotation-config/>
+  <ctx:property-placeholder location="${config.properties.path}"
+                            file-encoding="UTF-8"
+                            ignore-unresolvable="false"/>
+
+  <import resource="classpath*:META-INF/spring/config-messaging.xml"/>
+  <import resource="classpath*:META-INF/spring/daobs-harvester-routes.xml"/>
+  <import resource="classpath*:META-INF/spring/daobs-task-routes.xml"/>
+
+  <bean id="camelContextStore"
+        class="org.daobs.workers.ContextStore"/>
+
+  <bean id="jmsTemplate"
+        class="org.springframework.jms.core.JmsTemplate">
+    <constructor-arg ref="pooledConnectionFactory"/>
+    <property name="sessionTransacted" value="false"/>
+    <property name="receiveTimeout" value="5000"/>
+  </bean>
+
+  <bean id="jmsMessager"
+        class="org.daobs.messaging.JmsMessager"/>
+
+  <bean id="SolrServer"
+        class="org.daobs.index.SolrServerBean">
+    <property name="solrServerUrl"
+              value="${solr.server.url}/${solr.core.data}"/>
+    <property name="solrServerUsername" value="${solr.server.user}"/>
+    <property name="solrServerPassword" value="${solr.server.password}"/>
+  </bean>
+
+  <bean id="SolrRequest"
+        class="org.daobs.index.SolrRequestBean"/>
+
+  <bean id="DashboardLoader"
+        class="org.daobs.solr.samples.loader.DashboardLoader">
+    <property name="solrServerUrl"
+              value="${solr.server.url}/${solr.core.dashboard}"/>
+    <property name="solrServerUsername" value="${solr.server.user}"/>
+    <property name="solrServerPassword" value="${solr.server.password}"/>
+  </bean>
+
+
+  <bean id="harvesterConfigRepository"
+        class="org.daobs.harvester.repository.HarvesterConfigRepository">
+    <property name="configurationFilepath"
+              value="${data.dir}/harvester/config-harvesters.xml"/>
+    <property name="harvestingTasksFolder" value="${data.dir}/harvester/tasks"/>
+  </bean>
+</beans>

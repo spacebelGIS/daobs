@@ -32,7 +32,7 @@
 
   <bean id="bridgePropertyPlaceholder"
         class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
-    <property name="location" value="/WEB-INF/config.properties"/>
+    <property name="location" value="${config.properties.path}"/>
   </bean>
 
   <bean id="etfValidationClient"

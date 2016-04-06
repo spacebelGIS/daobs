@@ -33,6 +33,11 @@
   <import
     resource="classpath*:META-INF/spring/daobs-harvester-common-routes.xml"/>
 
+  <bean id="bridgePropertyPlaceholder"
+        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+    <property name="location" value="${config.properties.path}"/>
+  </bean>
+
   <bean id="cswHarvester" class="org.daobs.harvester.CswHarvester">
     <property name="maxRecords" value="${harvester.csw.getRecords.maxRecords}"/>
   </bean>
