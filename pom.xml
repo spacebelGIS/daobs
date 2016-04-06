@@ -479,6 +479,9 @@
     <!-- root.dir set by directory-maven-plugin -->
     <data.dir>${root.dir}/web/target/${war.name}/WEB-INF/datadir</data.dir>
 
+    <log.dir>/tmp</log.dir>
+    <!--<log.dir>${catalina.home}/logs</log.dir>-->
+
     <!-- Default username and password. This
     set the values in Spring security file and
     in services needing authentication against
@@ -499,6 +502,10 @@
     <etf.validation-html-reports.path>${project.basedir}/target/${war.name}/etf-validation-reports</etf.validation-html-reports.path>
     <!--url where to store the validation reports -->
     <etf.validation-html-reports.url>${webapp.url}${webapp.rootUrl}etf-validation-reports</etf.validation-html-reports.url>
+
+    <db.validation.db>localhost:5432/geocat</db.validation.db>
+    <db.validation.username>www-data</db.validation.username>
+    <db.validation.password>www-data</db.validation.password>
 
     <silk.port>8985</silk.port>
 
