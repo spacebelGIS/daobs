@@ -36,15 +36,6 @@
            data-translate="">isOfficialHelp</p>
       </div>
 
-      <div class="checkbox hidden">
-        <label>
-          <input data-ng-model="withRowData" type="checkbox"/>
-          <span data-translate="">indexRowData</span>
-        </label>
-        <p class="help-block"
-           data-translate="">indexRowDataHelp</p>
-      </div>
-
       <button class="btn btn-primary"
               data-ng-disabled="monitoringFiles.length < 1 || monitoringFiles === undefined || isSubmitting"
               data-ng-click="uploadMonitoring()">
