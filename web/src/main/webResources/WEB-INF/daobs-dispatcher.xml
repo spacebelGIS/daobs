@@ -77,11 +77,11 @@
     <property name="contentType" value="application/xml;charset=UTF-8"/>
   </bean>
 
-  <!-- <bean id="JSPViewResolver"
+  <bean id="JSPViewResolver"
          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
      <property name="order" value="2"/>
      <property name="prefix" value="/WEB-INF/jsp/" />
      <property name="suffix" value=".jsp" />
-   </bean>-->
+   </bean>
 
 </beans>
