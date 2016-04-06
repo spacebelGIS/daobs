@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cm="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <bean id="bridgePropertyPlaceholder"
+        class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+    <property name="location" value="WEB-INF/config.properties"/>
+  </bean>
+
+  <bean id="dbValidator"
+        class="org.daobs.tasks.validation.inspire.DBValidatorBean">
+    <constructor-arg ref="dbValidationClient"/>
+  </bean>
+
+  <bean id="dbValidationClient"
+        class="org.daobs.tasks.validation.inspire.DBValidatorClient">
+    <property name="dataSource"
+              ref="dataSource"/>
+    <property name="validRuleResult"
+              value="${task.db-validation-checker.db.validRuleResult}"/>
+    <property name="selectMetadataValidationResultQuery"
+              value="${task.db-validation-checker.db.sql.selectMetadataValidationResultQuery}"/>
+  </bean>
+
+  <bean id="dataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+    <property name="driverClassName"
+              value="${task.db-validation-checker.db.driverClassName}"/>
+    <property name="url"
+              value="${task.db-validation-checker.db.url}"/>
+    <property name="username"
+              value="${task.db-validation-checker.db.username}"/>
+    <property name="password"
+              value="${task.db-validation-checker.db.password}"/>
+  </bean>
+
+
+  <bean id="solrAddAggregatorStrategy"
+        class="org.daobs.routing.utility.XmlDocumentAggregationStrategy">
+    <property name="rootTagName" value="add"/>
+  </bean>
+
+  <bean id="pagination" class="org.daobs.routing.utility.Pagination">
+    <property name="recordsPerPage"
+              value="${task.db-validation-checker.records.per.page}"/>
+  </bean>
+
+  <cm:errorHandler id="loggingErrorHandler"
+                   type="LoggingErrorHandler"
+                   logName="daobs.tasks.db-validation-checker"
+                   level="DEBUG"/>
+
+  <cm:camelContext id="task.db-validation-checker"
+                   errorHandlerRef="loggingErrorHandler"
+                   useMDCLogging="true">
+
+    <cm:threadPoolProfile id="myDefaultProfile"
+                          defaultProfile="true"
+                          poolSize="10"
+                          maxPoolSize="10"/>
+
+    <cm:onException>
+      <cm:exception>
+        org.apache.camel.http.common.HttpOperationFailedException
+      </cm:exception>
+      <cm:continued>
+        <cm:constant>true</cm:constant>
+      </cm:continued>
+      <cm:log message="Oops, something went wrong: $simple{exception.message}."
+              loggingLevel="ERROR"
+              logName="org.daobs.task.DBValidationChecker"/>
+      <cm:log message="$simple{exception.responseBody}"
+              loggingLevel="ERROR"
+              logName="org.daobs.task.DBValidationChecker"/>
+      <cm:log message="$simple{exception.stacktrace}"
+              loggingLevel="ERROR"
+              logName="org.daobs.task.DBValidationChecker"/>
+      <cm:to uri="log:org.daobs.task.DBValidationChecker?showBody=true"/>
+    </cm:onException>
+
+
+    <cm:route id="route-task-db-validate"
+              autoStartup="{{task.db-validation-checker.startup.cli}}">
+      <cm:from uri="timer://start?repeatCount=1"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:simple>{{task.db-validation-checker.filter}}</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="direct:task-db-validate-start"/>
+    </cm:route>
+
+    <cm:route id="route-task-db-validate-start"
+              autoStartup="{{task.db-validation-checker.startup.jms}}">
+      <cm:from uri="activemq:task-db-validate"/>
+      <cm:setHeader headerName="documentFilter">
+        <cm:groovy>'{{task.db-validation-checker.filter}}' + ' ' + exchange.in.body.trim()</cm:groovy>
+      </cm:setHeader>
+      <cm:to uri="direct:task-db-validate-start"/>
+    </cm:route>
+
+
+
+    <cm:route id="route-get-non-validated-db-records">
+      <cm:from uri="direct:task-db-validate-start"/>
+
+      <cm:log message="Background task checking document validation status in database ..."
+              loggingLevel="DEBUG"
+              logName="org.daobs.task.DBValidationChecker"/>
+
+      <!-- Get number of records to validate -->
+      <cm:setHeader headerName="CamelHttpMethod">
+        <cm:constant>GET</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_QUERY">
+        <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter,
+          'UTF-8') + '&amp;fl={{task.db-validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'
+        </cm:groovy>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+      <cm:setHeader headerName="numberOfRecordsMatched">
+        <cm:xpath resultType="java.lang.String">
+          //result/@numFound
+        </cm:xpath>
+      </cm:setHeader>
+      <cm:log message="$simple{header.numberOfRecordsMatched} record(s) to validate."
+              loggingLevel="INFO"
+              logName="org.daobs.task.DBValidationChecker"/>
+
+      <cm:split parallelProcessing="false">
+        <cm:method bean="pagination" method="getPages"/>
+        <cm:setHeader headerName="start">
+          <cm:simple>${bean:pagination?method=getStart}</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="row">
+          <cm:simple>{{task.db-validation-checker.records.per.page}}</cm:simple>
+        </cm:setHeader>
+        <cm:log message="Validating page #$simple{property.CamelSplitIndex} - start: $simple{header.start} | row: $simple{header.row} | total: $simple{header.numberOfRecordsMatched}."
+                loggingLevel="INFO"
+                logName="org.daobs.task.DBValidationChecker"/>
+
+        <cm:setHeader headerName="CamelHttpMethod">
+          <cm:constant>GET</cm:constant>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_URI">
+          <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_QUERY">
+          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.db-validation-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+        </cm:setHeader>
+        <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+        <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        <cm:split parallelProcessing="false">
+          <cm:xpath>//doc</cm:xpath>
+          <!-- Retrieve UUID from Solr response -->
+          <cm:setHeader headerName="documentIdentifier">
+            <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']
+            </cm:xpath>
+          </cm:setHeader>
+          <cm:log message="Retrieve db validation status for record with UUID '$simple{header.documentIdentifier}'."
+                  loggingLevel="INFO"
+                  logName="org.daobs.task.DBValidationChecker"/>
+          <cm:bean ref="dbValidator"
+                   method="validateBody"/>
+          <cm:setBody>
+            <cm:simple>
+              <![CDATA[<doc>
+                <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
+                <field name="validDate" update="set">$simple{header.beginTime}</field>
+                <field name="isValid" update="set">${body.status}</field>
+                <field name="completenessIndicator" update="set">${body.completenessIndicator}</field>
+                <field name="isAboveThreshold" update="set">${body.isAboveThreshold}</field>
+                <field name="validReport" update="set"><![CDATA[${body.report}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
+              </doc>]]>
+            </cm:simple>
+          </cm:setBody>
+          <cm:convertBodyTo type="org.w3c.dom.Document"/>
+          <cm:aggregate strategyRef="solrAddAggregatorStrategy"
+                        completionSize="200"
+                        completionTimeout="10000"
+                        parallelProcessing="false">
+            <cm:correlationExpression>
+              <cm:constant>true</cm:constant>
+            </cm:correlationExpression>
+            <cm:log message="  aggregated ${property.CamelAggregatedSize} by ${property.CamelAggregatedCompletedBy} ..."
+                    loggingLevel="INFO"
+                    logName="org.daobs.task.DBValidationChecker"/>
+            <cm:to uri="direct:save-association"/>
+          </cm:aggregate>
+        </cm:split>
+      </cm:split>
+    </cm:route>
+
+    <!-- TODO: Move to common route -->
+    <cm:route id="save-association">
+      <cm:from uri="direct:save-association"/>
+      <cm:removeHeaders pattern="*"/>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="camelHttpMethod">
+        <cm:constant>POST</cm:constant>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:constant>application/xml</cm:constant>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+      <cm:log message="Solr response: ${body}."
+              loggingLevel="DEBUG"
+              logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+      <!-- Commit -->
+      <cm:setBody>
+        <cm:constant><![CDATA[<commit/>]]></cm:constant>
+      </cm:setBody>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:simple>text/xml</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
+    </cm:route>
+  </cm:camelContext>
+</beans>

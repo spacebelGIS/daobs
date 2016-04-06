@@ -87,12 +87,26 @@
       <organizationUrl>http://wwz.ifremer.fr/</organizationUrl>
     </contributor>
     <contributor>
+      <organization>BRGM</organization>
+      <organizationUrl>http://www.brgm.fr/</organizationUrl>
+    </contributor>
+    <contributor>
       <organization>GeoCat BV</organization>
       <organizationUrl>https://www.geocat.net/</organizationUrl>
     </contributor>
     <contributor>
       <organization>titellus</organization>
       <organizationUrl>http://titellus.net</organizationUrl>
+    </contributor>
+    <contributor>
+      <name>Benoît Maire</name>
+      <organization>Cap Gemini</organization>
+      <email>benoit.maire@capgemini.com</email>
+    </contributor>
+    <contributor>
+      <name>Corentin Sachot</name>
+      <organization>Cap Gemini</organization>
+      <email>corentin.sachot@capgemini.com</email>
     </contributor>
   </contributors>
   <licenses>
@@ -480,6 +494,9 @@
 
     <spring.version>4.2.4.RELEASE</spring.version>
     <spring-security.version>4.0.3.RELEASE</spring-security.version>
+
+    <posgresql.version>9.1-901.jdbc4</posgresql.version>
+    <commons-dbcp.version>1.4</commons-dbcp.version>
 
     <camel.version>2.17.0</camel.version>
 

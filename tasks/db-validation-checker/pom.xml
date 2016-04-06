@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.daobs.tasks</groupId>
+  <artifactId>daobs-tasks-db-validation-checker</artifactId>
+  <packaging>jar</packaging>
+  <version>0.1-SNAPSHOT</version>
+
+  <name>Background task / DB validation checker</name>
+  <url></url>
+
+  <parent>
+    <artifactId>daobs-task</artifactId>
+    <groupId>org.daobs.tasks</groupId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>${commons-dbcp.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${posgresql.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-routing-utility</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.daobs</groupId>
+      <artifactId>daobs-logging-deps</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.daobs.tasks</groupId>
+      <artifactId>daobs-tasks-validation-checker</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <header>${project.basedir}/../../doc/licence.tpl</header>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>conf-daobs.properties</exclude>
+            <exclude>log4j.*</exclude>
+            <exclude>rebel.xml</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/classes</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/resources</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- allows the route to be ran via 'mvn camel:run' -->
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
