@@ -51,11 +51,11 @@
 
 
     <xsl:variable name="mainLanguageCode" as="xs:string?"
-                  select="gmd:language/gmd:LanguageCode/
+                  select="gmd:language[1]/gmd:LanguageCode/
                         @codeListValue[normalize-space(.) != '']"/>
     <xsl:variable name="mainLanguage" as="xs:string?"
                   select="if ($mainLanguageCode) then $mainLanguageCode else
-                    gmd:language/gco:CharacterString[normalize-space(.) != '']"/>
+                    gmd:language[1]/gco:CharacterString[normalize-space(.) != '']"/>
 
     <xsl:variable name="otherLanguages" as="attribute()*"
                   select="gmd:locale/gmd:PT_Locale/
