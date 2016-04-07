@@ -47,3 +47,23 @@ Solr in cloud mode:
 ```
 su -c "SOLR_INCLUDE=$SOLR_ENV $SOLR_INSTALL_DIR/bin/solr $SOLR_CMD -c" - $RUNAS
 ```
+
+
+### Updating a collection
+
+#### Recreate an existing one
+
+```
+cd $INSTALL_DASHBOARD_PATH/solr
+bin/solr delete -p 8984 -c data-official
+bin/solr create -p 8984 -c data-official -d $INSTALL_DASHBOARD_PATH/daobssrc/solr/src/main/solr-cores/data/
+```
+
+
+#### Update configuration
+
+```
+cd $INSTALL_DASHBOARD_PATH/solr
+server/scripts/cloud-scripts/zkcli.sh -z localhost:9984 -cmd upconfig -confdir $INSTALL_DASHBOARD_PATH/daobssrc/solr/src/main/solr-cores/data/conf -confname data
+```
+
