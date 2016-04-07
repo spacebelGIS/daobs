@@ -78,13 +78,13 @@
           <!-- If records found, next route is direct:cswGetRecords. -->
           <cm:xpath>/response/lst/int[@name = 'status' and text() = '400']
           </cm:xpath>
-          <cm:setHeader headerName="indexingError">
+          <cm:setProperty propertyName="indexingError">
             <cm:xpath resultType="java.lang.String">
               /response/lst/str[@name = 'msg']/text()
             </cm:xpath>
-          </cm:setHeader>
+          </cm:setProperty>
           <cm:log
-            message="Oops, error while indexing record(s) of page #$simple{property.CamelSplitIndex}: $simple{header.indexingError}."
+            message="Oops, error while indexing record(s) of page #$simple{property.CamelSplitIndex}: $simple{property.indexingError}."
             loggingLevel="ERROR"
             logName="org.daobs.harvester.Harvester"/>
         </cm:when>
@@ -101,12 +101,12 @@
           <cm:to
             uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
 
-          <cm:setHeader headerName="indexingTime">
+          <cm:setProperty propertyName="indexingTime">
             <cm:xpath resultType="java.lang.String">
               /response/lst/int[@name = 'QTime']/text()
             </cm:xpath>
-          </cm:setHeader>
-          <cm:log message="Records indexed in $simple{header.indexingTime}ms."
+          </cm:setProperty>
+          <cm:log message="Records indexed in $simple{property.indexingTime}ms."
                   loggingLevel="INFO"
                   logName="org.daobs.harvester.Harvester"/>
         </cm:otherwise>

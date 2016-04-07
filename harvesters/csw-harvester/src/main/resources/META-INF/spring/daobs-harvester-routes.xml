@@ -97,6 +97,8 @@
       <cm:to uri="direct:route-start-csw-harvesting"/>
     </cm:route>
 
+    <!--
+    Deprecated: Start harvesting when a file is dropped in a folder.
     <cm:route id="route-csw-start-from-task-folder"
               autoStartup="{{harvester.csw.startup.webapp}}">
       <cm:description>
@@ -105,6 +107,23 @@
       </cm:description>
       <cm:from
         uri="file:{{harvester.csw.config.folder}}tasks?delay={{harvester.csw.tasks.delay}}&amp;move=.done&amp;moveFailed=.done"/>
+      <cm:to uri="direct:route-start-csw-harvesting"/>
+    </cm:route>-->
+
+    <cm:route id="route-csw-start-jms"
+              autoStartup="{{harvester.csw.startup.jms}}">
+      <cm:from uri="activemq:harvest-csw"/>
+      <cm:removeHeaders pattern="*"/>
+      <cm:log message="Received JMS message. Starting harvester '$simple{body.harvester.name}'"
+              loggingLevel="INFO"
+              logName="org.daobs.harvester.CswHarvester"/>
+      <cm:setBody>
+        <cm:simple>${body.harvester}</cm:simple>
+      </cm:setBody>
+      <cm:marshal>
+        <cm:jaxb prettyPrint="true"
+                 contextPath="org.daobs.harvester.config"/>
+      </cm:marshal>
       <cm:to uri="direct:route-start-csw-harvesting"/>
     </cm:route>
 
@@ -117,30 +136,30 @@
       <cm:split parallelProcessing="true">
         <cm:xpath>//daobs:harvester</cm:xpath>
         <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
-        <cm:setHeader headerName="harvesterConfig">
+        <cm:setProperty propertyName="harvesterConfig">
           <cm:xpath resultType="org.w3c.dom.Document">daobs:harvester</cm:xpath>
-        </cm:setHeader>
-        <cm:setHeader headerName="harvesterUrl">
+        </cm:setProperty>
+        <cm:setProperty propertyName="harvesterUrl">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:url)</cm:xpath>
-        </cm:setHeader>
-        <cm:setHeader headerName="harvesterUuid">
+        </cm:setProperty>
+        <cm:setProperty propertyName="harvesterUuid">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:uuid)</cm:xpath>
-        </cm:setHeader>
+        </cm:setProperty>
         <cm:setProperty propertyName="workers-uuid">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:uuid)</cm:xpath>
         </cm:setProperty>
-        <cm:setHeader headerName="harvesterTerritory">
+        <cm:setProperty propertyName="harvesterTerritory">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:territory)</cm:xpath>
-        </cm:setHeader>
-        <cm:setHeader headerName="harvesterNbRecordsPerPage">
+        </cm:setProperty>
+        <cm:setProperty propertyName="harvesterNbRecordsPerPage">
           <cm:xpath resultType="java.lang.String">if (daobs:harvester/daobs:nbOfRecordsPerPage) then normalize-space(daobs:harvester/daobs:nbOfRecordsPerPage) else -1</cm:xpath>
-        </cm:setHeader>
-        <cm:setHeader headerName="harvesterFolder">
+        </cm:setProperty>
+        <cm:setProperty propertyName="harvesterFolder">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:folder)</cm:xpath>
-        </cm:setHeader>
-        <cm:setHeader headerName="harvesterName">
+        </cm:setProperty>
+        <cm:setProperty propertyName="harvesterName">
           <cm:xpath resultType="java.lang.String">normalize-space(daobs:harvester/daobs:name)</cm:xpath>
-        </cm:setHeader>
+        </cm:setProperty>
 
         <!-- <cm:choice>
            <cm:when>
@@ -169,31 +188,31 @@
       <cm:choice>
         <cm:when>
           <cm:xpath>daobs:harvester/daobs:filter/ogc:Filter</cm:xpath>
-          <cm:setHeader headerName="harvesterFilter">
+          <cm:setProperty propertyName="harvesterFilter">
             <cm:xpath resultType="org.w3c.dom.Document">
               daobs:harvester/daobs:filter/ogc:Filter
             </cm:xpath>
-          </cm:setHeader>
+          </cm:setProperty>
         </cm:when>
         <cm:otherwise>
-          <cm:setHeader headerName="harvesterFilter">
+          <cm:setProperty propertyName="harvesterFilter">
             <cm:simple resultType="org.w3c.dom.Document"><![CDATA[<Filter xmlns="http://www.opengis.net/ogc"/>]]></cm:simple>
-          </cm:setHeader>
+          </cm:setProperty>
         </cm:otherwise>
       </cm:choice>
-      <cm:setHeader headerName="harvesterBeginTime">
+      <cm:setProperty propertyName="harvesterBeginTime">
         <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
-      </cm:setHeader>
+      </cm:setProperty>
 
 
       <cm:log
-        message="Harvesting node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory}) at '$simple{header.harvesterURL}' [Number of records requested per page in config: $simple{header.harvesterNbRecordsPerPage}]"
+        message="Harvesting node '$simple{property.harvesterName}' ($simple{property.harvesterTerritory}) at '$simple{property.harvesterURL}' [Number of records requested per page in config: $simple{property.harvesterNbRecordsPerPage}]"
         loggingLevel="INFO"
         logName="org.daobs.harvester.CswHarvester"/>
-      <cm:log message="CSW filter is $simple{header.harvesterFilter}"
+      <cm:log message="CSW filter is $simple{property.harvesterFilter}"
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
-      <cm:log message="Starting at $simple{header.harvesterBeginTime}"
+      <cm:log message="Starting at $simple{property.harvesterBeginTime}"
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
 
@@ -210,7 +229,7 @@
       <cm:from uri="direct:harvestNode"/>
       <cm:bean ref="cswHarvester" method="initialize"/>
       <cm:log
-        message="Query $simple{header.harvesterUrl} to get numberOfRecordsMatched ..."
+        message="Query $simple{property.harvesterUrl} to get numberOfRecordsMatched ..."
         loggingLevel="INFO"
         logName="org.daobs.harvester.CswHarvester"/>
       <!-- Add logger for time http://camel.apache.org/eventnotifier-to-log-details-about-all-sent-exchanges.html -->
@@ -225,7 +244,7 @@
       </cm:setBody>
       <cm:to uri="log:org.daobs.harvester.CswHarvester?showBody=true"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>${header.harvesterUrl}</cm:simple>
+        <cm:simple>${property.harvesterUrl}</cm:simple>
       </cm:setHeader>
       <!--
       The pl CSW looks to filter on user agent name
@@ -243,15 +262,15 @@
         <cm:when>
           <!-- If records found, next route is direct:cswGetRecords. -->
           <cm:xpath>/csw:GetRecordsResponse/csw:SearchResults[@numberOfRecordsMatched > 0]</cm:xpath>
-          <cm:setHeader headerName="numberOfRecordsMatched">
+          <cm:setProperty propertyName="numberOfRecordsMatched">
             <cm:xpath resultType="java.lang.String">/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched</cm:xpath>
-          </cm:setHeader>
+          </cm:setProperty>
           <cm:log
-            message="$simple{header.numberOfRecordsMatched} record(s) to harvest."
+            message="$simple{property.numberOfRecordsMatched} record(s) to harvest."
             loggingLevel="INFO"
             logName="org.daobs.harvester.CswHarvester"/>
           <cm:to
-            uri="bean:cswHarvester?method=setNumberOfRecords(${header.harvesterUrl}, ${header.numberOfRecordsMatched})"/>
+            uri="bean:cswHarvester?method=setNumberOfRecords(${property.harvesterUrl}, ${property.numberOfRecordsMatched})"/>
           <cm:to uri="direct:cswGetRecords"/>
         </cm:when>
         <cm:when>
@@ -294,9 +313,9 @@
         <cm:log message="GetRecords request ..."
                 loggingLevel="INFO"
                 logName="org.daobs.harvester.CswHarvester"/>
-        <cm:setHeader headerName="indexingIndex">
+        <cm:setProperty propertyName="indexingIndex">
           <cm:simple>${property.CamelSplitIndex}</cm:simple>
-        </cm:setHeader>
+        </cm:setProperty>
         <cm:setHeader headerName="cmHttpMethod">
           <cm:constant>POST</cm:constant>
         </cm:setHeader>
@@ -333,7 +352,7 @@
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
         <!-- TODO: Add CSW request to the document -->
         <cm:bean ref="harvesterDetailsAgg"
-                 method="doTransform($simple{body}, $simple{header.harvesterConfig})"/>
+                 method="doTransform($simple{body}, $simple{property.harvesterConfig})"/>
         <!--method="doTransform($simple{body}, $simple{header.harvesterUrl}, $simple{header.harvesterTerritory})"/>-->
         <cm:multicast stopOnException="false"
                       parallelProcessing="false">
@@ -341,43 +360,43 @@
           TODO &amp;preMove=inprogress&amp;move=done
           -->
           <cm:to
-            uri="file:{{data.dir}}?fileName=harvested_data/csw/$simple{header.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
+            uri="file:{{data.dir}}?fileName=harvested_data/csw/$simple{property.harvesterFolder}/$simple{date:now:yyyyMMdd}-$simple{property.CamelSplitIndex}.xml&amp;charset=utf-8"/>
           <cm:to uri="direct-vm:indexDocuments"/>
         </cm:multicast>
       </cm:split>
 
-      <cm:setHeader headerName="harvesterEndTime">
+      <cm:setProperty propertyName="harvesterEndTime">
         <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
-      </cm:setHeader>
+      </cm:setProperty>
 
 
       <cm:log
-        message="End harvesting for node '$simple{header.harvesterName}' ($simple{header.harvesterTerritory})"
+        message="End harvesting for node '$simple{property.harvesterName}' ($simple{property.harvesterTerritory})"
         loggingLevel="INFO"
         logName="org.daobs.harvester.CswHarvester"/>
-      <cm:log message="Ending at $simple{header.harvesterEndTime}"
+      <cm:log message="Ending at $simple{property.harvesterEndTime}"
               loggingLevel="INFO"
               logName="org.daobs.harvester.CswHarvester"/>
       <cm:log
-        message="Ellapsed time $simple{header.harvesterEndTime} - $simple{header.harvesterBeginTime}"
+        message="Ellapsed time $simple{property.harvesterEndTime} - $simple{property.harvesterBeginTime}"
         loggingLevel="INFO"
         logName="org.daobs.harvester.CswHarvester"/>
 
       <cm:log
-        message="Sending message to task-analyze queue for notification of ending '$simple{header.harvesterName}' ($simple{header.harvesterTerritory})"
+        message="Sending message to task-analyze queue for notification of ending '$simple{property.harvesterName}' ($simple{property.harvesterTerritory})"
         loggingLevel="INFO"
         logName="org.daobs.harvester.CswHarvester"/>
 
       <cm:setBody>
-        <cm:simple>+harvesterUuid:"${header.harvesterUuid}"</cm:simple>
+        <cm:simple>+harvesterUuid:"${property.harvesterUuid}"</cm:simple>
       </cm:setBody>
-      <cm:multicast stopOnException="false"
+      <!--<cm:multicast stopOnException="false"
                     parallelProcessing="false">
-        <cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>
-        <cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>
-        <!--<cm:to uri="activemq:queue:task-db-validate?jmsMessageType=Text"/>-->
-        <!--<cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>-->
-      </cm:multicast>
+        &lt;!&ndash;<cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>&ndash;&gt;
+        &lt;!&ndash;<cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>&ndash;&gt;
+        &lt;!&ndash;<cm:to uri="activemq:queue:task-db-validate?jmsMessageType=Text"/>&ndash;&gt;
+        &lt;!&ndash;<cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>&ndash;&gt;
+      </cm:multicast>-->
     </cm:route>
   </cm:camelContext>
 </beans>

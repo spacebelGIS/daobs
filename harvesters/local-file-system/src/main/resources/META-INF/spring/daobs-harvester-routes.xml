@@ -74,9 +74,9 @@
         <cm:correlationExpression>
           <cm:constant>true</cm:constant>
         </cm:correlationExpression>
-        <cm:setHeader headerName="indexingIndex">
+        <cm:setProperty propertyName="indexingIndex">
           <cm:simple>${property.CamelAggregatedIndex}</cm:simple>
-        </cm:setHeader>
+        </cm:setProperty>
         <cm:to uri="direct-vm:indexDocuments"/>
       </cm:aggregate>
     </cm:route>

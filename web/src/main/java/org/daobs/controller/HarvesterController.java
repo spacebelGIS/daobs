@@ -21,10 +21,13 @@
 
 package org.daobs.controller;
 
+import org.daobs.event.HarvestCswEvent;
 import org.daobs.harvester.config.Harvester;
 import org.daobs.harvester.config.Harvesters;
 import org.daobs.harvester.repository.HarvesterConfigRepository;
+import org.daobs.messaging.JmsMessager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import java.io.IOException;
 
@@ -70,6 +74,26 @@ public class HarvesterController {
     return new RequestResponse("Harvester added", "success");
   }
 
+  /**
+   * Load a set of harvesters.
+   */
+  @RequestMapping(value = "/harvesters",
+      produces = {
+        MediaType.APPLICATION_XML_VALUE,
+        MediaType.APPLICATION_JSON_VALUE
+      },
+      method = RequestMethod.PUT)
+  @ResponseBody
+  public RequestResponse addOrUpdateAll(@RequestBody Harvesters harvesters)
+    throws Exception {
+    for (Harvester harvester : harvesters.getHarvester()) {
+      harvesterConfigRepository.addOrUpdate(harvester);
+    }
+    return new RequestResponse(String.format(
+        "%d harvester added", harvesters.getHarvester().size()
+      ), "success");
+  }
+
   @RequestMapping(value = "/harvester/{uuid}",
       produces = {
         MediaType.APPLICATION_XML_VALUE,
@@ -99,6 +123,34 @@ public class HarvesterController {
   )
     throws Exception {
     harvesterConfigRepository.start(harvesterUuid);
+    return new RequestResponse("Harvester started", "success");
+  }
+
+  @Autowired
+  private JmsMessager jmsMessager;
+
+  @Autowired
+  private ApplicationContext appContext;
+
+  /**
+   * Start harvester by sending JMS message.
+   */
+  @RequestMapping(value = "/harvester/{uuid}/jms",
+      produces = {
+        MediaType.APPLICATION_XML_VALUE,
+        MediaType.APPLICATION_JSON_VALUE
+      },
+      method = RequestMethod.GET)
+  @ResponseBody
+  public RequestResponse runJms(@PathVariable(value = "uuid") String harvesterUuid)
+      throws Exception {
+    jmsMessager.sendMessage(
+        "harvest-csw",
+        new HarvestCswEvent(
+            appContext,
+            harvesterConfigRepository.findByUuid(harvesterUuid)
+        )
+    );
     return new RequestResponse("Harvester started", "success");
   }
 }

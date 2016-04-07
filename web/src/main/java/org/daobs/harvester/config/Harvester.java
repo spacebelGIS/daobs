@@ -21,6 +21,8 @@
 
 package org.daobs.harvester.config;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -71,7 +73,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "serviceMetadata"
 })
 @XmlRootElement(name = "harvester", namespace = "http://daobs.org")
-public class Harvester {
+public class Harvester implements Serializable {
+
+  private static final long serialVersionUID = 7526471155622776147L;
 
   @XmlElement(namespace = "http://daobs.org", required = true)
   protected String uuid;
