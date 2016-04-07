@@ -116,13 +116,37 @@
         }, 5000);
       };
 
+      $scope.loading = false;
       function init() {
+        $scope.loading = true;
         harvesterService.getAll().success(function (list) {
+          $scope.loading = false;
           $scope.harvesterConfig = list.harvester;
           if (list.harvester.length > 0) {
             loadStatsForTerritory()
           }
         });
+      }
+      $scope.orderByFields = ['name', 'territory', 'url', 'count', 'remoteError'];
+      $scope.predicate = 'territory';
+      $scope.order = function (predicate, reverse) {
+        var isNewPredicate = $scope.predicate === predicate;
+
+        if (predicate === 'count') {
+          $scope.predicate = function (h) {
+            return $scope.statsForTerritory[h.uuid] &&
+                    $scope.statsForTerritory[h.uuid].count;
+          };
+        } else if (predicate === 'remoteError') {
+          $scope.predicate = function (h) {
+            return $scope.statsForRemote[h.uuid] &&
+                    $scope.statsForRemote[h.uuid].error;
+          };
+        } else {
+          $scope.predicate = predicate;
+        }
+        $scope.reverse = reverse ? reverse : (
+          isNewPredicate ? !$scope.reverse : false);
       }
 
       $scope.getHitsNumber = function (h) {
@@ -144,8 +168,13 @@
         }, function (response) {
           Notification.error(
             $scope.translations.errorGettingRemoteHits + ' ' +
-            response.data + ' (' + response.status + ').');
-          console.log(response);
+            (response.error || response.data) +
+            ' (' + response.status + ').');
+          $scope.statsForRemote[h.uuid] = {
+            error: (response.error || response.data) +
+                   '(' + response.status + ')',
+            when: new Date()
+          };
         });
       };
 
@@ -162,7 +191,6 @@
           init();
           $scope.newHarvester = $scope.harvesterTpl;
         }, function (response) {
-          console.error(response);
           Notification.error(
             $scope.translations.errorAddingHarvester + ' ' +
             response.message);
@@ -171,12 +199,18 @@
 
       $scope.run = function (h) {
         harvesterService.run(h).then(function () {
-          Notification.success($scope.translations.harvesterStarted);
+          Notification.success(
+            $translate($scope.translations.harvesterStarted,
+                       {name: h.name}));
         }, function (response) {
-          console.error(response);
           Notification.error(
             $scope.translations.errorStartingHarvester + ' ' +
             response);
+        });
+      };
+      $scope.runAll = function () {
+        angular.forEach($scope.harvesterConfig, function (h) {
+          $scope.run(h);
         });
       };
 
