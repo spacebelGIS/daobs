@@ -53,6 +53,9 @@
 
   <mvc:annotation-driven/>
 
+  <mvc:resources mapping="/assets/**" location="/assets/" />
+  <mvc:resources mapping="/app/**" location="/app" />
+
 
 
   <ctx:property-placeholder location="${config.properties.path}"
