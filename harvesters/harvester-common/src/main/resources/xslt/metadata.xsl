@@ -41,6 +41,14 @@
 
   <xsl:param name="indexingIndex" select="'0'"/>
 
+  <!-- Define if operatesOn type should be defined
+  by analysis of protocol in all transfers options.
+  -->
+  <xsl:variable name="operatesOnSetByProtocol" select="false()"/>
+
+  <!-- Define if search for regulation title should be strict or light. -->
+  <xsl:variable name="inspireRegulationLaxCheck" select="false()"/>
+
   <xsl:variable name="harvester" as="element()?"
                 select="/harvestedContent/daobs:harvester"/>
 
@@ -58,6 +66,7 @@
   than the max length 32766. -->
   <xsl:variable name="maxFieldLength" select="32000" as="xs:integer"/>
 
+  <xsl:include href="fn.xsl"/>
   <xsl:include href="metadata-iso19139.xsl"/>
   <xsl:include href="metadata-iso19115-3.xsl"/>
 

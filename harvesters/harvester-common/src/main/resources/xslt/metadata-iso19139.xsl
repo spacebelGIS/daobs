@@ -293,10 +293,10 @@
         <xsl:variable name="inspireKeywords"
                       select="*/gmd:MD_Keywords[
                       contains(lower-case(
-                       gmd:thesaurusName[1]/*/gmd:title[1]/*/text()
+                       gmd:thesaurusName[1]/*/gmd:title[1]/*[1]/text()
                        ), 'gemet') and
                        contains(lower-case(
-                       gmd:thesaurusName[1]/*/gmd:title[1]/*/text()
+                       gmd:thesaurusName[1]/*/gmd:title[1]/*[1]/text()
                        ), 'inspire')]
                   /gmd:keyword"/>
         <xsl:for-each
@@ -610,17 +610,18 @@
 
       <!-- INSPIRE Conformity -->
 
-      <!-- Conformity for data sets -->
+      <!-- Conformity for services -->
       <xsl:choose>
         <xsl:when test="$isService">
           <xsl:for-each-group select="gmd:dataQualityInfo/*/gmd:report"
                               group-by="*/gmd:result/*/gmd:specification/gmd:CI_Citation/
         gmd:title/gco:CharacterString">
-
             <xsl:variable name="title" select="current-grouping-key()"/>
-            <xsl:if test="count($eu9762009/*[lower-case(normalize-space(.)) =
-                lower-case(normalize-space($title))]) = 1">
-
+            <xsl:variable name="matchingEUText"
+                          select="if ($inspireRegulationLaxCheck)
+                                  then daobs:search-in-contains($eu9762009/*, $title)
+                                  else daobs:search-in($eu9762009/*, $title)"/>
+            <xsl:if test="count($matchingEUText) = 1">
               <xsl:variable name="pass"
                             select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
               <field name="inspireConformResource">
@@ -630,15 +631,18 @@
           </xsl:for-each-group>
         </xsl:when>
         <xsl:otherwise>
-          <!-- Conformity for services -->
+          <!-- Conformity for dataset -->
           <xsl:for-each-group select="gmd:dataQualityInfo/*/gmd:report"
                               group-by="*/gmd:result/*/gmd:specification/gmd:CI_Citation/
         gmd:title/gco:CharacterString">
 
             <xsl:variable name="title" select="current-grouping-key()"/>
-            <xsl:if test="count($eu10892010/*[lower-case(normalize-space(.)) =
-                lower-case(normalize-space($title))]) = 1">
+            <xsl:variable name="matchingEUText"
+                          select="if ($inspireRegulationLaxCheck)
+                                  then daobs:search-in-contains($eu10892010/*, $title)
+                                  else daobs:search-in($eu10892010/*, $title)"/>
 
+            <xsl:if test="count($matchingEUText) = 1">
               <xsl:variable name="pass"
                             select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
               <field name="inspireConformResource">
@@ -698,12 +702,13 @@
 
         <xsl:for-each select="gmd:transferOptions/*/
                                 gmd:onLine/*[gmd:linkage/gmd:URL != '']">
+
+          <xsl:variable name="protocol" select="gmd:protocol/gco:CharacterString/text()"/>
+
           <field name="linkUrl">
             <xsl:value-of select="gmd:linkage/gmd:URL"/>
           </field>
-          <field name="linkProtocol">
-            <xsl:value-of select="gmd:protocol/gco:CharacterString/text()"/>
-          </field>
+          <field name="linkProtocol"><xsl:value-of select="$protocol"/></field>
           <field name="link">
             <xsl:value-of select="gmd:protocol/*/text()"/>
             <xsl:text>|</xsl:text>
@@ -713,6 +718,17 @@
             <xsl:text>|</xsl:text>
             <xsl:value-of select="gmd:description/*/text()"/>
           </field>
+
+          <xsl:if test="$operatesOnSetByProtocol and normalize-space($protocol) != ''">
+            <xsl:if test="daobs:contains($protocol, 'wms')">
+              <field name="recordOperatedByType">view</field>
+            </xsl:if>
+            <xsl:if test="daobs:contains($protocol, 'wfs') or
+                          daobs:contains($protocol, 'wcs') or
+                          daobs:contains($protocol, 'download')">
+              <field name="recordOperatedByType">download</field>
+            </xsl:if>
+          </xsl:if>
         </xsl:for-each>
       </xsl:for-each>
 
