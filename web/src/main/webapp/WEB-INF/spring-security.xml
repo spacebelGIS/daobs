@@ -34,25 +34,8 @@
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
   <!--<beans:import resource="spring-security-ba.xml"/>-->
-  <!--<import resource="spring-security-ldap.xml"/>-->
+  <beans:import resource="spring-security-ldap.xml"/>
 
-  <http>
-    <intercept-url pattern="/daobs/loginForm" access="permitAll" />
-    <intercept-url pattern="/assets/**" access="permitAll" />
-    <intercept-url pattern="/app/**" access="permitAll" />
-    <intercept-url pattern="/**" access="hasRole('USER')" />
-    <form-login login-page="/daobs/loginForm"/>
-    <logout />
-  </http>
-
-  <authentication-manager>
-    <authentication-provider>
-      <user-service>
-        <user name="jimi" password="jimip" authorities="ROLE_USER, ROLE_ADMIN" />
-        <user name="bob" password="bobp" authorities="ROLE_USER" />
-      </user-service>
-    </authentication-provider>
-  </authentication-manager>
 
 
 

@@ -20,35 +20,41 @@
     permissions and limitations under the Licence.
 
 -->
-<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns="http://www.springframework.org/schema/security"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans:beans
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:ctx="http://www.springframework.org/schema/context"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/security"
+
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
   http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context.xsd
   http://www.springframework.org/schema/security
-  http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+  http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
   <ldap-server
-    url="${ldap.base.provider.url}/${ldap.base.dn}"
-    manager-dn="${ldap.security.principal}"
-    manager-password="${ldap.security.credentials}"/>
+    ldif="classpath:test-server.ldif" />
+    <!--manager-dn="${ldap.security.principal}"
+    manager-password="${ldap.security.credentials}"
+    url="${ldap.base.provider.url}/${ldap.base.dn}"-->
 
   <http auto-config="true">
+    <intercept-url pattern="/daobs/loginForm" access="permitAll" />
+    <intercept-url pattern="/login" access="permitAll" />
+    <intercept-url pattern="/assets/**" access="permitAll" />
+    <intercept-url pattern="/app/**" access="permitAll" />
+    <intercept-url pattern="/**" access="hasRole('USER')" />
+    <form-login login-page="/daobs/loginForm"/>
+    <logout />
     <intercept-url pattern="/" access="ROLE_ADMIN"/>
-
-    <form-login
-      login-page="${login.url}"
-      default-target-url="/"
-      authentication-failure-url="${login.failure.url}"/>
-
-    <logout logout-success-url="${logout.success.url}"/>
   </http>
 
 
-  <authentication-manager alias="authenticationManager">
+  <authentication-manager>
     <ldap-authentication-provider
-      group-search-base="ou=groups"
       group-search-filter="member={0}"
+      group-search-base="ou=groups"
       user-search-base="ou=people"
       user-search-filter="uid={0}"
     />
