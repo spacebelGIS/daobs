@@ -86,6 +86,13 @@
                     <span data-translate="">harvesterStartAll</span>
                   </a>
                 </li>
+                <li>
+                  <a href=""
+                     data-ng-click="removeAll()">
+                    <i class="fa fa-remove text-danger"/>&nbsp;
+                    <span data-translate="">harvesterRemoveAll</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -158,9 +165,10 @@
           data-ng-repeat="h in harvesterConfig | filter:harvesterSearch | orderBy:predicate:reverse">
         <td class=""
             title="{{h.territory}}">
-          <h3>{{h.territory}}</h3>
+          <strong>{{h.territory}}</strong>
         </td>
-        <td>{{h.name}}<br/>
+        <td>
+          <strong>{{h.name}}</strong><br/>
           <small data-ng-show="statsForTerritory[h.uuid]">
             <strong>
               {{statsForTerritory[h.uuid].count}}
@@ -196,11 +204,12 @@
             </small>
           </div>
         </td>
-        <td class="ds-ww">
+        <td>
           <ul>
-            <li data-ng-repeat="(key, value) in h">
+            <li data-ng-repeat="(key, value) in h"
+                data-ng-show="value && key !== 'territory' && key !== 'name'">
               <span>{{key | translate}}</span>&nbsp;
-              <strong data-ng-if="value.indexOf('http') === -1">
+              <strong data-ng-if="value.indexOf === undefined || value.indexOf('http') === -1">
                 {{value || ('undefined' | translate)}}
               </strong>
               <strong data-ng-if="value.indexOf('http') === 0">

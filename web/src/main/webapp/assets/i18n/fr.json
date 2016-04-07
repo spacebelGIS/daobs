@@ -74,6 +74,7 @@
   "errorStartingHarvester": "Échec lors du lancement.",
   "errorRemovingHarvester": "Échec lors de la suppression.",
   "errorRemovingHarvesterRecords": "Échec  lors de la suppression des fiches.",
+  "harvesterRemoveAll": "Les supprimer tous",
   "value": "Valeur",
   "orderBy": "Trier par",
   "orderByTerritory": "territoire",

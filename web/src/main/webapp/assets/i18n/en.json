@@ -66,6 +66,7 @@
   "harvesterRecordsDeleted": "All harvester records deleted.",
   "harvesterStarted": "Harvester {{name}} started.",
   "harvesterDeleted": "Harvester {{name}} removed.",
+  "harvesterRemoveAll": "Remove all",
   "harvesterSaved": "Harvester configuration saved.",
   "errorAddingHarvester": "Error while saving harvester.",
   "errorStartingHarvester": "Error starting harvester.",
