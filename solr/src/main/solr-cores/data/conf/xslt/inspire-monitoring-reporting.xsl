@@ -23,7 +23,9 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:monitoring="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
+                xmlns:daobs="http://daobs.org"
                 xmlns:saxon="http://saxon.sf.net/"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
                 version="2.0">
@@ -33,37 +35,57 @@
   <xsl:include href="constant.xsl"/>
   <xsl:include href="metadata-inspire-constant.xsl"/>
 
+
+  <!-- Compute ISO date from a INSPIRE date node
+    eg. <monitoringDate>
+          <day>08</day>
+          <month>04</month>
+          <year>2016</year>
+        </monitoringDate>
+    return 2016-04-08T12:00:00
+  -->
+  <xsl:function name="daobs:get-date" as="xs:string">
+    <xsl:param name="dateNode" as="node()"/>
+    <xsl:variable name="year"
+                  select="$dateNode/year"/>
+    <!-- Format date properly. Sometimes month is written
+using one character or two. Prepend 0 when needed. -->
+    <xsl:variable name="month"
+                  select="if (string-length($dateNode/month) = 1)
+                        then concat('0', $dateNode/month)
+                        else if (string-length($dateNode/month) = 2)
+                        then $dateNode/month
+                        else '12'"/>
+    <xsl:variable name="day"
+                  select="if (string-length($dateNode/day) = 1)
+                        then concat('0', $dateNode/day)
+                        else if (string-length($dateNode/day) = 2)
+                        then $dateNode/day
+                        else '31'"/>
+    <xsl:value-of select="concat(
+                            $year, '-', $month, '-', $day,
+                            'T12:00:00Z')"/>
+  </xsl:function>
+
+
+  <xsl:variable name="reportingDate"
+                select="daobs:get-date(/monitoring:Monitoring/documentYear)"/>
+  <xsl:variable name="reportingDateSubmission"
+                select="daobs:get-date(/monitoring:Monitoring/MonitoringMD/monitoringDate)"/>
+
   <xsl:variable name="reportingYear"
                 select="/monitoring:Monitoring/documentYear/year"/>
+
   <xsl:variable name="reportingTerritory"
                 select="/monitoring:Monitoring/memberState"/>
 
-  <!-- Format date properly. Sometimes month is written
-  using one character or two. Prepend 0 when needed. -->
-  <xsl:variable name="month"
-                select="/monitoring:Monitoring/MonitoringMD/monitoringDate/month"/>
-  <xsl:variable name="reportingDateMonth"
-                select="if (string-length($month) = 1) then
-                        concat('0', $month) else $month"/>
 
-  <!-- Same for days. -->
-  <xsl:variable name="day"
-                select="/monitoring:Monitoring/MonitoringMD/monitoringDate/day"/>
-  <xsl:variable name="reportingDateDay"
-                select="if (string-length($day) = 1) then
-                        concat('0', $day) else $day"/>
-
-  <xsl:variable name="reportingDateSubmission" select="concat(
-    /monitoring:Monitoring/MonitoringMD/monitoringDate/year,
-    '-', $reportingDateMonth,
-    '-', $reportingDateDay, 'T12:00:00Z')"/>
-
-  <xsl:variable name="reportingDate" select="concat(
-    $reportingYear,
-    '-12-31T12:00:00Z')"/>
   <xsl:template match="/">
     <add>
-      <xsl:apply-templates select="//MonitoringMD|//Indicators/*|
+      <!-- TODO add the capability to index indicator using
+           the daobs XML format. -->
+      <xsl:apply-templates select="
+                //MonitoringMD|//Indicators/*|
                 //RowData/SpatialDataService/NetworkService/userRequest|
                 //RowData/SpatialDataSet/Coverage/(relevantArea|actualArea)|
                 //RowData/SpatialDataService|
