@@ -20,7 +20,7 @@
  */
 (function () {
   "use strict";
-  var app = angular.module('daobs');
+  var app = angular.module('daobs_cfg', []);
 
   var context = '${webapp.rootUrl}';
   var solrContext = '/${solr.webapp.name}';

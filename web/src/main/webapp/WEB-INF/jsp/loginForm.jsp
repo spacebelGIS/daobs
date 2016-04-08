@@ -39,11 +39,11 @@ permissions and limitations under the Licence.
 
 <div class="container-fluid">
   <form class="form-signin" method="post" action="/login">
-    <h2 class="form-signin-heading">Please sign in</h2>
-    <label for="username" class="sr-only">Email address</label>
-    <input type="text" name="username" id="username" class="form-control" placeholder="Email address" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <h2 class="form-signin-heading" data-translate>login.pleaseSignIn</h2>
+    <label for="username" class="sr-only" data-translate>login.username</label>
+    <input type="text" name="username" id="username" class="form-control" placeholder="{{'login.username-placeholder' | translate}}" required autofocus>
+    <label for="inputPassword" class="sr-only" data-translate>login.password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{'login.password-placeholder' | translate}}" required>
     <div class="checkbox">
       <label>
         <input type="checkbox" value="remember-me"> Remember me
@@ -63,7 +63,7 @@ permissions and limitations under the Licence.
 
 <script src="<spring:url value="/assets/libs/moment.min.js"/>"></script>
 
-<script src="<spring:url value="/assets/libs/angular/angular.min.js"/>" language="JavaScript"></script>
+<script src="<spring:url value="/assets/libs/angular/angular.js"/>" language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-route.min.js"/>"
         language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-route.min.js"/>"
@@ -77,6 +77,7 @@ permissions and limitations under the Licence.
 <script src="<spring:url value="/assets/libs/intro.js/intro.min.js"/>"></script>
 <script src="<spring:url value="/assets/libs/angular-ui-notification.min.js"/>"></script>
 
+<script src="<spring:url value="/app/app.config.js"/>"></script>
 <script src="<spring:url value="/app/login.module.js"/>"></script>
 <script src="<spring:url value="/app/components/login/loginController.js"/>"></script>
 

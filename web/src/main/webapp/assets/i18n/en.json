@@ -137,5 +137,10 @@
   "restartEtfAll": "ETF validation (all service records)",
   "restartEtfMissing": "ETF validation (missing service records)",
   "eftValidationStarted": "ETF validation started",
-  "errorStartingEftValidation": "Error while executing ETF validation."
+  "errorStartingEftValidation": "Error while executing ETF validation.",
+  "login.pleaseSignIn": "Please sign in",
+  "login.username": "Username",
+  "login.username-placeholder": "Username",
+  "login.password": "Password",
+  "login.password-placeholder": "Password"
 }

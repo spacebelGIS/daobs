@@ -26,6 +26,7 @@
    * @type {module|*}
    */
   var app = angular.module('daobs', [
+    'daobs_cfg',
     'ngRoute',
     'pascalprecht.translate',
     'solr',

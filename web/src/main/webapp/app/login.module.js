@@ -25,7 +25,23 @@
    * @type {module|*}
    */
   var app = angular.module('login', [
+    'daobs_cfg',
     'ngRoute',
     'pascalprecht.translate',
-    'ui-notification']);
+    'ui-notification'
+  ]);
+
+  app.config(['$routeProvider', '$translateProvider', 'cfg',
+    function ($routeProvider, $translateProvider, cfg) {
+      // Set translation provider to load JSON file
+      $translateProvider.useStaticFilesLoader({
+          prefix: cfg.SERVICES.root + 'assets/i18n/',
+          suffix: '.json'
+        })
+        .registerAvailableLanguageKeys(['en', 'fr'], {
+          'fr': 'fr',
+          '*': 'en'
+        })
+        .determinePreferredLanguage();
+    }]);
 })();
