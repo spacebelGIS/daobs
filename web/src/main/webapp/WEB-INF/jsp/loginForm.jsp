@@ -21,6 +21,7 @@ permissions and limitations under the Licence.
 
 --%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html ng-app="login">
 <head lang="en">
@@ -40,15 +41,13 @@ permissions and limitations under the Licence.
 <div class="container-fluid">
   <form class="form-signin" method="post" action="/login">
     <h2 class="form-signin-heading" data-translate>login.pleaseSignIn</h2>
+    <c:if test="${param.error ne null}">
+      <div class="alert alert-danger" data-translate="">login.userPassword-error</div>
+    </c:if>
     <label for="username" class="sr-only" data-translate>login.username</label>
     <input type="text" name="username" id="username" class="form-control" placeholder="{{'login.username-placeholder' | translate}}" required autofocus>
     <label for="inputPassword" class="sr-only" data-translate>login.password</label>
     <input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{'login.password-placeholder' | translate}}" required>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Sign in</button>
   </form>
@@ -63,7 +62,7 @@ permissions and limitations under the Licence.
 
 <script src="<spring:url value="/assets/libs/moment.min.js"/>"></script>
 
-<script src="<spring:url value="/assets/libs/angular/angular.js"/>" language="JavaScript"></script>
+<script src="<spring:url value="/assets/libs/angular/angular.min.js"/>" language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-route.min.js"/>"
         language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-route.min.js"/>"

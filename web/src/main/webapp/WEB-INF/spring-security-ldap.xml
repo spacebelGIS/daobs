@@ -41,11 +41,12 @@
 
   <http auto-config="true">
     <intercept-url pattern="/daobs/loginForm" access="permitAll" />
+    <intercept-url pattern="/daobs/userDetails" access="permitAll"/>
     <intercept-url pattern="/login" access="permitAll" />
     <intercept-url pattern="/assets/**" access="permitAll" />
     <intercept-url pattern="/app/**" access="permitAll" />
     <intercept-url pattern="/**" access="hasRole('USER')" />
-    <form-login login-page="/daobs/loginForm"/>
+    <form-login login-page="/daobs/loginForm" authentication-failure-url="/daobs/loginForm?error"/>
     <logout />
     <intercept-url pattern="/" access="ROLE_ADMIN"/>
   </http>

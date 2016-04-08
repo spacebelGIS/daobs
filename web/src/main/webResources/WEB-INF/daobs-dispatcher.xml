@@ -51,7 +51,11 @@
     </property>
   </bean>-->
 
-  <mvc:annotation-driven/>
+  <mvc:annotation-driven>
+    <mvc:argument-resolvers>
+      <bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver"/>
+    </mvc:argument-resolvers>
+  </mvc:annotation-driven>
 
   <mvc:resources mapping="/assets/**" location="/assets/" />
   <mvc:resources mapping="/app/**" location="/app" />

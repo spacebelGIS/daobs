@@ -20,8 +20,16 @@
  */
 package org.daobs.controller;
 
+import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.security.Principal;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by juanl on 06/04/2016.
@@ -32,5 +40,21 @@ public class LoginController {
   @RequestMapping(value = "/loginForm")
   public String loginForm() {
     return "loginForm";
+  }
+
+  @RequestMapping(value="/userDetails", produces = {MediaType.APPLICATION_JSON_VALUE})
+  public @ResponseBody Map<String, Object> currentUserDetails(Principal activeUser) {
+    Map<String, Object> map = new LinkedHashMap<>();
+    if (activeUser != null && ((Authentication) activeUser).isAuthenticated()) {
+      map.put("authenticated", Boolean.TRUE);
+      map.put("username", activeUser.getName());
+      map.put("roles", AuthorityUtils.authorityListToSet(((Authentication) activeUser)
+        .getAuthorities()));
+    } else {
+      map.put("authenticated", Boolean.FALSE);
+
+    }
+    return map;
+
   }
 }
