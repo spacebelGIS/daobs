@@ -138,10 +138,10 @@
   "restartEtfMissing": "Validation ETF (service non validé uniquement)",
   "eftValidationStarted": "Validation ETF en cours",
   "errorStartingEftValidation": "Échec lors du lancement de la validation ETF.",
-  "login.pleaseSignIn": "Please sign in",
-  "login.username": "Username",
-  "login.username-placeholder": "Username",
-  "login.password": "Password",
-  "login.password-placeholder": "Password",
+  "login.pleaseSignIn": "Me connecter",
+  "login.username": "Nom d'utilisateur",
+  "login.username-placeholder": "Nom d'utilisateur",
+  "login.password": "Mot de passe",
+  "login.password-placeholder": "Mot de passe",			
   "login.userPassword-error": "Username or password is invalid."
 }
