@@ -347,15 +347,23 @@
 
 
         <!-- Index all keywords -->
-        <xsl:for-each
-          select="*/gmd:MD_Keywords/
-                          gmd:keyword/gco:CharacterString|
-                        */gmd:MD_Keywords/
-                          gmd:keyword/gmd:PT_FreeText/gmd:textGroup/
-                            gmd:LocalisedCharacterString">
+        <xsl:variable name="keywords"
+                      select="*/gmd:MD_Keywords/
+                                gmd:keyword/gco:CharacterString|
+                              */gmd:MD_Keywords/
+                                gmd:keyword/gmd:PT_FreeText/gmd:textGroup/
+                                  gmd:LocalisedCharacterString"/>
+        <xsl:for-each select="$keywords">
           <field name="tag">
             <xsl:value-of select="text()"/>
           </field>
+
+          <xsl:if test="matches(
+                          normalize-unicode(replace(normalize-unicode(
+                            lower-case(normalize-space(text())), 'NFKD'), '\p{Mn}', ''), 'NFKC'),
+                          $openDataKeywords)">
+            <field name="isOpenData">true</field>
+          </xsl:if>
         </xsl:for-each>
 
         <!-- Index keywords which are of type place -->

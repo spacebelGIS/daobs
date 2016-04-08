@@ -49,6 +49,12 @@
   <!-- Define if search for regulation title should be strict or light. -->
   <xsl:variable name="inspireRegulationLaxCheck" select="false()"/>
 
+  <!-- List of keywords to search for to flag a record as opendata.
+   Do not put accents or upper case letters here as comparison will not
+   take them in account. -->
+  <xsl:variable name="openDataKeywords"
+                select="'opendata|donnees ouvertes'"/>
+
   <xsl:variable name="harvester" as="element()?"
                 select="/harvestedContent/daobs:harvester"/>
 
