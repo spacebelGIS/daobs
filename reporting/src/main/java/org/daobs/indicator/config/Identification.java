@@ -46,8 +46,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -68,10 +66,7 @@ public class Identification {
   /**
    * Gets the value of the title property.
    *
-   * @return
-   *     possible object is
-   *     {@link Title }
-   *
+   * @return possible object is {@link Title }
    */
   public Title getTitle() {
     return title;
@@ -80,10 +75,7 @@ public class Identification {
   /**
    * Sets the value of the title property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Title }
-   *
+   * @param value allowed object is {@link Title }
    */
   public void setTitle(Title value) {
     this.title = value;
@@ -92,10 +84,7 @@ public class Identification {
   /**
    * Gets the value of the author property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getAuthor() {
     return author;
@@ -104,10 +93,7 @@ public class Identification {
   /**
    * Sets the value of the author property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setAuthor(String value) {
     this.author = value;
@@ -116,10 +102,7 @@ public class Identification {
   /**
    * Gets the value of the url property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getUrl() {
     return url;
@@ -128,10 +111,7 @@ public class Identification {
   /**
    * Sets the value of the url property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setUrl(String value) {
     this.url = value;

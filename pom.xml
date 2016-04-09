@@ -463,7 +463,7 @@
 
     <silk.port>8985</silk.port>
 
-    <guava.version>17.0</guava.version>
+    <guava.version>19.0</guava.version>
 
     <tika.version>1.8</tika.version>
 

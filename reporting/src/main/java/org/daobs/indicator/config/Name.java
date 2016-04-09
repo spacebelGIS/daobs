@@ -46,8 +46,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -66,10 +64,7 @@ public class Name {
   /**
    * Gets the value of the content property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getContent() {
     return content;
@@ -78,10 +73,7 @@ public class Name {
   /**
    * Sets the value of the content property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setContent(String value) {
     this.content = value;
@@ -90,10 +82,7 @@ public class Name {
   /**
    * Gets the value of the lang property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getLang() {
     return lang;
@@ -102,10 +91,7 @@ public class Name {
   /**
    * Sets the value of the lang property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setLang(String value) {
     this.lang = value;

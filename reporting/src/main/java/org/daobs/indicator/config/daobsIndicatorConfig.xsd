@@ -40,8 +40,11 @@
         <xs:element ref="daobs:variables"/>
         <xs:element ref="daobs:indicators"/>
       </xs:sequence>
-      <xs:attribute name="computationTime" type="xs:int"/>
-      <xs:attribute name="id" type="xs:NCName"/>
+      <xs:attribute name="computationTime" type="xs:int" use="optional"/>
+      <xs:attribute name="dateTime" type="xs:dateTime" use="optional"/>
+      <xs:attribute name="scope" type="xs:string" use="optional"/>
+      <xs:attribute name="scopeId" type="xs:NCName" use="optional"/>
+      <xs:attribute name="id" type="xs:NCName" use="required"/>
     </xs:complexType>
     <xs:key name="indicator-id-key">
       <xs:selector

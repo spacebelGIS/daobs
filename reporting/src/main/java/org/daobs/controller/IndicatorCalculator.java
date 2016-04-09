@@ -34,17 +34,17 @@ public interface IndicatorCalculator {
    * Load or reload the configuration.
    *
    */
-  public IndicatorCalculator loadConfig() throws FileNotFoundException;
+  IndicatorCalculator loadConfig() throws FileNotFoundException;
 
   Reporting getConfiguration();
 
-  public Double get(String indicatorName);
+  Double get(String indicatorName);
 
   /**
    * Compute indicators.
    *
    */
-  public IndicatorCalculator computeIndicators(String... filterQuery);
+  IndicatorCalculator computeIndicators(String scopeId, String... filterQuery);
 
   Map<String, Double> getResults();
 }

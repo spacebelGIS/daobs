@@ -57,8 +57,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -98,10 +96,7 @@ public class Variable {
   /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link Name }
-   *
+   * @return possible object is {@link Name }
    */
   public Name getName() {
     return name;
@@ -110,10 +105,7 @@ public class Variable {
   /**
    * Sets the value of the name property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Name }
-   *
+   * @param value allowed object is {@link Name }
    */
   public void setName(Name value) {
     this.name = value;
@@ -122,10 +114,7 @@ public class Variable {
   /**
    * Gets the value of the query property.
    *
-   * @return
-   *     possible object is
-   *     {@link Query }
-   *
+   * @return possible object is {@link Query }
    */
   public Query getQuery() {
     return query;
@@ -134,10 +123,7 @@ public class Variable {
   /**
    * Sets the value of the query property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Query }
-   *
+   * @param value allowed object is {@link Query }
    */
   public void setQuery(Query value) {
     this.query = value;
@@ -146,10 +132,7 @@ public class Variable {
   /**
    * Gets the value of the format property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getFormat() {
     return format;
@@ -158,10 +141,7 @@ public class Variable {
   /**
    * Sets the value of the format property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setFormat(String value) {
     this.format = value;
@@ -170,10 +150,7 @@ public class Variable {
   /**
    * Gets the value of the value property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getValue() {
     return value;
@@ -182,10 +159,7 @@ public class Variable {
   /**
    * Sets the value of the value property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setValue(String value) {
     this.value = value;
@@ -194,10 +168,7 @@ public class Variable {
   /**
    * Gets the value of the status property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getStatus() {
     return status;
@@ -206,10 +177,7 @@ public class Variable {
   /**
    * Sets the value of the status property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setStatus(String value) {
     this.status = value;
@@ -218,10 +186,7 @@ public class Variable {
   /**
    * Gets the value of the comment property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getComment() {
     return comment;
@@ -230,10 +195,7 @@ public class Variable {
   /**
    * Sets the value of the comment property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setComment(String value) {
     this.comment = value;
@@ -242,10 +204,7 @@ public class Variable {
   /**
    * Gets the value of the id property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getId() {
     return id;
@@ -254,10 +213,7 @@ public class Variable {
   /**
    * Sets the value of the id property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setId(String value) {
     this.id = value;
@@ -266,10 +222,7 @@ public class Variable {
   /**
    * Gets the value of the default property.
    *
-   * @return
-   *     possible object is
-   *     {@link Double }
-   *
+   * @return possible object is {@link Double }
    */
   public Double getDefault() {
     return _default;
@@ -278,10 +231,7 @@ public class Variable {
   /**
    * Sets the value of the default property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Double }
-   *
+   * @param value allowed object is {@link Double }
    */
   public void setDefault(Double value) {
     this._default = value;
@@ -290,10 +240,7 @@ public class Variable {
   /**
    * Gets the value of the numberFormat property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getNumberFormat() {
     return numberFormat;
@@ -302,10 +249,7 @@ public class Variable {
   /**
    * Sets the value of the numberFormat property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setNumberFormat(String value) {
     this.numberFormat = value;
@@ -314,10 +258,7 @@ public class Variable {
   /**
    * Gets the value of the error property.
    *
-   * @return
-   *     possible object is
-   *     {@link Boolean }
-   *
+   * @return possible object is {@link Boolean }
    */
   public Boolean isError() {
     return error;
@@ -326,10 +267,7 @@ public class Variable {
   /**
    * Sets the value of the error property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Boolean }
-   *
+   * @param value allowed object is {@link Boolean }
    */
   public void setError(Boolean value) {
     this.error = value;

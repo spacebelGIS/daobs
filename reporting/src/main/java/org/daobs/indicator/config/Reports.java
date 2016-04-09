@@ -47,8 +47,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -63,24 +61,17 @@ public class Reports {
   /**
    * Gets the value of the reporting property.
    *
-   * <p>
-   * This accessor method returns a reference to the live list,
-   * not a snapshot. Therefore any modification you make to the
-   * returned list will be present inside the JAXB object.
-   * This is why there is not a <CODE>set</CODE> method for the reporting property.
+   * <p> This accessor method returns a reference to the live list, not a snapshot. Therefore any
+   * modification you make to the returned list will be present inside the JAXB object. This is
+   * why there is not a <CODE>set</CODE> method for the reporting property.
    *
-   * <p>
-   * For example, to add a new item, do as follows:
+   * <p> For example, to add a new item, do as follows:
    * <pre>
    *    getReporting().add(newItem);
    * </pre>
    *
    *
-   * <p>
-   * Objects of the following type(s) are allowed in the list
-   * {@link Reporting }
-   *
-   *
+   * <p> Objects of the following type(s) are allowed in the list {@link Reporting }
    */
   public List<Reporting> getReporting() {
     if (reporting == null) {
@@ -92,5 +83,4 @@ public class Reports {
   public void addReporting(Reporting reporting) {
     getReporting().add(reporting);
   }
-
 }

@@ -57,8 +57,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -77,10 +75,7 @@ public class Query {
   /**
    * Gets the value of the value property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getValue() {
     return value;
@@ -89,10 +84,7 @@ public class Query {
   /**
    * Sets the value of the value property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setValue(String value) {
     this.value = value;
@@ -101,10 +93,7 @@ public class Query {
   /**
    * Gets the value of the statsField property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getStatsField() {
     return statsField;
@@ -113,10 +102,7 @@ public class Query {
   /**
    * Sets the value of the statsField property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setStatsField(String value) {
     this.statsField = value;
@@ -125,10 +111,7 @@ public class Query {
   /**
    * Gets the value of the stats property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getStats() {
     return stats;
@@ -137,10 +120,7 @@ public class Query {
   /**
    * Sets the value of the stats property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setStats(String value) {
     this.stats = value;

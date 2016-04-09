@@ -38,6 +38,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Date;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiInfo;
@@ -82,9 +86,11 @@ public class SwaggerConfig {
       .build()
       .pathMapping("/")
       .genericModelSubstitutes(ResponseEntity.class)
+//      .directModelSubstitute(XMLGregorianCalendar.class, Date.class)
       .alternateTypeRules(
         newRule(typeResolver.resolve(DeferredResult.class,
-          typeResolver.resolve(ResponseEntity.class, WildcardType.class)
+          typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+          typeResolver.resolve(XMLGregorianCalendar.class, Date.class)
           ),
           typeResolver.resolve(WildcardType.class)
         ))
