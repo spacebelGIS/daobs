@@ -35,7 +35,8 @@ permissions and limitations under the Licence.
   <link rel="stylesheet" href="<spring:url value="/assets/css/login.css"/>"/>
 </head>
 <body data-ng-controller="LoginController"
-      data-ng-cloak="">
+      data-ng-cloak=""
+      data-translate-cloak="">
 
 
 <div class="container-fluid">
