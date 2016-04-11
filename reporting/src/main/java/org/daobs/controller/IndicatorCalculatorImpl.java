@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,6 +49,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -108,9 +111,17 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
   }
 
   @Override
-  public IndicatorCalculator computeIndicators(String... filterQuery) {
-    long start = System.currentTimeMillis();
+  public IndicatorCalculator computeIndicators(String scopeId, String... filterQuery) {
+    final long start = System.currentTimeMillis();
     Iterator<Variable> iterator = reporting.getVariables().getVariable().iterator();
+
+    String allFilters = "";
+    for (String filter : filterQuery) {
+      allFilters += filter;
+    }
+    reporting.setScope(allFilters);
+    reporting.setScopeId(scopeId);
+
     while (iterator.hasNext()) {
       Variable variable = iterator.next();
       logger.log(java.util.logging.Level.FINE,
@@ -244,9 +255,21 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
         }
       }
     }
-    long elapsed = System.currentTimeMillis() - start;
+    final long elapsed = System.currentTimeMillis() - start;
     // new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").format(new Date())
     reporting.setComputationTime(Math.round(elapsed));
+
+    final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+    DatatypeFactory datatypeFactory = null;
+    try {
+      datatypeFactory = DatatypeFactory.newInstance();
+      reporting.setDateTime(
+          datatypeFactory.newXMLGregorianCalendar(gregorianCalendar)
+      );
+    } catch (DatatypeConfigurationException e1) {
+      e1.printStackTrace();
+    }
+
     return null;
   }
 

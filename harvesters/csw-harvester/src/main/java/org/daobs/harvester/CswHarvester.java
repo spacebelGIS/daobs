@@ -24,7 +24,7 @@ package org.daobs.harvester;
 import com.google.common.base.Charsets;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Header;
+import org.apache.camel.ExchangeProperty;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -103,9 +103,9 @@ public class CswHarvester {
    *
    * @return  The harvester configuration
    */
-  public Config initialize(@Header("harvesterUrl") String identifier,
-                           @Header("harvesterFilter") Document filter,
-                           @Header("harvesterNbRecordsPerPage") int nbRecordsPerPage) {
+  public Config initialize(@ExchangeProperty("harvesterUrl") String identifier,
+                           @ExchangeProperty("harvesterFilter") Document filter,
+                           @ExchangeProperty("harvesterNbRecordsPerPage") int nbRecordsPerPage) {
 
     log.info(String.format("Initializing configuration for %s.", identifier));
     Config config = new Config();
@@ -119,7 +119,7 @@ public class CswHarvester {
     return config;
   }
 
-  private Config getConfig(@Header("harvesterUrl") String identifier) {
+  private Config getConfig(@ExchangeProperty("harvesterUrl") String identifier) {
     Config config = harvesters.get(identifier);
     if (config == null) {
       config = new Config();
@@ -137,19 +137,19 @@ public class CswHarvester {
    * @param numberOfRecordsMatched  The number of records that match the filter
    */
   public void setNumberOfRecords(
-      @Header("harvesterUrl") String identifier,
+      @ExchangeProperty("harvesterUrl") String identifier,
       String numberOfRecordsMatched) {
     Config config = getConfig(identifier);
     config.setNumberOfRecordsMatched(Integer.parseInt(numberOfRecordsMatched));
 
   }
 
-  public List<String> getPages(@Header("harvesterUrl") String identifier) {
+  public List<String> getPages(@ExchangeProperty("harvesterUrl") String identifier) {
     Config config = getConfig(identifier);
     return config.computeNumberOfPages();
   }
 
-  public int getNumberOfPages(@Header("harvesterUrl") String identifier) {
+  public int getNumberOfPages(@ExchangeProperty("harvesterUrl") String identifier) {
     Config config = getConfig(identifier);
     return config.getPages().size();
   }
@@ -241,7 +241,7 @@ public class CswHarvester {
    * @return  The XML query
    */
   public String generateGetRecordsHitsQuery(
-      @Header("harvesterUrl") String identifier,
+      @ExchangeProperty("harvesterUrl") String identifier,
       Exchange exchange) {
     Config config = getConfig(identifier);
     return buildGetRecordsQuery(config.getRecordsFilter(),
@@ -259,7 +259,7 @@ public class CswHarvester {
    * @return The XML query
    */
   public synchronized String generateGetRecordsQuery(
-      @Header("harvesterUrl") String identifier,
+      @ExchangeProperty("harvesterUrl") String identifier,
       Exchange exchange) {
     int page = (Integer) exchange.getProperty("CamelSplitIndex");
     Config config = getConfig(identifier);

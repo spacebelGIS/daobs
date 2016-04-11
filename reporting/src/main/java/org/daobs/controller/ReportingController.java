@@ -25,6 +25,7 @@ import org.daobs.indicator.config.Reporting;
 import org.daobs.indicator.config.Reports;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,6 +58,7 @@ public class ReportingController {
    */
   public static IndicatorCalculatorImpl generateReporting(HttpServletRequest request,
                                                           String reporting,
+                                                          String scopeId,
                                                           String fq,
                                                           boolean calculate)
       throws FileNotFoundException {
@@ -73,8 +75,7 @@ public class ReportingController {
           new IndicatorCalculatorImpl(configurationFile);
 
       if (calculate) {
-        // TODO: filter should be more generic
-        indicatorCalculator.computeIndicators(fq);
+        indicatorCalculator.computeIndicators(scopeId, fq);
       }
       // adds the XML source file to the model so the XsltView can detect
       return indicatorCalculator;
@@ -147,12 +148,16 @@ public class ReportingController {
   public Reporting get(HttpServletRequest request,
                        @PathVariable(value = "reporting") String reporting,
                        @RequestParam(
+                         value = "scopeId",
+                         defaultValue = "",
+                         required = false) String scopeId,
+                       @RequestParam(
                          value = "fq",
                          defaultValue = "",
                          required = false) String fq)
     throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
-        generateReporting(request, reporting, fq, true);
+        generateReporting(request, reporting, scopeId, fq.trim(), true);
     return indicatorCalculator.getConfiguration();
   }
 
@@ -173,12 +178,17 @@ public class ReportingController {
                        @PathVariable(value = "reporting") String reporting,
                        @PathVariable(value = "territory") String territory,
                        @RequestParam(
+                         value = "scopeId",
+                         defaultValue = "",
+                         required = false) String scopeId,
+                       @RequestParam(
                          value = "fq",
                          defaultValue = "",
                          required = false) String fq)
     throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
-        generateReporting(request, reporting, fq + " +territory:" + territory, true);
+        generateReporting(request, reporting, scopeId, "+territory:" + territory +
+          (StringUtils.isEmpty(fq) ? "" : " " + fq.trim()), true);
     return indicatorCalculator.getConfiguration();
   }
 }

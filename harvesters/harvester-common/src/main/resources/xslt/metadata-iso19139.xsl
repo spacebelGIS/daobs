@@ -51,11 +51,11 @@
 
 
     <xsl:variable name="mainLanguageCode" as="xs:string?"
-                  select="gmd:language/gmd:LanguageCode/
+                  select="gmd:language[1]/gmd:LanguageCode/
                         @codeListValue[normalize-space(.) != '']"/>
     <xsl:variable name="mainLanguage" as="xs:string?"
                   select="if ($mainLanguageCode) then $mainLanguageCode else
-                    gmd:language/gco:CharacterString[normalize-space(.) != '']"/>
+                    gmd:language[1]/gco:CharacterString[normalize-space(.) != '']"/>
 
     <xsl:variable name="otherLanguages" as="attribute()*"
                   select="gmd:locale/gmd:PT_Locale/
@@ -347,15 +347,23 @@
 
 
         <!-- Index all keywords -->
-        <xsl:for-each
-          select="*/gmd:MD_Keywords/
-                          gmd:keyword/gco:CharacterString|
-                        */gmd:MD_Keywords/
-                          gmd:keyword/gmd:PT_FreeText/gmd:textGroup/
-                            gmd:LocalisedCharacterString">
+        <xsl:variable name="keywords"
+                      select="*/gmd:MD_Keywords/
+                                gmd:keyword/gco:CharacterString|
+                              */gmd:MD_Keywords/
+                                gmd:keyword/gmd:PT_FreeText/gmd:textGroup/
+                                  gmd:LocalisedCharacterString"/>
+        <xsl:for-each select="$keywords">
           <field name="tag">
             <xsl:value-of select="text()"/>
           </field>
+
+          <xsl:if test="matches(
+                          normalize-unicode(replace(normalize-unicode(
+                            lower-case(normalize-space(text())), 'NFKD'), '\p{Mn}', ''), 'NFKC'),
+                          $openDataKeywords)">
+            <field name="isOpenData">true</field>
+          </xsl:if>
         </xsl:for-each>
 
         <!-- Index keywords which are of type place -->

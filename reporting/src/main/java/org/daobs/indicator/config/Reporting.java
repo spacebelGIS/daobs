@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
@@ -47,13 +48,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{http://daobs.org}indicators"/>
  *       &lt;/sequence>
  *       &lt;attribute name="computationTime" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}NCName" />
+ *       &lt;attribute name="dateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
+ *       &lt;attribute name="scope" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="scopeId" type="{http://www.w3.org/2001/XMLSchema}NCName" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -72,7 +74,16 @@ public class Reporting {
   protected Indicators indicators;
   @XmlAttribute(name = "computationTime")
   protected Integer computationTime;
-  @XmlAttribute(name = "id")
+  @XmlAttribute(name = "dateTime")
+  @XmlSchemaType(name = "dateTime")
+  protected XMLGregorianCalendar dateTime;
+  @XmlAttribute(name = "scope")
+  protected String scope;
+  @XmlAttribute(name = "scopeId")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "NCName")
+  protected String scopeId;
+  @XmlAttribute(name = "id", required = true)
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String id;
@@ -80,10 +91,7 @@ public class Reporting {
   /**
    * Gets the value of the identification property.
    *
-   * @return
-   *     possible object is
-   *     {@link Identification }
-   *
+   * @return possible object is {@link Identification }
    */
   public Identification getIdentification() {
     return identification;
@@ -92,10 +100,7 @@ public class Reporting {
   /**
    * Sets the value of the identification property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Identification }
-   *
+   * @param value allowed object is {@link Identification }
    */
   public void setIdentification(Identification value) {
     this.identification = value;
@@ -104,10 +109,7 @@ public class Reporting {
   /**
    * Gets the value of the variables property.
    *
-   * @return
-   *     possible object is
-   *     {@link Variables }
-   *
+   * @return possible object is {@link Variables }
    */
   public Variables getVariables() {
     return variables;
@@ -116,10 +118,7 @@ public class Reporting {
   /**
    * Sets the value of the variables property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Variables }
-   *
+   * @param value allowed object is {@link Variables }
    */
   public void setVariables(Variables value) {
     this.variables = value;
@@ -128,10 +127,7 @@ public class Reporting {
   /**
    * Gets the value of the indicators property.
    *
-   * @return
-   *     possible object is
-   *     {@link Indicators }
-   *
+   * @return possible object is {@link Indicators }
    */
   public Indicators getIndicators() {
     return indicators;
@@ -140,10 +136,7 @@ public class Reporting {
   /**
    * Sets the value of the indicators property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Indicators }
-   *
+   * @param value allowed object is {@link Indicators }
    */
   public void setIndicators(Indicators value) {
     this.indicators = value;
@@ -152,10 +145,7 @@ public class Reporting {
   /**
    * Gets the value of the computationTime property.
    *
-   * @return
-   *     possible object is
-   *     {@link Integer }
-   *
+   * @return possible object is {@link Integer }
    */
   public Integer getComputationTime() {
     return computationTime;
@@ -164,22 +154,70 @@ public class Reporting {
   /**
    * Sets the value of the computationTime property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Integer }
-   *
+   * @param value allowed object is {@link Integer }
    */
   public void setComputationTime(Integer value) {
     this.computationTime = value;
   }
 
   /**
+   * Gets the value of the dateTime property.
+   *
+   * @return possible object is {@link XMLGregorianCalendar }
+   */
+  public XMLGregorianCalendar getDateTime() {
+    return dateTime;
+  }
+
+  /**
+   * Sets the value of the dateTime property.
+   *
+   * @param value allowed object is {@link XMLGregorianCalendar }
+   */
+  public void setDateTime(XMLGregorianCalendar value) {
+    this.dateTime = value;
+  }
+
+  /**
+   * Gets the value of the scope property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getScope() {
+    return scope;
+  }
+
+  /**
+   * Sets the value of the scope property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setScope(String value) {
+    this.scope = value;
+  }
+
+  /**
+   * Gets the value of the scopeId property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getScopeId() {
+    return scopeId;
+  }
+
+  /**
+   * Sets the value of the scopeId property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setScopeId(String value) {
+    this.scopeId = value;
+  }
+
+  /**
    * Gets the value of the id property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is {@link String }
    */
   public String getId() {
     return id;
@@ -188,10 +226,7 @@ public class Reporting {
   /**
    * Sets the value of the id property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is {@link String }
    */
   public void setId(String value) {
     this.id = value;

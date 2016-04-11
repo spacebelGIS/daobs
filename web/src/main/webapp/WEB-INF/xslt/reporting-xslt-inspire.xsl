@@ -36,15 +36,19 @@
   on all harvested records. Should be a valid member states code. -->
   <xsl:param name="territory" select="''" as="xs:string"/>
 
+  <!-- The filter query used to retrieve document -->
+  <xsl:param name="fq" select="''" as="xs:string"/>
+
+  <!-- Override territory -->
+  <xsl:param name="scopeId" select="''" as="xs:string"/>
+
   <xsl:param name="language" select="'eng'" as="xs:string"/>
 
   <!-- Date of creation of the report. Default current date time. -->
-  <xsl:param name="creationDate" select="current-dateTime()"/>
+  <xsl:param name="creationDate" select="/daobs:reporting/@dateTime" as="xs:string"/>
 
-  <!-- Date covered by the data used to compute the indicators.
-  TODO: Should be based on the harvesting time of the records.
-  -->
-  <xsl:param name="reportingDate" select="current-dateTime()"/>
+  <!-- Date covered by the data used to compute the indicators.  -->
+  <xsl:param name="reportingDate" select="/daobs:reporting/@dateTime" as="xs:string"/>
 
   <!-- TODO: What is the organization. Use user session information ?  -->
   <xsl:param name="organizationName" select="''" as="xs:string"/>
@@ -73,26 +77,35 @@
   <xsl:variable name="dateFormat" as="xs:string"
                 select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z'"/>
 
+  <!-- TODO: Handle timezone -->
+  <xsl:variable name="creation"
+             select="xs:dateTime($creationDate)"/>
+  <xsl:variable name="reporting"
+             select="xs:dateTime($reportingDate)"/>
 
   <xsl:template match="/">
-
     <ns2:Monitoring
       xmlns:ns2="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://inspire.jrc.ec.europa.eu/monitoringreporting/monitoring http://dd.eionet.europa.eu/schemas/inspire-monitoring/monitoring.xsd">
       <documentYear>
         <day>
-          <xsl:value-of select="format-dateTime($creationDate, '[D01]')"/>
+          <xsl:value-of select="format-dateTime($creation, '[D01]')"/>
         </day>
         <month>
-          <xsl:value-of select="format-dateTime($creationDate, '[M01]')"/>
+          <xsl:value-of select="format-dateTime($creation, '[M01]')"/>
         </month>
         <year>
-          <xsl:value-of select="format-dateTime($creationDate, '[Y0001]')"/>
+          <xsl:value-of select="format-dateTime($creation, '[Y0001]')"/>
         </year>
       </documentYear>
+      <xsl:comment> Filter query: <xsl:value-of select="$fq"/></xsl:comment>
       <memberState>
-        <xsl:value-of select="upper-case($territory)"/>
+        <!-- If a scopeId is provided
+             use it as a memberState key. This is usefull when
+             creating report at local level eg. -->
+        <xsl:value-of select="if ($scopeId != '') then $scopeId
+                              else upper-case($territory)"/>
       </memberState>
       <MonitoringMD>
         <organizationName>
@@ -103,13 +116,13 @@
         </email>
         <monitoringDate>
           <day>
-            <xsl:value-of select="format-dateTime($reportingDate, '[D01]')"/>
+            <xsl:value-of select="format-dateTime($reporting, '[D01]')"/>
           </day>
           <month>
-            <xsl:value-of select="format-dateTime($reportingDate, '[M01]')"/>
+            <xsl:value-of select="format-dateTime($reporting, '[M01]')"/>
           </month>
           <year>
-            <xsl:value-of select="format-dateTime($reportingDate, '[Y0001]')"/>
+            <xsl:value-of select="format-dateTime($reporting, '[Y0001]')"/>
           </year>
         </monitoringDate>
         <language>

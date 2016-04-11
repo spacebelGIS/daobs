@@ -45,9 +45,9 @@
 
   app.controller('HarvesterConfigCtrl', [
     '$scope', '$routeParams', '$translate', '$timeout', '$http', '$location',
-    'harvesterService', 'cfg', 'Notification', 'cswService',
+    'harvesterService', 'cfg', 'Notification', 'cswService', '$filter',
     function ($scope, $routeParams, $translate, $timeout, $http, $location,
-              harvesterService, cfg, Notification, cswService) {
+              harvesterService, cfg, Notification, cswService, $filter) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
       $scope.adding = false;
@@ -113,22 +113,48 @@
         }
         $timeout(function () {
           loadStatsForTerritory()
-        }, 5000);
+        }, 10000);
       };
 
+      $scope.loading = false;
       function init() {
+        $scope.loading = true;
         harvesterService.getAll().success(function (list) {
+          $scope.loading = false;
           $scope.harvesterConfig = list.harvester;
           if (list.harvester.length > 0) {
             loadStatsForTerritory()
           }
         });
       }
+      $scope.orderByFields = ['name', 'territory', 'url', 'count', 'remoteError'];
+      $scope.predicate = 'territory';
+      $scope.order = function (predicate, reverse) {
+        var isNewPredicate = $scope.predicate === predicate;
+
+        if (predicate === 'count') {
+          $scope.predicate = function (h) {
+            return $scope.statsForTerritory[h.uuid] &&
+                    $scope.statsForTerritory[h.uuid].count;
+          };
+        } else if (predicate === 'remoteError') {
+          $scope.predicate = function (h) {
+            return $scope.statsForRemote[h.uuid] &&
+                    $scope.statsForRemote[h.uuid].error;
+          };
+        } else {
+          $scope.predicate = predicate;
+        }
+        $scope.reverse = reverse ? reverse : (
+          isNewPredicate ? !$scope.reverse : false);
+      }
 
       $scope.getHitsNumber = function (h) {
         if (h) {
           getHitsNumber(h);
         } else {
+          // TODO: This could send a huge number of requests.
+          // TODO: Improve, eg. turn off regular check
           angular.forEach($scope.harvesterConfig, function (h) {
             getHitsNumber(h);
           });
@@ -144,8 +170,13 @@
         }, function (response) {
           Notification.error(
             $scope.translations.errorGettingRemoteHits + ' ' +
-            response.data + ' (' + response.status + ').');
-          console.log(response);
+            (response.error || response.data) +
+            ' (' + response.status + ').');
+          $scope.statsForRemote[h.uuid] = {
+            error: (response.error || response.data) +
+                   '(' + response.status + ')',
+            when: new Date()
+          };
         });
       };
 
@@ -162,7 +193,6 @@
           init();
           $scope.newHarvester = $scope.harvesterTpl;
         }, function (response) {
-          console.error(response);
           Notification.error(
             $scope.translations.errorAddingHarvester + ' ' +
             response.message);
@@ -171,25 +201,43 @@
 
       $scope.run = function (h) {
         harvesterService.run(h).then(function () {
-          Notification.success($scope.translations.harvesterStarted);
+          Notification.success(
+            $filter('translate')('harvesterStarted',
+                       {name: h.name}));
         }, function (response) {
-          console.error(response);
           Notification.error(
             $scope.translations.errorStartingHarvester + ' ' +
             response);
         });
       };
+      $scope.runAll = function () {
+        angular.forEach($scope.harvesterConfig, function (h) {
+          $scope.run(h);
+        });
+      };
 
-      $scope.remove = function (h) {
+      $scope.remove = function (h, quiet) {
         harvesterService.remove(h).then(function (response) {
-          Notification.success($scope.translations.harvesterDeleted);
-          init();
+          Notification.success(
+            $filter('translate')('harvesterDeleted',
+                                 {name: h.name}));
+          if (quiet === true) {
+            init();
+          }
         }, function (response) {
           Notification.error(
             $scope.translations.errorRemovingHarvester + ' ' +
             response.error.msg);
         });
       };
+
+      $scope.removeAll = function () {
+        angular.forEach($scope.harvesterConfig, function (h) {
+          $scope.remove(h, true);
+        });
+        init();
+      };
+
       $scope.removeRecords = function (h) {
         harvesterService.removeRecords(h).then(function (response) {
           Notification.success($scope.translations.harvesterRecordsDeleted);

@@ -8,7 +8,7 @@
  * with the Licence.
  * You may obtain a copy of the Licence at:
  *
- * https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+ * https://joinup.ec.europa.eu/software/page/eupl5
  *
  * Unless required by applicable law or agreed to in
  * writing, software distributed under the Licence is
@@ -18,12 +18,18 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 (function () {
   "use strict";
   var app = angular.module('csw', ['daobs_cfg']);
 
-  app.factory('cswService', ['$http', '$q', 'cfg',
-    function ($http, $q, cfg) {
+  app.factory('cswService', ['$http', '$q', '$translate', 'cfg',
+    function ($http, $q, $translate, cfg) {
+      var translations = {};
+      $translate(['errorRemoteRecords']).then(function (t) {
+        translations = t;
+      });
+
       return {
         getHitsNumber: function (url, filter) {
           var deferred = $q.defer();
@@ -48,8 +54,21 @@
                   + '</csw:GetRecords>',
             headers: { "Content-Type": 'application/xml' }
           }).then(function (response) {
-            var nbHits = response.data.match(/numberOfRecordsMatched="([0-9]*)"/)[1];
-            deferred.resolve(nbHits)
+            if (response.data.indexOf('ExceptionReport') !== -1) {
+              // Try to extract exception report from response
+              response.error = response.data.match(/ExceptionText>(.*)<\/ows:ExceptionText/)[1];
+              deferred.reject(response);
+            } else {
+              try {
+              var nbHits = response.data.match(/numberOfRecordsMatched="([0-9]*)"/)[1];
+                deferred.resolve(nbHits);
+              } catch (e) {
+                console.warn(translations['errorRemoteRecords']);
+                console.warn(response);
+                response.error = translations['errorRemoteRecords'];
+                deferred.reject(response);
+              }
+            }
           }, function (response) {
             deferred.reject(response);
           });

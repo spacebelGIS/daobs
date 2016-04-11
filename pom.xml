@@ -389,54 +389,6 @@
         <artifactId>license-maven-plugin</artifactId>
         <version>1.8</version>
       </plugin>-->
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.3</version>
-        <executions>
-          <execution>
-            <id>findbugs</id>
-            <goals>
-              <goal>findbugs</goal>
-            </goals>
-            <phase>test</phase>
-          </execution>
-        </executions>
-        <configuration>
-          <xmlOutput>true</xmlOutput>
-          <xmlOutputDirectory>target/site</xmlOutputDirectory>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.17</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>6.17</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>check</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>test</phase>
-          </execution>
-        </executions>
-        <configuration>
-          <configLocation>checkstyle.xml</configLocation>
-          <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
-          <logViolationsToConsole>true</logViolationsToConsole>
-          <maxAllowedViolations>0</maxAllowedViolations>
-          <violationSeverity>warning</violationSeverity>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
@@ -525,9 +477,11 @@
     <db.validation.username>www-data</db.validation.username>
     <db.validation.password>www-data</db.validation.password>
 
+    <inspire.validation.background>false</inspire.validation.background>
+
     <silk.port>8985</silk.port>
 
-    <guava.version>17.0</guava.version>
+    <guava.version>19.0</guava.version>
 
     <tika.version>1.8</tika.version>
 
@@ -558,7 +512,9 @@
     <profile>
       <id>web</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!skipWeb</name>
+        </property>
       </activation>
       <properties>
         <config.properties.path>file:${data.dir}/config.properties</config.properties.path>
@@ -570,6 +526,80 @@
       <properties>
         <config.properties.path>/config.properties</config.properties.path>
       </properties>
+    </profile>
+    <!-- Use -Drelax property to avoid:
+    * findbug
+    * checkstyle
+    * and tests. -->
+    <profile>
+      <id>relax-build</id>
+      <activation>
+        <property>
+          <name>relax</name>
+        </property>
+      </activation>
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+      </properties>
+    </profile>
+    <profile>
+      <id>full-build</id>
+      <activation>
+        <property>
+          <name>!relax</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.3</version>
+            <executions>
+              <execution>
+                <id>findbugs</id>
+                <goals>
+                  <goal>findbugs</goal>
+                </goals>
+                <phase>test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <xmlOutput>true</xmlOutput>
+              <xmlOutputDirectory>target/site</xmlOutputDirectory>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.17</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.puppycrawl.tools</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>6.17</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>check</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <phase>test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <configLocation>checkstyle.xml</configLocation>
+              <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+              <logViolationsToConsole>true</logViolationsToConsole>
+              <maxAllowedViolations>0</maxAllowedViolations>
+              <violationSeverity>warning</violationSeverity>
+              <encoding>UTF-8</encoding>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>

@@ -261,6 +261,9 @@
   <dynamicField name="extra_medsea_*" type="managed_medsea" stored="true"
                 indexed="true" multiValued="true"/>
 
+  <field name="isOpenData" type="boolean" stored="true" indexed="true"
+         multiValued="false"/>
+
   <!-- Field to store validation against the XSD -->
   <field name="isSchemaValid" type="boolean" stored="true" indexed="true"
          multiValued="false"/>

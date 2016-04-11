@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2014-2016 European Environment Agency
  *
  * Licensed under the EUPL, Version 1.1 or – as soon
@@ -19,32 +19,28 @@
  * permissions and limitations under the Licence.
  */
 
-package org.daobs.controller;
+package org.daobs.event;
 
-import org.daobs.indicator.config.Reporting;
-
-import java.io.FileNotFoundException;
-import java.util.Map;
+import org.daobs.harvester.config.Harvester;
 
 /**
- * Created by francois on 17/10/14.
+ * JMS event.
+ *
  */
-public interface IndicatorCalculator {
-  /**
-   * Load or reload the configuration.
-   *
-   */
-  IndicatorCalculator loadConfig() throws FileNotFoundException;
+public class HarvestCswEvent extends org.springframework.context.ApplicationEvent {
+  private Harvester harvester;
 
-  Reporting getConfiguration();
 
-  Double get(String indicatorName);
+  public HarvestCswEvent(Object source, Harvester harvester) {
+    super(source);
+    this.harvester = harvester;
+  }
 
-  /**
-   * Compute indicators.
-   *
-   */
-  IndicatorCalculator computeIndicators(String scopeId, String... filterQuery);
+  public Harvester getHarvester() {
+    return harvester;
+  }
 
-  Map<String, Double> getResults();
+  public void setHarvester(Harvester harvester) {
+    this.harvester = harvester;
+  }
 }

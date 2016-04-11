@@ -32,7 +32,7 @@
           },
           run: function (h) {
             var deferred = $q.defer();
-            $http.get(cfg.SERVICES.harvester + '/' + h.uuid + '?action=start').success(function (data) {
+            $http.get(cfg.SERVICES.harvester + '/' + h.uuid + '/jms').success(function (data) {
               deferred.resolve(data);
             }).error(function (response) {
               deferred.reject(response);

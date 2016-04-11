@@ -96,12 +96,16 @@ public class CustomReportingController {
                                            defaultValue = "",
                                            required = false) String fq,
                                          @RequestParam(
+                                           value = "scopeId",
+                                           defaultValue = "",
+                                           required = false) String scopeId,
+                                         @RequestParam(
                                            value = "rows",
                                            defaultValue = "10000",
                                            required = false) int rows)
     throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
-        ReportingController.generateReporting(request, reporting, fq, true);
+        ReportingController.generateReporting(request, reporting, scopeId, fq, true);
 
     ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);
     model.addObject("xmlSource", indicatorCalculator.toSource());
@@ -140,6 +144,10 @@ public class CustomReportingController {
                                            defaultValue = "",
                                            required = false) String fq,
                                          @RequestParam(
+                                           value = "scopeId",
+                                           defaultValue = "",
+                                           required = false) String scopeId,
+                                         @RequestParam(
                                            value = "rows",
                                            defaultValue = "20000",
                                            required = false) int rows,
@@ -148,7 +156,7 @@ public class CustomReportingController {
     throws IOException {
     String filter = fq + " +territory:" + territory;
     IndicatorCalculatorImpl indicatorCalculator =
-        ReportingController.generateReporting(request, reporting, filter, true);
+        ReportingController.generateReporting(request, reporting, scopeId, filter, true);
 
 
     ModelAndView model = new ModelAndView("reporting-xslt-" + reporting);

@@ -76,7 +76,7 @@
         <xsl:value-of select="$reportingDate"/>
       </field>
       <field name="reportingYear">
-        <xsl:value-of select="$reportingYear"/>
+        <xsl:value-of select="$documentYear"/>
       </field>
     </doc>
   </xsl:template>
@@ -111,7 +111,7 @@
         <xsl:value-of select="$reportingDate"/>
       </field>
       <field name="reportingYear">
-        <xsl:value-of select="$reportingYear"/>
+        <xsl:value-of select="$documentYear"/>
       </field>
 
       <xsl:for-each select="../../Themes/*[text() != '']">
