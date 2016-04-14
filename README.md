@@ -47,6 +47,7 @@ Get the source code with
 ```
 git clone --recursive https://github.com/INSPIRE-MIF/daobs.git
 cd daobs
+```
 
 
 Compile the application running maven
