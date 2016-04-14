@@ -625,4 +625,13 @@
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>
+  <daobs:harvester>
+    <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-16</daobs:uuid>
+    <daobs:territory>PL</daobs:territory>
+    <daobs:folder>PL-16</daobs:folder>
+    <daobs:name>Usługa katalogowa Modułu SDI gmin zrzeszonych w Związku Miast i Gmin dorzecza Parsęty</daobs:name>
+    <daobs:url>http://sdi.parseta.pl/SDIProCSW/Service.svc/post</daobs:url>
+    <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
+    <daobs:serviceMetadata></daobs:serviceMetadata>
+  </daobs:harvester>
 </daobs:harvesters>
