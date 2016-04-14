@@ -45,10 +45,14 @@
     <intercept-url pattern="/login" access="permitAll" />
     <intercept-url pattern="/assets/**" access="permitAll" />
     <intercept-url pattern="/app/**" access="permitAll" />
-    <intercept-url pattern="/**" access="hasRole('USER')" />
-    <form-login login-page="/daobs/loginForm" authentication-failure-url="/daobs/loginForm?error"/>
-    <logout />
+    <intercept-url pattern="/favicon.ico" access="permitAll" />
     <intercept-url pattern="/" access="ROLE_ADMIN"/>
+    <intercept-url pattern="/**" access="hasRole('USER')" />
+    <form-login login-page="/daobs/loginForm" authentication-failure-url="/daobs/loginForm?error" default-target-url="/" />
+    <logout logout-success-url="/" />
+    <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
+    <custom-filter ref="csrfheaderFilter" after="CSRF_FILTER"/>
+
   </http>
 
 
@@ -67,5 +71,10 @@
     user-search-base="ou=people"
     user-search-filter="uid={0}"
   />
+
+  <beans:bean id="csrfheaderFilter" class="org.daobs.filter.CsrfHeaderFilter" />
+  <beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+    <beans:property name="headerName" value="X-XSRF-TOKEN"/>
+  </beans:bean>
 
 </beans:beans>

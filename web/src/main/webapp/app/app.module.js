@@ -82,10 +82,10 @@
       };
     }]);
 
-  app.controller('LogoutCtrl', ['$scope', '$http', 'cfg',
-    function ($scope, $http, cfg) {
+  app.controller('LogoutCtrl', ['$scope', '$http', '$q', '$location', '$log', '$timeout', 'cfg',
+    function ($scope, $http, $q, $location, $log, $timeout, cfg) {
       // IE (1st check for IE11, 2on for previous versions)
-      if ((Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) || (window.ActiveXObject)) {
+      /*if ((Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) || (window.ActiveXObject)) {
         try {
           document.execCommand("ClearAuthenticationCache");
           window.location.href = cfg.SERVICES.root;
@@ -102,6 +102,26 @@
             window.location.href = cfg.SERVICES.root;
           }
         }
-      }
+      }*/
+      var logoutCalls = [];
+      var solrLogoutPromise = $http.get(cfg.SERVICES.solrAdmin,
+        {cache: false}
+      );
+      logoutCalls.push(solrLogoutPromise);
+      var appLogoutPromise = $http.post(cfg.SERVICES.root + "logout", {cache:false});
+      logoutCalls.push(appLogoutPromise);
+      $q.all(logoutCalls).then(function() {
+        // success
+        return $timeout(function() {
+          window.location = cfg.SERVICES.root;
+        }, 100);
+      },
+      function () {
+          // error
+        $log.warn("Error exiting from Solr or the app");
+
+        }
+      );
     }]);
+
 }());
