@@ -174,10 +174,8 @@
     <daobs:territory>CY</daobs:territory>
     <daobs:folder>CY</daobs:folder>
     <daobs:name>Cyprus</daobs:name>
-    <daobs:url>http://213.136.80.55:58086/geonetwork/srv/eng/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>
-      http://213.136.80.55:58086/geonetwork/?uuid={{uuid}}
-    </daobs:pointOfTruthURLPattern>
+    <daobs:url>http://inspire.cyprus.moi.gov.cy/geocatalog/srv/eng/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>http://inspire.cyprus.moi.gov.cy/geocatalog/?uuid={{uuid}}</daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
   <daobs:harvester>
