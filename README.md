@@ -42,12 +42,23 @@ The guide for user installing and configuring the application.
 
 ## Build the application
 
-Clone and compile the application:
+Get the source code with
 
 ```
 git clone --recursive https://github.com/INSPIRE-MIF/daobs.git
 cd daobs
-mvn clean install
+
+
+Compile the application running maven
+
+```
+mvn clean install -P web
+```
+
+or for a quicker build
+
+```
+mvn clean install -DskipTests -Drelax -P web
 ```
 
 ## Install and configure Solr
