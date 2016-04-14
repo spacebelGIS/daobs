@@ -34,7 +34,9 @@
         getHitsNumber: function (url, filter) {
           var deferred = $q.defer();
           if (filter) {
-            filter = filter.match(/.*(<ogc:Filter.*[\s\S]*<\/ogc:Filter>).*/)[1];
+            filter = '<csw:Constraint version="1.1.0">' +
+                     filter.match(/.*(<ogc:Filter.*[\s\S]*<\/ogc:Filter>).*/)[1] +
+                     '</csw:Constraint>';
           } else {
             filter = '';
           }
