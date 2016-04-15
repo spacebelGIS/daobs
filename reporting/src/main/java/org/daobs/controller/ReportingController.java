@@ -187,8 +187,8 @@ public class ReportingController {
                          required = false) String fq)
     throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
-        generateReporting(request, reporting, scopeId, "+territory:" + territory +
-          (StringUtils.isEmpty(fq) ? "" : " " + fq.trim()), true);
+        generateReporting(request, reporting, scopeId, "+territory:" + territory
+          + (StringUtils.isEmpty(fq) ? "" : " " + fq.trim()), true);
     return indicatorCalculator.getConfiguration();
   }
 }
