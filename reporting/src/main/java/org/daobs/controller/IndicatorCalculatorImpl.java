@@ -113,7 +113,6 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
   @Override
   public IndicatorCalculator computeIndicators(String scopeId, String... filterQuery) {
     final long start = System.currentTimeMillis();
-    Iterator<Variable> iterator = reporting.getVariables().getVariable().iterator();
 
     String allFilters = "";
     for (String filter : filterQuery) {
@@ -122,6 +121,7 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
     reporting.setScope(allFilters);
     reporting.setScopeId(scopeId);
 
+    Iterator<Variable> iterator = reporting.getVariables().getVariable().iterator();
     while (iterator.hasNext()) {
       Variable variable = iterator.next();
       logger.log(java.util.logging.Level.FINE,

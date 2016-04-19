@@ -78,9 +78,11 @@
     <daobs:uuid>9da7a1e6-101d-4053-9cc9-31e30a89d4fa</daobs:uuid>
     <daobs:territory>LV</daobs:territory>
     <daobs:folder>LV-LGIA</daobs:folder>
-    <daobs:name>ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP
-    </daobs:name>
-    <daobs:url>http://kartes.lgia.gov.lv/geoportal/csw</daobs:url>
+    <daobs:name>ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP</daobs:name>
+    <daobs:url>https://metadati.lgia.gov.lv/geoportal/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      https://metadati.lgia.gov.lv/geoportal/catalog/search/resource/details.page?uuid={{uuid}}
+    </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -91,6 +93,14 @@
       ricerca
     </daobs:name>
     <daobs:url>http://www.rndt.gov.it/RNDT/CSW/POST</daobs:url>
+  </daobs:harvester>
+  <daobs:harvester>
+    <daobs:uuid>c32c9922-00d6-11e6-9c5d-52540023a883</daobs:uuid>
+    <daobs:territory>BG</daobs:territory>
+    <daobs:folder>BG</daobs:folder>
+    <daobs:name>Услуга за откриване</daobs:name>
+    <daobs:url>http://gis.armf.bg:8080/geonetwork/srv/eng/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>http://gis.armf.bg:8080/geonetwork/?uuid={{uuid}}</daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -174,9 +184,8 @@
     <daobs:territory>CY</daobs:territory>
     <daobs:folder>CY</daobs:folder>
     <daobs:name>Cyprus</daobs:name>
-    <daobs:url>http://213.136.80.55:58086/geonetwork/srv/eng/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>
-      http://213.136.80.55:58086/geonetwork/?uuid={{uuid}}
+    <daobs:url>http://inspire.cyprus.moi.gov.cy/geocatalog/srv/eng/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>http://inspire.cyprus.moi.gov.cy/geocatalog/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -325,6 +334,9 @@
       Environment, Community and Local Government)
     </daobs:name>
     <daobs:url>https://www.geoportal.ie/geoportal/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>
+      http://www.geoportal.ie/geoportal/catalog/search/resource/details.page?uuid={{uuid}}
+    </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -368,7 +380,12 @@
     <daobs:territory>PT</daobs:territory>
     <daobs:folder>PT</daobs:folder>
     <daobs:name>INSPIRE-PT Catalog Service</daobs:name>
-    <daobs:url>http://cgpr.igeo.pt/catalogo-inspire-pt/services/csw?</daobs:url>
+    <daobs:url>http://snig.dgterritorio.pt/geoportal/csw/discovery</daobs:url>
+    <daobs:filter>
+      <!--
+      TODO: Wait for the filter based on keyword to be added.
+      See https://ies-svn.jrc.ec.europa.eu/issues/2338 -->
+    </daobs:filter>
   </daobs:harvester>
 
   <daobs:harvester>
@@ -444,8 +461,8 @@
     <daobs:territory>SI</daobs:territory>
     <daobs:folder>SI</daobs:folder>
     <daobs:name>Slovenski Inspire metadata sistem (admin)</daobs:name>
-    <daobs:url>http://prostor3.gov.si:80/imps/srv/sl/csw</daobs:url>
-    <daobs:pointOfTruthURLPattern>http://prostor3.gov.si:80/imps/?uuid={{uuid}}
+    <daobs:url>http://prostor4.gov.si/imps/srv/slV/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern>http://prostor4.gov.si/imps/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
 
@@ -622,6 +639,17 @@
       Miast i Gmin Dorzecza Parsęty
     </daobs:name>
     <daobs:url>http://gis.parseta.pl/geoportal/csw</daobs:url>
+    <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
+    <daobs:serviceMetadata></daobs:serviceMetadata>
+  </daobs:harvester>
+  <daobs:harvester>
+    <daobs:uuid>INSPIRE-d81e48c4-b4cf-11e3-a455-52540004b857-16</daobs:uuid>
+    <daobs:territory>PL</daobs:territory>
+    <daobs:folder>PL-16</daobs:folder>
+    <daobs:name>Usługa katalogowa Modułu SDI gmin zrzeszonych w Związku Miast i Gmin dorzecza
+      Parsęty
+    </daobs:name>
+    <daobs:url>http://sdi.parseta.pl/SDIProCSW/Service.svc/post</daobs:url>
     <daobs:pointOfTruthURLPattern></daobs:pointOfTruthURLPattern>
     <daobs:serviceMetadata></daobs:serviceMetadata>
   </daobs:harvester>

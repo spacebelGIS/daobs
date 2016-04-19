@@ -70,7 +70,7 @@
 
       $scope.removeDashboard = function (id) {
         var documentFilter = id ? 'id:"' + id + '"' : '*:*';
-        return solrService.delete(documentFilter, 'dashboard').then(
+        return solrService.delete(documentFilter, cfg.SERVICES.dashboardCore).then(
           init
         );
       };

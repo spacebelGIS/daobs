@@ -29,7 +29,6 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 import com.google.common.base.Predicate;
 
 import com.fasterxml.classmate.TypeResolver;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -38,17 +37,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.Date;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.BasicAuth;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+
+import java.util.Date;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
+
 
 @EnableWebMvc
 @Configuration
@@ -58,8 +61,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
   @Autowired
   private TypeResolver typeResolver;
-
-  private Docket doc;
 
   private Predicate<String> paths() {
     return or(
@@ -71,30 +72,30 @@ public class SwaggerConfig {
    * Load API documentation.
    */
   public void loadApi() {
-    this.doc = new Docket(DocumentationType.SWAGGER_2)
-      .apiInfo(new ApiInfo(
-        "DAOBS Api Documentation (beta)",
-        "Learn how to use the DAOBS REST API.",
-        Api.VERSION_0_1,
-        "urn:tos",
-        Api.CONTACT_EMAIL,
-        "EUPL",
-        "https://joinup.ec.europa.eu/community/eupl/og_page/eupl"))
-      .select()
-      .apis(RequestHandlerSelectors.any())
-      .paths(paths())
-      .build()
-      .pathMapping("/")
-      .genericModelSubstitutes(ResponseEntity.class)
-//      .directModelSubstitute(XMLGregorianCalendar.class, Date.class)
-      .alternateTypeRules(
-        newRule(typeResolver.resolve(DeferredResult.class,
-          typeResolver.resolve(ResponseEntity.class, WildcardType.class),
-          typeResolver.resolve(XMLGregorianCalendar.class, Date.class)
-          ),
-          typeResolver.resolve(WildcardType.class)
-        ))
-      .useDefaultResponseMessages(false)
-      .securitySchemes(newArrayList(new BasicAuth("ba")));
+    Docket doc = new Docket(DocumentationType.SWAGGER_2)
+        .apiInfo(new ApiInfo(
+          "DAOBS Api Documentation (beta)",
+          "Learn how to use the DAOBS REST API.",
+          Api.VERSION_0_1,
+          "urn:tos",
+          new Contact(Api.CONTACT_EMAIL, "https://github.com/INSPIRE-MIF/daobs", Api.CONTACT_EMAIL),
+          "EUPL",
+          "https://joinup.ec.europa.eu/community/eupl/og_page/eupl"))
+        .select()
+        .apis(RequestHandlerSelectors.any())
+        .paths(paths())
+        .build()
+        .pathMapping("/")
+        .genericModelSubstitutes(ResponseEntity.class)
+        // .directModelSubstitute(XMLGregorianCalendar.class, Date.class)
+        .alternateTypeRules(
+          newRule(typeResolver.resolve(DeferredResult.class,
+            typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+            typeResolver.resolve(XMLGregorianCalendar.class, Date.class)
+            ),
+            typeResolver.resolve(WildcardType.class)
+          ))
+        .useDefaultResponseMessages(false)
+        .securitySchemes(newArrayList(new BasicAuth("ba")));
   }
 }
