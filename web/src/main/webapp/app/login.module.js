@@ -26,6 +26,7 @@
    */
   var app = angular.module('login', [
     'daobs_cfg',
+    'user_service',
     'ngRoute',
     'pascalprecht.translate',
     'ui-notification'

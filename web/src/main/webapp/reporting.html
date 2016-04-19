@@ -30,9 +30,10 @@
     <link rel="stylesheet" href="assets/libs/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="assets/libs/angular-ui-notification.min.css"/>
     <link rel="stylesheet" href="assets/css/main.css"/>
+    <link rel="stylesheet" href="assets/css/login.css"/>
   </head>
   <body data-ng-controller="RootController"
-        data-ng-cloak="">
+        data-ng-cloak="" data-translate-cloak="">
 
     <div ng-include="'toptoolbar.html'"></div>
 
@@ -50,10 +51,8 @@
 
     <script src="assets/libs/moment.min.js"></script>
 
-    <script src="assets/libs/angular/angular.min.js" language="JavaScript"></script>
-    <script src="assets/libs/angular/angular-route.min.js"
-            language="JavaScript"></script>
-    <script src="assets/libs/angular/angular-route.min.js"
+    <script src="assets/libs/angular/angular.js" language="JavaScript"></script>
+    <script src="assets/libs/angular/angular-route.js"
             language="JavaScript"></script>
     <script src="assets/libs/angular/angular-translate.min.js"
             language="JavaScript"></script>
@@ -66,6 +65,7 @@
 
     <script src="app/app.module.js"></script>
     <script src="app/app.config.js"></script>
+    <script src="app/login.module.js"></script>
     <script src="app/app.route.js"></script>
     <script src="app/app.filter.js"></script>
     <script src="app/shared/cswService.js"></script>
@@ -78,5 +78,7 @@
     <script src="app/components/harvester/harvesterController.js"></script>
     <script src="app/components/monitoring/monitoringService.js"></script>
     <script src="app/components/monitoring/monitoringController.js"></script>
+    <script src="app/components/login/userService.js"></script>
+    <script src="app/components/login/loginController.js"></script>
   </body>
 </html>

@@ -40,17 +40,18 @@ permissions and limitations under the Licence.
 
 
 <div class="container-fluid">
-  <form class="form-signin" method="post" action="/login">
+  <form class="form-signin" method="post" name="loginForm" data-ng-submit="signIn()">
     <h2 class="form-signin-heading" data-translate>login.pleaseSignIn</h2>
-    <c:if test="${param.error ne null}">
-      <div class="alert alert-danger" data-translate="">login.userPassword-error</div>
-    </c:if>
+    <div class="alert alert-danger" data-translate="" data-ng-show="loginError">login.userPassword-error</div>
     <label for="username" class="sr-only" data-translate>login.username</label>
-    <input type="text" name="username" id="username" class="form-control" placeholder="{{'login.username-placeholder' | translate}}" required autofocus>
+    <input type="text" name="username" id="username" class="form-control" data-ng-model="loginObj.username"
+           placeholder="{{'login.username-placeholder' | translate}}" required autofocus>
     <label for="inputPassword" class="sr-only" data-translate>login.password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{'login.password-placeholder' | translate}}" required>
+    <input type="password" name="password" id="inputPassword" class="form-control" data-ng-model="loginObj.password"
+           placeholder="{{'login.password-placeholder' | translate}}" required>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" data-ng-disabled="loginProcessing">
+      <i class="fa fa-circle-o-notch fa-spin fa-fw" data-ng-show="loginProcessing"></i>Sign in</button>
   </form>
 </div>
 
@@ -79,6 +80,7 @@ permissions and limitations under the Licence.
 
 <script src="<spring:url value="/app/app.config.js"/>"></script>
 <script src="<spring:url value="/app/login.module.js"/>"></script>
+<script src="<spring:url value="/app/components/login/userService.js"/>"></script>
 <script src="<spring:url value="/app/components/login/loginController.js"/>"></script>
 
 

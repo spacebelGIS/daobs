@@ -33,6 +33,8 @@
   http://www.springframework.org/schema/security
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
+  <ctx:component-scan base-package="org.daobs.authentication" />
+
   <!--<beans:import resource="spring-security-ba.xml"/>-->
   <beans:import resource="spring-security-ldap.xml"/>
 

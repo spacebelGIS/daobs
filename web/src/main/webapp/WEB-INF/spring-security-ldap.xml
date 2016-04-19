@@ -33,23 +33,28 @@
   http://www.springframework.org/schema/security
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
+
   <ldap-server
     ldif="classpath:test-server.ldif" />
     <!--manager-dn="${ldap.security.principal}"
     manager-password="${ldap.security.credentials}"
     url="${ldap.base.provider.url}/${ldap.base.dn}"-->
 
-  <http auto-config="true">
+  <http auto-config="true" entry-point-ref="httpAuthenticationEntryPoint">
     <intercept-url pattern="/daobs/loginForm" access="permitAll" />
     <intercept-url pattern="/daobs/userDetails" access="permitAll"/>
     <intercept-url pattern="/login" access="permitAll" />
     <intercept-url pattern="/assets/**" access="permitAll" />
     <intercept-url pattern="/app/**" access="permitAll" />
     <intercept-url pattern="/favicon.ico" access="permitAll" />
-    <intercept-url pattern="/" access="ROLE_ADMIN"/>
-    <intercept-url pattern="/**" access="hasRole('USER')" />
-    <form-login login-page="/daobs/loginForm" authentication-failure-url="/daobs/loginForm?error" default-target-url="/" />
-    <logout logout-success-url="/" />
+    <intercept-url pattern="/" access="permitAll"/>
+    <intercept-url pattern="/**" access="permitAll" />
+
+    <form-login login-page="/daobs/loginForm"
+                authentication-success-handler-ref="authSuccessHandler"
+                authentication-failure-handler-ref="authFailureHandler"
+                default-target-url="/" />
+    <logout success-handler-ref="httpLououtSuccessHandler"/>
     <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
     <custom-filter ref="csrfheaderFilter" after="CSRF_FILTER"/>
 

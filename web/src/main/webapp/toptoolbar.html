@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li data-ng-repeat="link in navLinks"
+        <li data-ng-repeat="link in getNavLinks()"
             class="{{link.id}}"
             data-ng-class="navClass('{{link.url}}')">
           <a href="{{link.url}}"
@@ -14,7 +14,20 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li data-ng-class="navClass('#/logout')">
+        <li>
+          <pre>
+            User: {{getUser()}}
+          </pre>
+        </li>
+        <li data-ng-class="navClass('#/login')" data-ng-hide="getUser().authenticated">
+          <a href="#/login"
+             title="{{'signInTitle' | translate}}"
+             id="ds-menu-signin">
+            <i class="fa fa-sign-in"></i>
+            {{'signin' | translate}}
+          </a>
+        </li>
+        <li data-ng-class="navClass('#/logout')" data-ng-show="getUser().authenticated">
           <a href="#/logout"
              title="{{'signoutTitle' | translate}}"
              id="ds-menu-signout">

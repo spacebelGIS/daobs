@@ -30,6 +30,7 @@
           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
   <ctx:annotation-config/>
+  <ctx:component-scan base-package="org.daobs.authentication" />
   <ctx:property-placeholder location="${config.properties.path}"
                             file-encoding="UTF-8"
                             ignore-unresolvable="false"/>

@@ -66,7 +66,7 @@
             {{dashboard.title}}
           </a>
           <button class="btn btn-link btn-sm pull-right"
-                  data-ng-click="removeDashboard(dashboard.id)">
+                  data-ng-click="removeDashboard(dashboard.id)" data-ng-show="getUser().authenticated">
             <i class="fa fa-remove text-danger"></i>
           </button>
         </li>
@@ -84,7 +84,7 @@
              data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
             {{dashboard.title}}
           </a>
-          <button class="btn btn-link btn-sm pull-right"
+          <button class="btn btn-link btn-sm pull-right" data-ng-show="getUser().authenticated"
                   data-ng-click="removeDashboard(dashboard.id)">
             <i class="fa fa-remove text-danger"></i>
           </button>
@@ -93,7 +93,7 @@
     </div>
 
 
-    <div class="pull-right">
+    <div class="pull-right" data-ng-show="getUser().authenticated">
       <!-- TODO: Should be only displayed for identified users -->
       <span data-ng-if="dashboards.length === 0"
             data-translate="">noDashboard</span>

@@ -43,6 +43,10 @@
         controller: 'LogoutCtrl',
         templateUrl: cfg.SERVICES.root +
         'app/components/home/homeView.html'
+      }).when('/login', {
+        controller:'LoginController',
+        templateUrl: cfg.SERVICES.root +
+        'app/components/login/loginTemplate.html'
       }).otherwise({
         redirectTo: '/'
       });

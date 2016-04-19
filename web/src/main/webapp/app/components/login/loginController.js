@@ -22,8 +22,27 @@
   "use strict";
   var app = angular.module('login');
 
-  app.controller('LoginController', ['$scope', function($scope) {
-    
+  app.controller('LoginController', ['$scope', 'userService', '$timeout', function($scope, userService, $timeout) {
+    $scope.loginObj = {};
+
+    $scope.signIn = function() {
+      $scope.loginProcessing = true;
+      $scope.loginError = false;
+      userService.login($scope.loginObj.username, $scope.loginObj.password).then(
+        function(data){
+          $timeout(function() {
+            window.location= "/";
+          }, 100);
+
+        },
+        function(rejection) {
+          $scope.loginError = true;
+        }
+      ).finally(function() {
+        $scope.loginProcessing = false;
+      });
+    }
+
   }]);
 
 })();
