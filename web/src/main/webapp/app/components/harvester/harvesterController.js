@@ -119,11 +119,12 @@
       $scope.loading = false;
       function init() {
         $scope.loading = true;
+        $scope.statsForTerritory = {};
         harvesterService.getAll().success(function (list) {
           $scope.loading = false;
           $scope.harvesterConfig = list.harvester;
           if (list.harvester.length > 0) {
-            loadStatsForTerritory()
+            loadStatsForTerritory();
           }
         });
       }

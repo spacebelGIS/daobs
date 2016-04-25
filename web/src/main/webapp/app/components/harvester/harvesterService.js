@@ -60,7 +60,7 @@
           removeRecords: function (h) {
             var filter = h === undefined ? '' :
               '+territory:"' + h.territory.trim() + '" ' +
-              '+harvesterId:"' + h.url.trim() + '"',
+              '+harvesterUuid:"' + h.uuid.trim() + '"',
               metadataFilter =
                 '+(documentType:metadata documentType:association) ' + filter,
               deferred = $q.defer();
