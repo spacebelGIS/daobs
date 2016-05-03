@@ -222,14 +222,16 @@
             <button role="button"
                     class="btn btn-default"
                     data-ng-click="edit(h)"
-                    title="{{'configure' | translate}}">
+                    title="{{'configure' | translate}}"
+                    data-ng-show="getUser().authenticated">
               <i class="fa fa-edit"></i>&nbsp;
               <span data-translate="">configure</span>
             </button>
             <button data-ng-click="run(h)"
                     class="btn btn-default"
                     role="button"
-                    title="{{'harvest' | translate}}">
+                    title="{{'harvest' | translate}}"
+                    data-ng-show="getUser().authenticated">
               <i class="fa fa-play"></i>&nbsp;
               <span data-translate="">harvest</span>
             </button>

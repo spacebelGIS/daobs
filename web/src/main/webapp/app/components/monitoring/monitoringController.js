@@ -50,9 +50,26 @@
    * TODO:
    * * submit report
    */
-  app.controller('MonitoringCtrl', ['$scope', '$routeParams',
-    function ($scope, $routeParams) {
-      $scope.section = $routeParams.section;
+  app.controller('MonitoringCtrl', ['$scope', '$routeParams', 'userService',
+    function ($scope, $routeParams, userService) {
+      var privateSections = [
+        'create',
+        'submit'
+      ];
+      var defaultSection = 'manage';
+
+      if (privateSections.indexOf($routeParams.section) === -1) {
+        $scope.section = $routeParams.section;
+      } else {
+        var user = userService.getUser();
+        if (user && user.authenticated) {
+          $scope.section = $routeParams.section;
+        } else {
+          $scope.section = defaultSection;
+        }
+      }
+
+
 
       $scope.isActive = function (hash) {
         return location.hash.indexOf("#/" + hash) === 0

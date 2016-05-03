@@ -30,11 +30,13 @@
       <a href="#/monitoring/manage"
          data-translate="">monitoringInfo</a></li>
     <li role="reporting"
-        data-ng-class="{'active':isActive('monitoring/create')}">
+        data-ng-class="{'active':isActive('monitoring/create')}"
+        data-ng-show="getUser().authenticated">
       <a href="#/monitoring/create"
          data-translate="">createMonitoring</a></li>
     <li role="reporting"
-        data-ng-class="{'active':isActive('monitoring/submit')}">
+        data-ng-class="{'active':isActive('monitoring/submit')}"
+        data-ng-show="getUser().authenticated">
       <a href="#/monitoring/submit"
          data-translate="">submitMonitoring</a></li>
   </ul>

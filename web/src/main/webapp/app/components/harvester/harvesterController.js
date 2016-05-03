@@ -45,9 +45,9 @@
 
   app.controller('HarvesterConfigCtrl', [
     '$scope', '$routeParams', '$translate', '$timeout', '$http', '$location',
-    'harvesterService', 'cfg', 'Notification', 'cswService', '$filter',
+    'harvesterService', 'cfg', 'Notification', 'cswService', '$filter', 'userService',
     function ($scope, $routeParams, $translate, $timeout, $http, $location,
-              harvesterService, cfg, Notification, cswService, $filter) {
+              harvesterService, cfg, Notification, cswService, $filter, userService) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
       $scope.adding = false;
@@ -201,6 +201,10 @@
       };
 
       $scope.run = function (h) {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         harvesterService.run(h).then(function () {
           Notification.success(
             $filter('translate')('harvesterStarted',
@@ -212,12 +216,20 @@
         });
       };
       $scope.runAll = function () {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         angular.forEach($scope.harvesterConfig, function (h) {
           $scope.run(h);
         });
       };
 
       $scope.remove = function (h, quiet) {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         harvesterService.remove(h).then(function (response) {
           Notification.success(
             $filter('translate')('harvesterDeleted',
@@ -233,6 +245,10 @@
       };
 
       $scope.removeAll = function () {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         angular.forEach($scope.harvesterConfig, function (h) {
           $scope.remove(h, true);
         });
