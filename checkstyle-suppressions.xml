@@ -26,7 +26,7 @@
   "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
 <suppressions>
   <suppress checks="[a-zA-Z0-9]*"
-            files="web/src/main/java/org/daobs/harvester/config/*"/>
+            files="harvesters/harvester-common/src/main/java/org/daobs/harvester/config/*"/>
   <suppress checks="[a-zA-Z0-9]*"
             files="reporting/src/main/java/org/daobs/indicator/config/*"/>
 </suppressions>
