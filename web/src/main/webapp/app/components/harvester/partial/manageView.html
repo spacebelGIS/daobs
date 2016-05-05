@@ -39,8 +39,8 @@
 
           <div class="btn-group pull-right" role="group">
             <button class="btn btn-default"
-                    data-ng-hide="adding"
-                    data-ng-click="adding = true"
+                    data-ng-if="!adding && getUser().authenticated"
+                    data-ng-click="startAdding()"
                     title="{{'add' | translate}}">
               <i class="fa fa-plus"></i>
             </button>
@@ -79,14 +79,14 @@
                     <span data-translate="">getHitsNumber</span>
                   </a>
                 </li>
-                <li>
+                <li data-ng-if="getUser().authenticated">
                   <a href=""
                      data-ng-click="runAll()">
                     <i class="fa fa-play"/>&nbsp;
                     <span data-translate="">harvesterStartAll</span>
                   </a>
                 </li>
-                <li>
+                <li data-ng-if="getUser().authenticated">
                   <a href=""
                      data-ng-click="removeAll()">
                     <i class="fa fa-remove text-danger"/>&nbsp;
@@ -218,20 +218,18 @@
             </li>
           </ul>
           <br/>
-          <div class="btn-group">
+          <div class="btn-group" data-ng-if="getUser().authenticated">
             <button role="button"
                     class="btn btn-default"
                     data-ng-click="edit(h)"
-                    title="{{'configure' | translate}}"
-                    data-ng-show="getUser().authenticated">
+                    title="{{'configure' | translate}}">
               <i class="fa fa-edit"></i>&nbsp;
               <span data-translate="">configure</span>
             </button>
             <button data-ng-click="run(h)"
                     class="btn btn-default"
                     role="button"
-                    title="{{'harvest' | translate}}"
-                    data-ng-show="getUser().authenticated">
+                    title="{{'harvest' | translate}}">
               <i class="fa fa-play"></i>&nbsp;
               <span data-translate="">harvest</span>
             </button>
@@ -301,6 +299,25 @@
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div class="btn-group" data-ng-if="!getUser().authenticated">
+            <button class="btn btn-default dropdown-toggle" type="button" id="publicActions"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="true"
+                    title="{{'actions' | translate}}">
+              <i class="fa fa-cog"/>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a role="button" id="publicGetHitsNumber"
+                   data-ng-click="getHitsNumber(h)">
+                  <i class="fa fa-calculator"></i>&nbsp;
+                  <span data-translate="">getHitsNumber</span>
+                </a>
+              </li>
+            </ul>
           </div>
         </td>
       </tr>

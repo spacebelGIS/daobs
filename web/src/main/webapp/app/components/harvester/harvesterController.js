@@ -24,18 +24,33 @@
 
   app.config(['$routeProvider', 'cfg',
     function ($routeProvider, cfg) {
-      $routeProvider.when('/harvesting/:section', {
+      $routeProvider.when('/harvesting', {
         templateUrl: cfg.SERVICES.root +
         'app/components/harvester/harvesterView.html'
-      }).when('/harvesting/harvesting', {
+      }).when('/harvesting/:section', {
         templateUrl: cfg.SERVICES.root +
         'app/components/harvester/harvesterView.html'
       });
     }]);
 
-  app.controller('HarvesterCtrl', ['$scope', '$routeParams',
-    function ($scope, $routeParams) {
-      $scope.section = $routeParams.section || 'harvester';
+  app.controller('HarvesterCtrl', ['$scope', '$routeParams', 'userService',
+    function ($scope, $routeParams, userService) {
+      var defaultSection = 'manage';
+
+      var privateSections = [
+        'monitor'
+      ];
+
+      if (privateSections.indexOf($routeParams.section) === -1) {
+        $scope.section = $routeParams.section || defaultSection;
+      } else {
+        var user = userService.getUser();
+        if (user && user.authenticated) {
+          $scope.section = $routeParams.section;
+        } else {
+          $scope.section = defaultSection;
+        }
+      }
 
       $scope.isActive = function (hash) {
         return location.hash.indexOf("#/" + hash) === 0
@@ -180,6 +195,10 @@
           };
         });
       };
+
+      $scope.startAdding = function() {
+        $scope.adding = true;
+      }
 
       $scope.edit = function (h) {
         $scope.adding = true;

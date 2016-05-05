@@ -31,14 +31,6 @@
         templateUrl: cfg.SERVICES.root +
         'app/components/monitoring/monitoringView.html',
         reloadOnSearch: false
-      }).when('/monitoring/manage', {
-        controller: 'MonitoringCtrl',
-        templateUrl: cfg.SERVICES.root +
-        'app/components/monitoring/monitoringView.html'
-      }).when('/monitoring/submit', {
-        controller: 'MonitoringCtrl',
-        templateUrl: cfg.SERVICES.root +
-        'app/components/monitoring/monitoringView.html'
       });
     }]);
 
@@ -59,7 +51,7 @@
       var defaultSection = 'manage';
 
       if (privateSections.indexOf($routeParams.section) === -1) {
-        $scope.section = $routeParams.section;
+        $scope.section = $routeParams.section || defaultSection;
       } else {
         var user = userService.getUser();
         if (user && user.authenticated) {
