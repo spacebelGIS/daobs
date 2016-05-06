@@ -38,9 +38,5 @@
   <!--<beans:import resource="spring-security-ba.xml"/>-->
   <beans:import resource="spring-security-ldap.xml"/>
 
-
-
-
   <ctx:property-placeholder location="WEB-INF/spring-security.properties"/>
-
 </beans:beans>

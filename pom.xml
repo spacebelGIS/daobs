@@ -458,12 +458,31 @@
     <log.dir>/tmp</log.dir>
     <!--<log.dir>${catalina.home}/logs</log.dir>-->
 
-    <!-- Default username and password. This
+
+    <!--
+    TODO: Add option to configure authentication mode:
+     * ba: XML configuration
+     * ldap: LDAP
+     * ldap-dev: Use an internal LDAP
+     TODO: Make ba the default
+     -->
+
+    <!-- For simple XML configuration:
+    Default username and password. This
     set the values in Spring security file and
     in services needing authentication against
     the Solr instance. eg. Harvesters. -->
     <webapp.username>admin</webapp.username>
     <webapp.password>admin</webapp.password>
+
+    <!-- For LDAP based authentication -->
+    <ldap.base.provider.url>ldap://ldap.eionet.europa.eu</ldap.base.provider.url>
+    <ldap.base.dn>o=EIONET,l=Europe</ldap.base.dn>
+    <ldap.security.principal></ldap.security.principal>
+    <ldap.security.credentials></ldap.security.credentials>
+    <ldap.base.search.base>ou=Users</ldap.base.search.base>
+    <ldap.base.dn.pattern>uid={0}</ldap.base.dn.pattern>
+
 
     <solr.webapp.name>solr</solr.webapp.name>
     <solr.port>8984</solr.port>
@@ -484,6 +503,7 @@
     <db.validation.password>www-data</db.validation.password>
 
     <inspire.validation.background>false</inspire.validation.background>
+
 
     <silk.port>8985</silk.port>
 

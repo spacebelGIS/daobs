@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by juanl on 14/04/2016.
  */
-@Component("httpLououtSuccessHandler")
+@Component("httpLogoutSuccessHandler")
 public class HttpLogoutSuccessHandler implements LogoutSuccessHandler {
   @Override
   public void onLogoutSuccess(
