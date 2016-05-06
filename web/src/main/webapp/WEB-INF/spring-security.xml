@@ -60,8 +60,19 @@
     <beans:property name="headerName" value="X-XSRF-TOKEN"/>
   </beans:bean>
 
-  <beans:import resource="spring-security-ba.xml"/>
-<!--  <beans:import resource="spring-security-ldap.xml"/>-->
-
   <ctx:property-placeholder location="WEB-INF/spring-security.properties"/>
+
+  <beans:beans profile="ba">
+    <beans:import resource="spring-security-ba.xml" />
+
+  </beans:beans>
+  <beans:beans profile="ldap">
+    <beans:import resource="spring-security-ldap.xml"/>
+  </beans:beans>
+  <beans:beans profile="ldap-dev">
+    <beans:import resource="spring-security-ldap-dev.xml"/>
+  </beans:beans>
+
+
+
 </beans:beans>
