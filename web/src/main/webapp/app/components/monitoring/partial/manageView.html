@@ -36,7 +36,8 @@
         <th data-translate="">territory</th>
         <th data-translate="">org</th>
         <th>
-          <div class="btn-group pull-right" role="group">
+          <div class="btn-group pull-right" role="group"
+               data-ng-if="getUser().authenticated">
             <a class="btn btn-default"
                href="#/monitoring/submit"
                title="{{'submitMonitoring' | translate}}">
@@ -96,7 +97,8 @@
           </a><br/>-->
           <a class="btn btn-link"
              href="" role="button"
-             data-ng-click="removeMonitoring(m)">
+             data-ng-click="removeMonitoring(m)"
+             data-ng-if="getUser().authenticated">
             <i class="fa fa-remove text-danger"></i>&nbsp;
             <span data-translate="">remove</span>
           </a>
