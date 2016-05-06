@@ -72,6 +72,12 @@
       <organizationUrl>https://www.geocat.net/</organizationUrl>
       <email>maria.arias@geocat.net</email>
     </developer>
+    <developer>
+      <name>Juan Luis Rodríguez Ponce</name>
+      <organization>GeoCat BV</organization>
+      <organizationUrl>https://www.geocat.net/</organizationUrl>
+      <email>juanluisrp@geocat.net</email>
+    </developer>
   </developers>
   <contributors>
     <contributor>
