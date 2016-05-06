@@ -468,12 +468,13 @@
 
 
     <!--
-    TODO: Add option to configure authentication mode:
-     * ba: XML configuration
-     * ldap: LDAP
-     * ldap-dev: Use an internal LDAP
-     TODO: Make ba the default
+      Option to configure authentication mode:
+        * ba: XML configuration
+        * ldap: LDAP
+        * ldap-dev: Use an internal LDAP
      -->
+    <authentication.mode.selected>ba</authentication.mode.selected>
+
 
     <!-- For simple XML configuration:
     Default username and password. This
@@ -634,6 +635,31 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>ldap</id>
+      <activation>
+        <property>
+          <name>authentication.mode</name>
+          <value>ldap</value>
+        </property>
+      </activation>
+      <properties>
+        <authentication.mode.selected>ldap</authentication.mode.selected>
+      </properties>
+    </profile>
+    <profile>
+      <id>ldap-dev</id>
+      <activation>
+        <property>
+          <name>authentication.mode</name>
+          <value>ldap-dev</value>
+        </property>
+      </activation>
+      <properties>
+        <authentication.mode.selected>ldap-dev</authentication.mode.selected>
+      </properties>
     </profile>
   </profiles>
 </project>

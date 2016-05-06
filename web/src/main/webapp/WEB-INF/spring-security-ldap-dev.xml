@@ -19,7 +19,7 @@
   ~ permissions and limitations under the Licence.
 
   -->
-<beans:beans profile="ldap"
+<beans:beans profile="ldap-dev"
   xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:ctx="http://www.springframework.org/schema/context"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -36,10 +36,7 @@
                             file-encoding="UTF-8"
                             ignore-unresolvable="false"/>
 
-  <ldap-server url="${ldap.base.provider.url}/${ldap.base.dn}"
-               manager-dn="${ldap.security.principal}"
-               manager-password="${ldap.security.credentials}"/>
-
+  <ldap-server ldif="classpath:test-server.ldif" />
 
 
   <authentication-manager>

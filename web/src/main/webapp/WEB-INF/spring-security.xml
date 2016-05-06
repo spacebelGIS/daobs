@@ -35,8 +35,44 @@
 
   <ctx:component-scan base-package="org.daobs.authentication" />
 
-  <!--<beans:import resource="spring-security-ba.xml"/>-->
-  <beans:import resource="spring-security-ldap.xml"/>
+  <http auto-config="true" entry-point-ref="httpAuthenticationEntryPoint">
+    <intercept-url pattern="/daobs/loginForm" access="permitAll" />
+    <intercept-url pattern="/daobs/userDetails" access="permitAll"/>
+    <intercept-url pattern="/login" access="permitAll" />
+    <intercept-url pattern="/assets/**" access="permitAll" />
+    <intercept-url pattern="/app/**" access="permitAll" />
+    <intercept-url pattern="/favicon.ico" access="permitAll" />
+    <intercept-url pattern="/" access="permitAll"/>
+    <intercept-url pattern="/**" access="permitAll" />
+
+    <form-login login-page="/daobs/loginForm"
+                authentication-success-handler-ref="authSuccessHandler"
+                authentication-failure-handler-ref="authFailureHandler"
+                default-target-url="/" />
+    <logout success-handler-ref="httpLogoutSuccessHandler"/>
+    <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
+    <custom-filter ref="csrfheaderFilter" after="CSRF_FILTER"/>
+
+  </http>
+
+  <beans:bean id="csrfheaderFilter" class="org.daobs.filter.CsrfHeaderFilter" />
+  <beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+    <beans:property name="headerName" value="X-XSRF-TOKEN"/>
+  </beans:bean>
 
   <ctx:property-placeholder location="WEB-INF/spring-security.properties"/>
+
+  <beans:beans profile="ba">
+    <beans:import resource="spring-security-ba.xml" />
+
+  </beans:beans>
+  <beans:beans profile="ldap">
+    <beans:import resource="spring-security-ldap.xml"/>
+  </beans:beans>
+  <beans:beans profile="ldap-dev">
+    <beans:import resource="spring-security-ldap-dev.xml"/>
+  </beans:beans>
+
+
+
 </beans:beans>
