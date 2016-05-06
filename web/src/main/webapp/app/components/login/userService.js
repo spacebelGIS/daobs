@@ -23,7 +23,7 @@
 
   app.factory('userService', ['$http', '$q', 'cfg', '$httpParamSerializerJQLike',
     function($http, $q, cfg, $httpParamSerializerJQLike) {
-      var currentUser = null;
+      var currentUser = null
 
 
       return {
