@@ -17,6 +17,7 @@
   ~ either express or implied.
   ~ See the Licence for the specific language governing
   ~ permissions and limitations under the Licence.
+
   -->
 <beans:beans
   xmlns:beans="http://www.springframework.org/schema/beans"
@@ -40,26 +41,7 @@
                manager-dn="${ldap.security.principal}"
                manager-password="${ldap.security.credentials}"/>
 
-  <http auto-config="true" entry-point-ref="httpAuthenticationEntryPoint">
-    <intercept-url pattern="/daobs/loginForm" access="permitAll" />
-    <intercept-url pattern="/daobs/userDetails" access="permitAll"/>
-    <intercept-url pattern="/login" access="permitAll" />
-    <intercept-url pattern="/assets/**" access="permitAll" />
-    <intercept-url pattern="/app/**" access="permitAll" />
-    <intercept-url pattern="/favicon.ico" access="permitAll" />
-    <intercept-url pattern="/" access="permitAll"/>
-    <intercept-url pattern="/**" access="permitAll" />
-
-    <form-login login-page="/daobs/loginForm"
-                authentication-success-handler-ref="authSuccessHandler"
-                authentication-failure-handler-ref="authFailureHandler"
-                default-target-url="/" />
-    <logout success-handler-ref="httpLogoutSuccessHandler"/>
-    <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
-    <custom-filter ref="csrfHeaderFilter" after="CSRF_FILTER"/>
-
-  </http>
-
+ 
 
   <authentication-manager>
     <ldap-authentication-provider
@@ -71,11 +53,6 @@
   <ldap-user-service
     user-search-base="ou=people"
     user-search-filter="uid={0}"
-  />-->
-
-  <beans:bean id="csrfHeaderFilter" class="org.daobs.filter.CsrfHeaderFilter" />
-  <beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
-    <beans:property name="headerName" value="X-XSRF-TOKEN"/>
-  </beans:bean>
+  />-->>
 
 </beans:beans>

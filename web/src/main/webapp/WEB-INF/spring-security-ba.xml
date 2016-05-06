@@ -28,38 +28,11 @@
   http://www.springframework.org/schema/security
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-  <http auto-config="true" use-expressions="true">
-    <!-- Solr admin -->
-    <intercept-url pattern="/${solr.webapp.name}/admin.html*"
-                   access="hasRole('ROLE_ADMIN')"/>
-    <intercept-url pattern="/${solr.webapp.name}/${solr.core.data}/admin/luke"
-                   access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    <intercept-url pattern="/${solr.webapp.name}/${solr.core.data}/admin/*"
-                   access="hasRole('ROLE_ADMIN')"/>
-    <intercept-url pattern="/${solr.webapp.name}/${solr.core.data}/update/*"
-                   access="hasRole('ROLE_ADMIN')"/>
-    <intercept-url pattern="/${solr.webapp.name}/${solr.core.dashboard}/admin/*"
-                   access="hasRole('ROLE_ADMIN')"/>
-    <intercept-url
-      pattern="/${solr.webapp.name}/${solr.core.dashboard}/update/*"
-      access="hasRole('ROLE_ADMIN')"/>
 
-    <!-- Controllers -->
-    <intercept-url pattern="/*/reporting*" method="GET"
-                   access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    <intercept-url pattern="/*/reporting*" access="hasRole('ROLE_ADMIN')"/>
-    <intercept-url pattern="/*/harvester*" access="hasRole('ROLE_ADMIN')"/>
-
-    <http-basic/>
-  </http>
 
   <authentication-manager>
     <authentication-provider>
-      <user-service>
-        <user name="${webapp.username}"
-              password="${webapp.password}"
-              authorities="ROLE_ADMIN"/>
-      </user-service>
+      <user-service properties="classpath:users.properties" />
     </authentication-provider>
   </authentication-manager>
 
