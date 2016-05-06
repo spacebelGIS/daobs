@@ -14,11 +14,6 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <pre>
-            User: {{getUser()}}
-          </pre>
-        </li>
         <li data-ng-class="navClass('#/login')" data-ng-hide="getUser().authenticated">
           <a href="#/login"
              title="{{'signInTitle' | translate}}"
