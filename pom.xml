@@ -464,7 +464,6 @@
         * ba: XML configuration
         * ldap: LDAP
         * ldap-dev: Use an internal LDAP
-     TODO: Make ba the default
      -->
     <authentication.mode.selected>ba</authentication.mode.selected>
 
