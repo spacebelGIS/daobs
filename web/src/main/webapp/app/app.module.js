@@ -108,27 +108,15 @@
       };
     }]);
 
-  app.controller('LogoutCtrl', ['$scope', '$http', '$q', '$location', '$log', '$timeout', 'cfg',
-    function ($scope, $http, $q, $location, $log, $timeout, cfg) {
-      var logoutCalls = [];
-      var solrLogoutPromise = $http.get(cfg.SERVICES.solrAdmin,
-        {cache: false}
-      );
-      logoutCalls.push(solrLogoutPromise);
-      var appLogoutPromise = $http.post(cfg.SERVICES.root + "logout", {cache:false});
-      logoutCalls.push(appLogoutPromise);
-      $q.all(logoutCalls).then(function() {
-        // success
-        return $timeout(function() {
-          window.location = cfg.SERVICES.root;
-        }, 100);
+  app.controller('LogoutCtrl', ['$http', '$log', 'cfg',
+    function ($http, $log, cfg) {
+      $http.post(cfg.SERVICES.root + "logout", {
+        cache:false
+      }).then(function() {
+        window.location = cfg.SERVICES.root;
       },
       function () {
-          // error
         $log.warn("Error exiting from Solr or the app");
-
-        }
-      );
+      });
     }]);
-
 }());
