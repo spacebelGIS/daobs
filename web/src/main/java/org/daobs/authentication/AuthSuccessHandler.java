@@ -18,29 +18,28 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 package org.daobs.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.header.Header;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by juanl on 14/04/2016.
@@ -50,8 +49,9 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthSuccessHandler.class);
 
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                      Authentication authentication) throws IOException, ServletException {
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException, ServletException {
     response.setStatus(HttpServletResponse.SC_OK);
     response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
@@ -60,7 +60,7 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
       map.put("authenticated", Boolean.TRUE);
       map.put("username", authentication.getName());
       map.put("roles", AuthorityUtils.authorityListToSet(authentication
-        .getAuthorities()));
+          .getAuthorities()));
     } else {
       map.put("authenticated", Boolean.FALSE);
     }

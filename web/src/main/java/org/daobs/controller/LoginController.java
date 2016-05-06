@@ -18,6 +18,7 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 package org.daobs.controller;
 
 import org.springframework.http.MediaType;
@@ -42,14 +43,19 @@ public class LoginController {
     return "loginForm";
   }
 
-  @RequestMapping(value="/userDetails", produces = {MediaType.APPLICATION_JSON_VALUE})
+  /**
+   * Get user details.
+   */
+  @RequestMapping(
+      value = "/userDetails",
+      produces = {MediaType.APPLICATION_JSON_VALUE})
   public @ResponseBody Map<String, Object> currentUserDetails(Principal activeUser) {
     Map<String, Object> map = new LinkedHashMap<>();
     if (activeUser != null && ((Authentication) activeUser).isAuthenticated()) {
       map.put("authenticated", Boolean.TRUE);
       map.put("username", activeUser.getName());
       map.put("roles", AuthorityUtils.authorityListToSet(((Authentication) activeUser)
-        .getAuthorities()));
+          .getAuthorities()));
     } else {
       map.put("authenticated", Boolean.FALSE);
 

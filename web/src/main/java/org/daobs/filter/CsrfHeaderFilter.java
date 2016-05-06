@@ -18,22 +18,24 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 package org.daobs.filter;
 
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
+
+import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- *  Angular wants the cookie name to be “XSRF-TOKEN” and Spring Security provides it as a request attribute, so we just
+ *  Angular wants the cookie name to be “XSRF-TOKEN”
+ *  and Spring Security provides it as a request attribute, so we just
  *  need to transfer the value from a request attribute to a cookie.
  */
 public class CsrfHeaderFilter extends OncePerRequestFilter {
@@ -42,7 +44,7 @@ public class CsrfHeaderFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
     CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-      .getName());
+        .getName());
     if (csrf != null) {
       Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
       String token = csrf.getToken();

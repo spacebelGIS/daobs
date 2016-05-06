@@ -18,18 +18,21 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 package org.daobs.authentication;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
- * Class implements {@link AuthenticationEntryPoint}, and implements only one method, which sends
+ * Class implements {@link AuthenticationEntryPoint},
+ * and implements only one method, which sends
  * response error (with 401 status code) in cause of unauthorized attempt.
  */
 @Component("httpAuthenticationEntryPoint")
