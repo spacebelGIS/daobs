@@ -41,7 +41,7 @@
                manager-dn="${ldap.security.principal}"
                manager-password="${ldap.security.credentials}"/>
 
- 
+
 
   <authentication-manager>
     <ldap-authentication-provider
@@ -53,6 +53,6 @@
   <ldap-user-service
     user-search-base="ou=people"
     user-search-filter="uid={0}"
-  />-->>
+  />-->
 
 </beans:beans>

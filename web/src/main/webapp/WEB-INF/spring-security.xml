@@ -49,7 +49,7 @@
                 authentication-success-handler-ref="authSuccessHandler"
                 authentication-failure-handler-ref="authFailureHandler"
                 default-target-url="/" />
-    <logout success-handler-ref="httpLououtSuccessHandler"/>
+    <logout success-handler-ref="httpLogoutSuccessHandler"/>
     <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
     <custom-filter ref="csrfheaderFilter" after="CSRF_FILTER"/>
 
