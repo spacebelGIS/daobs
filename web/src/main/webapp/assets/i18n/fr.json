@@ -154,5 +154,6 @@
   "login.username-placeholder": "Nom d'utilisateur",
   "login.password": "Mot de passe",
   "login.password-placeholder": "Mot de passe",
-  "login.userPassword-error": "Username or password is invalid."
+  "login.userPassword-error": "Username or password is invalid.",
+  "signIn": "Se connecter"
 }

@@ -154,5 +154,6 @@
   "login.username-placeholder": "Username",
   "login.password": "Password",
   "login.password-placeholder": "Password",
-  "login.userPassword-error": "Username or password is invalid."
+  "login.userPassword-error": "Username or password is invalid.",
+  "signIn": "Sign in"
 }
