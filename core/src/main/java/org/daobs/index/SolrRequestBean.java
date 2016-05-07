@@ -73,16 +73,17 @@ public class SolrRequestBean {
     }
     return null;
   }
+
   public static Node query(String query) {
     SolrServerBean serverBean = SolrServerBean.get();
     return query(serverBean.getSolrServerCore(), query);
   }
 
-    /**
-     * Return the number of rows matching the query.
-     *
-     * @param query The query
-     */
+  /**
+   * Return the number of rows matching the query.
+   *
+   * @param query The query
+   */
   public static Double getNumFound(String collection, String query, String... filterQuery) {
     try {
       SolrQuery solrQuery = new SolrQuery();
@@ -102,6 +103,7 @@ public class SolrRequestBean {
     }
     return null;
   }
+
   public static Double getNumFound(String query, String... filterQuery) {
     SolrServerBean serverBean = SolrServerBean.get();
     return getNumFound(serverBean.getSolrServerCore(), query, filterQuery);
@@ -153,7 +155,9 @@ public class SolrRequestBean {
     }
     return null;
   }
-  public static Double getStats(String query, String[] filterQuery, String statsField, String stats) {
+
+  public static Double getStats(String query, String[] filterQuery,
+                                String statsField, String stats) {
     SolrServerBean serverBean = SolrServerBean.get();
     return getStats(serverBean.getSolrServerCore(), query, filterQuery, statsField, stats);
   }
@@ -176,8 +180,9 @@ public class SolrRequestBean {
                                     String fieldValue) {
     return analyzeField(collection, fieldName, fieldValue, PHASE_INDEX, DEFAULT_FILTER_CLASS, 0);
   }
+
   public static String analyzeField(String fieldName,
-                                    String fieldValue){
+                                    String fieldValue) {
     SolrServerBean serverBean = SolrServerBean.get();
     return analyzeField(serverBean.getSolrServerCore(), fieldName, fieldValue);
   }
@@ -257,11 +262,15 @@ public class SolrRequestBean {
       return fieldValue;
     }
   }
+
+  /**
+   * Analyze a field.
+   */
   public static String analyzeField(String fieldName,
                                     String fieldValue,
                                     String analysisPhaseName,
                                     String filterClass,
-                                    int tokenPosition){
+                                    int tokenPosition) {
     SolrServerBean serverBean = SolrServerBean.get();
     return analyzeField(serverBean.getSolrServerCore(),
         fieldName, fieldValue, analysisPhaseName, filterClass, tokenPosition);

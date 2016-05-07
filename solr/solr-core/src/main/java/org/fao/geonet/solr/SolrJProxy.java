@@ -29,72 +29,62 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Create a bean providing a connection to the
- * Solr.
+ * Create a bean providing a connection to the Solr.
  */
 @Component
 public class SolrJProxy implements InitializingBean {
 
-    private static SolrJProxy instance;
-    private SolrClient client;
+  private static SolrJProxy instance;
+  private SolrClient client;
 
-    @Autowired
-    private SolrConfig config;
+  @Autowired
+  private SolrConfig config;
 
-    private boolean connectionChecked = false;
+  private boolean connectionChecked = false;
 
-    /**
-     * The first time this method is called, ping the
-     * client to check connection status.
-     *
-     * @return The Solr instance.
-     */
-    public SolrClient getServer() throws Exception {
-        if (!connectionChecked) {
-            this.ping();
-            connectionChecked = true;
-        }
-        return client;
+  /**
+   * The first time this method is called, ping the client to check connection status.
+   *
+   * @return The Solr instance.
+   */
+  public SolrClient getServer() throws Exception {
+    if (!connectionChecked) {
+      this.ping();
+      connectionChecked = true;
     }
+    return client;
+  }
 
-    public SolrJProxy setServer(SolrClient server) {
-        this.client = server;
-        return this;
-    }
+  public SolrJProxy setServer(SolrClient server) {
+    this.client = server;
+    return this;
+  }
 
-    /**
-     * Connect to the Solr, ping the client
-     * to check connection and set the instance.
-     *
-     * @throws Exception
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        client = config.createClient();
-        instance = this;
-    }
+  /**
+   * Connect to the Solr, ping the client to check connection and set the instance.
+   */
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    client = config.createClient();
+    instance = this;
+  }
 
-    /**
-     * Ping the Solr.
-     *
-     * @throws Exception
-     */
-    public void ping() throws Exception {
-        try {
-            client.ping();
-        } catch (Exception e) {
-            throw new Exception(
-                    String.format("Failed to ping Solr at URL %s. " +
-                                    "Check configuration.",
-                            config.getSolrServerUrl()),
-                    e);
-        }
+  /**
+   * Ping the Solr.
+   */
+  public void ping() throws Exception {
+    try {
+      client.ping();
+    } catch (Exception e1) {
+      throw new Exception(
+        String.format("Failed to ping Solr at URL %s. "
+          + "Check configuration.",
+          config.getSolrServerUrl()),
+        e1);
     }
+  }
 
-    /**
-     * @return Return the bean instance
-     */
-    public static SolrJProxy get() {
-        return instance;
-    }
+  public static SolrJProxy get() {
+    return instance;
+  }
 }

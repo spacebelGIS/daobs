@@ -126,8 +126,6 @@ public class DashboardLoader {
 
     String json = com.google.common.io.Files.toString(file, Charsets.UTF_8);
 
-    SolrClient client = server.getServer();
-
     ObjectMapper mapper = new ObjectMapper();
     JsonNode dashboardConfig = mapper.readTree(json);
 
@@ -138,6 +136,8 @@ public class DashboardLoader {
     doc.addField("user", "guest");
     doc.addField("group", "guest");
     doc.addField("dashboard", json);
+
+    SolrClient client = server.getServer();
     client.add(collection, doc);
     client.commit(collection);
   }

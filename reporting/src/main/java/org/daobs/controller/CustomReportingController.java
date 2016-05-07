@@ -97,36 +97,37 @@ public class CustomReportingController {
         MediaType.APPLICATION_XML_VALUE
       },
       method = RequestMethod.GET)
-  public ModelAndView generateMonitoring(HttpServletRequest request,
-                                         @RequestParam Map<String, String> allRequestParams,
-                                         @ApiParam(
-                                           value = "The report type to generate",
-                                           required = true)
-                                           @PathVariable(value = "reporting") String reporting,
-                                         @ApiParam(
-                                           value = "Add raw data section")
-                                         @RequestParam(
-                                           value = "withRowData",
-                                           required = false) Boolean withRowData,
-                                         @ApiParam(
-                                           value = "An optional filter query to generate report on a subset",
-                                           required = true)
-                                         @RequestParam(
-                                           value = "fq",
-                                           defaultValue = "",
-                                           required = false) String fq,
-                                         @ApiParam(
-                                           value = "An optional scope")
-                                         @RequestParam(
-                                           value = "scopeId",
-                                           defaultValue = "",
-                                           required = false) String scopeId,
-                                         @ApiParam(
-                                           value = "Max number of documents to add in the raw data section")
-                                         @RequestParam(
-                                           value = "rows",
-                                           defaultValue = "10000",
-                                           required = false) int rows)
+  public ModelAndView generateMonitoring(
+      HttpServletRequest request,
+      @RequestParam Map<String, String> allRequestParams,
+      @ApiParam(
+       value = "The report type to generate",
+       required = true)
+       @PathVariable(value = "reporting") String reporting,
+      @ApiParam(
+       value = "Add raw data section")
+      @RequestParam(
+       value = "withRowData",
+       required = false) Boolean withRowData,
+      @ApiParam(
+       value = "An optional filter query to generate report on a subset",
+       required = true)
+      @RequestParam(
+       value = "fq",
+       defaultValue = "",
+       required = false) String fq,
+      @ApiParam(
+       value = "An optional scope")
+      @RequestParam(
+       value = "scopeId",
+       defaultValue = "",
+       required = false) String scopeId,
+      @ApiParam(
+       value = "Max number of documents to add in the raw data section")
+      @RequestParam(
+       value = "rows",
+       defaultValue = "10000",
+       required = false) int rows)
     throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
         ReportingController.generateReporting(request, reporting, scopeId, fq, true);
@@ -161,40 +162,41 @@ public class CustomReportingController {
       },
       method = RequestMethod.GET)
   @ResponseBody
-  public ModelAndView generateMonitoring(HttpServletRequest request,
-                                         @RequestParam Map<String, String> allRequestParams,
-                                         @ApiParam(
-                                           value = "Add raw data section")
-                                         @RequestParam(
-                                           value = "withRowData",
-                                           required = false) Boolean withRowData,
-                                         @ApiParam(
-                                           value = "An optional filter query to generate report on a subset",
-                                           required = true)
-                                         @RequestParam(
-                                           value = "fq",
-                                           defaultValue = "",
-                                           required = false) String fq,
-                                         @ApiParam(
-                                           value = "An optional scope")
-                                         @RequestParam(
-                                           value = "scopeId",
-                                           defaultValue = "",
-                                           required = false) String scopeId,
-                                         @ApiParam(
-                                           value = "Max number of documents to add in the raw data section")
-                                         @RequestParam(
-                                           value = "rows",
-                                           defaultValue = "20000",
-                                           required = false) int rows,
-                                         @ApiParam(
-                                           value = "The report type to generate",
-                                           required = true)
-                                         @PathVariable(value = "reporting") String reporting,
-                                         @ApiParam(
-                                           value = "A territory",
-                                           required = true)
-                                         @PathVariable(value = "territory") String territory)
+  public ModelAndView generateMonitoring(
+      HttpServletRequest request,
+      @RequestParam Map<String, String> allRequestParams,
+      @ApiParam(
+       value = "Add raw data section")
+      @RequestParam(
+       value = "withRowData",
+       required = false) Boolean withRowData,
+      @ApiParam(
+       value = "An optional filter query to generate report on a subset",
+       required = true)
+      @RequestParam(
+       value = "fq",
+       defaultValue = "",
+       required = false) String fq,
+      @ApiParam(
+       value = "An optional scope")
+      @RequestParam(
+       value = "scopeId",
+       defaultValue = "",
+       required = false) String scopeId,
+      @ApiParam(
+       value = "Max number of documents to add in the raw data section")
+      @RequestParam(
+       value = "rows",
+       defaultValue = "20000",
+       required = false) int rows,
+      @ApiParam(
+       value = "The report type to generate",
+       required = true)
+      @PathVariable(value = "reporting") String reporting,
+      @ApiParam(
+       value = "A territory",
+       required = true)
+      @PathVariable(value = "territory") String territory)
     throws IOException {
     String filter = fq + " +territory:" + territory;
     IndicatorCalculatorImpl indicatorCalculator =

@@ -26,91 +26,78 @@ package org.fao.geonet.solr;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.solr.client.solrj.SolrClient;
-import org.fao.geonet.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by francois on 18/01/16.
  */
 @RequestMapping(value = {
         "search"
-})
+    })
 @Api(value = "search",
-        tags= "search",
-        description = "Search operations")
+    tags = "search",
+    description = "Search operations")
 @Controller
 public class SolrApi {
 
-    @Autowired
-    SolrJProxy solrProxy;
+  @Autowired
+  SolrJProxy solrProxy;
 
-    @Autowired
-    SolrConfig solrConfig;
+  @Autowired
+  SolrConfig solrConfig;
 
-    @RequestMapping(value = "/ping",
-                    method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-    @ApiOperation(value = "Ping search index",
-                  nickname = "pingIndex")
-    public boolean pingSolr() throws Exception {
-        if (solrProxy != null) {
-            try {
-                solrProxy.ping();
-                return true;
-            } catch (Exception e) {
-                throw new Exception(
-                        String.format("Failed to ping Solr at URL %s. " +
-                                        "Check Solr configuration.",
-                                solrConfig.getSolrServerUrl()),
-                        e);
-            }
-        } else {
-            throw new Exception(String.format("No Solr client URL defined in %s. " +
-                    "Check bean configuration.", solrConfig.getSolrServerUrl()));
+
+  /**
+   * Delete document.
+   */
+  @RequestMapping(value = "/update",
+      method = RequestMethod.DELETE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  @ApiOperation(value = "Delete documents",
+      nickname = "delete")
+  public void delete(@RequestParam(required = true)
+                     String collection,
+                     String query,
+                     HttpServletRequest request) throws Exception {
+
+
+    // TODO: Check if user can delete documents first
+    // throw new SecurityException(String.format(
+    // "Current user can't remove document with filter '%s'.", filter));
+
+    SolrClient client = solrProxy.getServer();
+    client.deleteByQuery(collection, query);
+    client.commit(collection);
+  }
+
+  /**
+   * Not used.
+     */
+  @ResponseBody
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ExceptionHandler({
+      Exception.class
+      })
+  public Object unauthorizedHandler(final Exception exception) {
+    exception.printStackTrace();
+    return new LinkedHashMap<String, String>() {{
+        put("code", "index-is-down");
+        put("message", exception.getClass().getSimpleName());
+        put("description", exception.getMessage());
         }
-    }
-
-    @RequestMapping(value = "/update",
-            method = RequestMethod.DELETE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete documents",
-            nickname = "delete")
-    public void delete(@RequestParam(required = true)
-                       String collection,
-                       String query,
-                       HttpServletRequest request) throws Exception {
-
-
-        // TODO: Check if user can delete documents first
-//        throw new SecurityException(String.format(
-//                "Current user can't remove document with filter '%s'.", filter));
-
-        SolrClient client = solrProxy.getServer();
-        client.deleteByQuery(collection, query);
-        client.commit(collection);
-    }
-
-    @ResponseBody
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler({
-            Exception.class
-    })
-    public Object unauthorizedHandler(final Exception exception) {
-        exception.printStackTrace();
-        return new LinkedHashMap<String, String>() {{
-            put("code", "index-is-down");
-            put("message", exception.getClass().getSimpleName());
-            put("description", exception.getMessage());
-        }};
-    }
+    };
+  }
 }

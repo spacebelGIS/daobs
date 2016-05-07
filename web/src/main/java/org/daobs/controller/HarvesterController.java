@@ -121,6 +121,9 @@ public class HarvesterController {
       ), "success");
   }
 
+  /**
+   * Remove harvester.
+   */
   @ApiOperation(value = "Remove harvester",
       nickname = "delete")
   @RequestMapping(value = "/harvesters/{uuid}",
@@ -141,17 +144,20 @@ public class HarvesterController {
     return new RequestResponse("Harvester and its records removed", "success");
   }
 
+  /**
+   * Remove harvester records.
+   */
   @ApiOperation(value = "Remove harvester records",
-    nickname = "deleteHarvesterRecords")
+      nickname = "deleteHarvesterRecords")
   @RequestMapping(value = "/harvesters/{uuid}/records",
-    produces = {
-      MediaType.APPLICATION_JSON_VALUE
-    },
-    method = RequestMethod.DELETE)
+      produces = {
+        MediaType.APPLICATION_JSON_VALUE
+      },
+      method = RequestMethod.DELETE)
   @ResponseBody
   public RequestResponse delete(
-    @PathVariable final String uuid,
-    @RequestParam final String query) throws Exception {
+      @PathVariable final String uuid,
+      @RequestParam final String query) throws Exception {
 
     removeRecords(uuid);
 
