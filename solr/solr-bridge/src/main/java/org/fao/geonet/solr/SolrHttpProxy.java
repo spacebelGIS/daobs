@@ -192,7 +192,7 @@ public class SolrHttpProxy {
       }
     } catch (IOException e1) {
       // connection problem with the host
-      e.printStackTrace();
+      e1.printStackTrace();
 
       throw new Exception(
         String.format("Failed to request Solr at URL %s. "
