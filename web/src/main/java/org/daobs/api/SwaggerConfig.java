@@ -30,6 +30,7 @@ import com.google.common.base.Predicate;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
@@ -64,14 +65,14 @@ public class SwaggerConfig {
 
   private Predicate<String> paths() {
     return or(
-      regex("/api/" + Api.VERSION_0_1 + ".*")
+      regex(".*")
     );
   }
 
   /**
    * Load API documentation.
    */
-  public void loadApi() {
+  public Docket loadApi() {
     Docket doc = new Docket(DocumentationType.SWAGGER_2)
         .apiInfo(new ApiInfo(
           "DAOBS Api Documentation (beta)",
@@ -90,12 +91,18 @@ public class SwaggerConfig {
         // .directModelSubstitute(XMLGregorianCalendar.class, Date.class)
         .alternateTypeRules(
           newRule(typeResolver.resolve(DeferredResult.class,
-            typeResolver.resolve(ResponseEntity.class, WildcardType.class),
-            typeResolver.resolve(XMLGregorianCalendar.class, Date.class)
+            typeResolver.resolve(ResponseEntity.class, WildcardType.class)
+//            typeResolver.resolve(XMLGregorianCalendar.class, Date.class)
             ),
             typeResolver.resolve(WildcardType.class)
           ))
         .useDefaultResponseMessages(false)
         .securitySchemes(newArrayList(new BasicAuth("ba")));
+    return doc;
+  }
+
+  @Bean
+  public Docket daobsApi() {
+    return loadApi();
   }
 }

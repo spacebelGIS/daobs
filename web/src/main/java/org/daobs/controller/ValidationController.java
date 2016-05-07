@@ -21,6 +21,10 @@
 
 package org.daobs.controller;
 
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import org.daobs.event.EtfValidatorEvent;
 import org.daobs.messaging.JmsMessager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +42,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author Jose García
  */
+@Api(value = "Validation",
+    tags = "Validation",
+    description = "Validation operations")
 @Controller
-public class EtfValidatorController {
+public class ValidationController {
   @Autowired
   private ApplicationContext appContext;
 
   @Autowired
   private JmsMessager jmsMessager;
 
-  @RequestMapping(value = "/etf-validator",
+  @ApiOperation(value = "Start ETF validation",
+      nickname = "runEtf")
+  @RequestMapping(value = "/validate/etf",
       produces = {
         MediaType.APPLICATION_XML_VALUE,
         MediaType.APPLICATION_JSON_VALUE

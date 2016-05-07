@@ -21,11 +21,16 @@
 
 package org.daobs.controller;
 
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
@@ -35,20 +40,33 @@ import java.util.Map;
 /**
  * Created by juanl on 06/04/2016.
  */
+@Api(value = "authentication",
+    tags = "authentication",
+    description = "Authentication operations")
 @Controller
 public class LoginController {
 
-  @RequestMapping(value = "/loginForm")
+
+  @ApiOperation(value = "Get login form",
+      nickname = "loginFrom")
+  @RequestMapping(
+      value = "/signin-form",
+      method = RequestMethod.GET)
   public String loginForm() {
-    return "loginForm";
+    return "signin-form";
   }
 
   /**
    * Get user details.
    */
+  @ApiOperation(value = "Get user details",
+      nickname = "getUserDetails")
   @RequestMapping(
-      value = "/userDetails",
-      produces = {MediaType.APPLICATION_JSON_VALUE})
+      value = "/me",
+      method = RequestMethod.GET,
+      produces = {
+        MediaType.APPLICATION_JSON_VALUE
+      })
   public @ResponseBody Map<String, Object> currentUserDetails(Principal activeUser) {
     Map<String, Object> map = new LinkedHashMap<>();
     if (activeUser != null && ((Authentication) activeUser).isAuthenticated()) {
@@ -58,7 +76,6 @@ public class LoginController {
           .getAuthorities()));
     } else {
       map.put("authenticated", Boolean.FALSE);
-
     }
     return map;
 

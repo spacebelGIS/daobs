@@ -21,6 +21,10 @@
 
 package org.daobs.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import org.daobs.index.SolrRequestBean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
@@ -42,9 +47,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  * Created by francois on 18/12/14.
  */
+@Api(value = "reports",
+    tags = "reports",
+    description = "Report operations")
+@EnableWebMvc
 @Controller
 public class CustomReportingController {
 
@@ -80,25 +90,39 @@ public class CustomReportingController {
    * Generate a report.
    * TODO: provide custom XSLT as parameter
    */
-  @RequestMapping(value = "/reporting/custom/{reporting}",
+  @ApiOperation(value = "Generate a report",
+      nickname = "generateReport")
+  @RequestMapping(value = "/reports/custom/{reporting}",
       produces = {
         MediaType.APPLICATION_XML_VALUE
       },
       method = RequestMethod.GET)
   public ModelAndView generateMonitoring(HttpServletRequest request,
                                          @RequestParam Map<String, String> allRequestParams,
-                                         @PathVariable(value = "reporting") String reporting,
+                                         @ApiParam(
+                                           value = "The report type to generate",
+                                           required = true)
+                                           @PathVariable(value = "reporting") String reporting,
+                                         @ApiParam(
+                                           value = "Add raw data section")
                                          @RequestParam(
                                            value = "withRowData",
                                            required = false) Boolean withRowData,
+                                         @ApiParam(
+                                           value = "An optional filter query to generate report on a subset",
+                                           required = true)
                                          @RequestParam(
                                            value = "fq",
                                            defaultValue = "",
                                            required = false) String fq,
+                                         @ApiParam(
+                                           value = "An optional scope")
                                          @RequestParam(
                                            value = "scopeId",
                                            defaultValue = "",
                                            required = false) String scopeId,
+                                         @ApiParam(
+                                           value = "Max number of documents to add in the raw data section")
                                          @RequestParam(
                                            value = "rows",
                                            defaultValue = "10000",
@@ -128,7 +152,10 @@ public class CustomReportingController {
    *             is too high, error may occurs. Only applies if withRowData
    *             is true.
    */
-  @RequestMapping(value = "/reporting/custom/{reporting}/{territory}",
+  @ApiOperation(value = "Generate a specific report "
+      + "for a specific area in INSPIRE monitoring reporting format",
+      nickname = "generateINSPIREReport")
+  @RequestMapping(value = "/reports/custom/{reporting}/{territory}",
       produces = {
         MediaType.APPLICATION_XML_VALUE
       },
@@ -136,22 +163,37 @@ public class CustomReportingController {
   @ResponseBody
   public ModelAndView generateMonitoring(HttpServletRequest request,
                                          @RequestParam Map<String, String> allRequestParams,
+                                         @ApiParam(
+                                           value = "Add raw data section")
                                          @RequestParam(
                                            value = "withRowData",
                                            required = false) Boolean withRowData,
+                                         @ApiParam(
+                                           value = "An optional filter query to generate report on a subset",
+                                           required = true)
                                          @RequestParam(
                                            value = "fq",
                                            defaultValue = "",
                                            required = false) String fq,
+                                         @ApiParam(
+                                           value = "An optional scope")
                                          @RequestParam(
                                            value = "scopeId",
                                            defaultValue = "",
                                            required = false) String scopeId,
+                                         @ApiParam(
+                                           value = "Max number of documents to add in the raw data section")
                                          @RequestParam(
                                            value = "rows",
                                            defaultValue = "20000",
                                            required = false) int rows,
+                                         @ApiParam(
+                                           value = "The report type to generate",
+                                           required = true)
                                          @PathVariable(value = "reporting") String reporting,
+                                         @ApiParam(
+                                           value = "A territory",
+                                           required = true)
                                          @PathVariable(value = "territory") String territory)
     throws IOException {
     String filter = fq + " +territory:" + territory;

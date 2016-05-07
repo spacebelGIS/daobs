@@ -50,8 +50,7 @@
         },
         getCurrentUserInfo: function() {
           var deferred = $q.defer();
-          $http.get(cfg.SERVICES.root + "daobs/userDetails").success(function (data) {
-            console.log(data);
+          $http.get(cfg.SERVICES.root + "api/me").success(function (data) {
             currentUser = data;
             deferred.resolve(data);
           }).error(function(response) {

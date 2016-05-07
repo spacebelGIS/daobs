@@ -143,7 +143,7 @@
   "uuid-help": "Unique identifier",
   "saveHarvester": "Save harvester",
   "cancel": "Cancel",
-  "licence": "Licensed under the <a href='https://joinup.ec.europa.eu/community/eupl'>EUPL</a> - <a href='https://github.com/INSPIRE-MIF/daobs/'>Powered by Daobs</a>",
+  "licence": "<a href='api-doc'>API</a> - Licensed under the <a href='https://joinup.ec.europa.eu/community/eupl'>EUPL</a> - <a href='https://github.com/INSPIRE-MIF/daobs/'>Powered by Daobs</a>",
   "actions": "Actions",
   "restartEtfAll": "ETF validation (all service records)",
   "restartEtfMissing": "ETF validation (missing service records)",

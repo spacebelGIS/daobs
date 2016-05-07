@@ -105,7 +105,7 @@
               "field: " + statsField[i] + ", missing: true }");
           }
           $http.get(
-            cfg.SERVICES.dataCore + '/select?' +
+            cfg.SERVICES.dataCore + '?' +
             $.param({
               'q': '+documentType:metadata',
               'rows': '0',

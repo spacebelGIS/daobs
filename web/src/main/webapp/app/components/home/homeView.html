@@ -21,7 +21,7 @@
 
 -->
 <div class="row" data-ng-controller="HomeCtrl">
-  <div class="col-sm-6">
+  <div class="col-sm-4">
 
     <div class="jumbotron">
       <p>{{'homeInfo' | translate}}</p>
@@ -29,7 +29,7 @@
 
 
   </div>
-  <div class="col-sm-6" id='ds-latest-dashboard'>
+  <div class="col-sm-8" id='ds-latest-dashboard'>
 
 
     <div class="alert alert-danger"
@@ -115,7 +115,7 @@
                data-ng-click="loadDashboard(item)">{{item}}</a></li>
         </ul>
       </div>
-      <button class="btn btn-primary"
+      <button class="btn btn-danger"
               data-ng-show="dashboards.length > 1"
               data-ng-click="removeDashboard()">
         <span data-translate=""

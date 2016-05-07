@@ -36,8 +36,8 @@
   <ctx:component-scan base-package="org.daobs.authentication" />
 
   <http auto-config="true" entry-point-ref="httpAuthenticationEntryPoint">
-    <intercept-url pattern="/daobs/loginForm" access="permitAll" />
-    <intercept-url pattern="/daobs/userDetails" access="permitAll"/>
+    <intercept-url pattern="/api/signin-form" access="permitAll" />
+    <intercept-url pattern="/api/me" access="permitAll"/>
     <intercept-url pattern="/login" access="permitAll" />
     <intercept-url pattern="/assets/**" access="permitAll" />
     <intercept-url pattern="/app/**" access="permitAll" />
@@ -45,7 +45,7 @@
     <intercept-url pattern="/" access="permitAll"/>
     <intercept-url pattern="/**" access="permitAll" />
 
-    <form-login login-page="/daobs/loginForm"
+    <form-login login-page="/api/signin-form"
                 authentication-success-handler-ref="authSuccessHandler"
                 authentication-failure-handler-ref="authFailureHandler"
                 default-target-url="/" />
@@ -64,7 +64,6 @@
 
   <beans:beans profile="ba">
     <beans:import resource="spring-security-ba.xml" />
-
   </beans:beans>
   <beans:beans profile="ldap">
     <beans:import resource="spring-security-ldap.xml"/>
@@ -72,7 +71,4 @@
   <beans:beans profile="ldap-dev">
     <beans:import resource="spring-security-ldap-dev.xml"/>
   </beans:beans>
-
-
-
 </beans:beans>

@@ -33,8 +33,11 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
+import org.daobs.index.SolrServerBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -51,6 +54,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 /**
  * A simple dashboard loader.
  * Created by francois on 03/02/15.
@@ -62,9 +67,11 @@ public class DashboardLoader {
    */
   public static final String dashboardSampleFilePattern = "([A-Z]*)-.*.json";
   private static final Pattern p = Pattern.compile(dashboardSampleFilePattern);
-  private String solrServerUsername;
-  private String solrServerPassword;
-  private String solrServerUrl;
+
+  @Resource(name = "dataSolrServer")
+  SolrServerBean server;
+
+  private String collection;
 
   /**
    * Load all JSON files matching the fileFilter
@@ -119,17 +126,7 @@ public class DashboardLoader {
 
     String json = com.google.common.io.Files.toString(file, Charsets.UTF_8);
 
-    HttpSolrClient server = null;
-    if (!StringUtils.isEmpty(solrServerUsername) && !StringUtils.isEmpty(solrServerPassword)) {
-      CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-      credentialsProvider.setCredentials(AuthScope.ANY,
-          new UsernamePasswordCredentials(solrServerUsername, solrServerPassword));
-      CloseableHttpClient httpClient =
-          HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
-      server = new HttpSolrClient(solrServerUrl, httpClient);
-    } else {
-      server = new HttpSolrClient(solrServerUrl);
-    }
+    SolrClient client = server.getServer();
 
     ObjectMapper mapper = new ObjectMapper();
     JsonNode dashboardConfig = mapper.readTree(json);
@@ -137,24 +134,14 @@ public class DashboardLoader {
     SolrInputDocument doc = new SolrInputDocument();
     doc.addField("id", dashboardConfig.get("title").asText());
     doc.addField("title", dashboardConfig.get("title").asText());
+    doc.addField("type", "dashboard");
     doc.addField("user", "guest");
     doc.addField("group", "guest");
     doc.addField("dashboard", json);
-    server.add(doc);
-    server.commit();
+    client.add(collection, doc);
+    client.commit(collection);
   }
 
-  public void setSolrServerUsername(String solrServerUsername) {
-    this.solrServerUsername = solrServerUsername;
-  }
-
-  public void setSolrServerPassword(String solrServerPassword) {
-    this.solrServerPassword = solrServerPassword;
-  }
-
-  public void setSolrServerUrl(String solrServerUrl) {
-    this.solrServerUrl = solrServerUrl;
-  }
 
   /**
    * Browse the folder for resources and return a sorted list of values.
@@ -181,5 +168,9 @@ public class DashboardLoader {
       exception.printStackTrace();
     }
     return listOfDashboards;
+  }
+
+  public void setCollection(String collection) {
+    this.collection = collection;
   }
 }

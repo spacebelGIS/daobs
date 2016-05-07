@@ -27,8 +27,16 @@
 
 <urlrewrite>
   <!-- Redirect to Solr application -->
-  <rule>
+  <!--<rule>
     <from>^/solr/(.*)$</from>
+    <to type="proxy" qsappend="true">${solr.url}/$1?</to>
+  </rule>-->
+  <rule>
+    <from>^/solr/(data/admin/luke.*)$</from>
+    <to type="proxy" qsappend="true">${solr.url}/$1?</to>
+  </rule>
+  <rule>
+    <from>^/solr/(admin/cores.*)$</from>
     <to type="proxy" qsappend="true">${solr.url}/$1?</to>
   </rule>
 </urlrewrite>

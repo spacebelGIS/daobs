@@ -21,6 +21,8 @@
 
 package org.daobs.controller;
 
+
+import io.swagger.annotations.Api;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spi.InflightRepository;
 import org.daobs.workers.ContextStore;
@@ -44,6 +46,9 @@ import java.util.List;
  * </p>
  * Created by francois on 20/01/16.
  */
+@Api(value = "monitoring",
+    tags = "monitoring",
+    description = "System monitoring operations")
 @Controller
 public class WorkersManager {
 
@@ -53,7 +58,7 @@ public class WorkersManager {
   /**
    * Get inflight exchanges.
    */
-  @RequestMapping(value = "/workers",
+  @RequestMapping(value = "/activities",
       produces = {
         MediaType.APPLICATION_XML_VALUE,
         MediaType.APPLICATION_JSON_VALUE,
@@ -61,7 +66,7 @@ public class WorkersManager {
       },
       method = RequestMethod.GET)
   @ResponseBody
-  public List<String> getExchangess() {
+  public List<String> getExchanges() {
     ArrayList<String> result = new ArrayList<>();
 
     for (CamelContext context : camelContextStore.getCamelContexts()) {

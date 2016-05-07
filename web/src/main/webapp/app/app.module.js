@@ -72,9 +72,8 @@
       }, {
         id: 'admin',
         icon: 'fa-cog',
-        url: '/solr',
+        url: cfg.SERVICES.solrAdmin,
         needsLogin: true
-        //TODO cfg.SERVICES.solrRoot + '/' but Solr admin will not be rewritten
       }];
 
       $scope.getNavLinks = function() {

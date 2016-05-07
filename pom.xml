@@ -299,9 +299,21 @@
         <version>2.6</version>
       </dependency>
       <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>1.3.1</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>4.5.2</version>
+      </dependency>
+
+
+      <dependency>
+        <groupId>org.jdom</groupId>
+        <artifactId>jdom2</artifactId>
+        <version>2.0.6</version>
       </dependency>
 
       <dependency>
@@ -473,7 +485,7 @@
         * ldap: LDAP
         * ldap-dev: Use an internal LDAP
      -->
-    <authentication.mode.selected>ba</authentication.mode.selected>
+    <authentication.mode>ba</authentication.mode>
 
 
     <!-- For simple XML configuration:
@@ -496,6 +508,10 @@
     <solr.webapp.name>solr</solr.webapp.name>
     <solr.port>8984</solr.port>
     <solr.url>http://localhost:${solr.port}/${solr.webapp.name}</solr.url>
+    <!-- Define the link to Solr admin page
+    displayed in the top tool bar. If Solr
+    is not accessible, leave it empty. -->
+    <solr.admin.url>http://localhost:${solr.port}/${solr.webapp.name}</solr.admin.url>
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
@@ -635,31 +651,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-
-    <profile>
-      <id>ldap</id>
-      <activation>
-        <property>
-          <name>authentication.mode</name>
-          <value>ldap</value>
-        </property>
-      </activation>
-      <properties>
-        <authentication.mode.selected>ldap</authentication.mode.selected>
-      </properties>
-    </profile>
-    <profile>
-      <id>ldap-dev</id>
-      <activation>
-        <property>
-          <name>authentication.mode</name>
-          <value>ldap-dev</value>
-        </property>
-      </activation>
-      <properties>
-        <authentication.mode.selected>ldap-dev</authentication.mode.selected>
-      </properties>
     </profile>
   </profiles>
 </project>

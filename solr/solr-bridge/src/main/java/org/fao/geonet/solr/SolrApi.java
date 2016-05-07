@@ -86,6 +86,7 @@ public class SolrApi {
     @ApiOperation(value = "Delete documents",
             nickname = "delete")
     public void delete(@RequestParam(required = true)
+                       String collection,
                        String query,
                        HttpServletRequest request) throws Exception {
 
@@ -95,8 +96,8 @@ public class SolrApi {
 //                "Current user can't remove document with filter '%s'.", filter));
 
         SolrClient client = solrProxy.getServer();
-        client.deleteByQuery(query);
-        client.commit();
+        client.deleteByQuery(collection, query);
+        client.commit(collection);
     }
 
     @ResponseBody

@@ -29,12 +29,9 @@
   http://www.springframework.org/schema/security
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-
-
   <authentication-manager>
     <authentication-provider>
       <user-service properties="classpath:users.properties" />
     </authentication-provider>
   </authentication-manager>
-
 </beans:beans>

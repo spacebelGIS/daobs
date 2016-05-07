@@ -52,12 +52,22 @@
   <bean id="jmsMessager"
         class="org.daobs.messaging.JmsMessager"/>
 
-  <bean id="SolrServer"
+  <bean id="dataSolrServer"
+        name="dataSolrServer"
         class="org.daobs.index.SolrServerBean">
-    <property name="solrServerUrl"
-              value="${solr.server.url}/${solr.core.data}"/>
+    <property name="solrServerUrl" value="${solr.server.url}"/>
+    <property name="solrServerCore" value="${solr.core.data}"/>
     <property name="solrServerUsername" value="${solr.server.user}"/>
     <property name="solrServerPassword" value="${solr.server.password}"/>
+  </bean>
+
+  <!-- TODO: Duplicate with the SolrServer bean used for the HTTP proxy -->
+  <bean id="solrConfig"
+        class="org.fao.geonet.solr.SolrConfig">
+    <property name="solrServerUrl" value="${solr.server.url}"/>
+    <property name="solrServerCore" value="${solr.core.data}"/>
+    <!--<property name="solrServerUsername" value="${solr.server.user}"/>-->
+    <!--<property name="solrServerPassword" value="${solr.server.password}"/>-->
   </bean>
 
   <bean id="SolrRequest"
@@ -65,12 +75,13 @@
 
   <bean id="DashboardLoader"
         class="org.daobs.solr.samples.loader.DashboardLoader">
-    <property name="solrServerUrl"
-              value="${solr.server.url}/${solr.core.dashboard}"/>
-    <property name="solrServerUsername" value="${solr.server.user}"/>
-    <property name="solrServerPassword" value="${solr.server.password}"/>
+    <property name="collection" value="${solr.core.dashboard}"/>
   </bean>
 
+  <bean id="ReportingController"
+        class="org.daobs.controller.ReportingController">
+    <property name="collection" value="${solr.core.data}"/>
+  </bean>
 
   <bean id="harvesterConfigRepository"
         class="org.daobs.harvester.repository.HarvesterConfigRepository">
