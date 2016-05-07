@@ -64,7 +64,7 @@ public class SolrServerBean implements InitializingBean {
    */
   public SolrClient getServer() throws Exception {
     if (!connectionChecked) {
-      this.ping();
+//      this.ping();
       connectionChecked = true;
     }
     return client;
