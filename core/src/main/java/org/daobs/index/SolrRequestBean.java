@@ -56,11 +56,11 @@ public class SolrRequestBean {
 
   /**
    * Query solr over HTTP.
-     */
-  public static Node query(String query) {
+   */
+  public static Node query(String collection, String query) {
     try {
       SolrServerBean serverBean = SolrServerBean.get();
-      URL url = new URL(serverBean.getSolrServerUrl() + query);
+      URL url = new URL(serverBean.getSolrServerUrl() + collection + query);
       String xmlResponse = IOUtils.toString(url, "UTF-8");
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
@@ -74,13 +74,17 @@ public class SolrRequestBean {
     return null;
   }
 
+  public static Node query(String query) {
+    SolrServerBean serverBean = SolrServerBean.get();
+    return query(serverBean.getSolrServerCore(), query);
+  }
 
   /**
    * Return the number of rows matching the query.
    *
    * @param query The query
    */
-  public static Double getNumFound(String query, String... filterQuery) {
+  public static Double getNumFound(String collection, String query, String... filterQuery) {
     try {
       SolrQuery solrQuery = new SolrQuery();
       solrQuery.setQuery(query);
@@ -92,7 +96,7 @@ public class SolrRequestBean {
       SolrServerBean serverBean = SolrServerBean.get();
       SolrClient solrServer = serverBean.getServer();
 
-      QueryResponse solrResponse = solrServer.query(solrQuery);
+      QueryResponse solrResponse = solrServer.query(collection, solrQuery);
       return (double) solrResponse.getResults().getNumFound();
     } catch (Exception exception) {
       exception.printStackTrace();
@@ -100,12 +104,17 @@ public class SolrRequestBean {
     return null;
   }
 
+  public static Double getNumFound(String query, String... filterQuery) {
+    SolrServerBean serverBean = SolrServerBean.get();
+    return getNumFound(serverBean.getSolrServerCore(), query, filterQuery);
+  }
+
 
   /**
    * Get stats for a field.
    */
   public static Double getStats(
-      String query, String[] filterQuery, String statsField, String stats) {
+      String collection, String query, String[] filterQuery, String statsField, String stats) {
     try {
       SolrQuery solrQuery = new SolrQuery();
       solrQuery.setQuery(query);
@@ -119,7 +128,7 @@ public class SolrRequestBean {
       SolrServerBean serverBean = SolrServerBean.get();
       SolrClient solrServer = serverBean.getServer();
 
-      QueryResponse solrResponse = solrServer.query(solrQuery);
+      QueryResponse solrResponse = solrServer.query(collection, solrQuery);
       FieldStatsInfo fieldStatsInfo = solrResponse.getFieldStatsInfo().get(statsField);
 
       if (fieldStatsInfo != null) {
@@ -147,6 +156,12 @@ public class SolrRequestBean {
     return null;
   }
 
+  public static Double getStats(String query, String[] filterQuery,
+                                String statsField, String stats) {
+    SolrServerBean serverBean = SolrServerBean.get();
+    return getStats(serverBean.getSolrServerCore(), query, filterQuery, statsField, stats);
+  }
+
 
   /**
    * Analyze a field and a value against the index phase
@@ -160,9 +175,16 @@ public class SolrRequestBean {
    * </p>
    *
    */
+  public static String analyzeField(String collection,
+                                    String fieldName,
+                                    String fieldValue) {
+    return analyzeField(collection, fieldName, fieldValue, PHASE_INDEX, DEFAULT_FILTER_CLASS, 0);
+  }
+
   public static String analyzeField(String fieldName,
                                     String fieldValue) {
-    return analyzeField(fieldName, fieldValue, PHASE_INDEX, DEFAULT_FILTER_CLASS, 0);
+    SolrServerBean serverBean = SolrServerBean.get();
+    return analyzeField(serverBean.getSolrServerCore(), fieldName, fieldValue);
   }
 
   /**
@@ -184,7 +206,8 @@ public class SolrRequestBean {
    *
    * @return The analyzed string value if found or the field value if not found.
    */
-  public static String analyzeField(String fieldName,
+  public static String analyzeField(String collection,
+                                    String fieldName,
                                     String fieldValue,
                                     String analysisPhaseName,
                                     String filterClass,
@@ -205,7 +228,7 @@ public class SolrRequestBean {
 
       FieldAnalysisResponse res = new FieldAnalysisResponse();
       try {
-        res.setResponse(server.request(request));
+        res.setResponse(server.request(request, collection));
       } catch (SolrServerException exception) {
         exception.printStackTrace();
         return fieldValue;
@@ -240,4 +263,16 @@ public class SolrRequestBean {
     }
   }
 
+  /**
+   * Analyze a field.
+   */
+  public static String analyzeField(String fieldName,
+                                    String fieldValue,
+                                    String analysisPhaseName,
+                                    String filterClass,
+                                    int tokenPosition) {
+    SolrServerBean serverBean = SolrServerBean.get();
+    return analyzeField(serverBean.getSolrServerCore(),
+        fieldName, fieldValue, analysisPhaseName, filterClass, tokenPosition);
+  }
 }

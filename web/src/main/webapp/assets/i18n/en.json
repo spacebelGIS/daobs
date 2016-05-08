@@ -8,6 +8,7 @@
   "harvestingTitle": "Harvesting configuration",
   "adminTitle": "Search index administration page",
   "signoutTitle": "Sign out",
+  "signInTitle": "Sing in",
   "inspireOfficialMonitoringReporting": "INSPIRE official monitoring dashboards",
   "dashboardTitle": "View & create dashboards",
   "latestDashboards": "Latest dashboards",
@@ -142,10 +143,17 @@
   "uuid-help": "Unique identifier",
   "saveHarvester": "Save harvester",
   "cancel": "Cancel",
-  "licence": "Licensed under the <a href='https://joinup.ec.europa.eu/community/eupl'>EUPL</a> - <a href='https://github.com/INSPIRE-MIF/daobs/'>Powered by Daobs</a>",
+  "licence": "<a href='api-doc'>API</a> - Licensed under the <a href='https://joinup.ec.europa.eu/community/eupl'>EUPL</a> - <a href='https://github.com/INSPIRE-MIF/daobs/'>Powered by Daobs</a>",
   "actions": "Actions",
   "restartEtfAll": "ETF validation (all service records)",
   "restartEtfMissing": "ETF validation (missing service records)",
   "eftValidationStarted": "ETF validation started",
-  "errorStartingEftValidation": "Error while executing ETF validation."
+  "errorStartingEftValidation": "Error while executing ETF validation.",
+  "login.pleaseSignIn": "Please sign in",
+  "login.username": "Username",
+  "login.username-placeholder": "Username",
+  "login.password": "Password",
+  "login.password-placeholder": "Password",
+  "login.userPassword-error": "Username or password is invalid.",
+  "signIn": "Sign in"
 }

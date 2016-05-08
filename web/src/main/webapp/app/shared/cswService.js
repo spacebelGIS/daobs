@@ -21,7 +21,7 @@
 
 (function () {
   "use strict";
-  var app = angular.module('csw', []);
+  var app = angular.module('csw', ['daobs_cfg']);
 
   app.factory('cswService', ['$http', '$q', '$translate', 'cfg',
     function ($http, $q, $translate, cfg) {

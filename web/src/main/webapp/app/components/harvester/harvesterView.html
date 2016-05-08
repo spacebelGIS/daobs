@@ -30,7 +30,8 @@
       <a href="#/harvesting/manage"
          data-translate="">harvesterConfiguration</a></li>
     <li role="reporting"
-        data-ng-class="{'active':isActive('harvesting/monitor')}">
+        data-ng-class="{'active':isActive('harvesting/monitor')}"
+        data-ng-show="getUser().authenticated">
       <a href="#/harvesting/monitor"
          data-translate="">harvesterMonitoring</a></li>
   </ul>

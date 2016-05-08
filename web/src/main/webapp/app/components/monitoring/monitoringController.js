@@ -31,14 +31,6 @@
         templateUrl: cfg.SERVICES.root +
         'app/components/monitoring/monitoringView.html',
         reloadOnSearch: false
-      }).when('/monitoring/manage', {
-        controller: 'MonitoringCtrl',
-        templateUrl: cfg.SERVICES.root +
-        'app/components/monitoring/monitoringView.html'
-      }).when('/monitoring/submit', {
-        controller: 'MonitoringCtrl',
-        templateUrl: cfg.SERVICES.root +
-        'app/components/monitoring/monitoringView.html'
       });
     }]);
 
@@ -50,9 +42,26 @@
    * TODO:
    * * submit report
    */
-  app.controller('MonitoringCtrl', ['$scope', '$routeParams',
-    function ($scope, $routeParams) {
-      $scope.section = $routeParams.section;
+  app.controller('MonitoringCtrl', ['$scope', '$routeParams', 'userService',
+    function ($scope, $routeParams, userService) {
+      var privateSections = [
+        'create',
+        'submit'
+      ];
+      var defaultSection = 'manage';
+
+      if (privateSections.indexOf($routeParams.section) === -1) {
+        $scope.section = $routeParams.section || defaultSection;
+      } else {
+        var user = userService.getUser();
+        if (user && user.authenticated) {
+          $scope.section = $routeParams.section;
+        } else {
+          $scope.section = defaultSection;
+        }
+      }
+
+
 
       $scope.isActive = function (hash) {
         return location.hash.indexOf("#/" + hash) === 0
@@ -167,7 +176,7 @@
       function init() {
         //Get list of territory available
         $http.get(cfg.SERVICES.dataCore +
-          '/select?q=' +
+          '?q=' +
           'documentType%3Ametadata&' +
           'start=0&rows=0&' +
           'wt=json&indent=true&' +
@@ -238,7 +247,7 @@
         $scope.fq = encodeURIComponent(fq);
 
         return $http.get(cfg.SERVICES.dataCore +
-          '/select?q=' +
+          '?q=' +
           'documentType%3Ametadata&' +
           'start=0&rows=0&' +
           'facet=true&facet.sort=index&facet.mincount=1' + facetParam +
@@ -271,7 +280,7 @@
       // View report configuration
       $scope.getReportDetails = function () {
         //$scope.territory = null;
-        return $http.get(cfg.SERVICES.reporting +
+        return $http.get(cfg.SERVICES.reports + '/' +
           $scope.reporting.id + '.json').success(function (data) {
           setReport(data);
           $scope.overview = true;
@@ -284,7 +293,7 @@
         $scope.report = null;
         var area = $scope.territory && $scope.territory.label,
           filterParameter = $scope.filter ? '?fq=' + encodeURIComponent($scope.filter) : '?';
-        return $http.get(cfg.SERVICES.reporting +
+        return $http.get(cfg.SERVICES.reports + '/' +
           $scope.reporting.id +
           (area ? '/' + area : '') +
           '.json' + filterParameter).success(function (data) {

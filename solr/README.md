@@ -3,7 +3,7 @@
 ### Manual installation
 
 Download Solr from http://lucene.apache.org/solr/mirrors-solr-latest-redir.html
-and copy it to the Solr module. eg. solr/solr-5.2.1
+and copy it to the Solr module. eg. solr/solr-5.3.1
 
 Download JTS from https://sourceforge.net/projects/jts-topo-suite/
 and copy it to the Solr lib folder: server/solr-webapp/webapp/WEB-INF/lib
@@ -14,7 +14,7 @@ Start Solr.
 
 Create collection
 ```
-cd solr/solr-5.2.1/bin
+cd solr/solr-config/solr-5.3.1/bin
 ./solr start -p 8984 -c
 ./solr create -p 8984 -c silk -d ../../src/main/solr-cores/silk/
 ./solr create -p 8984 -c data -d ../../src/main/solr-cores/data/
@@ -31,7 +31,7 @@ Maven could take care of the installation steps:
 Use the following commands:
 
 ```
-cd solr
+cd solr/solr-config
 mvn install -Psolr-download
 mvn install -Psolr-init
 mvn exec:exec -Dsolr-start
@@ -41,7 +41,7 @@ mvn exec:exec -Dsolr-start
 
 Configure Solr to start on server startup.
 
-Use solr/solr-5.2.1/bin/init.d/solr. Modify the script to start
+Use solr/solr-5.3.1/bin/init.d/solr. Modify the script to start
 Solr in cloud mode:
 
 ```

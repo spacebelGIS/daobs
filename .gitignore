@@ -18,4 +18,4 @@ web/csw/
 web/logs/
 web/overlays/
 web/activemq-data/
-solr/solr-*
+solr/solr-config/solr-*

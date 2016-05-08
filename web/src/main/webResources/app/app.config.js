@@ -20,29 +20,31 @@
  */
 (function () {
   "use strict";
-  var app = angular.module('daobs');
+  var app = angular.module('daobs_cfg', []);
 
   var context = '${webapp.rootUrl}';
+  var api = '${webapp.rootUrl}api/';
   var solrContext = '/${solr.webapp.name}';
 
   app.constant('cfg', {
     'SERVICES': {
       root: context,
       solrRoot: solrContext,
+      solrAdmin: '${solr.admin.url}',
       dashboardCoreName: '${solr.core.dashboard}',
-      dashboardCore: solrContext + '/${solr.core.dashboard}',
+      dashboardCore: api + 'search/${solr.core.dashboard}',
       dataCoreName: '${solr.core.data}',
-      dataCore: solrContext + '/${solr.core.data}',
-      reportingSubmit: solrContext + '/${solr.core.data}/update',
+      dataCore: api + 'search/${solr.core.data}',
       proxy: context + 'proxy?url=',
-      harvester: context + 'daobs/harvester',
-      workersStats: context + 'daobs/workers',
-      reportingConfig: context + 'daobs/reporting.json',
-      reporting: context + 'daobs/reporting/',
-      samples: context + 'daobs/samples/',
+      harvester: api + 'harvester',
+      harvesters: api + 'harvesters',
+      workersStats: api + 'activities',
+      dashboards: api + 'dashboards',
+      reportingConfig: api + 'reports.json',
+      reports: api + 'reports',
+      samples: api + 'samples',
       dashboardBaseURL: context + 'dashboard2/#/dashboard/solr/',
-      solrAdmin: solrContext + '/admin.html',
-      eftValidation: context + 'daobs/etf-validator'
+      eftValidation: api + 'validate/etf'
     }
   });
 }());

@@ -26,6 +26,9 @@
    * @type {module|*}
    */
   var app = angular.module('daobs', [
+    'daobs_cfg',
+    'user_service',
+    'login',
     'ngRoute',
     'pascalprecht.translate',
     'solr',
@@ -33,32 +36,55 @@
     'ui-notification']);
 
   app.controller('RootController', [
-    '$scope', '$location', '$http', 'cfg',
-    function ($scope, $location, $http, cfg) {
+    '$scope', '$location', '$http', 'cfg', 'userService', '$filter',
+    function ($scope, $location, $http, cfg, userService, $filter) {
+      $scope.userInfoChecked = false;
+      userService.getCurrentUserInfo().finally(function() {
+        $scope.userInfoChecked = true;
+      });
+
+      $scope.getUser = function() {
+        return userService.getUser();
+      };
+
       $scope.navLinks = [{
         id: 'home',
         icon: 'fa-home',
-        url: '#/'
+        url: '#/',
+        needsLogin: false
       }, {
         id: 'dashboard',
         icon: 'fa-bar-chart',
         // TODO: Should be displayed only if dashboard available
         // TODO: Should point to a dashboard that exist
-        url: 'dashboard2/#/dashboard/solr/INSPIRE%20Indicator%20trends'
+        url: 'dashboard2/#/dashboard/solr/INSPIRE%20Indicator%20trends',
+        needsLogin: false
       }, {
         id: 'monitoring',
         icon: 'fa-list-alt',
-        url: '#/monitoring/manage'
+        url: '#/monitoring/manage',
+        needsLogin: false
       }, {
         id: 'harvesting',
         icon: 'fa-cloud-download',
-        url: '#/harvesting/manage'
+        url: '#/harvesting/manage',
+        needsLogin: false
       }, {
         id: 'admin',
         icon: 'fa-cog',
-        url: '/solr'
-        //TODO cfg.SERVICES.solrRoot + '/' but Solr admin will not be rewritten
+        url: cfg.SERVICES.solrAdmin,
+        needsLogin: true
       }];
+
+      $scope.getNavLinks = function() {
+        if (!userService.getUser() || !userService.getUser().authenticated) {
+          return $filter('filter')($scope.navLinks, {needsLogin: false});
+        } else {
+          return $scope.navLinks;
+        }
+      };
+
+
 
       // Change class based on route path
       $scope.currentRoute = null;
@@ -81,26 +107,15 @@
       };
     }]);
 
-  app.controller('LogoutCtrl', ['$scope', '$http', 'cfg',
-    function ($scope, $http, cfg) {
-      // IE (1st check for IE11, 2on for previous versions)
-      if ((Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) || (window.ActiveXObject)) {
-        try {
-          document.execCommand("ClearAuthenticationCache");
-          window.location.href = cfg.SERVICES.root;
-        } catch (exception) {
-        }
-        // Other browsers
-      } else {
-        var xmlhttp = new XMLHttpRequest();
-        // page with logout message somewhere in not protected directory
-        xmlhttp.open("GET", cfg.SERVICES.solrAdmin, true, "logout", (new Date()).getTime().toString());
-        xmlhttp.send("");
-        xmlhttp.onreadystatechange = function () {
-          if (xmlhttp.readyState == 4) {
-            window.location.href = cfg.SERVICES.root;
-          }
-        }
-      }
+  app.controller('LogoutCtrl', ['$http', '$log', 'cfg',
+    function ($http, $log, cfg) {
+      $http.post(cfg.SERVICES.root + "logout", {
+        cache:false
+      }).then(function() {
+        window.location = cfg.SERVICES.root;
+      },
+      function () {
+        $log.warn("Error exiting from Solr or the app");
+      });
     }]);
 }());

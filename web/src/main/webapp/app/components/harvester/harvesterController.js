@@ -24,18 +24,33 @@
 
   app.config(['$routeProvider', 'cfg',
     function ($routeProvider, cfg) {
-      $routeProvider.when('/harvesting/:section', {
+      $routeProvider.when('/harvesting', {
         templateUrl: cfg.SERVICES.root +
         'app/components/harvester/harvesterView.html'
-      }).when('/harvesting/harvesting', {
+      }).when('/harvesting/:section', {
         templateUrl: cfg.SERVICES.root +
         'app/components/harvester/harvesterView.html'
       });
     }]);
 
-  app.controller('HarvesterCtrl', ['$scope', '$routeParams',
-    function ($scope, $routeParams) {
-      $scope.section = $routeParams.section || 'harvester';
+  app.controller('HarvesterCtrl', ['$scope', '$routeParams', 'userService',
+    function ($scope, $routeParams, userService) {
+      var defaultSection = 'manage';
+
+      var privateSections = [
+        'monitor'
+      ];
+
+      if (privateSections.indexOf($routeParams.section) === -1) {
+        $scope.section = $routeParams.section || defaultSection;
+      } else {
+        var user = userService.getUser();
+        if (user && user.authenticated) {
+          $scope.section = $routeParams.section;
+        } else {
+          $scope.section = defaultSection;
+        }
+      }
 
       $scope.isActive = function (hash) {
         return location.hash.indexOf("#/" + hash) === 0
@@ -45,9 +60,9 @@
 
   app.controller('HarvesterConfigCtrl', [
     '$scope', '$routeParams', '$translate', '$timeout', '$http', '$location',
-    'harvesterService', 'cfg', 'Notification', 'cswService', '$filter',
+    'harvesterService', 'cfg', 'Notification', 'cswService', '$filter', 'userService',
     function ($scope, $routeParams, $translate, $timeout, $http, $location,
-              harvesterService, cfg, Notification, cswService, $filter) {
+              harvesterService, cfg, Notification, cswService, $filter, userService) {
       $scope.harvesterConfig = null;
       $scope.pollingInterval = '10s';
       $scope.adding = false;
@@ -90,7 +105,7 @@
               "field: " + statsField[i] + ", missing: true }");
           }
           $http.get(
-            cfg.SERVICES.dataCore + '/select?' +
+            cfg.SERVICES.dataCore + '?' +
             $.param({
               'q': '+documentType:metadata',
               'rows': '0',
@@ -181,6 +196,10 @@
         });
       };
 
+      $scope.startAdding = function() {
+        $scope.adding = true;
+      }
+
       $scope.edit = function (h) {
         $scope.adding = true;
         $scope.newHarvester = h;
@@ -201,6 +220,10 @@
       };
 
       $scope.run = function (h) {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         harvesterService.run(h).then(function () {
           Notification.success(
             $filter('translate')('harvesterStarted',
@@ -212,12 +235,20 @@
         });
       };
       $scope.runAll = function () {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         angular.forEach($scope.harvesterConfig, function (h) {
           $scope.run(h);
         });
       };
 
       $scope.remove = function (h, quiet) {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         harvesterService.remove(h).then(function (response) {
           Notification.success(
             $filter('translate')('harvesterDeleted',
@@ -233,6 +264,10 @@
       };
 
       $scope.removeAll = function () {
+        var user = userService.getUser();
+        if (!user || !user.authenticated) {
+          return;
+        }
         angular.forEach($scope.harvesterConfig, function (h) {
           $scope.remove(h, true);
         });

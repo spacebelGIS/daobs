@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 European Environment Agency
+
+    Licensed under the EUPL, Version 1.1 or – as soon
+    they will be approved by the European Commission -
+    subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+
+    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+
+    Unless required by applicable law or agreed to in
+    writing, software distributed under the Licence is
+    distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied.
+    See the Licence for the specific language governing
+    permissions and limitations under the Licence.
+
+-->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         metadata-complete="true"
+>
+  <!-- Main application context -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      /WEB-INF/daobs-servlet.xml
+      /WEB-INF/spring-security.xml
+    </param-value>
+  </context-param>
+  <context-param>
+    <param-name>spring.profiles.active</param-name>
+    <param-value>${authentication.mode}</param-value>
+  </context-param>
+
+
+
+  <servlet>
+    <servlet-name>DaobsDispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/daobs-dispatcher.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DaobsDispatcher</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+
+
+
+  <servlet>
+    <servlet-name>HttpProxy</servlet-name>
+    <servlet-class>org.geonetwork.http.proxy.HttpProxyServlet</servlet-class>
+    <init-param>
+      <param-name>AllowedContentTypes</param-name>
+      <param-value>
+        application/xml,text/xml,
+        text/html,
+        text/plain,
+        application/vnd.ogc.se_xml,
+        application/vnd.ogc.se+xml,
+        application/vnd.ogc.success+xml,
+        application/vnd.ogc.wms_xml,
+        application/vnd.ogc.context+xml,
+        application/vnd.ogc.gml,
+        application/vnd.ogc.sld+xml,
+        application/vnd.google-earth.kml+xml,
+        application/vnd.google-earth.kmz,
+        application/json
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>AllowedHosts</param-name>
+      <param-value />
+    </init-param>
+    <init-param>
+      <param-name>DefaultProxyUrl</param-name>
+      <param-value></param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HttpProxy</servlet-name>
+    <url-pattern>/proxy</url-pattern>
+  </servlet-mapping>
+
+
+
+  <!-- Spring Security
+  TODO: For the time being secure the dashboard installation using a ReverseProxy.
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/solr/*</url-pattern>
+  </filter-mapping>-->
+
+
+
+  <filter>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter
+    </filter-class>
+
+    <init-param>
+      <param-name>confReloadCheckInterval</param-name>
+      <param-value>-1</param-value>
+    </init-param>
+
+    <init-param>
+      <param-name>logLevel</param-name>
+      <param-value>WARN</param-value>
+    </init-param>
+  </filter>
+
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <mime-mapping>
+    <extension>.xsl</extension>
+    <!-- per http://www.w3.org/TR/2006/PR-xslt20-20061121/ -->
+    <mime-type>application/xslt+xml</mime-type>
+  </mime-mapping>
+
+  <welcome-file-list>
+    <welcome-file>reporting.html</welcome-file>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>admin.html</welcome-file>
+  </welcome-file-list>
+
+  <!--  <error-page>
+      <error-code>404</error-code>
+      <location>/WEB-INF/errors/404.jsp</location>
+    </error-page>
+    <error-page>
+      <error-code>500</error-code>
+      <location>/WEB-INF/errors/500.jsp</location>
+    </error-page>-->
+</web-app>

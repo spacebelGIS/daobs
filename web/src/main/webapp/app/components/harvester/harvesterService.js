@@ -18,6 +18,7 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 (function () {
   "use strict";
   var app = angular.module('daobs');
@@ -28,11 +29,11 @@
       function ($http, $q, cfg, solrService) {
         return {
           getAll: function () {
-            return $http.get(cfg.SERVICES.harvester + '.json');
+            return $http.get(cfg.SERVICES.harvesters + '.json');
           },
           run: function (h) {
             var deferred = $q.defer();
-            $http.get(cfg.SERVICES.harvester + '/' + h.uuid + '/jms').success(function (data) {
+            $http.get(cfg.SERVICES.harvesters + '/' + h.uuid).success(function (data) {
               deferred.resolve(data);
             }).error(function (response) {
               deferred.reject(response);
@@ -50,7 +51,7 @@
           },
           remove: function (h) {
             var deferred = $q.defer();
-            $http.delete(cfg.SERVICES.harvester + '/' + h.uuid).success(function (data) {
+            $http.delete(cfg.SERVICES.harvesters + '/' + h.uuid).success(function (data) {
               deferred.resolve(data);
             }).error(function (response) {
               deferred.reject(response);
@@ -58,15 +59,9 @@
             return deferred.promise;
           },
           removeRecords: function (h) {
-            var filter = h === undefined ? '' :
-              '+territory:"' + h.territory.trim() + '" ' +
-              '+harvesterUuid:"' + h.uuid.trim() + '"',
-              metadataFilter =
-                '+(documentType:metadata documentType:association) ' + filter,
-              deferred = $q.defer();
+            var deferred = $q.defer();
 
-
-            solrService.delete(metadataFilter, 'data').then(
+            $http.delete(cfg.SERVICES.harvesters + '/' + h.uuid + '/records').then(
               function (data) {
                 deferred.resolve('Records deleted.');
               }, function (response) {

@@ -38,7 +38,7 @@
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
         $http.get(cfg.SERVICES.dashboardCore +
-          '/select?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').then(function (response) {
+          '?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').then(function (response) {
           $scope.dashboards = response.data.response.docs;
           angular.forEach($scope.dashboards, function (d) {
             if ($scope.startsWith(d, 'inspire')) {
@@ -53,7 +53,7 @@
           }
         });
 
-        $http.get(cfg.SERVICES.samples + 'dashboardType.json').success(function (data) {
+        $http.get(cfg.SERVICES.samples + '/dashboardType.json').success(function (data) {
           $scope.listOfDashboardToLoad = data;
         });
       };
@@ -69,10 +69,8 @@
       };
 
       $scope.removeDashboard = function (id) {
-        var documentFilter = id ? 'id:"' + id + '"' : '*:*';
-        return solrService.delete(documentFilter, cfg.SERVICES.dashboardCore).then(
-          init
-        );
+        var documentFilter = id ? '/' + id : '';
+        $http.delete(cfg.SERVICES.dashboards + documentFilter).then(init);
       };
 
       $scope.startsWith = function (actual, expected) {

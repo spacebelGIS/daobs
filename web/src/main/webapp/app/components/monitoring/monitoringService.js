@@ -18,6 +18,7 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 (function () {
   "use strict";
   var app = angular.module('daobs');
@@ -33,7 +34,7 @@
 
             // TODO: Move to solrService
             $http.get(cfg.SERVICES.dataCore +
-              '/select?q=documentType%3Amonitoring&' +
+              '?q=documentType%3Amonitoring&' +
               'sort=reportingDate+desc,territory+asc&' +
               'start=0&rows=' + rows + '&' +
               'facet=true&facet.field=reportingYear&facet.field=territory&' +
@@ -87,18 +88,14 @@
            * @returns Array of promise
            */
           uploadMonitoring: function (files, isOfficial, withRowData) {
-            var listOfDeffered = [],
-              uploadUrl = cfg.SERVICES.reportingSubmit +
-                '?commit=true&tr=inspire-monitoring-reporting' +
-                (withRowData ? '-with-ai' : '') +
-                '.xsl&isOfficial=' + isOfficial;
+            var listOfDeffered = [];
 
             angular.forEach(files, function (file) {
               var deferred = $q.defer();
               var fd = new FormData();
               fd.append('file', file);
 
-              $http.post(uploadUrl, fd, {
+              $http.post(cfg.SERVICES.reports, fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
               }).success(function (data) {
@@ -129,11 +126,12 @@
               monitoringFilter = '+documentType:monitoring* ' + filter,
               deferred = $q.defer();
 
-
-            solrService.delete(indicatorFilter, cfg.SERVICES.dataCoreName).then(
+            $http.delete(cfg.SERVICES.reports + '?query=' +
+                         encodeURIComponent(indicatorFilter)).then(
               function () {
                 // Remove monitoring
-                solrService.delete(monitoringFilter, cfg.SERVICES.dataCoreName).then(
+                $http.delete(cfg.SERVICES.reports + '?query=' +
+                             encodeURIComponent(monitoringFilter)).then(
                   function (data) {
                     deferred.resolve('Monitoring deleted.');
                   },

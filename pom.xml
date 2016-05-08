@@ -72,6 +72,12 @@
       <organizationUrl>https://www.geocat.net/</organizationUrl>
       <email>maria.arias@geocat.net</email>
     </developer>
+    <developer>
+      <name>Juan Luis Rodríguez Ponce</name>
+      <organization>GeoCat BV</organization>
+      <organizationUrl>https://www.geocat.net/</organizationUrl>
+      <email>juanluisrp@geocat.net</email>
+    </developer>
   </developers>
   <contributors>
     <contributor>
@@ -198,6 +204,24 @@
         <groupId>org.apache.activemq</groupId>
         <artifactId>activemq-pool</artifactId>
         <version>${activemq.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api-2.5</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-api-2.1</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.activemq</groupId>
@@ -231,6 +255,14 @@
         <artifactId>spring-security-ldap</artifactId>
         <version>${spring-security.version}</version>
       </dependency>
+
+
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>2.3.1</version>
+      </dependency>
+
 
       <dependency>
         <groupId>javax.servlet</groupId>
@@ -267,9 +299,21 @@
         <version>2.6</version>
       </dependency>
       <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>1.3.1</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>4.5.2</version>
+      </dependency>
+
+
+      <dependency>
+        <groupId>org.jdom</groupId>
+        <artifactId>jdom2</artifactId>
+        <version>2.0.6</version>
       </dependency>
 
       <dependency>
@@ -434,16 +478,40 @@
     <log.dir>/tmp</log.dir>
     <!--<log.dir>${catalina.home}/logs</log.dir>-->
 
-    <!-- Default username and password. This
+
+    <!--
+      Option to configure authentication mode:
+        * ba: XML configuration
+        * ldap: LDAP
+        * ldap-dev: Use an internal LDAP
+     -->
+    <authentication.mode>ba</authentication.mode>
+
+
+    <!-- For simple XML configuration:
+    Default username and password. This
     set the values in Spring security file and
     in services needing authentication against
     the Solr instance. eg. Harvesters. -->
     <webapp.username>admin</webapp.username>
     <webapp.password>admin</webapp.password>
 
+    <!-- For LDAP based authentication -->
+    <ldap.base.provider.url>ldap://ldap.eionet.europa.eu</ldap.base.provider.url>
+    <ldap.base.dn>o=EIONET,l=Europe</ldap.base.dn>
+    <ldap.security.principal></ldap.security.principal>
+    <ldap.security.credentials></ldap.security.credentials>
+    <ldap.base.search.base>ou=Users</ldap.base.search.base>
+    <ldap.base.dn.pattern>uid={0}</ldap.base.dn.pattern>
+
+
     <solr.webapp.name>solr</solr.webapp.name>
     <solr.port>8984</solr.port>
     <solr.url>http://localhost:${solr.port}/${solr.webapp.name}</solr.url>
+    <!-- Define the link to Solr admin page
+    displayed in the top tool bar. If Solr
+    is not accessible, leave it empty. -->
+    <solr.admin.url>http://localhost:${solr.port}/${solr.webapp.name}</solr.admin.url>
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
@@ -460,6 +528,7 @@
     <db.validation.password>www-data</db.validation.password>
 
     <inspire.validation.background>false</inspire.validation.background>
+
 
     <silk.port>8985</silk.port>
 

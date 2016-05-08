@@ -46,7 +46,6 @@ public class SolrServerBean implements InitializingBean {
   private String solrServerCore;
   private String solrServerUsername;
   private String solrServerPassword;
-  private boolean connectionChecked = false;
 
   /**
    * Get Solr server.
@@ -63,10 +62,6 @@ public class SolrServerBean implements InitializingBean {
    * @return The Solr client instance.
    */
   public SolrClient getServer() throws Exception {
-    if (!connectionChecked) {
-      this.ping();
-      connectionChecked = true;
-    }
     return client;
   }
 
@@ -100,22 +95,6 @@ public class SolrServerBean implements InitializingBean {
     } else {
       throw new Exception(String.format("No Solr client URL defined in %s. "
           + "Check bean configuration.", this.solrServerUrl));
-    }
-  }
-
-  /**
-   * Ping the Solr client.
-   *
-   */
-  private void ping() throws Exception {
-    try {
-      client.ping();
-    } catch (Exception exception) {
-      throw new Exception(
-        String.format("Failed to ping Solr client at URL %s. "
-            + "Check bean configuration.",
-          this.solrServerUrl),
-        exception);
     }
   }
 

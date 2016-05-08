@@ -21,6 +21,10 @@
 
 package org.daobs.controller;
 
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import org.daobs.solr.samples.loader.DashboardLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,7 +44,9 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by francois on 21/10/14.
  */
-
+@Api(value = "samples",
+    tags = "samples",
+    description = "Samples operations")
 @Controller
 public class SamplesController {
 
@@ -49,9 +55,11 @@ public class SamplesController {
   DashboardLoader loader;
 
   /**
-   * Return the list of sample dashboards available.
+   * Get the list of sample dashboards available.
    *
    */
+  @ApiOperation(value = "Get the list of sample dashboards available",
+      nickname = "getDashboards")
   @RequestMapping(value = "/samples/dashboard",
       produces = {
         MediaType.APPLICATION_XML_VALUE,
@@ -73,6 +81,8 @@ public class SamplesController {
    * {@link org.daobs.solr.samples.loader.DashboardLoader#dashboardSampleFilePattern}.
    *
    */
+  @ApiOperation(value = "Get the list of dashboard types",
+      nickname = "getDashboardTypes")
   @RequestMapping(value = "/samples/dashboardType",
       produces = {
         MediaType.APPLICATION_XML_VALUE,
@@ -91,6 +101,8 @@ public class SamplesController {
    * Put a dashboard in the Solr dashboard core.
    *
    */
+  @ApiOperation(value = "Add samples",
+      nickname = "getDashboardTypes")
   @RequestMapping(value = "/samples/dashboard/{dashboardFilePrefix}",
       produces = {
         MediaType.APPLICATION_XML_VALUE,

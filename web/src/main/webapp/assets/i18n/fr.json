@@ -8,6 +8,7 @@
   "harvestingTitle": "Configuration des moissonneurs",
   "adminTitle": "Console d'administration de l'index",
   "signoutTitle": "Se déconnecter",
+  "signInTitle": "Se connecter",
   "inspireOfficialMonitoringReporting": "Tableaux de bord INSPIRE",
   "dashboardTitle": "Visualiser & créer des tableaux de bord",
   "latestDashboards": "Nouveautés",
@@ -147,5 +148,12 @@
   "restartEtfAll": "Validation ETF (tous les services)",
   "restartEtfMissing": "Validation ETF (service non validé uniquement)",
   "eftValidationStarted": "Validation ETF en cours",
-  "errorStartingEftValidation": "Échec lors du lancement de la validation ETF."
+  "errorStartingEftValidation": "Échec lors du lancement de la validation ETF.",
+  "login.pleaseSignIn": "Me connecter",
+  "login.username": "Nom d'utilisateur",
+  "login.username-placeholder": "Nom d'utilisateur",
+  "login.password": "Mot de passe",
+  "login.password-placeholder": "Mot de passe",
+  "login.userPassword-error": "Username or password is invalid.",
+  "signIn": "Se connecter"
 }

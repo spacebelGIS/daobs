@@ -33,7 +33,7 @@
           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
   <ctx:annotation-config/>
-  <ctx:component-scan base-package="org.daobs.controller,org.daobs.api"/>
+  <ctx:component-scan base-package="org.daobs,org.fao.geonet"/>
 
   <bean
     class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
@@ -51,7 +51,14 @@
     </property>
   </bean>-->
 
-  <mvc:annotation-driven/>
+  <mvc:annotation-driven>
+    <mvc:argument-resolvers>
+      <bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver"/>
+    </mvc:argument-resolvers>
+  </mvc:annotation-driven>
+
+  <mvc:resources mapping="/assets/**" location="/assets/" />
+  <mvc:resources mapping="/app/**" location="/app" />
 
 
 
@@ -59,6 +66,11 @@
                             file-encoding="UTF-8"
                             ignore-unresolvable="true"/>
 
+
+  <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="100000000"/>
+  </bean>
 
   <bean id="XSLTViewResolver"
         class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
@@ -77,11 +89,11 @@
     <property name="contentType" value="application/xml;charset=UTF-8"/>
   </bean>
 
-  <!-- <bean id="JSPViewResolver"
+  <bean id="JSPViewResolver"
          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
      <property name="order" value="2"/>
      <property name="prefix" value="/WEB-INF/jsp/" />
      <property name="suffix" value=".jsp" />
-   </bean>-->
+   </bean>
 
 </beans>
