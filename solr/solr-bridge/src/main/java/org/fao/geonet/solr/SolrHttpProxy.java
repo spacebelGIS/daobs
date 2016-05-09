@@ -25,12 +25,26 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.params.BasicHttpParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -39,6 +53,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +62,7 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -199,6 +215,38 @@ public class SolrHttpProxy {
             + "Check Solr configuration.",
           serverUrl),
         e1);
+    }
+  }
+
+
+
+  @Value("${solr.server.url}")
+  private String solrUrl;
+
+  /**
+   * Update using JSON command.
+   */
+  @RequestMapping(value = "/update/{collection}",
+      method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.OK)
+  @ResponseBody
+  public ResponseEntity<String> update(
+      @PathVariable String collection,
+      @RequestParam(defaultValue = "true") boolean commit,
+      @RequestBody String body) throws Exception {
+
+    HttpPost httpPost = new HttpPost(
+        solrUrl + "/" + collection
+        + "/update" + (commit ? "?commit=" + commit : "")
+    );
+    httpPost.setEntity(new StringEntity(body, Charset.forName("UTF-8")));
+    httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
+    CloseableHttpClient httpClient = HttpClients.createDefault();
+    CloseableHttpResponse response = httpClient.execute(httpPost);
+    if (response.getStatusLine().getStatusCode() == 200) {
+      return new ResponseEntity<>("", HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
