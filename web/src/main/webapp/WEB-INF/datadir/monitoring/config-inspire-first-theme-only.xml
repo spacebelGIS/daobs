@@ -39,9 +39,7 @@
     <daobs:variable id="DSv_Num1" numberFormat="#">
       <daobs:name xml:lang="en">Number of spatial data sets for Annex I
       </daobs:name>
-      <daobs:query>+documentType:metadata +(resourceType:dataset
-        resourceType:series) +inspireAnnexForFirstTheme:i
-      </daobs:query>
+      <daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnexForFirstTheme:i</daobs:query>
       <daobs:comment>The value is based on the harvested records. It may be
         underestimated
         if the number of spatial data set does not have metadata or if error
@@ -518,9 +516,7 @@
 
     <daobs:indicator id="NSv_NumAllServ" numberFormat="#">
       <daobs:name>Number of all services</daobs:name>
-      <daobs:expression>NSv_NumDiscServ + NSv_NumViewServ + NSv_NumDownlServ +
-        NSv_NumTransfServ + NSv_NumInvkServ
-      </daobs:expression>
+      <daobs:expression>NSv_NumDiscServ + NSv_NumViewServ + NSv_NumDownlServ + NSv_NumTransfServ + NSv_NumInvkServ</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv_NumDiscServ"/>
         <daobs:parameter id="NSv_NumViewServ"/>
@@ -584,8 +580,7 @@
       <daobs:name xml:lang="en">%age of spatial data sets or services having
         metadata
       </daobs:name>
-      <daobs:expression>(MDv11 + MDv12 + MDv13 + MDv14) / (DSv_Num + SDSv_Num)
-      </daobs:expression>
+      <daobs:expression>(MDv11 + MDv12 + MDv13 + MDv14) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv11"/>
         <daobs:parameter id="MDv12"/>
@@ -670,8 +665,7 @@
       <daobs:name xml:lang="en">%age of spatial data sets and services with
         conformant metadata
       </daobs:name>
-      <daobs:expression>(MDv21 + MDv22 + MDv23 + MDv24) / (DSv_Num + SDSv_Num)
-      </daobs:expression>
+      <daobs:expression>(MDv21 + MDv22 + MDv23 + MDv24) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv21"/>
         <daobs:parameter id="MDv22"/>
@@ -763,8 +757,7 @@
       <daobs:name>%age of spatial data sets and services with metadata, for
         which a discovery service exists
       </daobs:name>
-      <daobs:expression>(NSv11 + NSv12) / (DSv_Num + SDSv_Num)
-      </daobs:expression>
+      <daobs:expression>(NSv11 + NSv12) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv11"/>
         <daobs:parameter id="NSv12"/>
@@ -809,8 +802,7 @@
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data
         sets of all Annexes
       </daobs:name>
-      <daobs:expression>DSv11_ActArea + DSv12_ActArea + DSv13_ActArea
-      </daobs:expression>
+      <daobs:expression>DSv11_ActArea + DSv12_ActArea + DSv13_ActArea</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="DSv11_ActArea"/>
         <daobs:parameter id="DSv12_ActArea"/>
@@ -824,8 +816,7 @@
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial
         data sets of all Annexes
       </daobs:name>
-      <daobs:expression>DSv11_RelArea + DSv12_RelArea + DSv13_RelArea
-      </daobs:expression>
+      <daobs:expression>DSv11_RelArea + DSv12_RelArea + DSv13_RelArea</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="DSv11_RelArea"/>
         <daobs:parameter id="DSv12_RelArea"/>

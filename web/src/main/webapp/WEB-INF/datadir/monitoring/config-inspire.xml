@@ -2521,10 +2521,7 @@
         have metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>-->
-      <daobs:expression>MDv11_aI_t33 + MDv11_aI_t32 + MDv11_aI_t31 +
-        MDv11_aI_t30 + MDv11_aI_t29 + MDv11_aI_t23 + MDv11_aI_t12 + MDv11_aI_t1
-        + MDv11_aI_t34
-      </daobs:expression>
+      <daobs:expression>MDv11_aI_t33 + MDv11_aI_t32 + MDv11_aI_t31 + MDv11_aI_t30 + MDv11_aI_t29 + MDv11_aI_t23 + MDv11_aI_t12 + MDv11_aI_t1 + MDv11_aI_t34</daobs:expression>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:parameters>
         <daobs:parameter id="MDv11_aI_t1"/>
@@ -2544,9 +2541,7 @@
         have metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>-->
-      <daobs:expression>MDv12_aII_t5 + MDv12_aII_t4 + MDv12_aII_t3 +
-        MDv12_aII_t2
-      </daobs:expression>
+      <daobs:expression>MDv12_aII_t5 + MDv12_aII_t4 + MDv12_aII_t3 + MDv12_aII_t2</daobs:expression>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:parameters>
         <daobs:parameter id="MDv12_aII_t2"/>
@@ -2561,13 +2556,7 @@
         have metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>-->
-      <daobs:expression>MDv13_aIII_t28 + MDv13_aIII_t27 + MDv13_aIII_t26 +
-        MDv13_aIII_t25 + MDv13_aIII_t24 + MDv13_aIII_t22 + MDv13_aIII_t21 +
-        MDv13_aIII_t20 + MDv13_aIII_t19 + MDv13_aIII_t18 + MDv13_aIII_t17 +
-        MDv13_aIII_t16 + MDv13_aIII_t15 + MDv13_aIII_t14 + MDv13_aIII_t13 +
-        MDv13_aIII_t11 + MDv13_aIII_t10 + MDv13_aIII_t9 + MDv13_aIII_t8 +
-        MDv13_aIII_t7 + MDv13_aIII_t6
-      </daobs:expression>
+      <daobs:expression>MDv13_aIII_t28 + MDv13_aIII_t27 + MDv13_aIII_t26 + MDv13_aIII_t25 + MDv13_aIII_t24 + MDv13_aIII_t22 + MDv13_aIII_t21 + MDv13_aIII_t20 + MDv13_aIII_t19 + MDv13_aIII_t18 + MDv13_aIII_t17 + MDv13_aIII_t16 + MDv13_aIII_t15 + MDv13_aIII_t14 + MDv13_aIII_t13 + MDv13_aIII_t11 + MDv13_aIII_t10 + MDv13_aIII_t9 + MDv13_aIII_t8 + MDv13_aIII_t7 + MDv13_aIII_t6</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv13_aIII_t6"/>
         <daobs:parameter id="MDv13_aIII_t7"/>
@@ -2599,10 +2588,7 @@
         I that have conformant metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>-->
-      <daobs:expression>DSv21_aI_t33 + DSv21_aI_t32 + DSv21_aI_t31 +
-        DSv21_aI_t30 + DSv21_aI_t29 + DSv21_aI_t23 + DSv21_aI_t12 + DSv21_aI_t1
-        + DSv21_aI_t34
-      </daobs:expression>
+      <daobs:expression>DSv21_aI_t33 + DSv21_aI_t32 + DSv21_aI_t31 + DSv21_aI_t30 + DSv21_aI_t29 + DSv21_aI_t23 + DSv21_aI_t12 + DSv21_aI_t1 + DSv21_aI_t34</daobs:expression>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:parameters>
         <daobs:parameter id="DSv21_aI_t1"/>
@@ -2626,9 +2612,7 @@
         II that have conformant metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>-->
-      <daobs:expression>DSv22_aII_t5 + DSv22_aII_t4 + DSv22_aII_t3 +
-        DSv22_aII_t2
-      </daobs:expression>
+      <daobs:expression>DSv22_aII_t5 + DSv22_aII_t4 + DSv22_aII_t3 + DSv22_aII_t2</daobs:expression>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:parameters>
         <daobs:parameter id="DSv22_aII_t2"/>
@@ -2647,13 +2631,7 @@
         II that have conformant metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>-->
-      <daobs:expression>DSv23_aIII_t28 + DSv23_aIII_t27 + DSv23_aIII_t26 +
-        DSv23_aIII_t25 + DSv23_aIII_t24 + DSv23_aIII_t22 + DSv23_aIII_t21 +
-        DSv23_aIII_t20 + DSv23_aIII_t19 + DSv23_aIII_t18 + DSv23_aIII_t17 +
-        DSv23_aIII_t16 + DSv23_aIII_t15 + DSv23_aIII_t14 + DSv23_aIII_t13 +
-        DSv23_aIII_t11 + DSv23_aIII_t10 + DSv23_aIII_t9 + DSv23_aIII_t8 +
-        DSv23_aIII_t7 + DSv23_aIII_t6
-      </daobs:expression>
+      <daobs:expression>DSv23_aIII_t28 + DSv23_aIII_t27 + DSv23_aIII_t26 + DSv23_aIII_t25 + DSv23_aIII_t24 + DSv23_aIII_t22 + DSv23_aIII_t21 + DSv23_aIII_t20 + DSv23_aIII_t19 + DSv23_aIII_t18 + DSv23_aIII_t17 + DSv23_aIII_t16 + DSv23_aIII_t15 + DSv23_aIII_t14 + DSv23_aIII_t13 + DSv23_aIII_t11 + DSv23_aIII_t10 + DSv23_aIII_t9 + DSv23_aIII_t8 + DSv23_aIII_t7 + DSv23_aIII_t6</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="DSv23_aIII_t6"/>
         <daobs:parameter id="DSv23_aIII_t7"/>
@@ -2689,10 +2667,7 @@
         have conformant metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:i</daobs:query>-->
-      <daobs:expression>MDv21_aI_t33 + MDv21_aI_t32 + MDv21_aI_t31 +
-        MDv21_aI_t30 + MDv21_aI_t29 + MDv21_aI_t23 + MDv21_aI_t12 + MDv21_aI_t1
-        + MDv21_aI_t34
-      </daobs:expression>
+      <daobs:expression>MDv21_aI_t33 + MDv21_aI_t32 + MDv21_aI_t31 + MDv21_aI_t30 + MDv21_aI_t29 + MDv21_aI_t23 + MDv21_aI_t12 + MDv21_aI_t1 + MDv21_aI_t34</daobs:expression>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:parameters>
         <daobs:parameter id="MDv21_aI_t1"/>
@@ -2714,9 +2689,7 @@
         have conformant metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:ii</daobs:query>-->
-      <daobs:expression>MDv22_aII_t5 + MDv22_aII_t4 + MDv22_aII_t3 +
-        MDv22_aII_t2
-      </daobs:expression>
+      <daobs:expression>MDv22_aII_t5 + MDv22_aII_t4 + MDv22_aII_t3 + MDv22_aII_t2</daobs:expression>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <daobs:parameters>
         <daobs:parameter id="MDv22_aII_t2"/>
@@ -2733,13 +2706,7 @@
         have conformant metadata
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +(resourceType:dataset resourceType:series) +inspireAnnex:iii</daobs:query>-->
-      <daobs:expression>MDv23_aIII_t28 + MDv23_aIII_t27 + MDv23_aIII_t26 +
-        MDv23_aIII_t25 + MDv23_aIII_t24 + MDv23_aIII_t22 + MDv23_aIII_t21 +
-        MDv23_aIII_t20 + MDv23_aIII_t19 + MDv23_aIII_t18 + MDv23_aIII_t17 +
-        MDv23_aIII_t16 + MDv23_aIII_t15 + MDv23_aIII_t14 + MDv23_aIII_t13 +
-        MDv23_aIII_t11 + MDv23_aIII_t10 + MDv23_aIII_t9 + MDv23_aIII_t8 +
-        MDv23_aIII_t7 + MDv23_aIII_t6
-      </daobs:expression>
+      <daobs:expression>MDv23_aIII_t28 + MDv23_aIII_t27 + MDv23_aIII_t26 + MDv23_aIII_t25 + MDv23_aIII_t24 + MDv23_aIII_t22 + MDv23_aIII_t21 + MDv23_aIII_t20 + MDv23_aIII_t19 + MDv23_aIII_t18 + MDv23_aIII_t17 + MDv23_aIII_t16 + MDv23_aIII_t15 + MDv23_aIII_t14 + MDv23_aIII_t13 + MDv23_aIII_t11 + MDv23_aIII_t10 + MDv23_aIII_t9 + MDv23_aIII_t8 + MDv23_aIII_t7 + MDv23_aIII_t6</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv23_aIII_t6"/>
         <daobs:parameter id="MDv23_aIII_t7"/>
@@ -2774,16 +2741,7 @@
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <!--<daobs:query>+documentType:metadata  {!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
-      <daobs:expression>NSv21_aI_t1 + NSv21_aI_t12 + NSv21_aI_t23 + NSv21_aI_t29
-        + NSv21_aI_t30 + NSv21_aI_t31 + NSv21_aI_t32 + NSv21_aI_t33 +
-        NSv21_aI_t34 + NSv21_aII_t2 + NSv21_aII_t3 + NSv21_aII_t4 + NSv21_aII_t5
-        + NSv21_aIII_t10 + NSv21_aIII_t11 + NSv21_aIII_t13 + NSv21_aIII_t14 +
-        NSv21_aIII_t15 + NSv21_aIII_t16 + NSv21_aIII_t17 + NSv21_aIII_t18 +
-        NSv21_aIII_t19 + NSv21_aIII_t20 + NSv21_aIII_t21 + NSv21_aIII_t22 +
-        NSv21_aIII_t24 + NSv21_aIII_t25 + NSv21_aIII_t26 + NSv21_aIII_t27 +
-        NSv21_aIII_t28 + NSv21_aIII_t6 + NSv21_aIII_t7 + NSv21_aIII_t8 +
-        NSv21_aIII_t9
-      </daobs:expression>
+      <daobs:expression>NSv21_aI_t1 + NSv21_aI_t12 + NSv21_aI_t23 + NSv21_aI_t29 + NSv21_aI_t30 + NSv21_aI_t31 + NSv21_aI_t32 + NSv21_aI_t33 + NSv21_aI_t34 + NSv21_aII_t2 + NSv21_aII_t3 + NSv21_aII_t4 + NSv21_aII_t5 + NSv21_aIII_t10 + NSv21_aIII_t11 + NSv21_aIII_t13 + NSv21_aIII_t14 + NSv21_aIII_t15 + NSv21_aIII_t16 + NSv21_aIII_t17 + NSv21_aIII_t18 + NSv21_aIII_t19 + NSv21_aIII_t20 + NSv21_aIII_t21 + NSv21_aIII_t22 + NSv21_aIII_t24 + NSv21_aIII_t25 + NSv21_aIII_t26 + NSv21_aIII_t27 + NSv21_aIII_t28 + NSv21_aIII_t6 + NSv21_aIII_t7 + NSv21_aIII_t8 + NSv21_aIII_t9</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv21_aI_t1"/>
         <daobs:parameter id="NSv21_aI_t12"/>
@@ -2827,16 +2785,7 @@
       <daobs:name xml:lang="en">Number of spatial data sets for which a download
         service exists
       </daobs:name>
-      <daobs:expression>NSv22_aI_t1 + NSv22_aI_t12 + NSv22_aI_t23 + NSv22_aI_t29
-        + NSv22_aI_t30 + NSv22_aI_t31 + NSv22_aI_t32 + NSv22_aI_t33 +
-        NSv22_aI_t34 + NSv22_aII_t2 + NSv22_aII_t3 + NSv22_aII_t4 + NSv22_aII_t5
-        + NSv22_aIII_t10 + NSv22_aIII_t11 + NSv22_aIII_t13 + NSv22_aIII_t14 +
-        NSv22_aIII_t15 + NSv22_aIII_t16 + NSv22_aIII_t17 + NSv22_aIII_t18 +
-        NSv22_aIII_t19 + NSv22_aIII_t20 + NSv22_aIII_t21 + NSv22_aIII_t22 +
-        NSv22_aIII_t24 + NSv22_aIII_t25 + NSv22_aIII_t26 + NSv22_aIII_t27 +
-        NSv22_aIII_t28 + NSv22_aIII_t6 + NSv22_aIII_t7 + NSv22_aIII_t8 +
-        NSv22_aIII_t9
-      </daobs:expression>
+      <daobs:expression>NSv22_aI_t1 + NSv22_aI_t12 + NSv22_aI_t23 + NSv22_aI_t29 + NSv22_aI_t30 + NSv22_aI_t31 + NSv22_aI_t32 + NSv22_aI_t33 + NSv22_aI_t34 + NSv22_aII_t2 + NSv22_aII_t3 + NSv22_aII_t4 + NSv22_aII_t5 + NSv22_aIII_t10 + NSv22_aIII_t11 + NSv22_aIII_t13 + NSv22_aIII_t14 + NSv22_aIII_t15 + NSv22_aIII_t16 + NSv22_aIII_t17 + NSv22_aIII_t18 + NSv22_aIII_t19 + NSv22_aIII_t20 + NSv22_aIII_t21 + NSv22_aIII_t22 + NSv22_aIII_t24 + NSv22_aIII_t25 + NSv22_aIII_t26 + NSv22_aIII_t27 + NSv22_aIII_t28 + NSv22_aIII_t6 + NSv22_aIII_t7 + NSv22_aIII_t8 + NSv22_aIII_t9</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv22_aI_t1"/>
         <daobs:parameter id="NSv22_aI_t12"/>
@@ -2881,16 +2830,7 @@
       </daobs:name>
       <!--<daobs:query>+documentType:metadata +documentType:metadata +(resourceType:dataset resourceType:series) +recordOperatedByType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
       <!--<daobs:query>+documentType:metadata  {!child of=documentType:metadata} +documentType:metadata +resourceType:service +serviceType:view +(inspireAnnex:i inspireAnnex:ii inspireAnnex:iii)</daobs:query>-->
-      <daobs:expression>NSv23_aI_t1 + NSv23_aI_t12 + NSv23_aI_t23 + NSv23_aI_t29
-        + NSv23_aI_t30 + NSv23_aI_t31 + NSv23_aI_t32 + NSv23_aI_t33 +
-        NSv23_aI_t34 + NSv23_aII_t2 + NSv23_aII_t3 + NSv23_aII_t4 + NSv23_aII_t5
-        + NSv23_aIII_t10 + NSv23_aIII_t11 + NSv23_aIII_t13 + NSv23_aIII_t14 +
-        NSv23_aIII_t15 + NSv23_aIII_t16 + NSv23_aIII_t17 + NSv23_aIII_t18 +
-        NSv23_aIII_t19 + NSv23_aIII_t20 + NSv23_aIII_t21 + NSv23_aIII_t22 +
-        NSv23_aIII_t24 + NSv23_aIII_t25 + NSv23_aIII_t26 + NSv23_aIII_t27 +
-        NSv23_aIII_t28 + NSv23_aIII_t6 + NSv23_aIII_t7 + NSv23_aIII_t8 +
-        NSv23_aIII_t9
-      </daobs:expression>
+      <daobs:expression>NSv23_aI_t1 + NSv23_aI_t12 + NSv23_aI_t23 + NSv23_aI_t29 + NSv23_aI_t30 + NSv23_aI_t31 + NSv23_aI_t32 + NSv23_aI_t33 + NSv23_aI_t34 + NSv23_aII_t2 + NSv23_aII_t3 + NSv23_aII_t4 + NSv23_aII_t5 + NSv23_aIII_t10 + NSv23_aIII_t11 + NSv23_aIII_t13 + NSv23_aIII_t14 + NSv23_aIII_t15 + NSv23_aIII_t16 + NSv23_aIII_t17 + NSv23_aIII_t18 + NSv23_aIII_t19 + NSv23_aIII_t20 + NSv23_aIII_t21 + NSv23_aIII_t22 + NSv23_aIII_t24 + NSv23_aIII_t25 + NSv23_aIII_t26 + NSv23_aIII_t27 + NSv23_aIII_t28 + NSv23_aIII_t6 + NSv23_aIII_t7 + NSv23_aIII_t8 + NSv23_aIII_t9</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv23_aI_t1"/>
         <daobs:parameter id="NSv23_aI_t12"/>
@@ -3011,9 +2951,7 @@
 
     <daobs:indicator id="NSv_NumAllServ" numberFormat="#">
       <daobs:name>Number of all services</daobs:name>
-      <daobs:expression>NSv_NumDiscServ + NSv_NumViewServ + NSv_NumDownlServ +
-        NSv_NumTransfServ + NSv_NumInvkServ
-      </daobs:expression>
+      <daobs:expression>NSv_NumDiscServ + NSv_NumViewServ + NSv_NumDownlServ + NSv_NumTransfServ + NSv_NumInvkServ</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv_NumDiscServ"/>
         <daobs:parameter id="NSv_NumViewServ"/>
@@ -3077,8 +3015,7 @@
       <daobs:name xml:lang="en">%age of spatial data sets or services having
         metadata
       </daobs:name>
-      <daobs:expression>(MDv11 + MDv12 + MDv13 + MDv14) / (DSv_Num + SDSv_Num)
-      </daobs:expression>
+      <daobs:expression>(MDv11 + MDv12 + MDv13 + MDv14) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv11"/>
         <daobs:parameter id="MDv12"/>
@@ -3163,8 +3100,7 @@
       <daobs:name xml:lang="en">%age of spatial data sets and services with
         conformant metadata
       </daobs:name>
-      <daobs:expression>(MDv21 + MDv22 + MDv23 + MDv24) / (DSv_Num + SDSv_Num)
-      </daobs:expression>
+      <daobs:expression>(MDv21 + MDv22 + MDv23 + MDv24) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="MDv21"/>
         <daobs:parameter id="MDv22"/>
@@ -3256,8 +3192,7 @@
       <daobs:name>%age of spatial data sets and services with metadata, for
         which a discovery service exists
       </daobs:name>
-      <daobs:expression>(NSv11 + NSv12) / (DSv_Num + SDSv_Num)
-      </daobs:expression>
+      <daobs:expression>(NSv11 + NSv12) / (DSv_Num + SDSv_Num)</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="NSv11"/>
         <daobs:parameter id="NSv12"/>
@@ -3302,8 +3237,7 @@
       <daobs:name xml:lang="en">Sum of the actual areas of all the spatial data
         sets of all Annexes
       </daobs:name>
-      <daobs:expression>DSv11_ActArea + DSv12_ActArea + DSv13_ActArea
-      </daobs:expression>
+      <daobs:expression>DSv11_ActArea + DSv12_ActArea + DSv13_ActArea</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="DSv11_ActArea"/>
         <daobs:parameter id="DSv12_ActArea"/>
@@ -3317,8 +3251,7 @@
       <daobs:name xml:lang="en">Sum of the relevant areas of all the spatial
         data sets of all Annexes
       </daobs:name>
-      <daobs:expression>DSv11_RelArea + DSv12_RelArea + DSv13_RelArea
-      </daobs:expression>
+      <daobs:expression>DSv11_RelArea + DSv12_RelArea + DSv13_RelArea</daobs:expression>
       <daobs:parameters>
         <daobs:parameter id="DSv11_RelArea"/>
         <daobs:parameter id="DSv12_RelArea"/>
