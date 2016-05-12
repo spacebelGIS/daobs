@@ -22,7 +22,8 @@
   "use strict";
   var app = angular.module('login');
 
-  app.controller('LoginController', ['$scope', 'userService', '$timeout', function($scope, userService, $timeout) {
+  app.controller('LoginController', ['$scope', 'userService', '$timeout', 'cfg',
+                                     function($scope, userService, $timeout, cfg) {
     $scope.loginObj = {};
 
     $scope.signIn = function() {
@@ -31,7 +32,7 @@
       userService.login($scope.loginObj.username, $scope.loginObj.password).then(
         function(data){
           $timeout(function() {
-            window.location= "/";
+            window.location= cfg.SERVICES.root;
           }, 100);
 
         },
