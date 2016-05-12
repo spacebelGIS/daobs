@@ -20,8 +20,8 @@ See the Licence for the specific language governing
 permissions and limitations under the Licence.
 
 --%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html ng-app="login">
 <head lang="en">
@@ -29,8 +29,7 @@ permissions and limitations under the Licence.
   <title>Daobs</title>
   <link rel="stylesheet" href="<spring:url value="/assets/libs/intro.js/introjs.min.css"/>"/>
   <link rel="stylesheet" href="<spring:url value="/assets/libs/bootstrap/css/bootstrap.min.css"/>"/>
-  <link rel="stylesheet"
-        href="<spring:url value="/assets/libs/font-awesome/css/font-awesome.min.css"/>"/>
+  <link rel="stylesheet" href="<spring:url value="/assets/libs/font-awesome/css/font-awesome.min.css"/>"/>
   <link rel="stylesheet" href="<spring:url value="/assets/libs/angular-ui-notification.min.css"/>"/>
   <link rel="stylesheet" href="<spring:url value="/assets/css/main.css"/>"/>
   <link rel="stylesheet" href="<spring:url value="/assets/css/login.css"/>"/>
@@ -43,23 +42,16 @@ permissions and limitations under the Licence.
 <div class="container-fluid">
   <form class="form-signin" method="post" name="loginForm" data-ng-submit="signIn()">
     <h2 class="form-signin-heading" data-translate>login.pleaseSignIn</h2>
-    <div class="alert alert-danger" data-translate="" data-ng-show="loginError">
-      login.userPassword-error
-    </div>
+    <div class="alert alert-danger" data-translate="" data-ng-show="loginError">login.userPassword-error</div>
     <label for="username" class="sr-only" data-translate>login.username</label>
-    <input type="text" name="username" id="username" class="form-control"
-           data-ng-model="loginObj.username"
+    <input type="text" name="username" id="username" class="form-control" data-ng-model="loginObj.username"
            placeholder="{{'login.username-placeholder' | translate}}" required autofocus>
     <label for="inputPassword" class="sr-only" data-translate>login.password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control"
-           data-ng-model="loginObj.password"
+    <input type="password" name="password" id="inputPassword" class="form-control" data-ng-model="loginObj.password"
            placeholder="{{'login.password-placeholder' | translate}}" required>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <!-- TODO: add redirect URL to referrer -->
-    <button class="btn btn-lg btn-primary btn-block" type="submit"
-            data-ng-disabled="loginProcessing">
-      <i class="fa fa-circle-o-notch fa-spin fa-fw" data-ng-show="loginProcessing"></i>Sign in
-    </button>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <button class="btn btn-lg btn-primary btn-block" type="submit" data-ng-disabled="loginProcessing">
+      <i class="fa fa-circle-o-notch fa-spin fa-fw" data-ng-show="loginProcessing"></i>Sign in</button>
   </form>
 </div>
 
@@ -72,17 +64,15 @@ permissions and limitations under the Licence.
 
 <script src="<spring:url value="/assets/libs/moment.min.js"/>"></script>
 
-<script src="<spring:url value="/assets/libs/angular/angular.min.js"/>"
-        language="JavaScript"></script>
+<script src="<spring:url value="/assets/libs/angular/angular.min.js"/>" language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-route.min.js"/>"
         language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-route.min.js"/>"
         language="JavaScript"></script>
 <script src="<spring:url value="/assets/libs/angular/angular-translate.min.js"/>"
         language="JavaScript"></script>
-<script
-  src="<spring:url value="/assets/libs/angular/angular-translate-loader-static-files.min.js"/>"
-  language="JavaScript"></script>
+<script src="<spring:url value="/assets/libs/angular/angular-translate-loader-static-files.min.js"/>"
+        language="JavaScript"></script>
 
 <script src="<spring:url value="/assets/libs/bootstrap/js/bootstrap.min.js"/>"></script>
 <script src="<spring:url value="/assets/libs/intro.js/intro.min.js"/>"></script>
@@ -92,5 +82,7 @@ permissions and limitations under the Licence.
 <script src="<spring:url value="/app/login.module.js"/>"></script>
 <script src="<spring:url value="/app/components/login/userService.js"/>"></script>
 <script src="<spring:url value="/app/components/login/loginController.js"/>"></script>
+
+
 </body>
 </html>
