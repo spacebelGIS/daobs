@@ -357,14 +357,21 @@
           <field name="tag">
             <xsl:value-of select="text()"/>
           </field>
-
-          <xsl:if test="matches(
-                          normalize-unicode(replace(normalize-unicode(
-                            lower-case(normalize-space(text())), 'NFKD'), '\p{Mn}', ''), 'NFKC'),
-                          $openDataKeywords)">
-            <field name="isOpenData">true</field>
-          </xsl:if>
         </xsl:for-each>
+
+        <xsl:variable name="isOpenData">
+          <xsl:for-each select="$keywords">
+            <xsl:if test="matches(
+                            normalize-unicode(replace(normalize-unicode(
+                              lower-case(normalize-space(text())), 'NFKD'), '\p{Mn}', ''), 'NFKC'),
+                            $openDataKeywords)">
+              <xsl:value-of select="'true'"/>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="normalize-space($isOpenData) != ''">
+          <field name="isOpenData">true</field>
+        </xsl:if>
 
         <!-- Index keywords which are of type place -->
         <xsl:for-each
