@@ -467,7 +467,7 @@
     <daobs:territory>SI</daobs:territory>
     <daobs:folder>SI</daobs:folder>
     <daobs:name>Slovenski Inspire metadata sistem (admin)</daobs:name>
-    <daobs:url>http://prostor4.gov.si/imps/srv/slV/csw</daobs:url>
+    <daobs:url>http://prostor4.gov.si/imps/srv/slv/csw-INSPIRE</daobs:url>
     <daobs:pointOfTruthURLPattern>http://prostor4.gov.si/imps/?uuid={{uuid}}
     </daobs:pointOfTruthURLPattern>
   </daobs:harvester>
