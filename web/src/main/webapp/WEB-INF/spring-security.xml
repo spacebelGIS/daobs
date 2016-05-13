@@ -36,7 +36,6 @@
   <ctx:component-scan base-package="org.daobs.authentication" />
 
   <http auto-config="true" entry-point-ref="httpAuthenticationEntryPoint">
-    <intercept-url pattern="/api/signin-form" access="permitAll" />
     <intercept-url pattern="/api/me" access="permitAll"/>
     <intercept-url pattern="/login" access="permitAll" />
     <intercept-url pattern="/assets/**" access="permitAll" />
@@ -45,7 +44,7 @@
     <intercept-url pattern="/" access="permitAll"/>
     <intercept-url pattern="/**" access="permitAll" />
 
-    <form-login login-page="/api/signin-form"
+    <form-login login-page="/#/login"
                 authentication-success-handler-ref="authSuccessHandler"
                 authentication-failure-handler-ref="authFailureHandler"
                 default-target-url="/" />

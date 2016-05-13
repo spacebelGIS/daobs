@@ -90,10 +90,9 @@
   </bean>
 
   <bean id="JSPViewResolver"
-         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-     <property name="order" value="2"/>
-     <property name="prefix" value="/WEB-INF/jsp/" />
-     <property name="suffix" value=".jsp" />
-   </bean>
-
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="order" value="2"/>
+    <property name="prefix" value="/WEB-INF/jsp/" />
+    <property name="suffix" value=".jsp" />
+  </bean>
 </beans>

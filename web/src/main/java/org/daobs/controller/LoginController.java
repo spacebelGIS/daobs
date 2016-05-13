@@ -45,17 +45,6 @@ import java.util.Map;
     description = "Authentication operations")
 @Controller
 public class LoginController {
-
-
-  @ApiOperation(value = "Get login form",
-      nickname = "loginFrom")
-  @RequestMapping(
-      value = "/signin-form",
-      method = RequestMethod.GET)
-  public String loginForm() {
-    return "signin-form";
-  }
-
   /**
    * Get user details.
    */
