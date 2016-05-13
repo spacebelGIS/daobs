@@ -156,8 +156,7 @@ public class HarvesterController {
       method = RequestMethod.DELETE)
   @ResponseBody
   public RequestResponse delete(
-      @PathVariable final String uuid,
-      @RequestParam final String query) throws Exception {
+      @PathVariable final String uuid) throws Exception {
 
     removeRecords(uuid);
 
