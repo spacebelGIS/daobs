@@ -399,7 +399,7 @@
           <xsl:variable name="thesaurusId"
                         select="normalize-space(../gmd:thesaurusName/gmd:CI_Citation/
                                   gmd:identifier[position() = 1]/gmd:MD_Identifier/
-                                    gmd:code/*)"/>
+                                    gmd:code/(gco:CharacterString|gmx:Anchor)/text())"/>
 
           <xsl:variable name="key">
             <xsl:choose>
