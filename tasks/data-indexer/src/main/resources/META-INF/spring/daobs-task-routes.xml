@@ -54,6 +54,12 @@
     errorHandlerRef="loggingErrorHandler"
     useMDCLogging="true">
 
+    <cm:properties>
+      <cm:property key="http.proxyHost" value="${http.proxyHost}"/>
+      <cm:property key="http.proxyPort" value="${http.proxyPort}"/>
+      <cm:property key="http.nonProxyHosts" value="${http.nonProxyHosts}"/>
+    </cm:properties>
+
     <cm:threadPoolProfile id="myDefaultProfile"
                           defaultProfile="true"
                           poolSize="10"

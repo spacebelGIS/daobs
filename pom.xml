@@ -478,6 +478,10 @@
     <log.dir>/tmp</log.dir>
     <!--<log.dir>${catalina.home}/logs</log.dir>-->
 
+    <!-- Proxy configuration -->
+    <http.proxyHost></http.proxyHost>
+    <http.proxyPort></http.proxyPort>
+    <http.nonProxyHosts></http.nonProxyHosts>
 
     <!--
       Option to configure authentication mode:

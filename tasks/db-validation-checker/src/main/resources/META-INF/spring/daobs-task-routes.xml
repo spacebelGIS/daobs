@@ -83,6 +83,12 @@
                    errorHandlerRef="loggingErrorHandler"
                    useMDCLogging="true">
 
+    <cm:properties>
+      <cm:property key="http.proxyHost" value="${http.proxyHost}"/>
+      <cm:property key="http.proxyPort" value="${http.proxyPort}"/>
+      <cm:property key="http.nonProxyHosts" value="${http.nonProxyHosts}"/>
+    </cm:properties>
+
     <cm:threadPoolProfile id="myDefaultProfile"
                           defaultProfile="true"
                           poolSize="10"
@@ -250,7 +256,7 @@
       <cm:setHeader headerName="Content-Type">
         <cm:simple>text/xml</cm:simple>
       </cm:setHeader>
-      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false" />
+      <cm:to uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
     </cm:route>
   </cm:camelContext>
 </beans>

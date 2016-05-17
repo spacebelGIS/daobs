@@ -141,7 +141,7 @@
   "uuid": "UUID",
   "uuid-placeholder": "",
   "uuid-help": "Identifiant unique",
-  "licence": "Sous licence <a href='https://joinup.ec.europa.eu/community/eupl'>EUPL</a> - <a href='https://github.com/INSPIRE-MIF/daobs/'>Propulsé par Daobs</a>",
+  "licence": "Sous licence <a href='https://joinup.ec.europa.eu/community/eupl'>EUPL</a> - Propulsé par <a href='https://github.com/INSPIRE-MIF/daobs/'>Daobs</a>",
   "saveHarvester": "Sauvegarder",
   "cancel": "Annuler",
   "actions": "Actions",
