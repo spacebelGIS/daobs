@@ -472,7 +472,28 @@
 
   <requestHandler name="/update" class="solr.UpdateRequestHandler"/>
 
-  <initParams path="/update/**,/query,/select,/tvrh,/elevate,/spell">
+  <updateRequestProcessorChain name="urpc" default="true">
+    <processor class="org.apache.solr.update.processor.UniqFieldsUpdateProcessorFactory">
+      <arr name="fieldName">
+        <str>codelist_type</str>
+        <str>codelist_DCP</str>
+        <str>linkProtocol</str>
+      </arr>
+      <!--<str name="fieldRegex">.*</str>-->
+    </processor>
+    <processor class="solr.LogUpdateProcessorFactory"/>
+    <processor class="solr.DistributedUpdateProcessorFactory"/>
+    <processor class="solr.RunUpdateProcessorFactory"/>
+  </updateRequestProcessorChain>
+
+  <initParams path="/update/**">
+    <lst name="defaults">
+      <str name="df">text</str>
+      <str name="update.chain">urpc</str>
+    </lst>
+  </initParams>
+
+  <initParams path="/query,/select,/tvrh,/elevate,/spell">
     <lst name="defaults">
       <str name="df">text</str>
     </lst>
