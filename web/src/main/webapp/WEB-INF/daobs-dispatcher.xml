@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
-    Copyright 2014-2016 European Environment Agency
-
-    Licensed under the EUPL, Version 1.1 or – as soon
-    they will be approved by the European Commission -
-    subsequent versions of the EUPL (the "Licence");
-    You may not use this work except in compliance
-    with the Licence.
-    You may obtain a copy of the Licence at:
-
-    https://joinup.ec.europa.eu/community/eupl/og_page/eupl
-
-    Unless required by applicable law or agreed to in
-    writing, software distributed under the Licence is
-    distributed on an "AS IS" basis,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-    either express or implied.
-    See the Licence for the specific language governing
-    permissions and limitations under the Licence.
-
--->
+  ~ Copyright 2014-2016 European Environment Agency
+  ~
+  ~ Licensed under the EUPL, Version 1.1 or – as soon
+  ~ they will be approved by the European Commission -
+  ~ subsequent versions of the EUPL (the "Licence");
+  ~ You may not use this work except in compliance
+  ~ with the Licence.
+  ~ You may obtain a copy of the Licence at:
+  ~
+  ~ https://joinup.ec.europa.eu/community/eupl/og_page/eupl
+  ~
+  ~ Unless required by applicable law or agreed to in
+  ~ writing, software distributed under the Licence is
+  ~ distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+  ~ either express or implied.
+  ~ See the Licence for the specific language governing
+  ~ permissions and limitations under the Licence.
+  -->
 <beans xmlns:ctx="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -34,6 +32,8 @@
 
   <ctx:annotation-config/>
   <ctx:component-scan base-package="org.daobs,org.fao.geonet"/>
+
+  <import resource="properties.xml"/>
 
   <bean
     class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
@@ -60,16 +60,9 @@
   <mvc:resources mapping="/assets/**" location="/assets/" />
   <mvc:resources mapping="/app/**" location="/app" />
 
-
-
-  <ctx:property-placeholder location="${config.properties.path}"
-                            file-encoding="UTF-8"
-                            ignore-unresolvable="true"/>
-
-
   <bean id="multipartResolver"
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    <property name="maxUploadSize" value="100000000"/>
+    <property name="maxUploadSize" value="${upload.maxsize}"/>
   </bean>
 
   <bean id="XSLTViewResolver"

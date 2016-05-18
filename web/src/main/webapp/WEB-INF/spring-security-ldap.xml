@@ -17,7 +17,6 @@
   ~ either express or implied.
   ~ See the Licence for the specific language governing
   ~ permissions and limitations under the Licence.
-
   -->
 <beans:beans profile="ldap"
   xmlns:beans="http://www.springframework.org/schema/beans"
@@ -32,9 +31,8 @@
   http://www.springframework.org/schema/security
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-  <ctx:property-placeholder location="${config.properties.path}"
-                            file-encoding="UTF-8"
-                            ignore-unresolvable="false"/>
+
+  <beans:import resource="properties.xml"/>
 
   <ldap-server url="${ldap.base.provider.url}/${ldap.base.dn}"
                manager-dn="${ldap.security.principal}"

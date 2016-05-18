@@ -32,12 +32,9 @@
   http://www.springframework.org/schema/security
   http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-  <ctx:property-placeholder location="${config.properties.path}"
-                            file-encoding="UTF-8"
-                            ignore-unresolvable="false"/>
+  <beans:import resource="WEB-INF/properties.xml"/>
 
   <ldap-server ldif="classpath:test-server.ldif" />
-
 
   <authentication-manager>
     <ldap-authentication-provider
