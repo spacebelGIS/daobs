@@ -38,31 +38,37 @@
                             ignore-unresolvable="false"/>
 
   <!--  Embedded ActiveMQ Broker -->
-  <amq:broker id="amqBroker" start="true"
+  <amq:broker id="internaljmschannel"
+              start="true"
               useJmx="false"
+              brokerName="internaljmschannel"
               persistent="false">
+    <amq:persistenceAdapter>
+      <amq:kahaDB directory="${data.dir}/activemq-data"
+                  journalMaxFileLength="32mb"/>
+    </amq:persistenceAdapter>
+    <amq:systemUsage>
+      <amq:systemUsage>
+        <amq:memoryUsage>
+          <amq:memoryUsage limit="32mb"/>
+        </amq:memoryUsage>
+        <amq:storeUsage>
+          <amq:storeUsage limit="200mb"/>
+        </amq:storeUsage>
+        <amq:tempUsage>
+          <amq:tempUsage limit="200mb"/>
+        </amq:tempUsage>
+      </amq:systemUsage>
+    </amq:systemUsage>
     <amq:transportConnectors>
-      <amq:transportConnector uri="${jms.url}"/>
+      <amq:transportConnector uri="${jms.broker.url}?transport.maxReconnectAttempts=2&amp;transport.timeout=1000"/>
     </amq:transportConnectors>
   </amq:broker>
 
-  <!--<amq:systemUsage>
-    <amq:systemUsage>
-      <amq:memoryUsage>
-        <amq:memoryUsage limit="64 mb"/>
-      </amq:memoryUsage>
-      <amq:storeUsage>
-        <amq:storeUsage limit="1 gb"/>
-      </amq:storeUsage>
-      <amq:tempUsage>
-        <amq:tempUsage limit="1 gb"/>
-      </amq:tempUsage>
-    </amq:systemUsage>
-  </amq:systemUsage>-->
 
   <bean id="jmsConnectionFactory"
         class="org.apache.activemq.ActiveMQConnectionFactory">
-    <property name="brokerURL" value="${jms.url}"/>
+    <property name="brokerURL" value="${jms.broker.url}"/>
   </bean>
   <bean id="pooledConnectionFactory"
         class="org.apache.activemq.pool.PooledConnectionFactory"
