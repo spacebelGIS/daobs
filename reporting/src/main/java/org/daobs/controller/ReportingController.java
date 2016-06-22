@@ -60,6 +60,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -92,6 +93,9 @@ public class ReportingController {
 
   @Value("${solr.core.data}")
   private String collection;
+
+  @Value("${reports.dir}")
+  private String reportsPath;
 
   public void setCollection(String collection) {
     this.collection = collection;
@@ -378,5 +382,63 @@ public class ReportingController {
         generateReporting(request, reporting, scopeId, "+territory:" + territory
           + (StringUtils.isEmpty(fq) ? "" : " " + fq.trim()), true);
     return indicatorCalculator.getConfiguration();
+  }
+
+  /**
+   * Remove all ETF reports.
+   */
+  @ApiOperation(value = "Remove all ETF reports",
+      nickname = "deleteEtfReports")
+  @RequestMapping(value = "/reports/etf",
+      produces = {
+        MediaType.APPLICATION_XML_VALUE,
+        MediaType.APPLICATION_JSON_VALUE
+      },
+      method = RequestMethod.DELETE)
+  @ResponseBody
+  public ResponseEntity<String> deleteEtfReports() throws Exception {
+
+    File reportDirectory = new File(this.reportsPath);
+    try {
+      if (reportDirectory.isDirectory()) {
+        FileUtils.cleanDirectory(reportDirectory);
+      }
+    } catch (Exception ex) {
+      ;
+    }
+
+    return new ResponseEntity<>("All ETF reports removed", HttpStatus.OK);
+  }
+
+  /**
+   * Remove all reports related to a harvester.
+   */
+  @ApiOperation(value = "Remove reports related to a harvester",
+      nickname = "deleteEtfHarvesterReports")
+  @RequestMapping(value = "/reports/etf/{uuid}",
+      produces = {
+        MediaType.APPLICATION_XML_VALUE,
+        MediaType.APPLICATION_JSON_VALUE
+      },
+      method = RequestMethod.DELETE)
+  @ResponseBody
+  public ResponseEntity<String> deleteEtfHarvesterReports(
+      @PathVariable(value = "uuid") String harvesterUuid
+  ) throws Exception {
+
+    // Delete the ETF reports
+    String harvesterReportsPath = Paths.get(this.reportsPath,
+        harvesterUuid).toString();
+
+    File reportDirectory = new File(harvesterReportsPath);
+    if (reportDirectory.exists()) {
+      FileUtils.deleteQuietly(reportDirectory);
+      return new ResponseEntity<>("All ETF reports for harvester ("
+          + harvesterUuid + ") removed", HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>("No ETF reports for harvester ("
+          + harvesterUuid + ") found", HttpStatus.NOT_FOUND);
+    }
+
   }
 }
