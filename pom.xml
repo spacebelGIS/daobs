@@ -525,7 +525,7 @@
 
     <etf.installation.path>${project.basedir}/../tasks/etf-validation-checker/ETF/ETF</etf.installation.path>
     <!-- web folder where to store the validation reports -->
-    <etf.validation-html-reports.path>${project.basedir}/target/${war.name}/etf-validation-reports</etf.validation-html-reports.path>
+    <etf.validation-html-reports.path>${data.dir}/etf-validation-reports</etf.validation-html-reports.path>
     <!--url where to store the validation reports -->
     <etf.validation-html-reports.url>${webapp.url}${webapp.rootUrl}etf-validation-reports</etf.validation-html-reports.url>
 

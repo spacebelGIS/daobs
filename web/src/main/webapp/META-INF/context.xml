@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context path="/" aliases="/etf-validation-reports=${etf.validation-html-reports.path}"/>

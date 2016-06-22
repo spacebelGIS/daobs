@@ -403,6 +403,13 @@
             <resource>
               <directory>${project.basedir}/../dashboard2/target/web</directory>
             </resource>
+            <resource>
+              <directory>src/main/webapp</directory>
+              <filtering>true</filtering>
+              <includes>
+                <include>**/META-INF/context.xml</include>
+              </includes>
+            </resource>
           </webResources>
         </configuration>
       </plugin>

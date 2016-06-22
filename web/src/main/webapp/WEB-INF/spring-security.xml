@@ -51,7 +51,10 @@
     <logout success-handler-ref="httpLogoutSuccessHandler"/>
     <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
     <custom-filter ref="csrfheaderFilter" after="CSRF_FILTER"/>
-
+    <headers>
+      <frame-options
+        policy="SAMEORIGIN" />
+    </headers>
   </http>
 
   <beans:bean id="csrfheaderFilter" class="org.daobs.filter.CsrfHeaderFilter" />
