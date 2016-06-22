@@ -36,6 +36,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.daobs.index.SolrServerBean;
 import org.daobs.indicator.config.Reporting;
 import org.daobs.indicator.config.Reports;
+import org.daobs.util.UnzipUtility;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -439,6 +440,31 @@ public class ReportingController {
       return new ResponseEntity<>("No ETF reports for harvester ("
           + harvesterUuid + ") found", HttpStatus.NOT_FOUND);
     }
+  }
 
+  /**
+   * Add a ETF reports.
+   */
+  @ApiOperation(value = "Add ETF reports",
+      nickname = "addEtfReports")
+  @RequestMapping(
+      value = "/reports/etf",
+      produces = {
+        MediaType.APPLICATION_JSON_VALUE
+      },
+      method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseEntity<String> addEtfReports(
+      @ApiParam(value = "The file to upload")
+      @RequestParam("file")
+      MultipartFile file) throws Exception {
+
+    File zipFile = File.createTempFile("reports", ".zip");
+    FileUtils.writeByteArrayToFile(zipFile, file.getBytes());
+
+    UnzipUtility unzipper = new UnzipUtility();
+    unzipper.unzip(zipFile, new File(this.reportsPath));
+
+    return new ResponseEntity<>("", HttpStatus.OK);
   }
 }
