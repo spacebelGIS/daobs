@@ -24,6 +24,7 @@ package org.daobs.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.daobs.event.HarvestCswEvent;
 import org.daobs.harvester.config.Harvester;
@@ -46,7 +47,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import javax.annotation.Resource;
 
@@ -68,6 +71,10 @@ public class HarvesterController {
 
   @Value("${solr.core.data}")
   private String collection;
+
+  @Value("${reports.dir}")
+  private String reportsPath;
+
 
   @ApiOperation(value = "Get harvesters",
       nickname = "get")
@@ -170,6 +177,13 @@ public class HarvesterController {
         uuid.trim()
     ));
     client.commit(collection);
+
+
+    // Delete the ETF reports
+    String harvesterReportsPath = Paths.get(this.reportsPath,
+        uuid).toString();
+
+    FileUtils.deleteQuietly(new File(harvesterReportsPath));
   }
 
   @ApiOperation(value = "Run harvester (deprecated)",
