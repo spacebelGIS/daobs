@@ -38,7 +38,7 @@ public class EtfValidatorClientTest extends TestCase {
     super.setUp();
 
     validator = new EtfValidatorClient("./ETF/ETF", "./ETF/ETF/etf-html-reports",
-      "http://localhost/validation-reports");
+      "http://localhost/validation-reports", timeout);
   }
 
   @org.junit.Test

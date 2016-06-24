@@ -39,6 +39,8 @@
         class="org.daobs.tasks.validation.etf.EtfValidatorBean">
     <property name="etfResourceTesterPath"
               value="${task.validation-etf-checker.validator.path}"/>
+    <property name="timeout"
+              value="${task.validation-etf-checker.timeout}"/>
     <!-- Destination to copy the html reports -->
     <property name="etfResourceTesterHtmlReportsPath"
               value="${task.validation-etf-checker.validator.htmlreports.path}"/>

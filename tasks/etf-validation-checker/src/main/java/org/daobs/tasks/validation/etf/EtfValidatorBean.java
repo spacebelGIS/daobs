@@ -48,6 +48,16 @@ public class EtfValidatorBean {
   String etfResourceTesterHtmlReportsUrl;
   private Log log = LogFactory.getLog(this.getClass());
 
+  public int getTimeout() {
+    return timeout;
+  }
+
+  public void setTimeout(int timeout) {
+    this.timeout = timeout;
+  }
+
+  private int timeout = 1;
+
   public String getEtfResourceTesterPath() {
     return etfResourceTesterPath;
   }
@@ -104,7 +114,7 @@ public class EtfValidatorBean {
       String reportUrl =  this.etfResourceTesterHtmlReportsUrl + "/" + harvesterUuid;
 
       final EtfValidatorClient validatorClient =
-          new EtfValidatorClient(this.etfResourceTesterPath, reportPath, reportUrl);
+          new EtfValidatorClient(this.etfResourceTesterPath, reportPath, reportUrl, timeout);
 
       expression = "/doc/arr[@name='serviceType']/str";
       String serviceType = (String) xpath.compile(expression).evaluate(doc, XPathConstants.STRING);

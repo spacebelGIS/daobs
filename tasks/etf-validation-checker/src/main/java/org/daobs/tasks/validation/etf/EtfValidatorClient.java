@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Simple Java Client for the ETF Validator Tool.
@@ -52,16 +53,28 @@ public class EtfValidatorClient {
   String etfResourceTesterHtmlReportsUrl;
   private Log log = LogFactory.getLog(this.getClass());
 
+  public int getTimeout() {
+    return timeout;
+  }
+
+  public void setTimeout(int timeout) {
+    this.timeout = timeout;
+  }
+
+  private int timeout = 1;
+
   /**
    * ETF validator client.
      */
   public EtfValidatorClient(String etfResourceTesterPath,
                             String etfResourceTesterHtmlReportsPath,
-                            String etfResourceTesterHtmlReportsUrl) {
+                            String etfResourceTesterHtmlReportsUrl,
+                            int timeout) {
 
     this.etfResourceTesterPath = etfResourceTesterPath;
     this.etfResourceTesterHtmlReportsPath = etfResourceTesterHtmlReportsPath;
     this.etfResourceTesterHtmlReportsUrl = etfResourceTesterHtmlReportsUrl;
+    this.timeout = timeout;
   }
 
   public String getEtfResourceTesterPath() {
@@ -208,7 +221,11 @@ public class EtfValidatorClient {
 
       }
 
-      int exitVal = pr.waitFor();
+      if(!pr.waitFor(timeout, TimeUnit.MINUTES)) {
+        pr.destroy(); // consider using destroyForcibly instead
+        log.warn(String.format("Process killed after %d minutes.", timeout));
+      }
+      int exitVal = pr.exitValue();
       log.info("Process exitValue: " + exitVal);
 
       String eftResultsPath = this.etfResourceTesterPath + "/reports/" + reportName;

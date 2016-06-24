@@ -62,7 +62,7 @@
   </logger>
 
   <logger name="org.daobs.tasks.validation.etf">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
 
   <logger name="org.daobs.messaging">
