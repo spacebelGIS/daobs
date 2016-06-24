@@ -55,7 +55,7 @@ public class OnlineServiceValidatorClientTest extends TestCase {
 
     ValidationReport report = validator.validate(file);
     assertNotNull(report);
-    assertEquals(89, Math.round(report.getCompletenessIndicator()));
+    assertEquals(94, Math.round(report.getCompletenessIndicator()));
   }
 
   /**
