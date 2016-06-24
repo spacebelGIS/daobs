@@ -221,7 +221,7 @@ public class EtfValidatorClient {
 
       }
 
-      if(!pr.waitFor(timeout, TimeUnit.MINUTES)) {
+      if (!pr.waitFor(timeout, TimeUnit.MINUTES)) {
         pr.destroy(); // consider using destroyForcibly instead
         log.warn(String.format("Process killed after %d minutes.", timeout));
       }
