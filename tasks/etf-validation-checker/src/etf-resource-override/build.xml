@@ -27,9 +27,9 @@
   <property name="VSWMTS_SOAPUI" location="ETF/VS/VS-WMTS-soapui-project.xml"/>
 
   <!-- Memory settings -->
-  <property name="soapui.xms" value="1024M"/>
-  <property name="soapui.xmx" value="3072M"/>
-  <property name="soapui.maxpermsize" value="1024m"/>
+  <property name="soapui.xms" value="512M"/>
+  <property name="soapui.xmx" value="1024M"/>
+  <property name="soapui.maxpermsize" value="256M"/>
 
 
   <!-- Temporary folder. Allows to override the default temporary folder using -DtmpDir parameter -->
