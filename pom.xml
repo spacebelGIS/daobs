@@ -528,7 +528,8 @@
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
-    <solr.version>5.3.1</solr.version>
+    <solr.version>6.0.1</solr.version>
+    <solr.version.md5>fc9a4a6ee127dff21135dd4941c92c15</solr.version.md5>
 
     <etf.installation.path>${project.basedir}/../tasks/etf-validation-checker/ETF/ETF</etf.installation.path>
     <!-- web folder where to store the validation reports -->

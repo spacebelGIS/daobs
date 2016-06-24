@@ -65,11 +65,11 @@
                 </goals>
                 <configuration>
                   <url>
-                    http://apache.crihan.fr/dist/lucene/solr/${solr.version}/solr-${solr.version}.tgz
+                    https://archive.apache.org/dist/lucene/solr/${solr.version}/solr-${solr.version}.tgz
                   </url>
                   <unpack>true</unpack>
                   <outputDirectory>${project.basedir}</outputDirectory>
-                  <md5>dc1eec12e2fabd38dfcd24c120295014</md5>
+                  <md5>${solr.version.md5}</md5>
                 </configuration>
               </execution>
               <execution>
@@ -162,6 +162,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
+            <version>1.5.0</version>
             <executions>
               <execution>
                 <id>solr-start</id>
@@ -269,6 +270,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
+            <version>1.5.0</version>
             <configuration>
               <executable>solr-${solr.version}/bin/${solr.executable}</executable>
               <arguments>
