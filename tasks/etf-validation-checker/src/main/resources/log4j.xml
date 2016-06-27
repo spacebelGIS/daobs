@@ -48,12 +48,12 @@
     <level value="WARN"/>
   </logger>
   <logger name="org.daobs.tasks.validation.etf">
-    <level value="DEBUG"/>
+    <level value="INFO"/>
     <appender-ref ref="file"/>
   </logger>
 
   <logger name="org.daobs.tasks.validation.etf" additivity="true">
-    <level value="DEBUG"/>
+    <level value="INFO"/>
     <appender-ref ref="file"/>
   </logger>
 
