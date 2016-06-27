@@ -109,12 +109,18 @@ public class ServiceProtocolChecker {
         return ServiceProtocol.WMTS;
       }
 
+      errorMessage = errorMessage + ". Tried with WMS (declared protocol) "
+        + "and WMTS protocols. ETF validation not applied.";
+
     } else {
       if (checkWmts()) {
         return ServiceProtocol.WMTS;
       } else if (checkWms()) {
         return ServiceProtocol.WMS;
       }
+
+      errorMessage = errorMessage + ". Tried with WMTS (declared protocol) "
+        + "and WMS protocols. ETF validation not applied.";
     }
 
     return null;
@@ -129,6 +135,9 @@ public class ServiceProtocolChecker {
         return ServiceProtocol.WFS;
       }
 
+      errorMessage = errorMessage + ". Tried with ATOM (declared protocol) "
+        + "and WFS protocols. ETF validation not applied.";
+
     } else {
       if (checkWfs()) {
         return ServiceProtocol.WFS;
@@ -136,6 +145,10 @@ public class ServiceProtocolChecker {
       } else if (checkAtom()) {
         return ServiceProtocol.ATOM;
       }
+
+      errorMessage = errorMessage + ". Tried with WFS (declared protocol) "
+        + "and ATOM protocols. ETF validation not applied.";
+
     }
 
     return null;
@@ -219,7 +232,12 @@ public class ServiceProtocolChecker {
           return doc;
 
         } else {
-          this.errorMessage = response.getStatusLine().getReasonPhrase();
+
+          // Only add the error message if not already filled. The first protocol
+          // checked (declared protocol) has higher priority that next protocols checked.
+          if (StringUtils.isEmpty(this.errorMessage)) {
+            this.errorMessage = response.getStatusLine().getReasonPhrase();
+          }
         }
       }
     } catch (Exception ex) {
