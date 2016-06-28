@@ -46,7 +46,7 @@
       reportingConfig: api + 'reports.json',
       reports: api + 'reports',
       samples: api + 'samples',
-      dashboardBaseURL: context + 'dashboard2/#/dashboard/solr/',
+      dashboardBaseURL: context + 'dashboard/#/dashboard/solr/',
       eftValidation: api + 'validate/etf'
     }
   });

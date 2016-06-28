@@ -482,7 +482,7 @@
     <!-- root.dir set by directory-maven-plugin -->
     <data.dir>${root.dir}/web/target/${war.name}/WEB-INF/datadir</data.dir>
 
-    <dashboard.default>/dashboard/solr/INSPIRE%20Indicator%20trends</dashboard.default>
+    <dashboard.default>INSPIRE%20Indicator%20trends</dashboard.default>
 
     <log.dir>/tmp</log.dir>
     <!--<log.dir>${catalina.home}/logs</log.dir>-->
