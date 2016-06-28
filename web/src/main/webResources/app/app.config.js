@@ -29,6 +29,7 @@
   app.constant('cfg', {
     'repository': '${repository}',
     'version': '${buildNumber}',
+    'defaultDashboard': '${dashboard.default}',
     'SERVICES': {
       root: context,
       solrRoot: solrContext,

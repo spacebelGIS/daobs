@@ -14,7 +14,7 @@
   "latestDashboards": "Nouveautés",
   "homeInfo": "Collecter des données, définir des indicateurs & créer des rapports. Construire des tableaux de bord en ligne. Partager vos analyses.",
   "noDashboard": "Aucun tableau de bord disponible",
-  "noDashboardHelp": "<strong>Il n'y a aucun tableau de bord dans le système.</strong> Utiliser les menu pour charger les tableaux de bord par défaut ou aller dans <a href='dashboard2'>l'outil de création</a> pour en charger de nouveaux.",
+  "noDashboardHelp": "<strong>Il n'y a aucun tableau de bord dans le système.</strong> Utiliser les menu pour charger les tableaux de bord par défaut ou aller dans <a href='dashboard'>l'outil de création</a> pour en charger de nouveaux.",
   "dashboardLoaded": "<strong>{{number}}</strong> tableau(x) de bord chargé(s).",
   "dashboardNotLoaded": "<strong>{{number}}</strong> tableau(x) de bord avec des erreurs.",
   "deleteAllDashboards": "Supprimer les <strong>{{number}}</strong> tableau(x) de bord",

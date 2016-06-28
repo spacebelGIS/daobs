@@ -2,7 +2,7 @@
 	path = dashboard
 	url = https://github.com/INSPIRE-MIF/banana.git
 [submodule "dashboard2"]
-	path = dashboard2
+	path = dashboard
 	url = https://github.com/INSPIRE-MIF/banana.git
 [submodule "silk"]
 	path = silk

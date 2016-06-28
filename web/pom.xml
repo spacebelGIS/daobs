@@ -401,7 +401,7 @@
           <includeEmptyDirectories>true</includeEmptyDirectories>
           <webResources>
             <resource>
-              <directory>${project.basedir}/../dashboard2/target/web</directory>
+              <directory>${project.basedir}/../dashboard/target/web</directory>
             </resource>
             <resource>
               <directory>src/main/webapp</directory>

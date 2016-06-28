@@ -448,7 +448,7 @@
     <module>harvesters</module>
     <module>tasks</module>
     <module>solr</module>
-    <module>dashboard2</module>
+    <module>dashboard</module>
     <module>silk</module>
     <module>web</module>
     <module>messaging</module>
@@ -481,6 +481,8 @@
 
     <!-- root.dir set by directory-maven-plugin -->
     <data.dir>${root.dir}/web/target/${war.name}/WEB-INF/datadir</data.dir>
+
+    <dashboard.default>/dashboard/solr/INSPIRE%20Indicator%20trends</dashboard.default>
 
     <log.dir>/tmp</log.dir>
     <!--<log.dir>${catalina.home}/logs</log.dir>-->

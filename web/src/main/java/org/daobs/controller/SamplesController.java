@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class SamplesController {
 
-  public static final String DASHBOARD_FOLDER = "/dashboard2/app/dashboards";
+  public static final String DASHBOARD_FOLDER = "/dashboard/app/dashboards";
   @Autowired
   DashboardLoader loader;
 
