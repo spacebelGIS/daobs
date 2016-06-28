@@ -369,9 +369,14 @@
             </xsl:if>
           </xsl:for-each>
         </xsl:variable>
-        <xsl:if test="normalize-space($isOpenData) != ''">
-          <field name="isOpenData">true</field>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="normalize-space($isOpenData) != ''">
+            <field name="isOpenData">true</field>
+          </xsl:when>
+          <xsl:otherwise>
+            <field name="isOpenData">false</field>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <!-- Index keywords which are of type place -->
         <xsl:for-each
