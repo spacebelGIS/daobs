@@ -25,20 +25,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
+import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.params.BasicHttpParams;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,7 +58,6 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -230,10 +225,11 @@ public class SolrHttpProxy {
       method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.OK)
   @ResponseBody
-  public ResponseEntity<String> update(
+  public String update(
       @PathVariable String collection,
       @RequestParam(defaultValue = "true") boolean commit,
-      @RequestBody String body) throws Exception {
+      @RequestBody String body,
+      HttpServletResponse response) throws Exception {
 
     HttpPost httpPost = new HttpPost(
         solrUrl + "/" + collection
@@ -242,12 +238,12 @@ public class SolrHttpProxy {
     httpPost.setEntity(new StringEntity(body, Charset.forName("UTF-8")));
     httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
     CloseableHttpClient httpClient = HttpClients.createDefault();
-    CloseableHttpResponse response = httpClient.execute(httpPost);
-    if (response.getStatusLine().getStatusCode() == 200) {
-      return new ResponseEntity<>("", HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+    CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
+    for (Header header : httpResponse.getAllHeaders()) {
+      response.addHeader(header.getName(), header.getValue());
     }
+    response.setStatus(httpResponse.getStatusLine().getStatusCode());
+    return EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
   }
 
 
