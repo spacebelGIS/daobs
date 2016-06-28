@@ -570,6 +570,8 @@
     <java.version>1.8</java.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <repository>https://github.com/INSPIRE-MIF/daobs</repository>
   </properties>
 
   <profiles>

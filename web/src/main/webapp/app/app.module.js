@@ -47,6 +47,8 @@
         return userService.getUser();
       };
 
+      $scope.config = cfg;
+
       $scope.navLinks = [{
         id: 'home',
         icon: 'fa-home',

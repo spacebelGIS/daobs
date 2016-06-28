@@ -27,6 +27,8 @@
   var solrContext = '/${solr.webapp.name}';
 
   app.constant('cfg', {
+    'repository': '${repository}',
+    'version': '${buildNumber}',
     'SERVICES': {
       root: context,
       solrRoot: solrContext,
