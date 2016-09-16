@@ -142,6 +142,7 @@
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-test-framework</artifactId>
         <version>${solr.version}</version>
+        <scope>test</scope>
       </dependency>
 
       <dependency>
@@ -449,11 +450,11 @@
     <module>tasks</module>
     <module>solr</module>
     <module>dashboard</module>
-    <module>silk</module>
     <module>web</module>
     <module>messaging</module>
     <module>reporting</module>
     <module>http-proxy</module>
+    <module>es</module>
   </modules>
 
 
@@ -530,8 +531,11 @@
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
-    <solr.version>6.0.1</solr.version>
+    <solr.version>5.5.0</solr.version>
     <solr.version.md5>fc9a4a6ee127dff21135dd4941c92c15</solr.version.md5>
+
+    <es.version>5.0.0-alpha5</es.version>
+    <es.version.md5>98e7445ec79a5d140c2b4980e20b8237</es.version.md5>
 
     <etf.installation.path>${project.basedir}/../tasks/etf-validation-checker/ETF/ETF</etf.installation.path>
     <!-- web folder where to store the validation reports -->

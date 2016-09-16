@@ -552,6 +552,12 @@
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>)</xsl:text>
                     </field>
+
+                    <field name="geojson">
+                      <xsl:text>{"type": "point",</xsl:text>
+                      <xsl:text>"coordinates": "</xsl:text><xsl:value-of select="concat($w, ' ', $s)"/>"
+                      <xsl:text>}</xsl:text>
+                    </field>
                   </xsl:when>
                   <xsl:when
                     test="($e = $w and $s != $n) or ($e != $w and $s = $n)">
@@ -560,6 +566,12 @@
                       <xsl:text>POINT(</xsl:text>
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>)</xsl:text>
+                    </field>
+
+                    <field name="geojson">
+                      <xsl:text>{"type": "point",</xsl:text>
+                      <xsl:text>"coordinates": "</xsl:text><xsl:value-of select="concat($w, ' ', $s)"/>"
+                      <xsl:text>}</xsl:text>
                     </field>
                   </xsl:when>
                   <xsl:otherwise>
@@ -575,6 +587,22 @@
                       <xsl:text>,</xsl:text>
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>))</xsl:text>
+                    </field>
+
+
+                    <field name="geojson">
+                      <xsl:text>{"type": "polygon",</xsl:text>
+                      <xsl:text>"coordinates": [</xsl:text>
+                      <xsl:value-of select="concat('[', $w, ' ', $s, ']')"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat('[', $e, ' ', $s, ']')"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat('[', $e, ' ', $n, ']')"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat('[', $w, ' ', $n, ']')"/>
+                      <xsl:text>,</xsl:text>
+                      <xsl:value-of select="concat('[', $w, ' ', $s, ']')"/>
+                      <xsl:text>]}</xsl:text>
                     </field>
                   </xsl:otherwise>
                 </xsl:choose>

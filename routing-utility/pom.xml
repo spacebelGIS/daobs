@@ -55,6 +55,12 @@
       <groupId>net.sf.saxon</groupId>
       <artifactId>saxon-xpath</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.elasticsearch</groupId>
+      <artifactId>elasticsearch</artifactId>
+      <version>2.3.1</version>
+      <!--<version>${es.version}</version>-->
+    </dependency>
   </dependencies>
 
   <build>

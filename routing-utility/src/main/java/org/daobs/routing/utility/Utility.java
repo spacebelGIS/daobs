@@ -27,8 +27,11 @@ import net.sf.saxon.FeatureKeys;
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.springframework.util.Assert;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -38,7 +41,9 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -54,6 +59,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+
 /**
  * Created by francois on 10/12/14.
  */
@@ -67,6 +74,53 @@ public class Utility {
     return DigestUtils.sha256Hex(stringToEncrypt);
   }
 
+  public String xmlToJson(Exchange exchange) {
+    Document xml = exchange.getIn().getBody(Document.class);
+
+    try {
+      XContentBuilder xcb = jsonBuilder()
+        .startObject();
+
+      NodeList childNodes = xml.getChildNodes();
+      Node docs = childNodes.item(0);
+      List<String> fields = new ArrayList<String>();
+
+
+      if (docs != null) {
+        NodeList nodes = docs.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) {
+          Node currentNode = nodes.item(i);
+          if (currentNode != null && currentNode.getNodeType() == Node.ELEMENT_NODE) {
+            Node name = currentNode.getAttributes().getNamedItem("name");
+            if (name != null) {
+              if (name.getTextContent().equals("geom")) {
+                continue;
+              }
+              if (name.getTextContent().equals("id")) {
+                exchange.getOut().setHeader("id", currentNode.getTextContent());
+              }
+              if (name.getTextContent().equals("geojson")) {
+                xcb.field("geom", currentNode.getTextContent());
+              } else if (!name.getTextContent().startsWith("conformTo_") && !name.getTextContent().startsWith("thesaurus_")) {
+                xcb.field(
+                  name.getTextContent(),
+                  currentNode.getTextContent());
+              }
+            }
+          }
+        }
+      }
+      xcb.endObject();
+      String json = xcb.string();
+      System.out.println(json);
+
+      exchange.getOut().setBody(json);
+      return json;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
   /**
    * Run XSLT transformation on the body of the Exchange
    * and set the output body to the results of the transformation.

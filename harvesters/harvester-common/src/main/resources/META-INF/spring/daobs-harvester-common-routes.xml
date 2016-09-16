@@ -59,11 +59,27 @@
       See https://github.com/INSPIRE-MIF/daobs/issues/90 -->
       <cm:removeHeaders pattern="*"/>
 
-      <!--      <cm:setHeader headerName="transactionFileName">
-              <cm:groovy>java.util.UUID.randomUUID().toString() + '.xml'</cm:groovy>
-            </cm:setHeader>
-            <cm:to uri="file:/tmp/?fileName=solr-request/$simple{header.transactionFileName}&amp;charset=utf-8"/>-->
-      <cm:setHeader headerName="Exchange.HTTP_URI">
+      <cm:split parallelProcessing="true">
+        <cm:xpath>//doc</cm:xpath>
+        <cm:setProperty propertyName="id">
+          <cm:xpath>
+            field[@name = 'id']/text()
+          </cm:xpath>
+        </cm:setProperty>
+        <cm:bean ref="xsltUtility" method="xmlToJson"/>
+        <cm:setHeader headerName="Exchange.HTTP_URI">
+          <cm:simple>http://localhost:9201/{{solr.core.data}}/record/$simple{in.headers.id}</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="Content-Type">
+          <cm:simple>application/json</cm:simple>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_METHOD">
+          <cm:simple>POST</cm:simple>
+        </cm:setHeader>
+        <cm:to uri="http4://localhost:9201"/>
+        <!--<cm:to uri="elasticsearch://cluster?ip=localhost&amp;port=9200&amp;operation=BULK_INDEX&amp;indexName=records"/>-->
+      </cm:split>
+      <!--<cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Content-Type">
@@ -75,7 +91,7 @@
       <cm:to uri="log:org.daobs.harvester.Harvester?showBody=true"/>
       <cm:choice>
         <cm:when>
-          <!-- If records found, next route is direct:cswGetRecords. -->
+          &lt;!&ndash; If records found, next route is direct:cswGetRecords. &ndash;&gt;
           <cm:xpath>/response/lst/int[@name = 'status' and text() = '400']
           </cm:xpath>
           <cm:setProperty propertyName="indexingError">
@@ -110,7 +126,7 @@
                   loggingLevel="INFO"
                   logName="org.daobs.harvester.Harvester"/>
         </cm:otherwise>
-      </cm:choice>
+      </cm:choice>-->
     </cm:route>
 
     <!--<cm:route id="route-delete">
