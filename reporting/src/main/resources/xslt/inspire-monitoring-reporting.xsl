@@ -50,13 +50,17 @@
     <!-- Format date properly. Sometimes month is written
 using one character or two. Prepend 0 when needed. -->
     <xsl:variable name="month"
-                  select="if (string-length($dateNode/month) = 1)
+                  select="if ($dateNode/month = '0')
+                        then '12'
+                        else if (string-length($dateNode/month) = 1)
                         then concat('0', $dateNode/month)
                         else if (string-length($dateNode/month) = 2)
                         then $dateNode/month
                         else '12'"/>
     <xsl:variable name="day"
-                  select="if (string-length($dateNode/day) = 1)
+                  select="if ($dateNode/day = '0')
+                        then '31'
+                        else if (string-length($dateNode/day) = 1)
                         then concat('0', $dateNode/day)
                         else if (string-length($dateNode/day) = 2)
                         then $dateNode/day
