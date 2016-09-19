@@ -449,7 +449,7 @@
     <module>harvesters</module>
     <module>tasks</module>
     <module>solr</module>
-    <module>dashboard</module>
+    <module>kibana</module>
     <module>web</module>
     <module>messaging</module>
     <module>reporting</module>
@@ -536,6 +536,10 @@
 
     <es.version>5.0.0-alpha5</es.version>
     <es.version.md5>98e7445ec79a5d140c2b4980e20b8237</es.version.md5>
+    <es.port>9200</es.port>
+    <es.url>http://localhost:${es.port}</es.url>
+    <es.username></es.username>
+    <es.password></es.password>
 
     <etf.installation.path>${project.basedir}/../tasks/etf-validation-checker/ETF/ETF</etf.installation.path>
     <!-- web folder where to store the validation reports -->
@@ -550,7 +554,7 @@
     <inspire.validation.background>false</inspire.validation.background>
 
 
-    <silk.port>8985</silk.port>
+    <kibana.port>8985</kibana.port>
 
     <guava.version>19.0</guava.version>
 

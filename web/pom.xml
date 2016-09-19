@@ -391,6 +391,7 @@
                 <resource>
                   <directory>${project.basedir}/src/main/webResources</directory>
                   <filtering>true</filtering>
+                  <targetPath>${build.webapp.resources}</targetPath>
                 </resource>
               </resources>
             </configuration>
@@ -416,6 +417,9 @@
                 <include>**/META-INF/context.xml</include>
               </includes>
             </resource>
+            <resource>
+              <directory>${build.webapp.resources}</directory>
+            </resource>
           </webResources>
         </configuration>
       </plugin>
@@ -438,30 +442,37 @@
           <revisionOnScmFailure>true</revisionOnScmFailure>
         </configuration>
       </plugin>
-
       <plugin>
-        <!-- Running the application using Tomcat.
-        This solves the REST API access StackOverflow issue on Jetty
-        when accessing pages likes:
-        http://localhost:8983/solr/data/schema/analysis/stopwords/english.
-        -->
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.2</version>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.3.11.v20160721</version>
         <configuration>
-          <contextReloadable>true</contextReloadable>
-          <!-- http port -->
-          <port>${webapp.port}</port>
-          <!-- application path always starts with /-->
-          <path>${webapp.context}</path>
-          <uriEncoding>UTF-8</uriEncoding>
+          <contextXml>${basedir}/jetty-context.xml</contextXml>
+          <webAppSourceDirectory>${project.build.directory}/${war.name}</webAppSourceDirectory>
+          <webApp>
+            <contextPath>${webapp.context}</contextPath>
+            <descriptor>${project.build.directory}/${war.name}/WEB-INF/web.xml</descriptor>
+            <baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+              <resourcesAsCSV>
+                ${project.basedir}/src/main/webapp,
+                ${build.webapp.resources}
+              </resourcesAsCSV>
+            </baseResource>
+          </webApp>
           <systemProperties>
-            <daobs.data.dir>${data.dir}</daobs.data.dir>
+            <systemProperty>
+              <name>org.eclipse.jetty.server.Request.maxFormContentSize</name>
+              <value>500000</value>
+            </systemProperty>
           </systemProperties>
-          <!-- if you want to use test dependencies rather than only runtime -->
-          <useTestClasspath>false</useTestClasspath>
+          <stopKey>JETTY_TOP</stopKey>
+          <stopPort>8090</stopPort>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <properties>
+    <build.webapp.resources>${project.build.directory}/webapp</build.webapp.resources>
+  </properties>
 </project>

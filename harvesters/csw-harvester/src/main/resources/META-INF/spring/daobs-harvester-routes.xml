@@ -300,7 +300,7 @@
               shutdownRunningTask="CompleteAllTasks">
       <cm:description>Based on the total number of records
         to be harvested, retrieve records per page and index
-        them in SOLR. All records are removed from the indexed
+        them in ES. All records are removed from the indexed
         when the task starts.
 
         TODO: Improve update strategy.
@@ -396,13 +396,13 @@
       <cm:setBody>
         <cm:simple>+harvesterUuid:"${property.harvesterUuid}"</cm:simple>
       </cm:setBody>
-      <cm:multicast stopOnException="false"
+      <!--<cm:multicast stopOnException="false"
                     parallelProcessing="false">
         <cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>
         <cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>
-        <!--<cm:to uri="activemq:queue:task-db-validate?jmsMessageType=Text"/>-->
-        <!--<cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>-->
-      </cm:multicast>
+        <cm:to uri="activemq:queue:task-db-validate?jmsMessageType=Text"/>
+        <cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>
+      </cm:multicast>-->
     </cm:route>
   </cm:camelContext>
 </beans>

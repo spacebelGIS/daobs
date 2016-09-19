@@ -23,8 +23,14 @@ package org.daobs.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.daobs.event.HarvestCswEvent;
 import org.daobs.harvester.config.Harvester;
@@ -35,23 +41,15 @@ import org.daobs.messaging.JmsMessager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Paths;
 
 
 /**
@@ -178,6 +176,20 @@ public class HarvesterController {
     ));
     client.commit(collection);
 
+
+//    {{es.url}}/{{solr.core.data}}/records/_delete_by_query
+// {"query": {"match": {"harvesterUuid": "{{csw.harvester.delete.filter}}"}}}
+    HttpPost httpPost = new HttpPost();
+    httpPost.setURI(new URI("http://localhost:9200/data/records/_delete_by_query"));
+    String json = String.format(
+      "{\"query\": {\"match\": {\"harvesterUuid\": \"%s\"}}}",
+      uuid.trim()
+    );
+    HttpEntity entity = new ByteArrayEntity(json.getBytes("UTF-8"));
+    httpPost.setEntity(entity);
+    HttpClient httpClient = HttpClientBuilder.create().build();
+    HttpResponse response = httpClient.execute(httpPost);
+    String result = EntityUtils.toString(response.getEntity());
 
     // Delete the ETF reports
     String harvesterReportsPath = Paths.get(this.reportsPath,

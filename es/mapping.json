@@ -1,0 +1,236 @@
+{
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [
+        {
+          "codelist": {
+            "match": "codelist_*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }},{
+          "org": {
+            "match": "*Org*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }},{
+          "contact": {
+            "match": "*contact*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }},{
+          "date": {
+            "match": "*Date*",
+            "mapping": {
+              "type": "date"
+            }
+          }},{
+          "dateMonth": {
+            "match": "*Month*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }},{
+          "dateYear": {
+            "match": "*Year*",
+            "mapping": {
+              "type": "short"
+            }
+          }},{
+          "measure": {
+            "match": "measure_*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        }
+      ]
+    },
+    "records": {
+      "properties": {
+        "accessConstraints": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "coordinateSystem": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "dateStamp": {
+          "type": "date"
+        },
+        "document": {
+          "type": "text"
+        },
+        "documentStandard": {
+          "type": "keyword"
+        },
+        "documentType": {
+          "type": "keyword"
+        },
+        "geom": {
+          "type": "text"
+        },
+        "harvesterId": {
+          "type": "keyword"
+        },
+        "harvesterUuid": {
+          "type": "keyword"
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "inspireAnnex": {
+          "type": "keyword"
+        },
+        "inspireAnnexForFirstTheme": {
+          "type": "keyword"
+        },
+        "inspireServiceType": {
+          "type": "keyword"
+        },
+        "inspireTheme": {
+          "type": "keyword"
+        },
+        "inspireThemeFirst": {
+          "type": "keyword"
+        },
+        "inspireThemeFirst_syn": {
+          "type": "keyword"
+        },
+        "inspireTheme_syn": {
+          "type": "keyword"
+        },
+        "isOpenData": {
+          "type": "keyword"
+        },
+        "lineage": {
+          "type": "text"
+        },
+        "link": {
+          "type": "text"
+        },
+        "linkProtocol": {
+          "type": "keyword"
+        },
+        "linkUrl": {
+          "type": "text"
+        },
+        "mainLanguage": {
+          "type": "keyword"
+        },
+        "metadataIdentifier": {
+          "type": "keyword"
+        },
+        "numberOfInspireTheme": {
+          "type": "short"
+        },
+        "otherConstraints": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "overviewUrl": {
+          "type": "text"
+        },
+        "pointOfTruthURL": {
+          "type": "text"
+        },
+        "recordOperateOn": {
+          "type": "keyword"
+        },
+        "resolutionDistance": {
+          "type": "keyword"
+        },
+        "resolutionScaleDenominator": {
+          "type": "keyword"
+        },
+        "resourceAbstract": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "resourceAltTitle": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "resourceCredit": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "resourceLanguage": {
+          "type": "keyword"
+        },
+        "resourceTitle": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "resourceType": {
+          "type": "keyword"
+        },
+        "serviceType": {
+          "type": "keyword"
+        },
+        "spatialRepresentationType": {
+          "type": "keyword"
+        },
+        "standardName": {
+          "type": "keyword"
+        },
+        "tag": {
+          "type": "keyword"
+        },
+        "territory": {
+          "type": "keyword"
+        },
+        "topic": {
+          "type": "keyword"
+        },
+        "useLimitation": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        }
+      }
+    }
+  }
+}

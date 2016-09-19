@@ -7,8 +7,8 @@
 
 Collect information and configure indicators to generate reporting. Build dashboards 
 using the online creation tools. Share your dashboards and provide access to all 
-monitoring information. This project is using [Solr](http://lucene.apache.org/solr/) and 
-[Banana](https://github.com/LucidWorks/banana) dashboard tool to analyze geospatial metadata 
+monitoring information. This project is using [Elasticsearch](https://github.com/elastic/elasticsearch) and 
+[Kibana](https://github.com/elastic/kibana) dashboard tool to analyze geospatial metadata 
 catalog content and [Tika analysis toolkit](https://tika.apache.org/) to analyze 
 associated resources (eg. PDF, JSON, DBF).
 
@@ -37,7 +37,7 @@ The guide for user installing and configuring the application.
 * Git
 * Java 8
 * Maven 3.1.0+
-* Solr 5.x
+* Elasticsearch 5.x
 * A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE10+ should be also supported.
 
 ## Build the application
@@ -62,9 +62,9 @@ or for a quicker build
 mvn clean install -DskipTests -Drelax -P web
 ```
 
-## Install and configure Solr
+## Install and configure Elasticsearch
 
-See [solr/README.md](solr/README.md).
+See [es/README.md](es/README.md).
 
 
 ## Run the application
@@ -79,7 +79,7 @@ See [solr/README.md](solr/README.md).
 
 ```
 cd web
-mvn tomcat7:run-war
+mvn jetty:run
 ```
 
 Access the home page from http://localhost:8983.

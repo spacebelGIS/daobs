@@ -105,18 +105,18 @@
               "field: " + statsField[i] + ", missing: true }");
           }
           $http.get(
-            cfg.SERVICES.dataCore + '?' +
-            $.param({
-              'q': '+documentType:metadata',
-              'rows': '0',
-              'wt': 'json',
-              'json.facet': "{'top_territory': { " +
-              "type: terms, field: harvesterUuid, " +
-              "limit: " + $scope.harvesterConfig.length +
-              ", missing: true," +
-              "facet: {" + statsFieldConfig.join(',') +
-              "}}}"
-            })
+            cfg.SERVICES.dataCore + '/records',
+            {
+                params: {
+                aggs: {
+                  top_territory: {
+                    value_count:  {
+                      field: "territory"
+                    }
+                  }
+                 }
+                }
+            }
           ).then(function (data) {
             if (data.data.facets.top_territory && data.data.facets.top_territory.buckets) {
               var facets = data.data.facets.top_territory.buckets;

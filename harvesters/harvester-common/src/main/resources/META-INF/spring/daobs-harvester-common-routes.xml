@@ -49,7 +49,7 @@
 
     <cm:route id="route-index">
       <cm:description>
-        Index records in Solr and report any errors.
+        Index records in ES and report any errors.
       </cm:description>
       <cm:from uri="direct-vm:indexDocuments"/>
 
@@ -68,7 +68,7 @@
         </cm:setProperty>
         <cm:bean ref="xsltUtility" method="xmlToJson"/>
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>http://localhost:9201/{{solr.core.data}}/record/$simple{in.headers.id}</cm:simple>
+          <cm:simple>{{es.url}}/{{solr.core.data}}/records/$simple{in.headers.id}</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Content-Type">
           <cm:simple>application/json</cm:simple>
@@ -76,73 +76,31 @@
         <cm:setHeader headerName="Exchange.HTTP_METHOD">
           <cm:simple>POST</cm:simple>
         </cm:setHeader>
-        <cm:to uri="http4://localhost:9201"/>
+        <cm:to uri="http4://localhost/es-server"/>
         <!--<cm:to uri="elasticsearch://cluster?ip=localhost&amp;port=9200&amp;operation=BULK_INDEX&amp;indexName=records"/>-->
       </cm:split>
-      <!--<cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
-      </cm:setHeader>
-      <cm:setHeader headerName="Content-Type">
-        <cm:simple>text/xml</cm:simple>
-      </cm:setHeader>
-      <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:convertBodyTo type="org.w3c.dom.Document" charset="UTF-8"/>
-      <cm:to uri="log:org.daobs.harvester.Harvester?showBody=true"/>
-      <cm:choice>
-        <cm:when>
-          &lt;!&ndash; If records found, next route is direct:cswGetRecords. &ndash;&gt;
-          <cm:xpath>/response/lst/int[@name = 'status' and text() = '400']
-          </cm:xpath>
-          <cm:setProperty propertyName="indexingError">
-            <cm:xpath resultType="java.lang.String">
-              /response/lst/str[@name = 'msg']/text()
-            </cm:xpath>
-          </cm:setProperty>
-          <cm:log
-            message="Oops, error while indexing record(s) of page #$simple{property.CamelSplitIndex}: $simple{property.indexingError}."
-            loggingLevel="ERROR"
-            logName="org.daobs.harvester.Harvester"/>
-        </cm:when>
-        <cm:otherwise>
-          <cm:setBody>
-            <cm:constant><![CDATA[<commit/>]]></cm:constant>
-          </cm:setBody>
-          <cm:setHeader headerName="Exchange.HTTP_URI">
-            <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
-          </cm:setHeader>
-          <cm:setHeader headerName="Content-Type">
-            <cm:simple>text/xml</cm:simple>
-          </cm:setHeader>
-          <cm:to
-            uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-
-          <cm:setProperty propertyName="indexingTime">
-            <cm:xpath resultType="java.lang.String">
-              /response/lst/int[@name = 'QTime']/text()
-            </cm:xpath>
-          </cm:setProperty>
-          <cm:log message="Records indexed in $simple{property.indexingTime}ms."
-                  loggingLevel="INFO"
-                  logName="org.daobs.harvester.Harvester"/>
-        </cm:otherwise>
-      </cm:choice>-->
     </cm:route>
 
-    <!--<cm:route id="route-delete">
+   <!-- <cm:route id="route-delete">
       <cm:description>
         Delete all records from the index.
 
         TODO: Should only delete record for this harvester only
       </cm:description>
       <cm:from uri="direct:indexDeleteDocuments"/>
-      <cm:setHeader headerName="SolrOperation">
-        <cm:constant>DELETE_BY_QUERY</cm:constant>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{es.url}}/{{solr.core.data}}/records/_delete_by_query</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:simple>application/json</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_METHOD">
+        <cm:simple>DELETE</cm:simple>
       </cm:setHeader>
       <cm:setBody>
-        <cm:simple>{{csw.harvester.delete.filter}}</cm:simple>
+        <cm:simple>{"query": {"match": {"harvesterUuid": "{{csw.harvester.delete.filter}}"}}}</cm:simple>
       </cm:setBody>
-      <cm:to uri="solr://{{solr.server.url}}"/>
+      <cm:to uri="http4://localhost/es-server"/>
     </cm:route>-->
 
 
