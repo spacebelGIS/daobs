@@ -3,7 +3,7 @@
 ### Manual installation
 
 Download Solr from http://lucene.apache.org/solr/mirrors-solr-latest-redir.html
-and copy it to the Solr module. eg. solr/solr-5.3.1
+and copy it to the Solr module. eg. solr/solr-6.0.1
 
 Download JTS from https://sourceforge.net/projects/jts-topo-suite/
 and copy it to the Solr lib folder: server/solr-webapp/webapp/WEB-INF/lib
@@ -41,7 +41,7 @@ mvn exec:exec -Dsolr-start
 
 Configure Solr to start on server startup.
 
-Use solr/solr-5.3.1/bin/init.d/solr. Modify the script to start
+Use solr/solr-6.0.1/bin/init.d/solr. Modify the script to start
 Solr in cloud mode:
 
 ```

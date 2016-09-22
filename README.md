@@ -34,13 +34,33 @@ The guide for user installing and configuring the application.
 
 ## Requirements
 
-* Git
 * Java 8
-* Maven 3.1.0+
-* Solr 5.x
+* Java servlet container (eg. Tomcat 8+)
+* Solr 6.x
+* ETF (optional)
+* INSPIRE validator (optional): if not available use remote service
 * A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE10+ should be also supported.
 
-## Build the application
+
+## Installation
+
+Download and install [Solr](solr/README.md) (See Manual installation).
+
+Download and install [Tomcat](http://tomcat.apache.org/download-80.cgi)
+
+Download daobs.war and deploy it in Tomcat webapps folder.
+
+Open http://localhost:8080/daobs/
+
+
+
+
+## Build the application from the source code
+
+Requirements
+
+* Git
+* Maven 3.1.0+
 
 Get the source code with
 
@@ -64,7 +84,7 @@ mvn clean install -DskipTests -Drelax -P web
 
 ## Install and configure Solr
 
-See [solr/README.md](solr/README.md).
+See [Solr installation](solr/README.md).
 
 
 ## Run the application
