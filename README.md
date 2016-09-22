@@ -27,6 +27,9 @@ associated resources (eg. PDF, JSON, DBF).
 (https://raw.githubusercontent.com/INSPIRE-MIF/daobs/daobs-1.0.x/doc/img/daobs-sample-dashboard.png)
 
 
+# Release
+
+* [Version 1.0.0](https://github.com/INSPIRE-MIF/daobs/releases/tag/v1.0.0)
 
 # User guide
 
