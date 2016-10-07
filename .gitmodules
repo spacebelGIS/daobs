@@ -1,6 +1,0 @@
-[submodule "dashboard"]
-	path = dashboard
-	url = https://github.com/INSPIRE-MIF/banana.git
-[submodule "silk"]
-	path = silk
-	url = https://github.com/INSPIRE-MIF/silk.git
