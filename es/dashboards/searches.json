@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "All-records",
+    "_type": "search",
+    "_source": {
+      "title": "All records",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "resourceTitle",
+        "territory"
+      ],
+      "sort": [
+        "creationDateForResource",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"data\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647}}"
+      }
+    }
+  }
+]
