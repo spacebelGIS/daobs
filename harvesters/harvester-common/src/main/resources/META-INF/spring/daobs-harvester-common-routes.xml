@@ -68,7 +68,7 @@
         </cm:setProperty>
         <cm:bean ref="xsltUtility" method="xmlToJson"/>
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{es.url}}/{{solr.core.data}}/records/$simple{in.headers.id}</cm:simple>
+          <cm:simple>{{es.url}}/records/$simple{in.headers.id}</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Content-Type">
           <cm:simple>application/json</cm:simple>

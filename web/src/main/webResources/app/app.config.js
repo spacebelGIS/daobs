@@ -38,6 +38,8 @@
       dashboardCore: api + 'search/${solr.core.dashboard}',
       dataCoreName: '${solr.core.data}',
       dataCore: api + 'search/${solr.core.data}',
+      esdataCore: context + 'es/records',
+      esindicatorCore: context + 'es/indicators',
       proxy: context + 'proxy?url=',
       harvester: api + 'harvester',
       harvesters: api + 'harvesters',

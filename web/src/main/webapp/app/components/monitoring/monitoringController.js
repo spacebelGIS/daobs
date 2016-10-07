@@ -101,10 +101,6 @@
         );
       };
 
-      $scope.setAsOfficialMonitoring = function (m) {
-        alert('not supported yet');
-      }
-
       init();
     }]);
 
@@ -175,27 +171,55 @@
 
       function init() {
         //Get list of territory available
-        $http.get(cfg.SERVICES.dataCore +
-          '?q=' +
-          'documentType%3Ametadata&' +
-          'start=0&rows=0&' +
-          'wt=json&indent=true&' +
-          'facet=true&facet.sort=index' + facetParam, {cache: true}).success(function (data) {
+        // $http.get(cfg.SERVICES.dataCore +
+        //   '?q=' +
+        //   'documentType%3Ametadata&' +
+        //   'start=0&rows=0&' +
+        //   'wt=json&indent=true&' +
+        //   'facet=true&facet.sort=index' + facetParam, {cache: true})
+        $http.post(
+          cfg.SERVICES.esdataCore + '/_search?size=0', {
+            "query" : {
+            },
+            "aggs": {
+              "territory": {
+                "terms":  {
+                  "field": "territory"
+                }
+              },
+              "resourceType": {
+                "terms":  {
+                  "field": "resourceType"
+                }
+              },
+              "isValid": {
+                "terms":  {
+                  "field": "isValid"
+                }
+              },
+              "OrgForResource": {
+                "terms":  {
+                  "field": "OrgForResource"
+                }
+              },
+              "Org": {
+                "terms":  {
+                  "field": "Org"
+                }
+              }
+            }
+          }
+        ).success(function (r) {
           $scope.facetValues = {};
-          var i = 0, facet = data.facet_counts.facet_fields.territory;
+          var i = 0, facet = r.aggregations.territory.buckets;
 
           // The facet response contains an array
-          // with [value1, countFor1, value2, countFor2, ...]
-          do {
-            // If it has records
-            if (facet[i + 1] > 0) {
-              $scope.listOfTerritory.push({
-                label: facet[i],
-                count: facet[i + 1]
-              });
-            }
-            i = i + 2;
-          } while (i < facet.length);
+          for (var i = 0; i < facet.length; i ++) {
+            $scope.listOfTerritory.push({
+              label: facet[i].key,
+              count: facet[i].doc_count
+            });
+          }
 
           var territoryParam = $location.search().territory,
             filterParam = $location.search().filter;

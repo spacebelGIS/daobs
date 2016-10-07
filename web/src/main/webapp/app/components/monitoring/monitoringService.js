@@ -33,44 +33,38 @@
             var rows = 10000, deferred = $q.defer();
 
             // TODO: Move to solrService
-            $http.get(cfg.SERVICES.dataCore +
-              '?q=documentType%3Amonitoring&' +
-              'sort=reportingDate+desc,territory+asc&' +
-              'start=0&rows=' + rows + '&' +
-              'facet=true&facet.field=reportingYear&facet.field=territory&' +
-              'wt=json').success(function (data) {
-              var listOfMonitoring = data.response.docs,
-                facets = data.facet_counts.facet_fields,
-                facetArray = {};
-
-              // Convert JSON encoded fields in response.
-              angular.forEach(listOfMonitoring,
-                function (monitoring, index) {
-                  angular.forEach(monitoring.contact,
-                    function (contact, contactIndex) {
-                      listOfMonitoring[index].contact[contactIndex] =
-                        angular.fromJson(contact);
-                    });
-                });
-              angular.forEach(facets, function (facet, key) {
-                var i = 0;
-                facetArray[key] = [];
-                // The facet response contains an array
-                // with [value1, countFor1, value2, countFor2, ...]
-                do {
-                  // If it has records
-                  if (facet[i + 1] > 0) {
-                    facetArray[key].push({
-                      label: facet[i],
-                      count: facet[i + 1]
-                    });
+            // $http.get(cfg.SERVICES.dataCore +
+            //   '?q=documentType%3Amonitoring&' +
+            //   'sort=reportingDate+desc,territory+asc&' +
+            //   'start=0&rows=' + rows + '&' +
+            //   'facet=true&facet.field=reportingYear&facet.field=territory&' +
+            //   'wt=json')
+            $http.post(
+              cfg.SERVICES.esindicatorCore + '/_search?size=' + rows, {
+                "query" : {
+                  "bool" : {
+                    "filter" : {
+                      "term" : {"documentType": "monitoring"}
+                    }
                   }
-                  i = i + 2;
-                } while (i < facet.length);
-              });
+                },
+                "aggs": {
+                  "reportingYear" : {
+                    "terms" : {
+                      "field" : "reportingYear"
+                    }
+                  },
+                  "territory": {
+                    "terms":  {
+                      "field": "territory"
+                    }
+                  }
+                }
+              }
+            ).success(function (data) {
               deferred.resolve({
-                monitoring: listOfMonitoring,
-                facet: facetArray
+                monitoring: data.hits.hits,
+                facet: data.aggregations
               });
             }).error(function (response) {
               deferred.reject(response);

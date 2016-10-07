@@ -5,9 +5,9 @@
       <li data-ng-repeat="(key, value) in monitoringFacet">
         {{key | translate}}
         <ul>
-          <li data-ng-repeat="v in value">
-            <a href="" data-ng-click="setMonitoringFilter(key, v.label)">
-              {{v.label | translate}} ({{v.count}})
+          <li data-ng-repeat="v in value.buckets">
+            <a href="" data-ng-click="setMonitoringFilter(key, v.key)">
+              {{v.key | translate}} ({{v.doc_count}})
             </a>
           </li>
           <li>
@@ -58,46 +58,38 @@
       <tr>
         <th>
           <input class="form-control"
-                 data-ng-model="monitoringFilter.reportingYear">
+                 data-ng-model="monitoringFilter._source.reportingYear">
         </th>
         <th/>
         <th>
           <input class="form-control"
-                 data-ng-model="monitoringFilter.territory"
+                 data-ng-model="monitoringFilter._source.territory"
                  autofocus="">
         </th>
         <th colspan="4"></th>
       </tr>
       <tr data-ng-repeat="m in listOfMonitoring | filter:monitoringFilter"
           data-ng-class="monitoringDanger ? 'danger' : ''">
-        <td><strong>{{m.reportingYear}}</strong></td>
-        <td title="{{m.reportingDate}}">{{m.reportingDate | fromNow}}</td>
-        <td>{{m.territory}}</td>
+        <td><strong>{{m._source.reportingDate}}</strong></td>
+        <td title="{{m._source.reportingDate}}">{{m._source.reportingDate | fromNow}}</td>
+        <td>{{m._source.territory}}</td>
         <td>
           <ul>
-            <li data-ng-repeat="c in m.contact">
+           <!-- FIXME <li data-ng-repeat="c in m._source.contact">
               <a href="mailto:{{c.email}}">{{c.org}}</a>
-            </li>
+            </li>-->
           </ul>
         </td>
         <td>
           <a class="btn btn-link"
              role="button"
-             data-ng-href="dashboard/#/dashboard/solr/INSPIRE%20Dashboard?q=%2Bterritory:{{m.territory}} %2BreportingYear:{{m.reportingYear}}">
+             data-ng-href="dashboard/#/dashboard/solr/INSPIRE%20Dashboard?q=%2Bterritory:{{m._source.territory}} %2BreportingYear:{{m._source.reportingYear}}">
             <i class="fa fa-eye"></i>&nbsp;
             <span data-translate="">viewRecords</span>
           </a><br/>
-          <!--<a class="btn btn-link"
-             href="" role="button"
-             title="{{'isOfficial' | translate}}"
-             data-ng-class="m.isOfficial ? '' : 'disabled'"
-             data-ng-click="setAsOfficialMonitoring(m)">
-            <i class="fa fa-pushpin"></i>&nbsp;
-            <span data-translate="">setAsOfficial</span>
-          </a><br/>-->
           <a class="btn btn-link"
              href="" role="button"
-             data-ng-click="removeMonitoring(m)"
+             data-ng-click="removeMonitoring(m._source)"
              data-ng-if="getUser().authenticated">
             <i class="fa fa-remove text-danger"></i>&nbsp;
             <span data-translate="">remove</span>

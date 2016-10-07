@@ -104,24 +104,23 @@
             statsFieldConfig.push(statsField[i] + ": { type : terms, " +
               "field: " + statsField[i] + ", missing: true }");
           }
-          $http.get(
-            cfg.SERVICES.dataCore + '/records',
-            {
-                params: {
-                aggs: {
-                  top_territory: {
-                    value_count:  {
-                      field: "territory"
-                    }
+          $http.post(
+            cfg.SERVICES.esdataCore + '/_search?size=0', {
+              "query" : {
+              },
+              "aggs": {
+                "top_territory": {
+                  "terms":  {
+                    "field": "harvesterUuid"
                   }
-                 }
                 }
+              }
             }
-          ).then(function (data) {
-            if (data.data.facets.top_territory && data.data.facets.top_territory.buckets) {
-              var facets = data.data.facets.top_territory.buckets;
+          ).then(function (r) {
+            if (r.data.aggregations.top_territory && r.data.aggregations.top_territory.buckets) {
+              var facets = r.data.aggregations.top_territory.buckets;
               for (var i = 0; i < facets.length; i++) {
-                $scope.statsForTerritory[facets[i].val] = facets[i];
+                $scope.statsForTerritory[facets[i].key] = {count: facets[i].doc_count};
               }
             }
           });

@@ -35,4 +35,8 @@
     <from>^/solr/(admin/cores.*)$</from>
     <to type="proxy" qsappend="true">${solr.url}/$1?</to>
   </rule>
+  <rule>
+    <from>^/es/(.*)$</from>
+    <to type="proxy" qsappend="true">${es.url}/$1?</to>
+  </rule>
 </urlrewrite>

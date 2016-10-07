@@ -37,6 +37,7 @@ import org.daobs.index.SolrServerBean;
 import org.daobs.indicator.config.Reporting;
 import org.daobs.indicator.config.Reports;
 import org.daobs.util.UnzipUtility;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -54,6 +55,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +65,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +77,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 
 @Api(value = "reports",
@@ -98,8 +104,55 @@ public class ReportingController {
   @Value("${reports.dir}")
   private String reportsPath;
 
+  @Value("${es.url}")
+  private String esUrl;
+
   public void setCollection(String collection) {
     this.collection = collection;
+  }
+
+  public String elementToJson(Element xml) {
+    try {
+      XContentBuilder xcb = jsonBuilder()
+        .startObject();
+
+      List childNodes = xml.getChildren();
+
+      if (childNodes != null) {
+        childNodes.forEach(o -> {
+          if (o instanceof Element) {
+            Element e = (Element) o;
+            try {
+              xcb.field(
+                e.getAttributeValue("name"),
+                e.getTextNormalize());
+            } catch (IOException e1) {
+              e1.printStackTrace();
+            }
+          }
+        });
+      }
+      xcb.endObject();
+      return xcb.string();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public String getId(Element xml) {
+    Iterator i = xml.getChildren().iterator();
+    while (i.hasNext()) {
+      Object o = i.next();
+
+      if (o instanceof Element) {
+        Element e = (Element) o;
+        if (e.getAttributeValue("name").equals("id")) {
+          return e.getTextNormalize();
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -118,30 +171,6 @@ public class ReportingController {
       @ApiParam(value = "The file to upload")
       @RequestParam("file")
       MultipartFile file) throws Exception {
-    // TODO: Make generic function to handle xsl update in Solr
-    // This does not work. XSLT is made in daobs and not in Solr now
-    //    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-    //    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-    //    builder.addBinaryBody("file", file.getInputStream(),
-    //      ContentType.TEXT_XML, file.getOriginalFilename());
-    //
-    //    HttpEntity multipart = builder.build();
-    //
-    //    HttpPost uploadFile = new HttpPost(
-    //        server.getSolrServerUrl() + "/" + server.getSolrServerCore() + "/update"
-    //        + "?commit=true&tr=inspire-monitoring-reporting.xsl&isOfficial=false"
-    //    );
-    //    uploadFile.addHeader("Content-Type",
-    //      "multipart/form-data; boundary=----" + System.currentTimeMillis());
-    //
-    //    uploadFile.setEntity(multipart);
-    //    CloseableHttpClient httpClient = HttpClients.createDefault();
-    //    CloseableHttpResponse response = httpClient.execute(uploadFile);
-    //    if (response.getStatusLine().getStatusCode() == 200) {
-    //      return new ResponseEntity<>("", HttpStatus.OK);
-    //    } else {
-    //      return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
-    //    }
 
     File xmlFile = File.createTempFile("report", ".xml");
     FileUtils.writeByteArrayToFile(xmlFile, file.getBytes());
@@ -161,17 +190,33 @@ public class ReportingController {
     Element results = simpleTransform(xmlFile.getAbsolutePath(),
         stylesheet);
 
-    HttpPost uploadFile = new HttpPost(
-        server.getSolrServerUrl() + "/" + server.getSolrServerCore()
-        + "/update?commit=true"
-    );
-    String xml = new XMLOutputter(Format.getPrettyFormat()).outputString(results);
-    HttpEntity entity = new ByteArrayEntity(xml.getBytes("UTF-8"));
-    uploadFile.setEntity(entity);
-    uploadFile.setHeader("Content-Type", "text/xml");
-    CloseableHttpClient httpClient = HttpClients.createDefault();
-    CloseableHttpResponse response = httpClient.execute(uploadFile);
-    if (response.getStatusLine().getStatusCode() == 200) {
+    boolean success = true;
+    if (results != null) {
+      Iterator i = results.getChildren().iterator();
+      while (i.hasNext()) {
+        Object o = i.next();
+        try {
+          if (o instanceof Element) {
+            Element e = (Element) o;
+            String json = elementToJson(e);
+            HttpPost uploadFile = new HttpPost(
+              esUrl + "/indicators/" + getId(e)
+            );
+            HttpEntity entity = new ByteArrayEntity(json.getBytes("UTF-8"));
+            uploadFile.setEntity(entity);
+            uploadFile.setHeader("Content-Type", "application/json");
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(uploadFile);
+            if (response.getStatusLine().getStatusCode() != 200) {
+              success = false;
+            }
+          }
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    if (success) {
       return new ResponseEntity<>("", HttpStatus.OK);
     } else {
       return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);

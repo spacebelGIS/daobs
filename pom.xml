@@ -146,6 +146,18 @@
       </dependency>
 
       <dependency>
+        <groupId>org.elasticsearch</groupId>
+        <artifactId>elasticsearch</artifactId>
+        <!--<version>2.3.1</version>-->
+        <version>${es.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-core</artifactId>
+        <version>${solr.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>net.sf.saxon</groupId>
         <artifactId>saxon</artifactId>
         <version>${saxon.version}</version>
@@ -531,11 +543,11 @@
     <solr.core.data>data</solr.core.data>
     <solr.core.dashboard>dashboard</solr.core.dashboard>
 
-    <solr.version>5.5.0</solr.version>
-    <solr.version.md5>fc9a4a6ee127dff21135dd4941c92c15</solr.version.md5>
+    <solr.version>6.2.0</solr.version>
+    <solr.version.md5>489ead340950950472ddbe8e32b7b20d</solr.version.md5>
 
-    <es.version>5.0.0-alpha5</es.version>
-    <es.version.md5>98e7445ec79a5d140c2b4980e20b8237</es.version.md5>
+    <es.version>5.0.0-beta1</es.version>
+    <es.version.md5>489ead340950950472ddbe8e32b7b20d</es.version.md5>
     <es.port>9200</es.port>
     <es.url>http://localhost:${es.port}</es.url>
     <es.username></es.username>
