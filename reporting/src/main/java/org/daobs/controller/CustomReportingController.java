@@ -25,7 +25,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-import org.daobs.index.SolrRequestBean;
+import org.daobs.index.ESClientBean;
+import org.daobs.index.ESRequestBean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -231,13 +232,13 @@ public class CustomReportingController {
     // Grab data sets and services to later
     // build the raw data section
     if (withRowData) {
-      Node spatialDataSets = SolrRequestBean.query(String.format(
+      Node spatialDataSets = ESRequestBean.query(String.format(
             SPATIALDATASETS_QUERY_URL,
             fq, rows));
       model.addObject("spatialDataSets", spatialDataSets);
 
 
-      Node spatialDataServices = SolrRequestBean.query(String.format(
+      Node spatialDataServices = ESRequestBean.query(String.format(
             SPATIALDATASERVICE_QUERY_URL,
             fq, rows));
       model.addObject("spatialDataServices", spatialDataServices);

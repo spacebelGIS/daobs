@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -64,9 +65,12 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -167,7 +171,7 @@ public class ReportingController {
       },
       method = RequestMethod.POST)
   @ResponseBody
-  public ResponseEntity<String> add(
+  public ResponseEntity<Map<String, String>> add(
       @ApiParam(value = "The file to upload")
       @RequestParam("file")
       MultipartFile file) throws Exception {
@@ -191,24 +195,28 @@ public class ReportingController {
         stylesheet);
 
     boolean success = true;
+    Map<String, String> errors = new HashMap<>();
     if (results != null) {
       Iterator i = results.getChildren().iterator();
+      // TODO: Use bulk import
       while (i.hasNext()) {
         Object o = i.next();
         try {
           if (o instanceof Element) {
             Element e = (Element) o;
             String json = elementToJson(e);
+            String id = getId(e);
             HttpPost uploadFile = new HttpPost(
-              esUrl + "/indicators/" + getId(e)
+              esUrl + "/indicators/" +  URLEncoder.encode(id, "UTF-8")
             );
             HttpEntity entity = new ByteArrayEntity(json.getBytes("UTF-8"));
             uploadFile.setEntity(entity);
             uploadFile.setHeader("Content-Type", "application/json");
             CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(uploadFile);
-            if (response.getStatusLine().getStatusCode() != 200) {
+            if (response.getStatusLine().getStatusCode() != 201) {
               success = false;
+              errors.put(id, IOUtils.toString(response.getEntity().getContent()));
             }
           }
         } catch(Exception e) {
@@ -217,9 +225,9 @@ public class ReportingController {
       }
     }
     if (success) {
-      return new ResponseEntity<>("", HttpStatus.OK);
+      return new ResponseEntity<>(errors, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

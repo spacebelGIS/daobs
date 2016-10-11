@@ -57,6 +57,13 @@
     <property name="solrServerPassword" value="${solr.server.password}"/>
   </bean>
 
+  <bean id="esClient"
+        name="esClient"
+        class="org.daobs.index.ESClientBean">
+    <property name="serverUrl" value="${es.url}"/>
+    <property name="collection" value="records"/>
+  </bean>
+
   <!-- TODO: Duplicate with the SolrServer bean used for the HTTP proxy -->
   <bean id="solrConfig"
         class="org.fao.geonet.solr.SolrConfig">

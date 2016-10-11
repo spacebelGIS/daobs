@@ -57,7 +57,7 @@ public class SolrRequestBean {
   /**
    * Query solr over HTTP.
    */
-  public static Node query(String collection, String query) {
+  static Node query(String collection, String query) {
     try {
       SolrServerBean serverBean = SolrServerBean.get();
       URL url = new URL(serverBean.getSolrServerUrl() + collection + query);
@@ -65,8 +65,8 @@ public class SolrRequestBean {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
       InputSource is = new InputSource(
-          new ByteArrayInputStream(
-              xmlResponse.getBytes("UTF-8")));
+        new ByteArrayInputStream(
+          xmlResponse.getBytes("UTF-8")));
       return builder.parse(is).getFirstChild();
     } catch (Exception exception) {
       exception.printStackTrace();
@@ -74,7 +74,7 @@ public class SolrRequestBean {
     return null;
   }
 
-  public static Node query(String query) {
+  static Node query(String query) {
     SolrServerBean serverBean = SolrServerBean.get();
     return query(serverBean.getSolrServerCore(), query);
   }
@@ -84,7 +84,7 @@ public class SolrRequestBean {
    *
    * @param query The query
    */
-  public static Double getNumFound(String collection, String query, String... filterQuery) {
+  static Double getNumFound(String collection, String query, String... filterQuery) {
     try {
       SolrQuery solrQuery = new SolrQuery();
       solrQuery.setQuery(query);
@@ -104,17 +104,16 @@ public class SolrRequestBean {
     return null;
   }
 
-  public static Double getNumFound(String query, String... filterQuery) {
+  static Double getNumFound(String query, String... filterQuery) {
     SolrServerBean serverBean = SolrServerBean.get();
     return getNumFound(serverBean.getSolrServerCore(), query, filterQuery);
   }
 
-
   /**
    * Get stats for a field.
    */
-  public static Double getStats(
-      String collection, String query, String[] filterQuery, String statsField, String stats) {
+  static Double getStats(
+    String collection, String query, String[] filterQuery, String statsField, String stats) {
     try {
       SolrQuery solrQuery = new SolrQuery();
       solrQuery.setQuery(query);
@@ -156,12 +155,11 @@ public class SolrRequestBean {
     return null;
   }
 
-  public static Double getStats(String query, String[] filterQuery,
-                                String statsField, String stats) {
+  static Double getStats(String query, String[] filterQuery,
+                         String statsField, String stats) {
     SolrServerBean serverBean = SolrServerBean.get();
     return getStats(serverBean.getSolrServerCore(), query, filterQuery, statsField, stats);
   }
-
 
   /**
    * Analyze a field and a value against the index phase
@@ -175,14 +173,14 @@ public class SolrRequestBean {
    * </p>
    *
    */
-  public static String analyzeField(String collection,
-                                    String fieldName,
-                                    String fieldValue) {
-    return analyzeField(collection, fieldName, fieldValue, PHASE_INDEX, DEFAULT_FILTER_CLASS, 0);
+  static String analyzeField(String collection,
+                             String fieldName,
+                             String fieldValue) {
+    return analyzeField(collection, fieldName, fieldValue, SolrRequestBean.PHASE_INDEX, SolrRequestBean.DEFAULT_FILTER_CLASS, 0);
   }
 
-  public static String analyzeField(String fieldName,
-                                    String fieldValue) {
+  static String analyzeField(String fieldName,
+                             String fieldValue) {
     SolrServerBean serverBean = SolrServerBean.get();
     return analyzeField(serverBean.getSolrServerCore(), fieldName, fieldValue);
   }
@@ -206,12 +204,12 @@ public class SolrRequestBean {
    *
    * @return The analyzed string value if found or the field value if not found.
    */
-  public static String analyzeField(String collection,
-                                    String fieldName,
-                                    String fieldValue,
-                                    String analysisPhaseName,
-                                    String filterClass,
-                                    int tokenPosition) {
+  static String analyzeField(String collection,
+                             String fieldName,
+                             String fieldValue,
+                             String analysisPhaseName,
+                             String filterClass,
+                             int tokenPosition) {
 
     try {
       SolrClient server = SolrServerBean.get().getServer();
@@ -237,21 +235,21 @@ public class SolrRequestBean {
         return fieldValue;
       }
       FieldAnalysisResponse.Analysis analysis =
-          res.getFieldNameAnalysis(fieldName);
+        res.getFieldNameAnalysis(fieldName);
 
       Iterable<AnalysisResponseBase.AnalysisPhase> phases =
-          PHASE_INDEX.equals(analysisPhaseName)
-            ? analysis.getIndexPhases() : analysis.getQueryPhases();
+        SolrRequestBean.PHASE_INDEX.equals(analysisPhaseName)
+          ? analysis.getIndexPhases() : analysis.getQueryPhases();
       if (phases != null) {
         Iterator<AnalysisResponseBase.AnalysisPhase> iterator =
-            phases.iterator();
+          phases.iterator();
         while (iterator.hasNext()) {
           AnalysisResponseBase.AnalysisPhase analysisPhase = iterator.next();
           if (analysisPhase.getClassName()
-              .equals(filterClass)
-              && analysisPhase.getTokens().size() > 0) {
+            .equals(filterClass)
+            && analysisPhase.getTokens().size() > 0) {
             AnalysisResponseBase.TokenInfo token =
-                analysisPhase.getTokens().get(tokenPosition);
+              analysisPhase.getTokens().get(tokenPosition);
             return token.getText();
           }
         }
@@ -266,13 +264,13 @@ public class SolrRequestBean {
   /**
    * Analyze a field.
    */
-  public static String analyzeField(String fieldName,
-                                    String fieldValue,
-                                    String analysisPhaseName,
-                                    String filterClass,
-                                    int tokenPosition) {
+  static String analyzeField(String fieldName,
+                             String fieldValue,
+                             String analysisPhaseName,
+                             String filterClass,
+                             int tokenPosition) {
     SolrServerBean serverBean = SolrServerBean.get();
     return analyzeField(serverBean.getSolrServerCore(),
-        fieldName, fieldValue, analysisPhaseName, filterClass, tokenPosition);
+      fieldName, fieldValue, analysisPhaseName, filterClass, tokenPosition);
   }
 }

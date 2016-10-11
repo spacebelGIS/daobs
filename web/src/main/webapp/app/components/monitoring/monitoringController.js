@@ -270,13 +270,22 @@
         $scope.filterError = null;
         $scope.fq = encodeURIComponent(fq);
 
-        return $http.get(cfg.SERVICES.dataCore +
-          '?q=' +
-          'documentType%3Ametadata&' +
-          'start=0&rows=0&' +
-          'facet=true&facet.sort=index&facet.mincount=1' + facetParam +
-          '&wt=json&indent=true&fq=' + encodeURIComponent(fq)).success(function (data) {
-          $scope.filterCount = data.response.numFound;
+        return  $http.post(
+          cfg.SERVICES.esdataCore + '/_search?size=0', {
+            "query" : {
+              "query_string" : {
+                "query" : "+documentType:metadata " + fq
+              }
+            }
+          })
+        // $http.get(cfg.SERVICES.dataCore +
+        //   '?q=' +
+        //   'documentType%3Ametadata&' +
+        //   'start=0&rows=0&' +
+        //   'facet=true&facet.sort=index&facet.mincount=1' + facetParam +
+        //   '&wt=json&indent=true&fq=' + encodeURIComponent(fq))
+        .success(function (data) {
+          $scope.filterCount = data.hits.total;
           $scope.facetValues = {};
           $scope.facetValues = data.facet_counts.facet_fields;
           $scope.preview();

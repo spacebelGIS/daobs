@@ -152,6 +152,11 @@
         <version>${es.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>transport</artifactId>
+        <version>${es.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.lucene</groupId>
         <artifactId>lucene-core</artifactId>
         <version>${solr.version}</version>
@@ -349,6 +354,10 @@
     <repository>
       <id>jbossrepo</id>
       <url>https://repository.jboss.org/nexus/content/repositories/root_repository/maven2/</url>
+    </repository>
+    <repository>
+      <id>es</id>
+      <url>https://artifacts.elastic.co/maven/</url>
     </repository>
   </repositories>
 
