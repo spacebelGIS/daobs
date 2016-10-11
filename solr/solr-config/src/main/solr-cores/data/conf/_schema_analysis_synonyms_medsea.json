@@ -55,23 +55,68 @@
     "Unknown": [
       "Unknown"
     ],
-    "Order form/envoice": [
+    "No information was found on data delivery mechanisms": [
+      "No information"
+    ],
+    "Manual process: Order form/invoice is requested": [
       "Manual"
     ],
-    "Order form/invoice": [
-      "Manual"
-    ],
-    "On-line downloading services": [
+    "Online downloading services": [
       "Partial INSPIRE function"
     ],
-    "On-line discovery+viewing + downloading services": [
+    "Online discovery + downloading + viewing services (Advanced services)": [
       "Full INSPIRE function"
     ],
-    "On-line discovery + viewing + downloading services": [
+    "Online discovery and downloading services": [
       "Full INSPIRE function"
     ],
-    "On-line discovery + viewing + downloading + advanced services (High resolution viewing,3D viewing services, Processing/Mapping services...)": [
-      "Full INSPIRE function"
+    "Cited in peer reviewed paper or grey literature but no info on how to access": [
+      "Low visibility"
+    ],
+    "Information retrieved upon specific request to the data source": [
+      "Low visibility"
+    ],
+    "Use of social network, community of practices sharing information, portals of organization where no search is organized": [
+      "Medium visibility"
+    ],
+    "Search via reference catalogue (e.g. MyOcean, GEOSS Geoportal…)": [
+      "Good visibility"
+    ],
+    "Use of open search engines, searching by name either the data provider or the characteristics": [
+      "Good visibility"
+    ],
+    "Data sets are not referenced in a catalogue or are referenced in a non public catalogue": [
+      "Inadequate"
+    ],
+    "The datasets are referenced in a public national catalogue, in an international catalogue service": [
+      "Partly adequate"
+    ],
+    "The datasets are provided through an EU Inspire catalogue service (OGC)": [
+      "Totally adequate"
+    ],
+    "There is no information at all on data policy adopted by data providers": [
+      "Low transparency"
+    ],
+    "There is information, but details are available only on request": [
+      "Medium transparency"
+    ],
+    "There is detailed information provided to understand data policy": [
+      "High transparency"
+    ],
+    "Format not or not well documented": [
+      "Not documented"
+    ],
+    "Proprietary format and not well documented": [
+      "Not ready to be consumed"
+    ],
+    "Format not proprietary but content not clearly specified": [
+      "Not ready to be consumed"
+    ],
+    "Format proprietary but content clearly specified": [
+      "Can be processed to be consumed"
+    ],
+    "Format not proprietary and content clearly specified (e.g. autodescriptive like ODV, NetCDF CF) or at least with appropriate document describing the content": [
+      "Ready to be consumed"
     ]
   }
 }
