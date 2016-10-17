@@ -60,7 +60,9 @@ public class SolrRequestBean {
   public static Node query(String collection, String query) {
     try {
       SolrServerBean serverBean = SolrServerBean.get();
-      URL url = new URL(serverBean.getSolrServerUrl() + collection + query);
+      String serverUrl = serverBean.getSolrServerUrl() + (
+        serverBean.getSolrServerUrl().endsWith("/") ? "" : "/");
+      URL url = new URL(serverUrl + collection + query);
       String xmlResponse = IOUtils.toString(url, "UTF-8");
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();

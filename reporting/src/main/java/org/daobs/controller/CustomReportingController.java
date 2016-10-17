@@ -137,7 +137,7 @@ public class CustomReportingController {
 
     addRequestParametersToModel(allRequestParams, model);
 
-    addRowDataToModel(withRowData, rows, fq, model);
+    addRawDataToModel(withRowData, rows, fq, model);
 
     return model;
   }
@@ -216,12 +216,12 @@ public class CustomReportingController {
     addRequestParametersToModel(allRequestParams, model);
 
     // TODO: URL encoding should be done when the HTTP request is made
-    addRowDataToModel(withRowData, rows, URLEncoder.encode(filter, "UTF-8"), model);
+    addRawDataToModel(withRowData, rows, URLEncoder.encode(filter, "UTF-8"), model);
 
     return model;
   }
 
-  private void addRowDataToModel(Boolean withRowData, int rows, String fq, ModelAndView model) {
+  private void addRawDataToModel(Boolean withRowData, int rows, String fq, ModelAndView model) {
     // Handle defaults for boolean
     if (withRowData == null) {
       withRowData = false;
