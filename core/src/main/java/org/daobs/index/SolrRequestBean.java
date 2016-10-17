@@ -61,7 +61,7 @@ public class SolrRequestBean {
     try {
       SolrServerBean serverBean = SolrServerBean.get();
       String serverUrl = serverBean.getSolrServerUrl() + (
-        serverBean.getSolrServerUrl().endsWith("/") ? "" : "/");
+          serverBean.getSolrServerUrl().endsWith("/") ? "" : "/");
       URL url = new URL(serverUrl + collection + query);
       String xmlResponse = IOUtils.toString(url, "UTF-8");
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
