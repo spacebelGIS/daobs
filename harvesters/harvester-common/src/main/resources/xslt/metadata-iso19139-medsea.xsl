@@ -38,12 +38,43 @@
 
     <xsl:if
       test="contains(gmd:metadataStandardName/gco:CharacterString, 'Emodnet')">
-      <xsl:call-template name="medsea-index-keyword">
+      <!--<xsl:call-template name="medsea-index-keyword">
         <xsl:with-param name="thesaurusName"
                         select="'Data delivery mechanisms'"/>
         <xsl:with-param name="fieldName"
                         select="'extra_medsea_dataDeliveryMechanism'"/>
-      </xsl:call-template>
+      </xsl:call-template>-->
+
+
+      <xsl:variable name="thesaurusList">
+        <entry key="Data delivery mechanisms">extra_medsea_dataDeliveryMechanism</entry>
+        <entry key="emodnet-checkpoint.policy.visibility">extra_medsea_policyVisibility</entry>
+        <entry key="emodnet-checkpoint.service.extent">extra_medsea_serviceExtent</entry>
+        <entry key="emodnet-checkpoint.visibility">extra_medsea_visibility</entry>
+        <entry key="emodnet-checkpoint.readyness">extra_medsea_readyness</entry>
+      </xsl:variable>
+
+      <xsl:variable name="identification" select="gmd:identificationInfo"/>
+
+      <xsl:for-each select="$thesaurusList/entry">
+        <xsl:message>##19:<xsl:value-of select="."/> </xsl:message>
+        <xsl:variable name="thesaurusName" select="@key"/>
+        <xsl:variable name="fieldName" select="."/>
+        <xsl:for-each
+          select="$identification/*/
+                 gmd:descriptiveKeywords/gmd:MD_Keywords[
+                 contains(
+                     gmd:thesaurusName[1]/*/gmd:title[1]/gco:CharacterString/text(),
+                     $thesaurusName) or
+                 contains(
+                     gmd:thesaurusName[1]/*/gmd:identifier[1]/*/gmd:code/*/text(),
+                     $thesaurusName)
+                     ]/gmd:keyword/gco:CharacterString">
+          <field name="{$fieldName}">
+            <xsl:value-of select="text()"/>
+          </field>
+        </xsl:for-each>
+      </xsl:for-each>
 
       <xsl:for-each select="gmd:identificationInfo/*/
                               gmd:resourceConstraints/*/

@@ -26,6 +26,7 @@
                 xmlns:mco="http://standards.iso.org/iso/19115/-3/mco/1.0"
                 xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/1.0"
                 xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0"
+                xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0"
                 xmlns:mdq="http://standards.iso.org/iso/19157/-2/mdq/1.0"
                 xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0"
                 xmlns:saxon="http://saxon.sf.net/"
@@ -39,20 +40,38 @@
   could be used to index more fields. -->
   <xsl:template mode="index-extra-fields" match="mdb:MD_Metadata">
 
+
     <xsl:if
       test="contains(mdb:metadataStandard/cit:CI_Citation/cit:title/gco:CharacterString, 'Emodnet')">
-      <xsl:variable name="thesaurusName" select="'Data delivery mechanisms'"/>
-      <xsl:variable name="fieldName"
-                    select="'extra_medsea_dataDeliveryMechanism'"/>
-      <xsl:for-each
-        select="mdb:identificationInfo/*/
-               mri:descriptiveKeywords/mri:MD_Keywords[contains(
-                   mri:thesaurusName[1]/cit:CI_Citation/
-                     cit:title[1]/gco:CharacterString/text(),
-                     $thesaurusName)]/mri:keyword/gco:CharacterString">
-        <field name="{$fieldName}">
-          <xsl:value-of select="text()"/>
-        </field>
+
+      <xsl:variable name="thesaurusList">
+        <entry key="Data delivery mechanisms">extra_medsea_dataDeliveryMechanism</entry>
+        <entry key="emodnet-checkpoint.policy.visibility">extra_medsea_policyVisibility</entry>
+        <entry key="emodnet-checkpoint.service.extent">extra_medsea_serviceExtent</entry>
+        <entry key="emodnet-checkpoint.visibility">extra_medsea_visibility</entry>
+        <entry key="emodnet-checkpoint.readyness">extra_medsea_readyness</entry>
+      </xsl:variable>
+
+      <xsl:variable name="identification" select="mdb:identificationInfo"/>
+
+      <xsl:for-each select="$thesaurusList/entry">
+        <xsl:message>##<xsl:value-of select="."/> </xsl:message>
+        <xsl:variable name="thesaurusName" select="@key"/>
+        <xsl:variable name="fieldName" select="."/>
+        <xsl:for-each
+          select="$identification/*/
+                 mri:descriptiveKeywords/mri:MD_Keywords[
+                 contains(
+                     mri:thesaurusName[1]/*/cit:title[1]/gco:CharacterString/text(),
+                     $thesaurusName) or
+                 contains(
+                     mri:thesaurusName[1]/*/cit:identifier[1]/*/mcc:code/*/text(),
+                     $thesaurusName)
+                     ]/mri:keyword/gco:CharacterString">
+          <field name="{$fieldName}">
+            <xsl:value-of select="text()"/>
+          </field>
+        </xsl:for-each>
       </xsl:for-each>
 
       <xsl:for-each select="mdb:identificationInfo/*/
