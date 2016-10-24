@@ -21,32 +21,16 @@
 
 package org.daobs.index;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.FieldAnalysisRequest;
-import org.apache.solr.client.solrj.response.AnalysisResponseBase;
-import org.apache.solr.client.solrj.response.FieldAnalysisResponse;
-import org.apache.solr.client.solrj.response.FieldStatsInfo;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.params.AnalysisParams;
-import org.apache.solr.common.params.ModifiableSolrParams;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Utility class to run Solr requests like field analysis.
@@ -57,6 +41,40 @@ public class ESRequestBean {
   private static String PHASE_QUERY = "query";
   private static String DEFAULT_FILTER_CLASS = "org.apache.lucene.analysis.synonym.SynonymFilter";
 
+  public static String deleteByQuery(String index, String query, int scrollSize) throws Exception {
+    ESClientBean client = ESClientBean.get();
+    SearchResponse scrollResponse = client.getClient()
+      .prepareSearch(index)
+      .setQuery(QueryBuilders.queryStringQuery(query))
+      .setScroll(new TimeValue(60000))
+      .setSize(scrollSize)
+      .execute().actionGet();
+
+    BulkRequestBuilder brb = client.getClient().prepareBulk();
+    while (true) {
+      for(SearchHit hit : scrollResponse.getHits()) {
+        brb.add(new DeleteRequest(index, hit.getType(), hit.getId()));
+      }
+      scrollResponse = client.getClient()
+        .prepareSearchScroll(scrollResponse.getScrollId())
+        .setScroll(new TimeValue(60000))
+        .execute().actionGet();
+      if (scrollResponse.getHits().getHits().length == 0) {
+        break;
+      }
+    }
+
+    if (brb.numberOfActions() > 0) {
+      BulkResponse result = brb.execute().actionGet();
+      if (result.hasFailures()) {
+        throw new IOException(result.buildFailureMessage());
+      } else {
+        return String.format(
+          "{\"msg\": \"%d records removed.\"}", brb.numberOfActions());
+      }
+    }
+    return String.format("No match found for query ''.", query);
+  }
   /**
    * Query solr over HTTP.
    */
@@ -197,6 +215,14 @@ public class ESRequestBean {
     return analyzeField(collection, fieldName, fieldValue, ESRequestBean.PHASE_INDEX, ESRequestBean.DEFAULT_FILTER_CLASS, 0);
   }
 
+  public static String analyzeField(String fieldName,
+                                    String fieldValue,
+                                    String analysisPhaseName,
+                                    String filterClass,
+                                    int tokenPosition) {
+    ESClientBean client = ESClientBean.get();
+    return analyzeField(client.getCollection(), fieldName, fieldValue, ESRequestBean.PHASE_INDEX, ESRequestBean.DEFAULT_FILTER_CLASS, 0);
+  }
 
   /**
    * Analyze a field and a value against the index

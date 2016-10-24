@@ -41,20 +41,13 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -73,53 +66,89 @@ public class Utility {
   public String encrypt(@Header("stringToEncrypt") String stringToEncrypt) {
     return DigestUtils.sha256Hex(stringToEncrypt);
   }
-
-  public String xmlToJson(Exchange exchange) {
-    Document xml = exchange.getIn().getBody(Document.class);
-
+  public static String documentToString(Document doc) {
     try {
-      XContentBuilder xcb = jsonBuilder()
-        .startObject();
+      StringWriter sw = new StringWriter();
+      TransformerFactory tf = TransformerFactory.newInstance();
+      Transformer transformer = tf.newTransformer();
+      transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+      transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+      transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-      NodeList childNodes = xml.getChildNodes();
-      Node docs = childNodes.item(0);
-      List<String> fields = new ArrayList<String>();
+      transformer.transform(new DOMSource(doc), new StreamResult(sw));
+      return sw.toString();
+    } catch (Exception ex) {
+      throw new RuntimeException("Error converting to String", ex);
+    }
+  }
+  public Map<String, String> documentToJson(Document xml) {
+    try {
+      NodeList root = xml.getChildNodes();
+      Node addNode = root.item(0);
+      Map<String, String> listOfXcb = new HashMap<>();
+      if (root != null) {
+        NodeList records = addNode.getChildNodes();
+        for (int i = 0; i < records.getLength(); i++) {
+          Node record = records.item(i);
+          if (record != null && record.getNodeType() == Node.ELEMENT_NODE) {
+            XContentBuilder xcb = jsonBuilder()
+              .startObject();
+            String id = null;
+            NodeList fields = record.getChildNodes();
+            for (int j = 0; j < fields.getLength(); j++) {
+              Node currentField = fields.item(j);
+              if (currentField != null && currentField.getNodeType() == Node.ELEMENT_NODE) {
+                Node name = currentField.getAttributes().getNamedItem("name");
 
+                if (name != null) {
+                  if (name.getTextContent().equals("geom")) {
+                    continue;
+                  }
 
-      if (docs != null) {
-        NodeList nodes = docs.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) {
-          Node currentNode = nodes.item(i);
-          if (currentNode != null && currentNode.getNodeType() == Node.ELEMENT_NODE) {
-            Node name = currentNode.getAttributes().getNamedItem("name");
-            if (name != null) {
-              if (name.getTextContent().equals("geom")) {
-                continue;
-              }
-              if (name.getTextContent().equals("id")) {
-                exchange.getOut().setHeader("id", currentNode.getTextContent());
-              }
-              if (name.getTextContent().equals("geojson")) {
-                xcb.field("geom", currentNode.getTextContent());
-              } else if (!name.getTextContent().startsWith("conformTo_") && !name.getTextContent().startsWith("thesaurus_")) {
-                xcb.field(
-                  name.getTextContent(),
-                  currentNode.getTextContent());
+                  if (name.getTextContent().equals("id")) {
+                    id = currentField.getTextContent();
+                  }
+
+                  if (name.getTextContent().equals("geojson")) {
+                    xcb.field("geom", currentField.getTextContent());
+                  } else if (
+                    // Skip some fields causing errors / TODO
+                    !name.getTextContent().startsWith("conformTo_") &&
+                      !name.getTextContent().startsWith("thesaurus_")) {
+                    xcb.field(
+                      name.getTextContent(),
+                      currentField.getTextContent());
+                  }
+                }
               }
             }
+            xcb.endObject();
+            listOfXcb.put(id, xcb.string());
           }
         }
       }
-      xcb.endObject();
-      String json = xcb.string();
-      System.out.println(json);
-
-      exchange.getOut().setBody(json);
-      return json;
+      return listOfXcb;
     } catch (IOException e) {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public String xmlToBulkJson(Exchange exchange) {
+    Document xml = exchange.getIn().getBody(Document.class);
+    StringBuffer stringBuffer = new StringBuffer();
+    Map<String, String> xcb = documentToJson(xml);
+    Iterator<String> iterator = xcb.keySet().iterator();
+    while (iterator.hasNext()) {
+      String key = iterator.next();
+      stringBuffer.append(String.format(
+        "{\"index\": {\"_index\": \"%s\", \"_type\": \"records\", \"_id\": \"%s\"}}",
+        "records", key)).append("\n");
+      stringBuffer.append(xcb.get(key)).append("\n");
+    }
+    exchange.getOut().setBody(stringBuffer.toString());
+    return stringBuffer.toString();
   }
   /**
    * Run XSLT transformation on the body of the Exchange

@@ -35,6 +35,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.solr.client.solrj.SolrClient;
 import org.daobs.index.ESClientBean;
+import org.daobs.index.ESRequestBean;
 import org.daobs.index.SolrServerBean;
 import org.daobs.indicator.config.Reporting;
 import org.daobs.indicator.config.Reports;
@@ -43,6 +44,7 @@ import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -208,7 +210,8 @@ public class ReportingController {
     if (results != null) {
       Iterator i = results.getChildren().iterator();
       ESClientBean client = ESClientBean.get();
-      BulkRequestBuilder bulkRequestBuilder = client.getClient().prepareBulk();
+      BulkRequestBuilder bulkRequestBuilder = client.getClient()
+        .prepareBulk();
       BulkResponse response = null;
       int counter = 0;
       while (i.hasNext()) {
@@ -221,7 +224,7 @@ public class ReportingController {
 
 
             bulkRequestBuilder.add(
-              client.getClient().prepareIndex(collection, "indicators", id).setSource(json)
+              client.getClient().prepareIndex("indicators", "indicators", id).setSource(json)
             );
             counter ++;
 
@@ -233,6 +236,7 @@ public class ReportingController {
                 ));
               if (response.hasFailures()) {
                 errors.put(counter + "", response.buildFailureMessage());
+                success = false;
               }
               bulkRequestBuilder = client.getClient().prepareBulk();
             }
@@ -242,6 +246,8 @@ public class ReportingController {
         }
       }
       if (bulkRequestBuilder.numberOfActions() > 0) {
+        bulkRequestBuilder
+          .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
         response = bulkRequestBuilder.execute().actionGet();
         logger.info(String.format("Importing reporting: %d actions performed. Has errors: %s",
           counter,
@@ -249,6 +255,7 @@ public class ReportingController {
         ));
         if (response.hasFailures()) {
           errors.put(counter + "", response.buildFailureMessage());
+          success = false;
         }
       }
     }
@@ -295,39 +302,14 @@ public class ReportingController {
       @ApiParam(
           value = "A query to select report to delete",
           required = true)
-      @RequestParam final String query) throws Exception {
-    ESClientBean client = ESClientBean.get();
-    SearchResponse scrollResponse = client.getClient()
-      .prepareSearch("indicators")
-      .setQuery(QueryBuilders.queryStringQuery(query))
-      .setScroll(new TimeValue(60000))
-      .setSize(1000)
-      .execute().actionGet();
-
-    BulkRequestBuilder brb = client.getClient().prepareBulk();
-    while (true) {
-      for(SearchHit hit : scrollResponse.getHits()) {
-        brb.add(new DeleteRequest("indicators", hit.getType(), hit.getId()));
-      }
-      scrollResponse = client.getClient()
-        .prepareSearchScroll(scrollResponse.getScrollId())
-        .setScroll(new TimeValue(60000))
-        .execute().actionGet();
-      if (scrollResponse.getHits().getHits().length == 0) {
-        break;
-      }
+      @RequestParam final String query) {
+    String message = null;
+    try {
+      message = ESRequestBean.deleteByQuery("indicators", query, 1000);
+      return new ResponseEntity<>(String.format("{\"msg\": \"%s\"}", message), HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(String.format("{\"msg\": \"%s\"}", message), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    if (brb.numberOfActions() > 0) {
-      BulkResponse result = brb.execute().actionGet();
-      if (result.hasFailures()) {
-        return new ResponseEntity<>(result.buildFailureMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-      } else {
-        return new ResponseEntity<>(String.format(
-          "{\"msg\": \"%d records removed.\"}", brb.numberOfActions()), HttpStatus.OK);
-      }
-    }
-    return new ResponseEntity<>("{\"msg\": \"Nothing to remove?\"}", HttpStatus.OK);
   }
 
 

@@ -36,12 +36,15 @@ import org.daobs.event.HarvestCswEvent;
 import org.daobs.harvester.config.Harvester;
 import org.daobs.harvester.config.Harvesters;
 import org.daobs.harvester.repository.HarvesterConfigRepository;
+import org.daobs.index.ESRequestBean;
 import org.daobs.index.SolrServerBean;
 import org.daobs.messaging.JmsMessager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -169,27 +172,17 @@ public class HarvesterController {
   }
 
   private void removeRecords(@PathVariable String uuid) throws Exception {
-    SolrClient client = server.getServer();
-    client.deleteByQuery(collection, String.format(
+    String message = null;
+    try {
+      String query = String.format(
         "+harvesterUuid:\"%s\" +(documentType:metadata documentType:association)",
         uuid.trim()
-    ));
-    client.commit(collection);
-
-
-//    {{es.url}}/{{solr.core.data}}/records/_delete_by_query
-// {"query": {"match": {"harvesterUuid": "{{csw.harvester.delete.filter}}"}}}
-    HttpPost httpPost = new HttpPost();
-    httpPost.setURI(new URI("http://localhost:9200/data/records/_delete_by_query"));
-    String json = String.format(
-      "{\"query\": {\"match\": {\"harvesterUuid\": \"%s\"}}}",
-      uuid.trim()
-    );
-    HttpEntity entity = new ByteArrayEntity(json.getBytes("UTF-8"));
-    httpPost.setEntity(entity);
-    HttpClient httpClient = HttpClientBuilder.create().build();
-    HttpResponse response = httpClient.execute(httpPost);
-    String result = EntityUtils.toString(response.getEntity());
+      );
+      message = ESRequestBean.deleteByQuery("records", query, 1000);
+      System.out.println(message);
+    } catch (Exception e) {
+      System.out.println(message);
+    }
 
     // Delete the ETF reports
     String harvesterReportsPath = Paths.get(this.reportsPath,

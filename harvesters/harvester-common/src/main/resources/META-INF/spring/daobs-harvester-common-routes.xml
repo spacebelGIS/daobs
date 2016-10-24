@@ -59,56 +59,38 @@
       See https://github.com/INSPIRE-MIF/daobs/issues/90 -->
       <cm:removeHeaders pattern="*"/>
 
-      <cm:split parallelProcessing="true">
-        <cm:xpath>//doc</cm:xpath>
-        <cm:setProperty propertyName="id">
-          <cm:xpath>
-            field[@name = 'id']/text()
-          </cm:xpath>
-        </cm:setProperty>
-        <cm:bean ref="xsltUtility" method="xmlToJson"/>
-        <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{es.url}}/records/$simple{in.headers.id}</cm:simple>
-        </cm:setHeader>
-        <cm:setHeader headerName="Content-Type">
-          <cm:simple>application/json</cm:simple>
-        </cm:setHeader>
-        <cm:setHeader headerName="Exchange.HTTP_METHOD">
-          <cm:simple>POST</cm:simple>
-        </cm:setHeader>
-        <cm:to uri="http4://localhost/es-server"/>
-        <!--<cm:to uri="elasticsearch://cluster?ip=localhost&amp;port=9200&amp;operation=BULK_INDEX&amp;indexName=records"/>-->
-      </cm:split>
+      <cm:bean ref="xsltUtility" method="xmlToBulkJson"/>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:simple>{{es.url}}/records/_bulk</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Content-Type">
+        <cm:simple>application/json</cm:simple>
+      </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_METHOD">
+        <cm:simple>POST</cm:simple>
+      </cm:setHeader>
+      <cm:to uri="http4://localhost/es-server"/>
     </cm:route>
 
-   <!-- <cm:route id="route-delete">
+    <!--<cm:route id="route-delete">
       <cm:description>
         Delete all records from the index.
 
         TODO: Should only delete record for this harvester only
       </cm:description>
       <cm:from uri="direct:indexDeleteDocuments"/>
-      <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{es.url}}/{{solr.core.data}}/records/_delete_by_query</cm:simple>
+      <cm:setHeader headerName="index">
+        <cm:constant>indicators</cm:constant>
       </cm:setHeader>
-      <cm:setHeader headerName="Content-Type">
-        <cm:simple>application/json</cm:simple>
-      </cm:setHeader>
-      <cm:setHeader headerName="Exchange.HTTP_METHOD">
-        <cm:simple>DELETE</cm:simple>
+      <cm:setHeader headerName="scrollSize">
+        <cm:constant>1000</cm:constant>
       </cm:setHeader>
       <cm:setBody>
         <cm:simple>{"query": {"match": {"harvesterUuid": "{{csw.harvester.delete.filter}}"}}}</cm:simple>
       </cm:setBody>
+      <cm:bean method="deleteByQuery(${header.index}, ${body}, ${header.scrollSize})"/>
       <cm:to uri="http4://localhost/es-server"/>
-    </cm:route>-->
-
-
-    <!--<cm:route id="websocket-log">
-      <cm:from uri="direct:websocketLog"/>
-      &lt;!&ndash;<cm:from uri="websocket://harvester"/>&ndash;&gt;
-      &lt;!&ndash;<cm:log message=">>> Message received from WebSocket Client : ${body}"/>&ndash;&gt;
-      <cm:to uri="websocket://harvester-csw-log?sendToAll=true"/>
-    </cm:route>-->
+    </cm:route>
+-->
   </cm:routeContext>
 </beans>
