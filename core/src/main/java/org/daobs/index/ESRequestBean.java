@@ -21,6 +21,7 @@
 
 package org.daobs.index;
 
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequest;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -32,6 +33,11 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHitField;
+import org.elasticsearch.search.SearchHits;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
@@ -84,26 +90,57 @@ public class ESRequestBean {
   /**
    * Query solr over HTTP.
    */
-  public static Node query(String collection, String query) {
-//    try {
-//      SolrServerBean serverBean = SolrServerBean.get();
-//      URL url = new URL(serverBean.getSolrServerUrl() + collection + query);
-//      String xmlResponse = IOUtils.toString(url, "UTF-8");
-//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//      DocumentBuilder builder = factory.newDocumentBuilder();
-//      InputSource is = new InputSource(
-//        new ByteArrayInputStream(
-//          xmlResponse.getBytes("UTF-8")));
-//      return builder.parse(is).getFirstChild();
-//    } catch (Exception exception) {
-//      exception.printStackTrace();
-//    }
-    return null;
+  public static Node query(String collection, String[] fields, String query, int rows) throws Exception {
+    ESClientBean client = ESClientBean.get();
+    // TODO: Use the scroll API for large set
+    SearchRequestBuilder srb = client.getClient().prepareSearch(collection)
+      .setQuery(QueryBuilders.queryStringQuery(query));
+
+    if (fields != null) {
+      srb.setFetchSource(fields, null);
+    }
+
+    SearchResponse searchResponse = srb
+      .setFrom(0)
+      .setSize(rows)
+      .execute().actionGet();
+
+    return searchResponseToNode(searchResponse.getHits());
   }
 
-  public static Node query(String query) {
+  public static Node searchResponseToNode(SearchHits hits) {
+    Document xmlDoc = new DocumentImpl();
+    Element response = xmlDoc.createElement("result");
+    for (SearchHit h : hits.getHits()) {
+      Node doc = xmlDoc.createElement("doc");
+      Iterator<String> iterator = h.getSource().keySet().iterator();
+      while (iterator.hasNext()) {
+        String key = iterator.next();
+        Object values = h.getSource().get(key);
+
+        boolean isArray = false;
+        Element field = xmlDoc.createElement(isArray ? "arr" : "str");
+
+        field.setAttribute("name", key);
+        if (isArray) {
+//          for (Object v : values.getValues()) {
+//            Element arrayElement = xmlDoc.createElement("str");
+//            arrayElement.setTextContent(v.toString());
+//            field.appendChild(arrayElement);
+//          }
+        } else {
+          field.setTextContent(values.toString());
+        }
+        doc.appendChild(field);
+      }
+      response.appendChild(doc);
+    }
+    return response;
+  }
+
+  public static Node query(String[] fields, String query, int rows) throws Exception {
     ESClientBean client = ESClientBean.get();
-    return query(client.getCollection(), query);
+    return query(client.getCollection(), fields, query, rows);
   }
 
   /**

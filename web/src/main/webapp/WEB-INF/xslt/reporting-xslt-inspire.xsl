@@ -441,21 +441,24 @@
           </SdsConformant>
         </SdsConformantIndicators>
       </Indicators>
+      <xsl:message>##<xsl:copy-of select="$withRowData"/></xsl:message>
 
       <xsl:if test="$withRowData = true()">
         <!--<xsl:message><xsl:copy-of select="$spatialDataServices"/></xsl:message>-->
         <RowData>
           <xsl:apply-templates mode="SpatialDataServiceFactory"
                                select="$spatialDataServices/result/doc"/>
+          <xsl:message>##<xsl:copy-of select="$spatialDataSets"/></xsl:message>
+
           <xsl:choose>
             <xsl:when test="$datasetMode = 'asManyDatasetsAsInspireThemes'">
               <xsl:apply-templates
                 mode="SpatialDataSetFactoryForEachInspireTheme"
-                select="$spatialDataSets/result/doc"/>
+                select="$spatialDataSets//doc"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates mode="SpatialDataSetFactory"
-                                   select="$spatialDataSets/result/doc"/>
+                                   select="$spatialDataSets//doc"/>
             </xsl:otherwise>
           </xsl:choose>
         </RowData>

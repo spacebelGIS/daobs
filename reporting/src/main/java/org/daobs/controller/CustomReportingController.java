@@ -60,27 +60,21 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomReportingController {
 
   // TODO: config should move to configuration file
-  public static final String SPATIALDATASETS_QUERY_URL = "/select?"
-      + "q=%%2BdocumentType%%3Ametadata+"
-      + "%%2B(resourceType%%3Adataset+"
-      + "resourceType%%3Aseries)&"
-      + "fq=%s&"
-      + "start=0&rows=%d&"
-      + "fl=metadataIdentifier,resourceTitle,isAboveThreshold,"
-      + "inspireAnnex,inspireTheme,inspireConformResource,"
-      + "recordOperatedByType,recordOperatedByTypeview,recordOperatedByTypedownload,"
-      + "OrgForResource,custodianOrgForResource,ownerOrgForResource,"
-      + "pointOfContactOrgForResource,harvesterUuid";
+  public static final String[] SPATIALDATASETS_QUERY_URL = new String[]{
+    "metadataIdentifier", "resourceTitle", "isAboveThreshold",
+    "inspireAnnex", "inspireTheme", "inspireConformResource",
+    "recordOperatedByType", "recordOperatedByTypeview", "recordOperatedByTypedownload",
+    "OrgForResource", "custodianOrgForResource", "ownerOrgForResource",
+    "pointOfContactOrgForResource", "harvesterUuid"
+  };
 
-  public static final String SPATIALDATASERVICE_QUERY_URL = "/select?"
-      + "q=%%2BdocumentType%%3Ametadata+%%2BresourceType%%3Aservice&"
-      + "fq=%s&"
-      + "start=0&rows=%d&"
-      + "fl=metadataIdentifier,resourceTitle,isAboveThreshold,"
-      + "inspireAnnex,inspireTheme,inspireConformResource,"
-      + "serviceType,linkUrl,link,"
-      + "OrgForResource,custodianOrgForResource,ownerOrgForResource,"
-      + "pointOfContactOrgForResource,harvesterUuid";
+  public static final String[] SPATIALDATASERVICE_QUERY_URL = new String[]{
+    "metadataIdentifier", "resourceTitle", "isAboveThreshold",
+      "inspireAnnex", "inspireTheme", "inspireConformResource",
+      "serviceType", "linkUrl", "link",
+      "OrgForResource", "custodianOrgForResource", "ownerOrgForResource",
+      "pointOfContactOrgForResource", "harvesterUuid"
+  };
 
   public static final List<String> BOOLEAN_PARAMETERS = new ArrayList<>(
       Arrays.asList("withRowData")
@@ -188,7 +182,7 @@ public class CustomReportingController {
        value = "Max number of documents to add in the raw data section")
       @RequestParam(
        value = "rows",
-       defaultValue = "20000",
+       defaultValue = "10000",
        required = false) int rows,
       @ApiParam(
        value = "The report type to generate",
@@ -217,7 +211,7 @@ public class CustomReportingController {
     addRequestParametersToModel(allRequestParams, model);
 
     // TODO: URL encoding should be done when the HTTP request is made
-    addRowDataToModel(withRowData, rows, URLEncoder.encode(filter, "UTF-8"), model);
+    addRowDataToModel(withRowData, rows, filter, model);
 
     return model;
   }
@@ -232,16 +226,26 @@ public class CustomReportingController {
     // Grab data sets and services to later
     // build the raw data section
     if (withRowData) {
-      Node spatialDataSets = ESRequestBean.query(String.format(
-            SPATIALDATASETS_QUERY_URL,
-            fq, rows));
-      model.addObject("spatialDataSets", spatialDataSets);
+      Node spatialDataSets = null;
+      try {
+        spatialDataSets = ESRequestBean.query(
+              SPATIALDATASETS_QUERY_URL,
+              fq, rows);
+        model.addObject("spatialDataSets", spatialDataSets);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
 
 
-      Node spatialDataServices = ESRequestBean.query(String.format(
-            SPATIALDATASERVICE_QUERY_URL,
-            fq, rows));
-      model.addObject("spatialDataServices", spatialDataServices);
+      Node spatialDataServices = null;
+      try {
+        spatialDataServices = ESRequestBean.query(
+              SPATIALDATASERVICE_QUERY_URL,
+              fq, rows);
+        model.addObject("spatialDataServices", spatialDataServices);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
