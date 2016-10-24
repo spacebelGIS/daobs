@@ -34,11 +34,19 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.solr.client.solrj.SolrClient;
+import org.daobs.index.ESClientBean;
 import org.daobs.index.SolrServerBean;
 import org.daobs.indicator.config.Reporting;
 import org.daobs.indicator.config.Reports;
 import org.daobs.util.UnzipUtility;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -67,10 +75,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,6 +96,9 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 @EnableWebMvc
 @Controller
 public class ReportingController {
+  private Logger logger = Logger.getLogger("org.daobs.reporting");
+
+  private static final int commitInterval = 1000;
 
   public static final String INDICATOR_CONFIGURATION_DIR =
       "/WEB-INF/datadir/monitoring/";
@@ -198,7 +207,10 @@ public class ReportingController {
     Map<String, String> errors = new HashMap<>();
     if (results != null) {
       Iterator i = results.getChildren().iterator();
-      // TODO: Use bulk import
+      ESClientBean client = ESClientBean.get();
+      BulkRequestBuilder bulkRequestBuilder = client.getClient().prepareBulk();
+      BulkResponse response = null;
+      int counter = 0;
       while (i.hasNext()) {
         Object o = i.next();
         try {
@@ -206,21 +218,37 @@ public class ReportingController {
             Element e = (Element) o;
             String json = elementToJson(e);
             String id = getId(e);
-            HttpPost uploadFile = new HttpPost(
-              esUrl + "/indicators/" +  URLEncoder.encode(id, "UTF-8")
+
+
+            bulkRequestBuilder.add(
+              client.getClient().prepareIndex(collection, "indicators", id).setSource(json)
             );
-            HttpEntity entity = new ByteArrayEntity(json.getBytes("UTF-8"));
-            uploadFile.setEntity(entity);
-            uploadFile.setHeader("Content-Type", "application/json");
-            CloseableHttpClient httpClient = HttpClients.createDefault();
-            CloseableHttpResponse response = httpClient.execute(uploadFile);
-            if (response.getStatusLine().getStatusCode() != 201) {
-              success = false;
-              errors.put(id, IOUtils.toString(response.getEntity().getContent()));
+            counter ++;
+
+            if (bulkRequestBuilder.numberOfActions() % commitInterval == 0) {
+              response = bulkRequestBuilder.execute().actionGet();
+              logger.info(String.format("Importing reporting: %d actions performed. Has errors: %s",
+                counter,
+                response.hasFailures()
+                ));
+              if (response.hasFailures()) {
+                errors.put(counter + "", response.buildFailureMessage());
+              }
+              bulkRequestBuilder = client.getClient().prepareBulk();
             }
           }
         } catch(Exception e) {
           e.printStackTrace();
+        }
+      }
+      if (bulkRequestBuilder.numberOfActions() > 0) {
+        response = bulkRequestBuilder.execute().actionGet();
+        logger.info(String.format("Importing reporting: %d actions performed. Has errors: %s",
+          counter,
+          response.hasFailures()
+        ));
+        if (response.hasFailures()) {
+          errors.put(counter + "", response.buildFailureMessage());
         }
       }
     }
@@ -268,13 +296,38 @@ public class ReportingController {
           value = "A query to select report to delete",
           required = true)
       @RequestParam final String query) throws Exception {
+    ESClientBean client = ESClientBean.get();
+    SearchResponse scrollResponse = client.getClient()
+      .prepareSearch("indicators")
+      .setQuery(QueryBuilders.queryStringQuery(query))
+      .setScroll(new TimeValue(60000))
+      .setSize(1000)
+      .execute().actionGet();
 
-    SolrClient client = server.getServer();
-    // TODO: This can delete whatever docs
-    client.deleteByQuery(collection, query);
-    client.commit(collection);
+    BulkRequestBuilder brb = client.getClient().prepareBulk();
+    while (true) {
+      for(SearchHit hit : scrollResponse.getHits()) {
+        brb.add(new DeleteRequest("indicators", hit.getType(), hit.getId()));
+      }
+      scrollResponse = client.getClient()
+        .prepareSearchScroll(scrollResponse.getScrollId())
+        .setScroll(new TimeValue(60000))
+        .execute().actionGet();
+      if (scrollResponse.getHits().getHits().length == 0) {
+        break;
+      }
+    }
 
-    return new ResponseEntity<>("", HttpStatus.OK);
+    if (brb.numberOfActions() > 0) {
+      BulkResponse result = brb.execute().actionGet();
+      if (result.hasFailures()) {
+        return new ResponseEntity<>(result.buildFailureMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      } else {
+        return new ResponseEntity<>(String.format(
+          "{\"msg\": \"%d records removed.\"}", brb.numberOfActions()), HttpStatus.OK);
+      }
+    }
+    return new ResponseEntity<>("{\"msg\": \"Nothing to remove?\"}", HttpStatus.OK);
   }
 
 
