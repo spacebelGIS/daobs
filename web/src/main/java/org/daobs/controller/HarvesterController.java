@@ -179,9 +179,7 @@ public class HarvesterController {
         uuid.trim()
       );
       message = ESRequestBean.deleteByQuery("records", query, 1000);
-      System.out.println(message);
     } catch (Exception e) {
-      System.out.println(message);
     }
 
     // Delete the ETF reports

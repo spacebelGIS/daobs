@@ -30,7 +30,8 @@
           "type": "keyword"
         },
         "harvesterUuid": {
-          "type": "keyword"
+          "type": "keyword",
+          "fielddata": true
         },
         "id": {
           "type": "keyword"

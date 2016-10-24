@@ -116,7 +116,7 @@
 
       <xsl:for-each select="../../Themes/*[text() != '']">
         <xsl:variable name="inspireTheme" as="xs:string"
-                      select="solr:analyzeField('inspireTheme_syn', text())"/>
+                      select="solr:analyzeField('analyzeField', text())"/>
 
         <xsl:if test="$inspireTheme != ''">
           <field name="inspireTheme_syn">
@@ -129,7 +129,7 @@
           <xsl:if test="position() = 1">
             <field name="inspireAnnex">
               <xsl:value-of
-                select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
+                select="solr:analyzeField('synInspireAnnexes', $inspireTheme)"/>
             </field>
           </xsl:if>
         </xsl:if>

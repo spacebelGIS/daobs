@@ -305,7 +305,7 @@
           <xsl:for-each select="gco:CharacterString[. != '']|
                                 gmx:Anchor[. != '']">
             <xsl:variable name="inspireTheme" as="xs:string"
-                          select="solr:analyzeField('inspireTheme_syn', text())"/>
+                          select="solr:analyzeField('synInspireThemes', text())"/>
 
             <field name="inspireTheme_syn">
               <xsl:value-of select="text()"/>
@@ -327,12 +327,12 @@
               </field>
               <field name="inspireAnnexForFirstTheme">
                 <xsl:value-of
-                  select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
+                  select="solr:analyzeField('synInspireAnnexes', $inspireTheme)"/>
               </field>
             </xsl:if>
             <field name="inspireAnnex">
               <xsl:value-of
-                select="solr:analyzeField('inspireAnnex_syn', $inspireTheme)"/>
+                select="solr:analyzeField('synInspireAnnexes', $inspireTheme)"/>
             </field>
           </xsl:for-each>
         </xsl:for-each>
@@ -622,10 +622,7 @@
           </field>
           <xsl:variable name="inspireServiceType" as="xs:string"
                         select="solr:analyzeField(
-                        'inspireServiceType', text(),
-                        'query',
-                        'org.apache.lucene.analysis.miscellaneous.KeepWordFilter',
-                        0)"/>
+                        'keepInspireServiceTypes', text())"/>
           <xsl:if test="$inspireServiceType != ''">
             <field name="inspireServiceType">
               <xsl:value-of select="lower-case($inspireServiceType)"/>
