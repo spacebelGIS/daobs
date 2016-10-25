@@ -123,28 +123,6 @@
   </licenses>
   <dependencyManagement>
     <dependencies>
-      <!--<dependency>
-        <groupId>org.apache.solr</groupId>
-        <artifactId>solr-velocity</artifactId>
-        <version>${solr.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.solr</groupId>
-        <artifactId>solr-dataimporthandler</artifactId>
-        <version>${solr.version}</version>
-      </dependency>-->
-      <dependency>
-        <groupId>org.apache.solr</groupId>
-        <artifactId>solr-solrj</artifactId>
-        <version>${solr.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.solr</groupId>
-        <artifactId>solr-test-framework</artifactId>
-        <version>${solr.version}</version>
-        <scope>test</scope>
-      </dependency>
-
       <dependency>
         <groupId>org.elasticsearch</groupId>
         <artifactId>elasticsearch</artifactId>
