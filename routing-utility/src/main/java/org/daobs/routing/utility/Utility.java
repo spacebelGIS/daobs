@@ -21,6 +21,8 @@
 
 package org.daobs.routing.utility;
 
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+
 import net.sf.saxon.Configuration;
 import net.sf.saxon.FeatureKeys;
 
@@ -41,18 +43,24 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
  * Created by francois on 10/12/14.
@@ -66,6 +74,11 @@ public class Utility {
   public String encrypt(@Header("stringToEncrypt") String stringToEncrypt) {
     return DigestUtils.sha256Hex(stringToEncrypt);
   }
+
+  /**
+   * Convert document to string.
+   *
+   */
   public static String documentToString(Document doc) {
     try {
       StringWriter sw = new StringWriter();
@@ -82,6 +95,10 @@ public class Utility {
       throw new RuntimeException("Error converting to String", ex);
     }
   }
+
+  /**
+   * Convert document to JSON.
+   */
   public Map<String, String> documentToJson(Document xml) {
     try {
       NodeList root = xml.getChildNodes();
@@ -93,7 +110,7 @@ public class Utility {
           Node record = records.item(i);
           if (record != null && record.getNodeType() == Node.ELEMENT_NODE) {
             XContentBuilder xcb = jsonBuilder()
-              .startObject();
+                .startObject();
             String id = null;
             NodeList fields = record.getChildNodes();
             for (int j = 0; j < fields.getLength(); j++) {
@@ -113,12 +130,12 @@ public class Utility {
                   if (name.getTextContent().equals("geojson")) {
                     xcb.field("geom", currentField.getTextContent());
                   } else if (
-                    // Skip some fields causing errors / TODO
-                    !name.getTextContent().startsWith("conformTo_") &&
-                      !name.getTextContent().startsWith("thesaurus_")) {
+                      // Skip some fields causing errors / TODO
+                      !name.getTextContent().startsWith("conformTo_")
+                      && !name.getTextContent().startsWith("thesaurus_")) {
                     xcb.field(
-                      name.getTextContent(),
-                      currentField.getTextContent());
+                        name.getTextContent(),
+                        currentField.getTextContent());
                   }
                 }
               }
@@ -129,12 +146,16 @@ public class Utility {
         }
       }
       return listOfXcb;
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException ex) {
+      ex.printStackTrace();
     }
     return null;
   }
 
+  /**
+   * Convert body of exchange to bulk JSON format.
+   *
+   */
   public String xmlToBulkJson(Exchange exchange) {
     Document xml = exchange.getIn().getBody(Document.class);
     StringBuffer stringBuffer = new StringBuffer();
@@ -150,6 +171,7 @@ public class Utility {
     exchange.getOut().setBody(stringBuffer.toString());
     return stringBuffer.toString();
   }
+
   /**
    * Run XSLT transformation on the body of the Exchange
    * and set the output body to the results of the transformation.

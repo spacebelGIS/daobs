@@ -25,8 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-import org.daobs.index.ESClientBean;
-import org.daobs.index.ESRequestBean;
+import org.daobs.index.EsRequestBean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +38,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -123,7 +121,7 @@ public class CustomReportingController {
        value = "rows",
        defaultValue = "10000",
        required = false) int rows)
-    throws IOException {
+      throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
         ReportingController.generateReporting(request, reporting, scopeId, fq, true);
 
@@ -192,7 +190,7 @@ public class CustomReportingController {
        value = "A territory",
        required = true)
       @PathVariable(value = "territory") String territory)
-    throws IOException {
+      throws IOException {
     String filter = fq + " +territory:" + territory;
     IndicatorCalculatorImpl indicatorCalculator =
         ReportingController.generateReporting(request, reporting, scopeId, filter, true);
@@ -228,23 +226,23 @@ public class CustomReportingController {
     if (withRowData) {
       Node spatialDataSets = null;
       try {
-        spatialDataSets = ESRequestBean.query(
+        spatialDataSets = EsRequestBean.query(
               SPATIALDATASETS_QUERY_URL,
               fq, rows);
         model.addObject("spatialDataSets", spatialDataSets);
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (Exception ex) {
+        ex.printStackTrace();
       }
 
 
       Node spatialDataServices = null;
       try {
-        spatialDataServices = ESRequestBean.query(
+        spatialDataServices = EsRequestBean.query(
               SPATIALDATASERVICE_QUERY_URL,
               fq, rows);
         model.addObject("spatialDataServices", spatialDataServices);
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (Exception ex) {
+        ex.printStackTrace();
       }
     }
   }

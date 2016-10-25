@@ -558,6 +558,9 @@
     <es.version.md5>f28f2013040a7a8deb13283207730433</es.version.md5>
     <es.port>9200</es.port>
     <es.url>http://localhost:${es.port}</es.url>
+    <es.index.records>records</es.index.records>
+    <es.index.indicators>indicators</es.index.indicators>
+    <es.index.dashboards>.dashboards</es.index.dashboards>
     <es.username></es.username>
     <es.password></es.password>
 

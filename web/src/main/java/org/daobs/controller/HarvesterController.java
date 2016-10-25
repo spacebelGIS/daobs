@@ -24,34 +24,26 @@ package org.daobs.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
-import org.apache.solr.client.solrj.SolrClient;
 import org.daobs.event.HarvestCswEvent;
 import org.daobs.harvester.config.Harvester;
 import org.daobs.harvester.config.Harvesters;
 import org.daobs.harvester.repository.HarvesterConfigRepository;
-import org.daobs.index.ESRequestBean;
-import org.daobs.index.SolrServerBean;
+import org.daobs.index.EsRequestBean;
 import org.daobs.messaging.JmsMessager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Paths;
 
 
@@ -64,14 +56,8 @@ import java.nio.file.Paths;
 @Controller
 public class HarvesterController {
 
-  @Resource(name = "dataSolrServer")
-  SolrServerBean server;
-
   @Autowired
   HarvesterConfigRepository harvesterConfigRepository;
-
-  @Value("${solr.core.data}")
-  private String collection;
 
   @Value("${reports.dir}")
   private String reportsPath;
@@ -87,7 +73,7 @@ public class HarvesterController {
       method = RequestMethod.GET)
   @ResponseBody
   public Harvesters get()
-    throws IOException {
+      throws IOException {
     return harvesterConfigRepository.getAll();
   }
 
@@ -102,7 +88,7 @@ public class HarvesterController {
       method = RequestMethod.PUT)
   @ResponseBody
   public RequestResponse addOrUpdate(@RequestBody Harvester harvester)
-    throws Exception {
+      throws Exception {
     harvesterConfigRepository.addOrUpdate(harvester);
     return new RequestResponse("Harvester added", "success");
   }
@@ -120,7 +106,7 @@ public class HarvesterController {
       method = RequestMethod.PUT)
   @ResponseBody
   public RequestResponse addOrUpdateAll(@RequestBody Harvesters harvesters)
-    throws Exception {
+      throws Exception {
     for (Harvester harvester : harvesters.getHarvester()) {
       harvesterConfigRepository.addOrUpdate(harvester);
     }
@@ -175,11 +161,12 @@ public class HarvesterController {
     String message = null;
     try {
       String query = String.format(
-        "+harvesterUuid:\"%s\" +(documentType:metadata documentType:association)",
-        uuid.trim()
+          "+harvesterUuid:\"%s\" +(documentType:metadata documentType:association)",
+          uuid.trim()
       );
-      message = ESRequestBean.deleteByQuery("records", query, 1000);
-    } catch (Exception e) {
+      message = EsRequestBean.deleteByQuery("records", query, 1000);
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
 
     // Delete the ETF reports
@@ -204,7 +191,7 @@ public class HarvesterController {
                                value = "action",
                                required = false) String action
   )
-    throws Exception {
+      throws Exception {
     harvesterConfigRepository.start(harvesterUuid);
     return new RequestResponse("Harvester started", "success");
   }
@@ -239,7 +226,4 @@ public class HarvesterController {
     return new RequestResponse("Harvester started", "success");
   }
 
-  public void setCollection(String collection) {
-    this.collection = collection;
-  }
 }

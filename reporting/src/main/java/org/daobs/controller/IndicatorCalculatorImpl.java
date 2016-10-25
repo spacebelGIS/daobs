@@ -26,7 +26,7 @@ import de.congrace.exp4j.ExpressionBuilder;
 import de.congrace.exp4j.UnknownFunctionException;
 import de.congrace.exp4j.UnparsableExpressionException;
 
-import org.daobs.index.ESRequestBean;
+import org.daobs.index.EsRequestBean;
 import org.daobs.indicator.config.Indicator;
 import org.daobs.indicator.config.Parameter;
 import org.daobs.indicator.config.Query;
@@ -141,13 +141,13 @@ public class IndicatorCalculatorImpl implements IndicatorCalculator {
 
         String statsField = query.getStatsField();
         if (statsField != null) {
-          statValue = ESRequestBean.getStats(
+          statValue = EsRequestBean.getStats(
               variable.getQuery().getValue(),
               filterQuery,
               statsField,
               query.getStats());
         } else {
-          statValue = ESRequestBean.getNumFound(
+          statValue = EsRequestBean.getNumFound(
               variable.getQuery().getValue(),
               filterQuery);
         }

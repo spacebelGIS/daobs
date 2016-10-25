@@ -27,18 +27,7 @@ import com.google.common.base.Strings;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
-import org.daobs.index.SolrServerBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.nio.file.DirectoryStream;
@@ -54,8 +43,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Resource;
-
 /**
  * A simple dashboard loader.
  * Created by francois on 03/02/15.
@@ -67,11 +54,6 @@ public class DashboardLoader {
    */
   public static final String dashboardSampleFilePattern = "([A-Z]*)-.*.json";
   private static final Pattern p = Pattern.compile(dashboardSampleFilePattern);
-
-  @Resource(name = "dataSolrServer")
-  SolrServerBean server;
-
-  private String collection;
 
   /**
    * Load all JSON files matching the fileFilter
@@ -136,10 +118,10 @@ public class DashboardLoader {
     doc.addField("user", "guest");
     doc.addField("group", "guest");
     doc.addField("dashboard", json);
-
-    SolrClient client = server.getServer();
-    client.add(collection, doc);
-    client.commit(collection);
+    // TODO ES
+    //    SolrClient client = server.getServer();
+    //    client.add(collection, doc);
+    //    client.commit(collection);
   }
 
 
@@ -168,9 +150,5 @@ public class DashboardLoader {
       exception.printStackTrace();
     }
     return listOfDashboards;
-  }
-
-  public void setCollection(String collection) {
-    this.collection = collection;
   }
 }

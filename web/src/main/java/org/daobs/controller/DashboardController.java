@@ -24,23 +24,15 @@ package org.daobs.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-import org.apache.solr.client.solrj.SolrClient;
-import org.daobs.index.SolrServerBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-
-import javax.annotation.Resource;
 
 
 /**
@@ -52,16 +44,6 @@ import javax.annotation.Resource;
 @EnableWebMvc
 @Controller
 public class DashboardController {
-
-  @Resource(name = "dataSolrServer")
-  SolrServerBean server;
-
-  @Value("${solr.core.dashboard}")
-  private String collection;
-
-  public void setCollection(String collection) {
-    this.collection = collection;
-  }
 
   /**
    * Remove one dashboard.
@@ -77,9 +59,10 @@ public class DashboardController {
   public ResponseEntity<String> delete(
       @PathVariable final String id) throws Exception {
 
-    SolrClient client = server.getServer();
-    client.deleteById(collection, id);
-    client.commit(collection);
+    // TODO ES
+    //    SolrClient client = server.getServer();
+    //    client.deleteById(collection, id);
+    //    client.commit(collection);
 
     return new ResponseEntity<>("", HttpStatus.OK);
   }
@@ -98,9 +81,10 @@ public class DashboardController {
   @ResponseBody
   public ResponseEntity<String> deleteAll() throws Exception {
 
-    SolrClient client = server.getServer();
-    client.deleteByQuery(collection, "+type:dashboard");
-    client.commit(collection);
+    // TODO ES
+    //    SolrClient client = server.getServer();
+    //    client.deleteByQuery(collection, "+type:dashboard");
+    //    client.commit(collection);
 
     return new ResponseEntity<>("", HttpStatus.OK);
   }

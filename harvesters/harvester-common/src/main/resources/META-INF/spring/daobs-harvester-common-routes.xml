@@ -31,17 +31,6 @@
         http://camel.apache.org/schema/spring/camel-spring.xsd">
 
 
-  <bean id="SolrServer"
-        class="org.daobs.index.SolrServerBean">
-    <property name="solrServerUrl" value="${solr.server.url}"/>
-    <property name="solrServerCore" value="${solr.core.data}"/>
-    <property name="solrServerUsername" value="${solr.server.user}"/>
-    <property name="solrServerPassword" value="${solr.server.password}"/>
-  </bean>
-
-  <bean id="SolrRequest"
-        class="org.daobs.index.SolrRequestBean"/>
-
   <bean id="xsltUtility" class="org.daobs.routing.utility.Utility"/>
 
   <cm:routeContext

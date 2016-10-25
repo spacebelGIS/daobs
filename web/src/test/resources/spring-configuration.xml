@@ -39,13 +39,10 @@
                             ignore-unresolvable="true"/>
 
   <bean id="SolrServer"
-        class="org.daobs.index.SolrServerBean">
-    <property name="solrServerUrl" value="${solr.server.url}"/>
-    <property name="solrServerCore" value="${solr.core.data}"/>
-    <property name="solrServerUsername" value="${solr.server.username}"/>
-    <property name="solrServerPassword" value="${solr.server.password}"/>
+        class="org.daobs.index.EsClientBean">
+    <property name="serverUrl" value="${es.url}"/>
   </bean>
 
   <bean id="SolrRequest"
-        class="org.daobs.index.SolrRequestBean"/>
+        class="org.daobs.index.EsRequestBean"/>
 </beans>

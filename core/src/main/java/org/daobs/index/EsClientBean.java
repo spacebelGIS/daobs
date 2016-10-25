@@ -33,9 +33,9 @@ import java.net.InetAddress;
  * Create a bean providing a connection to ES
  * Created by francois on 30/09/14.
  */
-public class ESClientBean implements InitializingBean {
+public class EsClientBean implements InitializingBean {
 
-  private static ESClientBean instance;
+  private static EsClientBean instance;
 
   private TransportClient client;
   private String serverUrl;
@@ -47,7 +47,7 @@ public class ESClientBean implements InitializingBean {
    * Get Solr server.
    * @return Return the bean instance
    */
-  public static ESClientBean get() {
+  public static EsClientBean get() {
     return instance;
   }
 
@@ -70,18 +70,11 @@ public class ESClientBean implements InitializingBean {
   @Override
   public void afterPropertiesSet() throws Exception {
     if (serverUrl != null) {
-//      if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
-//
-//      } else {
-//
-//      }
-
       client = new PreBuiltTransportClient(Settings.EMPTY)
         .addTransportAddress(new InetSocketTransportAddress(
           InetAddress.getByName("127.0.0.1"), 9300));
 
-
-      synchronized (ESClientBean.class) {
+      synchronized (EsClientBean.class) {
         instance = this;
       }
     } else {
@@ -100,7 +93,7 @@ public class ESClientBean implements InitializingBean {
   /**
    * The Solr client URL.
    */
-  public ESClientBean setServerUrl(String serverUrl) {
+  public EsClientBean setServerUrl(String serverUrl) {
     this.serverUrl = serverUrl;
     return this;
   }
@@ -115,7 +108,7 @@ public class ESClientBean implements InitializingBean {
   /**
    * The Solr client credentials username.
    */
-  public ESClientBean setUsername(String username) {
+  public EsClientBean setUsername(String username) {
     this.username = username;
     return this;
   }
@@ -130,7 +123,7 @@ public class ESClientBean implements InitializingBean {
   /**
    * The Solr client credentials password.
    */
-  public ESClientBean setPassword(String password) {
+  public EsClientBean setPassword(String password) {
     this.password = password;
     return this;
   }

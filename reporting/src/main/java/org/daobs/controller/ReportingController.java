@@ -21,37 +21,22 @@
 
 package org.daobs.controller;
 
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.solr.client.solrj.SolrClient;
-import org.daobs.index.ESClientBean;
-import org.daobs.index.ESRequestBean;
-import org.daobs.index.SolrServerBean;
+import org.daobs.index.EsClientBean;
+import org.daobs.index.EsRequestBean;
 import org.daobs.indicator.config.Reporting;
 import org.daobs.indicator.config.Reports;
 import org.daobs.util.UnzipUtility;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.delete.DeleteRequest;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.WriteRequest;
-import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.jdom2.transform.JDOMResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -66,8 +51,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,21 +59,21 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 
 @Api(value = "reports",
@@ -110,11 +94,6 @@ public class ReportingController {
   private static final Pattern INDICATOR_CONFIGURATION_ID_PATTERN =
       Pattern.compile(INDICATOR_CONFIGURATION_ID_MATCHER);
 
-  @Resource(name = "dataSolrServer")
-  SolrServerBean server;
-
-  @Value("${solr.core.data}")
-  private String collection;
 
   @Value("${reports.dir}")
   private String reportsPath;
@@ -122,25 +101,24 @@ public class ReportingController {
   @Value("${es.url}")
   private String esUrl;
 
-  public void setCollection(String collection) {
-    this.collection = collection;
-  }
-
+  /**
+   * Convert Element to JSON.
+   */
   public String elementToJson(Element xml) {
     try {
       XContentBuilder xcb = jsonBuilder()
-        .startObject();
+          .startObject();
 
       List childNodes = xml.getChildren();
 
       if (childNodes != null) {
         childNodes.forEach(o -> {
           if (o instanceof Element) {
-            Element e = (Element) o;
+            Element element = (Element) o;
             try {
               xcb.field(
-                e.getAttributeValue("name"),
-                e.getTextNormalize());
+                  element.getAttributeValue("name"),
+                  element.getTextNormalize());
             } catch (IOException e1) {
               e1.printStackTrace();
             }
@@ -149,21 +127,24 @@ public class ReportingController {
       }
       xcb.endObject();
       return xcb.string();
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException ex) {
+      ex.printStackTrace();
     }
     return null;
   }
 
+  /**
+   * Get first element with id name attribute.
+   */
   public String getId(Element xml) {
-    Iterator i = xml.getChildren().iterator();
-    while (i.hasNext()) {
-      Object o = i.next();
+    Iterator iterator = xml.getChildren().iterator();
+    while (iterator.hasNext()) {
+      Object next = iterator.next();
 
-      if (o instanceof Element) {
-        Element e = (Element) o;
-        if (e.getAttributeValue("name").equals("id")) {
-          return e.getTextNormalize();
+      if (next instanceof Element) {
+        Element element = (Element) next;
+        if (element.getAttributeValue("name").equals("id")) {
+          return element.getTextNormalize();
         }
       }
     }
@@ -208,31 +189,31 @@ public class ReportingController {
     boolean success = true;
     Map<String, String> errors = new HashMap<>();
     if (results != null) {
-      Iterator i = results.getChildren().iterator();
-      ESClientBean client = ESClientBean.get();
+      Iterator iterator = results.getChildren().iterator();
+      EsClientBean client = EsClientBean.get();
       BulkRequestBuilder bulkRequestBuilder = client.getClient()
-        .prepareBulk();
+           .prepareBulk();
       BulkResponse response = null;
       int counter = 0;
-      while (i.hasNext()) {
-        Object o = i.next();
+      while (iterator.hasNext()) {
+        Object next = iterator.next();
         try {
-          if (o instanceof Element) {
-            Element e = (Element) o;
-            String json = elementToJson(e);
-            String id = getId(e);
+          if (next instanceof Element) {
+            Element element = (Element) next;
+            String json = elementToJson(element);
+            String id = getId(element);
 
 
             bulkRequestBuilder.add(
-              client.getClient().prepareIndex("indicators", "indicators", id).setSource(json)
+                client.getClient().prepareIndex("indicators", "indicators", id).setSource(json)
             );
             counter ++;
 
             if (bulkRequestBuilder.numberOfActions() % commitInterval == 0) {
               response = bulkRequestBuilder.execute().actionGet();
               logger.info(String.format("Importing reporting: %d actions performed. Has errors: %s",
-                counter,
-                response.hasFailures()
+                  counter,
+                  response.hasFailures()
                 ));
               if (response.hasFailures()) {
                 errors.put(counter + "", response.buildFailureMessage());
@@ -241,17 +222,17 @@ public class ReportingController {
               bulkRequestBuilder = client.getClient().prepareBulk();
             }
           }
-        } catch(Exception e) {
-          e.printStackTrace();
+        } catch (Exception ex) {
+          ex.printStackTrace();
         }
       }
       if (bulkRequestBuilder.numberOfActions() > 0) {
         bulkRequestBuilder
-          .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+           .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
         response = bulkRequestBuilder.execute().actionGet();
         logger.info(String.format("Importing reporting: %d actions performed. Has errors: %s",
-          counter,
-          response.hasFailures()
+            counter,
+            response.hasFailures()
         ));
         if (response.hasFailures()) {
           errors.put(counter + "", response.buildFailureMessage());
@@ -305,10 +286,14 @@ public class ReportingController {
       @RequestParam final String query) {
     String message = null;
     try {
-      message = ESRequestBean.deleteByQuery("indicators", query, 1000);
-      return new ResponseEntity<>(String.format("{\"msg\": \"%s\"}", message), HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(String.format("{\"msg\": \"%s\"}", message), HttpStatus.INTERNAL_SERVER_ERROR);
+      message = EsRequestBean.deleteByQuery("indicators", query, 1000);
+      return new ResponseEntity<>(
+          String.format("{\"msg\": \"%s\"}", message),
+          HttpStatus.OK);
+    } catch (Exception ex) {
+      return new ResponseEntity<>(
+          String.format("{\"msg\": \"%s\"}", message),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -361,7 +346,7 @@ public class ReportingController {
       method = RequestMethod.GET)
   @ResponseBody
   public Reports getReports(HttpServletRequest request)
-    throws IOException {
+      throws IOException {
     File file = null;
     File[] paths = null;
     Reports reports = new Reports();
@@ -423,7 +408,7 @@ public class ReportingController {
                          value = "fq",
                          defaultValue = "",
                          required = false) String fq)
-    throws IOException {
+      throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
         generateReporting(request, reporting, scopeId, fq.trim(), true);
     return indicatorCalculator.getConfiguration();
@@ -466,7 +451,7 @@ public class ReportingController {
                          value = "fq",
                          defaultValue = "",
                          required = false) String fq)
-    throws IOException {
+      throws IOException {
     IndicatorCalculatorImpl indicatorCalculator =
         generateReporting(request, reporting, scopeId, "+territory:" + territory
           + (StringUtils.isEmpty(fq) ? "" : " " + fq.trim()), true);

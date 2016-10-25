@@ -33,9 +33,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -48,29 +46,34 @@ import java.util.List;
  * Utility class to run Solr requests like field analysis.
  * Created by francois on 30/09/14.
  */
-public class ESRequestBean {
+public class EsRequestBean {
   private static String PHASE_INDEX = "index";
   private static String PHASE_QUERY = "query";
   private static String DEFAULT_FILTER_CLASS = "org.apache.lucene.analysis.synonym.SynonymFilter";
 
+  /**
+   * Delete by query.
+   *
+   *
+   */
   public static String deleteByQuery(String index, String query, int scrollSize) throws Exception {
-    ESClientBean client = ESClientBean.get();
+    EsClientBean client = EsClientBean.get();
     SearchResponse scrollResponse = client.getClient()
-      .prepareSearch(index)
-      .setQuery(QueryBuilders.queryStringQuery(query))
-      .setScroll(new TimeValue(60000))
-      .setSize(scrollSize)
-      .execute().actionGet();
+        .prepareSearch(index)
+        .setQuery(QueryBuilders.queryStringQuery(query))
+        .setScroll(new TimeValue(60000))
+        .setSize(scrollSize)
+        .execute().actionGet();
 
     BulkRequestBuilder brb = client.getClient().prepareBulk();
     while (true) {
-      for(SearchHit hit : scrollResponse.getHits()) {
+      for (SearchHit hit : scrollResponse.getHits()) {
         brb.add(new DeleteRequest(index, hit.getType(), hit.getId()));
       }
       scrollResponse = client.getClient()
-        .prepareSearchScroll(scrollResponse.getScrollId())
-        .setScroll(new TimeValue(60000))
-        .execute().actionGet();
+          .prepareSearchScroll(scrollResponse.getScrollId())
+          .setScroll(new TimeValue(60000))
+          .execute().actionGet();
       if (scrollResponse.getHits().getHits().length == 0) {
         break;
       }
@@ -87,27 +90,40 @@ public class ESRequestBean {
     }
     return String.format("No match found for query ''.", query);
   }
+
+
   /**
    * Query solr over HTTP.
    */
-  public static Node query(String collection, String[] fields, String query, int rows) throws Exception {
-    ESClientBean client = ESClientBean.get();
+  public static Node query(String collection, String[] fields,
+                           String query, int rows) throws Exception {
+    EsClientBean client = EsClientBean.get();
     // TODO: Use the scroll API for large set
     SearchRequestBuilder srb = client.getClient().prepareSearch(collection)
-      .setQuery(QueryBuilders.queryStringQuery(query));
+        .setQuery(QueryBuilders.queryStringQuery(query));
 
     if (fields != null) {
       srb.setFetchSource(fields, null);
     }
 
     SearchResponse searchResponse = srb
-      .setFrom(0)
-      .setSize(rows)
-      .execute().actionGet();
+        .setFrom(0)
+        .setSize(rows)
+        .execute().actionGet();
 
     return searchResponseToNode(searchResponse.getHits());
   }
 
+
+  public static Node query(String[] fields, String query, int rows) throws Exception {
+    EsClientBean client = EsClientBean.get();
+    return query(client.getCollection(), fields, query, rows);
+  }
+
+  /**
+   * Convert search response to node.
+   *
+   */
   public static Node searchResponseToNode(SearchHits hits) {
     Document xmlDoc = new DocumentImpl();
     Element response = xmlDoc.createElement("result");
@@ -123,11 +139,11 @@ public class ESRequestBean {
 
         field.setAttribute("name", key);
         if (isArray) {
-//          for (Object v : values.getValues()) {
-//            Element arrayElement = xmlDoc.createElement("str");
-//            arrayElement.setTextContent(v.toString());
-//            field.appendChild(arrayElement);
-//          }
+          //          for (Object v : values.getValues()) {
+          //            Element arrayElement = xmlDoc.createElement("str");
+          //            arrayElement.setTextContent(v.toString());
+          //            field.appendChild(arrayElement);
+          //          }
         } else {
           field.setTextContent(values.toString());
         }
@@ -138,10 +154,6 @@ public class ESRequestBean {
     return response;
   }
 
-  public static Node query(String[] fields, String query, int rows) throws Exception {
-    ESClientBean client = ESClientBean.get();
-    return query(client.getCollection(), fields, query, rows);
-  }
 
   /**
    * Return the number of rows matching the query.
@@ -150,10 +162,10 @@ public class ESRequestBean {
    */
   public static Double getNumFound(String collection, String query, String... filterQuery) {
     try {
-      ESClientBean client = ESClientBean.get();
+      EsClientBean client = EsClientBean.get();
       SearchRequestBuilder srb = client.getClient()
-        .prepareSearch(collection)
-        .setQuery(QueryBuilders.queryStringQuery(query));
+          .prepareSearch(collection)
+          .setQuery(QueryBuilders.queryStringQuery(query));
 
       if (filterQuery != null) {
         String filters = "";
@@ -162,12 +174,11 @@ public class ESRequestBean {
         }
         srb.setPostFilter(QueryBuilders.queryStringQuery(filters));
       }
-      SearchResponse response =
-        srb.setFrom(0)
-        .setSize(0)
-        .setExplain(true)
-        .execute()
-        .actionGet();
+      SearchResponse response = srb.setFrom(0)
+          .setSize(0)
+          .setExplain(true)
+          .execute()
+          .actionGet();
 
       return (double) response.getHits().getTotalHits();
     } catch (Exception exception) {
@@ -177,7 +188,7 @@ public class ESRequestBean {
   }
 
   public static Double getNumFound(String query, String... filterQuery) {
-    ESClientBean client = ESClientBean.get();
+    EsClientBean client = EsClientBean.get();
     return getNumFound(client.getCollection(), query, filterQuery);
   }
 
@@ -185,49 +196,50 @@ public class ESRequestBean {
    * Get stats for a field.
    */
   public static Double getStats(
-    String collection, String query, String[] filterQuery, String statsField, String stats) {
+      String collection, String query,
+      String[] filterQuery, String statsField, String stats) {
 
-    ESClientBean client = ESClientBean.get();
+    EsClientBean client = EsClientBean.get();
     try {
       FieldStatsResponse response = client.getClient()
-        .prepareFieldStats()
-        .setFields(statsField)
-        .setIndices(collection)
-//        .setQuery(QueryBuilders.queryStringQuery(query))
-  //        .setPostFilter(QueryBuilders.simpleQueryStringQuery(filterQuery[0]))
-        .execute()
-        .actionGet();
+          .prepareFieldStats()
+          .setFields(statsField)
+          .setIndices(collection)
+          //        .setQuery(QueryBuilders.queryStringQuery(query))
+          //        .setPostFilter(QueryBuilders.simpleQueryStringQuery(filterQuery[0]))
+          .execute()
+          .actionGet();
       // TODO: Subset to filter - We should probably use aggregates
 
       // TODO: Return correct stat info
       return (double)response.getAllFieldStats().get(statsField).getMaxValue();
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
 
-//        if ("min".equals(stats)) {
-//          return (Double) fieldStatsInfo.getMin();
-//        } else if ("max".equals(stats)) {
-//          return (Double) fieldStatsInfo.getMax();
-//        } else if ("count".equals(stats)) {
-//          return fieldStatsInfo.getCount().doubleValue();
-//        } else if ("missing".equals(stats)) {
-//          return fieldStatsInfo.getMissing().doubleValue();
-//        } else if ("mean".equals(stats)) {
-//          return (Double) fieldStatsInfo.getMean();
-//        } else if ("sum".equals(stats)) {
-//          return (Double) fieldStatsInfo.getSum();
-//        } else if ("stddev".equals(stats)) {
-//          return fieldStatsInfo.getStddev();
-//        } else if ("countDistinct".equals(stats)) {
-//          return fieldStatsInfo.getCountDistinct().doubleValue();
-//        }
+    //        if ("min".equals(stats)) {
+    //          return (Double) fieldStatsInfo.getMin();
+    //        } else if ("max".equals(stats)) {
+    //          return (Double) fieldStatsInfo.getMax();
+    //        } else if ("count".equals(stats)) {
+    //          return fieldStatsInfo.getCount().doubleValue();
+    //        } else if ("missing".equals(stats)) {
+    //          return fieldStatsInfo.getMissing().doubleValue();
+    //        } else if ("mean".equals(stats)) {
+    //          return (Double) fieldStatsInfo.getMean();
+    //        } else if ("sum".equals(stats)) {
+    //          return (Double) fieldStatsInfo.getSum();
+    //        } else if ("stddev".equals(stats)) {
+    //          return fieldStatsInfo.getStddev();
+    //        } else if ("countDistinct".equals(stats)) {
+    //          return fieldStatsInfo.getCountDistinct().doubleValue();
+    //        }
     return null;
   }
 
   public static Double getStats(String query, String[] filterQuery,
                          String statsField, String stats) {
-    ESClientBean client = ESClientBean.get();
+    EsClientBean client = EsClientBean.get();
     return getStats(client.getCollection(), query, filterQuery, statsField, stats);
   }
 
@@ -242,7 +254,6 @@ public class ESRequestBean {
    *
    * TODO: Logger.
    * </p>
-   * @param fieldName The field name
    * @param fieldValue    The field value to analyze
    *
    * @return The analyzed string value if found or the field value if not found.
@@ -251,19 +262,22 @@ public class ESRequestBean {
                              String analyzer,
                              String fieldValue) {
 
-    ESClientBean client = ESClientBean.get();
+    EsClientBean client = EsClientBean.get();
     AnalyzeRequest request = (new AnalyzeRequest(collection).text(fieldValue)).analyzer(analyzer);
     try {
       List<AnalyzeResponse.AnalyzeToken> tokens =
-        client.getClient().admin().indices().analyze(request).actionGet().getTokens();
+          client.getClient()
+              .admin().indices()
+              .analyze(request)
+              .actionGet().getTokens();
       Iterator<AnalyzeResponse.AnalyzeToken> iterator = tokens.iterator();
       while (iterator.hasNext()) {
-        AnalyzeResponse.AnalyzeToken t = iterator.next();
-        if (t.getType().equals("SYNONYM")) {
-          return t.getTerm();
+        AnalyzeResponse.AnalyzeToken token = iterator.next();
+        if (token.getType().equals("SYNONYM")) {
+          return token.getTerm();
         }
       }
-    } catch (Exception e) {
+    } catch (Exception ex) {
       return fieldValue;
     }
 
@@ -272,7 +286,7 @@ public class ESRequestBean {
 
   public static String analyzeField(String fieldName,
                              String fieldValue) {
-    ESClientBean client = ESClientBean.get();
+    EsClientBean client = EsClientBean.get();
     return analyzeField(client.getCollection(), fieldName, fieldValue);
   }
 
