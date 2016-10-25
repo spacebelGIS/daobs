@@ -1,6 +1,0 @@
-discovery
-view
-download
-invoke
-transformation
-other
