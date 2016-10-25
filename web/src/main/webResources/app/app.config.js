@@ -36,6 +36,7 @@
       solrAdmin: '${solr.admin.url}',
       dashboardCoreName: '${solr.core.dashboard}',
       dashboardCore: api + 'search/${solr.core.dashboard}',
+      esdashboardCore: context + 'es/.dashboards',
       dataCoreName: '${solr.core.data}',
       dataCore: api + 'search/${solr.core.data}',
       esdataCore: context + 'es/records',
@@ -48,7 +49,7 @@
       reportingConfig: api + 'reports.json',
       reports: api + 'reports',
       samples: api + 'samples',
-      dashboardBaseURL: context + 'dashboard/#/dashboard/solr/',
+      dashboardBaseURL: context + 'dashboard/app/kibana?#/dashboard/',
       eftValidation: api + 'validate/etf'
     }
   });

@@ -38,14 +38,16 @@ The guide for user installing and configuring the application.
 * Java 8
 * Maven 3.1.0+
 * Elasticsearch 5.x
-* A modern web browser. The latest version of Chrome and Firefox have been tested to work. Safari also works, except for the "Export to File" feature for saving dashboards. We recommend that you use Chrome or Firefox while building dashboards. IE10+ should be also supported.
+* Kibana 5.x
+* A modern web browser. 
+
 
 ## Build the application
 
 Get the source code with
 
 ```
-git clone --recursive https://github.com/INSPIRE-MIF/daobs.git
+git clone https://github.com/INSPIRE-MIF/daobs.git
 cd daobs
 ```
 
@@ -62,9 +64,11 @@ or for a quicker build
 mvn clean install -DskipTests -Drelax -P web
 ```
 
-## Install and configure Elasticsearch
+## Install and configure Elasticsearch & Kibana
 
-See [es/README.md](es/README.md).
+For Elasticsearch, see [es/README.md](es/README.md).
+
+For Kibana, see [dashboards/README.md](dashboards/README.md).
 
 
 ## Run the application
@@ -82,7 +86,7 @@ cd web
 mvn jetty:run
 ```
 
-Access the home page from http://localhost:8983.
+Access the home page from http://localhost:8080.
 
 
 ### Build a custom WAR file
@@ -248,71 +252,13 @@ Harvesting is multithreaded on endpoint basis. By default, configuration is 11 t
 
 
 
-### Indexing ISO19139 records
+### Indexing ISO19139 or ISO19115-3 records
 
-Metadata records and indicators could be manually loaded using Solr API by importing XML files.
-First you need to apply the following XSL transformation to convert ISO metadata
-to Solr XML transaction document.
-
-After the transformation, you can then load the output documents using:
-
-```
-# Load files in all subfolders
-find . -name *.xml -type f |
-while read f
-do
-  echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update?commit=true" \
-    -u admin:admin \
-    -H "Content-Type: text/xml; charset=utf-8" \
-    --data-binary @$f
-done
-```
-
+Use the admin interface and start a harvester.
 
 ### Indexing INSPIRE indicators
 
-
-Manually indexing INSPIRE monitoring:
-
-```
-for f in *.xml; do
-  echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update?commit=true&tr=inspire-monitoring-reporting.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
-done
-```
-
-To import monitoring with ancillary information:
-```
-for f in *.xml; do
-  echo "importing '$f' file..";
-  curl "http://localhost:8983/data/update?commit=true&tr=inspire-monitoring-reporting-with-ai.xsl" -u admin:admin -H "Content-Type: text/xml; charset=utf-8" --data-binary @$f
-done
-```
-
-
-
-
-## Removing documents
-
-
-Manually dropped all records:
-```
-curl http://localhost:8983/data/update \
-    --data '<delete><query>documentType:*</query></delete>' \
-    -u admin:admin \
-    -H 'Content-type:text/xml; charset=utf-8'
-
-curl http://localhost:8983/data/update \
-    --data '<commit/>' \
-    -u admin:admin \
-    -H 'Content-type:text/xml; charset=utf-8'
-```
-
-The search query could be adapted to restrict to a subset of documents:
-* reportingYear:2014 for removing reporting for 2014
-
-
+Use the admin interface and upload INSPIRE monitoring file in XML format.
 
 
 
@@ -425,40 +371,4 @@ To trigger the data analysis:
 cd tasks/data-indexer
 mvn camel:run -Pcli
 ```
-
-
-
-## Dashboard
-
-
-Access the dashboard page, click load and choose dashboard configuration from the list. 
-If no dashboards are available sample dashboard are available here: dashboard/src/app/dashboards
-
-* Browse: Search for metadata records and filter your search easily (facets, INSPIRE themes and annexes charts).
-* INSPIRE-Dashboard: Home page
-* default: Monitoring reporting 2013 dashboard
-
-By default no dashboard are loaded.
-
-User can load a set of dashboards using the /daobs/samples/dashboard service.
-
-Eg. http://localhost:8983/daobs/samples/dashboard/INSPIRE.json will load all INSPIRE specific dashboards.
-
-2 sets of dashboards are available:
-* INSPIRE* about INSPIRE monitoring
-* CATALOG* for dashboards on harvested records.
-
-
-## Reporting
-
-Report configuration is made web/src/main/webapp/WEB-INF/reporting.
-One or more configuration file can be created in this folder. The file name should follow the pattern "config-{{report_id}}.xml".
-
-A report is created from a set of variables and indicators. Variables are defined using query expressions to be computed by the search engine. Indicators are created from mathematical expressions based on variables.
-
-
-TODO: Add more doc on how to configure indicators.
-
-
-
 

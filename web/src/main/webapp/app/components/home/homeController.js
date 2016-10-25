@@ -37,11 +37,11 @@
 
       var init = function () {
         $scope.dashboardBaseURL = cfg.SERVICES.dashboardBaseURL;
-        $http.get(cfg.SERVICES.dashboardCore +
-          '?q=title:*&wt=json&sort=title asc&start=0&rows=80&fl=id,title').then(function (response) {
-          $scope.dashboards = response.data.response.docs;
+        $http.get(cfg.SERVICES.esdashboardCore +
+          '/dashboard/_search').then(function (response) {
+          $scope.dashboards = response.data.hits.hits;
           angular.forEach($scope.dashboards, function (d) {
-            if ($scope.startsWith(d, 'inspire')) {
+            if ($scope.startsWith(d._source.title, 'inspire')) {
               $scope.hasINSPIREdashboard = true;
             } else {
               $scope.hasOnlyINSPIREdashboard = false;

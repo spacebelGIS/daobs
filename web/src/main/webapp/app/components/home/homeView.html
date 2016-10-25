@@ -62,13 +62,13 @@
         <li class="list-group-item"
             data-ng-repeat="dashboard in dashboards | filter:'inspire':startsWith">
           <a href=""
-             data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
-            {{dashboard.title}}
+             data-ng-href="{{dashboardBaseURL}}{{dashboard._id}}">
+            {{dashboard._source.title}}
           </a>
-          <button class="btn btn-link btn-sm pull-right"
+          <!--TODO ES <button class="btn btn-link btn-sm pull-right"
                   data-ng-click="removeDashboard(dashboard.id)" data-ng-show="getUser().authenticated">
             <i class="fa fa-remove text-danger"></i>
-          </button>
+          </button>-->
         </li>
       </ul>
     </div>
@@ -81,20 +81,19 @@
         <li class="list-group-item"
             data-ng-repeat="dashboard in dashboards | filter:'inspire':notStartsWith">
           <a href=""
-             data-ng-href="{{dashboardBaseURL}}{{dashboard.id}}">
-            {{dashboard.title}}
+             data-ng-href="{{dashboardBaseURL}}{{dashboard._id}}">
+            {{dashboard._source.title}}
           </a>
-          <button class="btn btn-link btn-sm pull-right" data-ng-show="getUser().authenticated"
+          <!-- TODO ES<button class="btn btn-link btn-sm pull-right" data-ng-show="getUser().authenticated"
                   data-ng-click="removeDashboard(dashboard.id)">
             <i class="fa fa-remove text-danger"></i>
-          </button>
+          </button>-->
         </li>
       </ul>
     </div>
 
-
+<!-- TODO ES
     <div class="pull-right" data-ng-show="getUser().authenticated">
-      <!-- TODO: Should be only displayed for identified users -->
       <span data-ng-if="dashboards.length === 0"
             data-translate="">noDashboard</span>
       <div class="btn-group">
@@ -123,7 +122,7 @@
           deleteAllDashboards</span>
         <i class="fa fa-times"></i>
       </button>
-    </div>
+    </div>-->
     <br/><br/>
 
     <div class="alert alert-info"

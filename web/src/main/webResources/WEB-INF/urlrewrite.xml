@@ -26,17 +26,12 @@
   "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite>
-  <!-- Redirect to Solr application -->
-  <rule>
-    <from>^/solr/(.*/admin/luke.*)$</from>
-    <to type="proxy" qsappend="true">${solr.url}/$1?</to>
-  </rule>
-  <rule>
-    <from>^/solr/(admin/cores.*)$</from>
-    <to type="proxy" qsappend="true">${solr.url}/$1?</to>
-  </rule>
   <rule>
     <from>^/es/(.*)$</from>
     <to type="proxy" qsappend="true">${es.url}/$1?</to>
+  </rule>
+  <rule>
+    <from>^/dashboard/(.*)\??(.*)$</from>
+    <to type="proxy" qsappend="true">${kb.url}/$1?$2</to>
   </rule>
 </urlrewrite>
