@@ -25,23 +25,21 @@
                 version="2.0">
 
   <xsl:param name="serviceIdentifier"/>
+  <xsl:param name="index"/>
+  <xsl:param name="type"/>
 
-  <xsl:output omit-xml-declaration="yes"/>
+  <xsl:output method="text"/>
 
-  <xsl:template match="/">
-    <xsl:if
-      test="$serviceIdentifier != '' and count(//result/doc/arr[@name = 'inspireTheme']/str) > 0">
-      <doc>
-        <field name="id"><xsl:value-of select="$serviceIdentifier"/></field>
-        <xsl:for-each
-          select="distinct-values(//result/doc/arr[@name = 'inspireTheme']/str)">
-          <field name="inspireTheme" update="add"><xsl:value-of select="."/></field>
-        </xsl:for-each>
-        <xsl:for-each
-          select="distinct-values(//result/doc/arr[@name = 'inspireAnnex']/str)">
-          <field name="inspireAnnex" update="add"><xsl:value-of select="."/></field>
-        </xsl:for-each>
-      </doc>
-    </xsl:if>
+  <!-- Preserve formatting for building JSON on 2 lines without extra spaces. -->
+  <xsl:template match="/"><xsl:if
+      test="$serviceIdentifier != '' and count(//inspireTheme) > 0">{"update": {"_index": "<xsl:value-of
+      select="$index"/>", "_type": "<xsl:value-of
+      select="$type"/>", "_id" : "<xsl:value-of
+      select="$serviceIdentifier"/>"}}
+{"script": { "inline": "ctx._source.inspireTheme += params.inspireTheme;ctx._source.inspireAnnex += params.inspireAnnex", "lang": "painless", "params": {"inspireTheme": [<xsl:for-each
+      select="distinct-values(//inspireTheme//text())">"<xsl:value-of
+      select="."/>"<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>], "inspireAnnex":[<xsl:for-each
+      select="distinct-values(//inspireAnnex//text())">"<xsl:value-of
+      select="."/>"<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>]}}}</xsl:if>
   </xsl:template>
 </xsl:stylesheet>

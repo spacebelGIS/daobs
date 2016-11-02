@@ -166,14 +166,15 @@
       </cm:setBody>
       <cm:to
         uri="http4://index?throwExceptionOnFailure=false"/>
-      <cm:log
+      <cm:convertBodyTo type="java.lang.String"/>
+      <cm:unmarshal ref="xmljson"/>
+      <!--<cm:log
         message="$simple{body}"
         loggingLevel="INFO"
-        logName="org.daobs.task.ValidationChecker"/>
-      <!--<cm:convertBodyTo type="org.w3c.dom.Document"/>-->
+        logName="org.daobs.task.ValidationChecker"/>-->
       <cm:setHeader headerName="numberOfRecordsMatched">
         <cm:xpath resultType="java.lang.String">
-          //result/@numFound
+          //hits/total
         </cm:xpath>
       </cm:setHeader>
       <cm:choice>

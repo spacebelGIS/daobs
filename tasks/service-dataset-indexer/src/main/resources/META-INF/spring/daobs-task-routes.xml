@@ -47,9 +47,8 @@
   <bean id="duplicateRepo"
         class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository"/>
 
-  <bean id="solrAddAggregatorStrategy"
-        class="org.daobs.routing.utility.XmlDocumentAggregationStrategy">
-    <property name="rootTagName" value="add"/>
+  <bean id="addAggregatorStrategy"
+        class="org.daobs.routing.utility.StringAggregationStrategy">
   </bean>
 
   <bean id="nullBodyStrategy"
@@ -75,6 +74,16 @@
                           defaultProfile="true"
                           poolSize="10"
                           maxPoolSize="10"/>
+
+    <cm:dataFormats>
+      <cm:xmljson id="xmljson"/>
+      <cm:xmljson id="xmljsonNoNs"
+                  forceTopLevelObject="true"
+                  trimSpaces="true"
+                  rootName="root"
+                  skipNamespaces="true"
+                  removeNamespacePrefixes="true"/>
+    </cm:dataFormats>
 
     <cm:onException>
       <cm:exception>
@@ -138,23 +147,38 @@
 
       <!-- Get number of services to analyze -->
       <cm:removeHeaders pattern="harvesterName"/>
-      <cm:setHeader headerName="CamelHttpMethod">
-        <cm:constant>GET</cm:constant>
-      </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
         <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
-        <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'</cm:groovy>
+        <cm:groovy>'from=0&amp;size=0'</cm:groovy>
       </cm:setHeader>
+      <cm:setBody>
+        <cm:simple>
+          {
+          "sort" : [{
+            "id" : {"order" : "asc"}
+          }],
+          "_source": [{{task.service-dataset-indexer.fields}}],
+          "query": {
+            "query_string" : {
+              "query" : "$simple{header.documentFilter}"
+            }
+            }
+          }
+        </cm:simple>
+      </cm:setBody>
       <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        uri="http4://index?throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="java.lang.String"/>
+      <cm:unmarshal ref="xmljson"/>
       <cm:choice>
         <cm:when>
-          <cm:xpath>//result[@numFound > 0]</cm:xpath>
+          <cm:xpath>//hits/total and //hits/total > 0</cm:xpath>
           <cm:setHeader headerName="numberOfRecordsMatched">
-            <cm:xpath resultType="java.lang.String">//result/@numFound</cm:xpath>
+            <cm:xpath resultType="java.lang.String">
+              //hits/total
+            </cm:xpath>
           </cm:setHeader>
           <cm:log
             message="$simple{header.numberOfRecordsMatched} services record(s) to index."
@@ -177,38 +201,52 @@
               loggingLevel="INFO"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
 
+
             <cm:setHeader headerName="CamelHttpMethod">
-              <cm:constant>GET</cm:constant>
+              <cm:constant>POST</cm:constant>
             </cm:setHeader>
+            <!-- TODO: Use scroll instead. -->
             <cm:setHeader headerName="Exchange.HTTP_URI">
-              <cm:simple>{{es.url}}/{{es.index.records}}/_search
-              </cm:simple>
+              <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
             </cm:setHeader>
             <cm:setHeader headerName="Exchange.HTTP_QUERY">
-              <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;sort=id+desc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+              <cm:groovy>'from=' + exchange.in.headers.start + '&amp;size=' + exchange.in.headers.row</cm:groovy>
             </cm:setHeader>
+            <cm:setBody>
+              <cm:simple>
+                {
+                "sort" : [{
+                "id" : {"order" : "asc"}
+                }],
+                "_source": [{{task.service-dataset-indexer.fields}}],
+                "query": {
+                "query_string" : {
+                "query" : "$simple{header.documentFilter}"
+                }
+                }
+                }
+              </cm:simple>
+            </cm:setBody>
             <cm:to
-              uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-
-            <cm:convertBodyTo type="org.w3c.dom.Document"/>
+              uri="http4://index?throwExceptionOnFailure=false"/>
+            <cm:convertBodyTo type="java.lang.String"/>
+            <cm:unmarshal ref="xmljson"/>
             <cm:split parallelProcessing="false" strategyRef="nullBodyStrategy">
-              <cm:xpath>//doc</cm:xpath>
+              <cm:xpath>//hits/hits//e[_source]</cm:xpath>
               <!-- Retrieve UUID from Solr response -->
               <cm:setHeader headerName="documentIdentifier">
-                <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']</cm:xpath>
+                <cm:xpath resultType="java.lang.String">e/_source/id</cm:xpath>
               </cm:setHeader>
               <cm:setHeader headerName="harvesterId">
-                <cm:xpath resultType="java.lang.String">doc/str[@name =
-                  'harvesterId']</cm:xpath>
+                <cm:xpath resultType="java.lang.String">e/_source/harvesterId</cm:xpath>
               </cm:setHeader>
               <cm:setHeader headerName="serviceType">
-                <cm:xpath resultType="java.lang.String">doc/arr[@name =
-                  'serviceType']/str/text()</cm:xpath>
+                <cm:xpath resultType="java.lang.String">e/_source/serviceType</cm:xpath>
               </cm:setHeader>
 
 
               <cm:split parallelProcessing="false">
-                <cm:xpath>doc/arr[@name = 'recordOperateOn']/str</cm:xpath>
+                <cm:xpath>e/_source/recordOperateOn</cm:xpath>
                 <cm:setBody>
                   <cm:xpath resultType="java.lang.String">normalize-space(.)</cm:xpath>
                 </cm:setBody>
@@ -249,7 +287,7 @@
     <cm:route id="route-index-association">
       <cm:from uri="direct:index-association"/>
       <cm:setHeader headerName="beginTime">
-        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'ss}</cm:simple>
       </cm:setHeader>
       <cm:log
         message="Service '$simple{header.documentIdentifier}' ($simple{header.serviceType}) related to '$simple{body}'"
@@ -257,15 +295,10 @@
         logName="org.daobs.task.ServiceDatasetIndexer"/>
 
       <cm:setBody>
-        <cm:simple resultType="org.w3c.dom.Document"><![CDATA[<doc>
-          <field name="id"><![CDATA[$simple{body}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-          <field name="recordOperatedByType" update="add">$simple{header.serviceType}</field>
-          <field name="recordOperatedBy" update="add">$simple{header.documentIdentifier}</field>
-          <field name="recordOperatedByType$simple{header.serviceType}" update="add">$simple{header.documentIdentifier}</field>
-        </doc>]]>
-        </cm:simple>
+        <cm:simple>{ "update" : { "_index" : "{{es.index.records}}", "_type" : "{{es.index.records}}", "_id" : "$simple{body}"} }
+{"doc": { "recordOperatedByType": "$simple{header.serviceType}", "recordOperatedBy": "$simple{header.documentIdentifier}", "recordOperatedByType$simple{header.serviceType}": "$simple{header.documentIdentifier}"} }</cm:simple>
       </cm:setBody>
-      <cm:aggregate strategyRef="solrAddAggregatorStrategy"
+      <cm:aggregate strategyRef="addAggregatorStrategy"
                     completionSize="200"
                     completionTimeout="30000"
                     parallelProcessing="false">
@@ -284,7 +317,7 @@
     <cm:route id="route-index-inspirethemes-in-service">
       <cm:from uri="direct:index-inspirethemes-in-service"/>
       <cm:setHeader headerName="beginTime">
-        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'ss}</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="serviceIdentifier">
         <cm:simple>${header.documentIdentifier}</cm:simple>
@@ -293,32 +326,47 @@
         <cm:simple>${body}</cm:simple>
       </cm:setHeader>
       <cm:log
-        message="Get INSPIRE themes from dataset '$simple{header.datasetIdentifier}' and add them to the service '$simple{header.serviceIdentifier}' ..."
+        message="Search INSPIRE themes in dataset '$simple{header.datasetIdentifier}' and add them to the service '$simple{header.serviceIdentifier}' ..."
         loggingLevel="INFO"
         logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+
       <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
+      <!-- TODO: Use scroll instead. -->
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
+        <cm:simple>{{es.url}}/{{es.index.records}}/{{es.index.records}}/$simple{header.datasetIdentifier}</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
-        <cm:groovy>'q=' + URLEncoder.encode('id:"' + exchange.in.headers.datasetIdentifier + '"', 'UTF-8') + '&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1'</cm:groovy>
+        <cm:simple></cm:simple>
       </cm:setHeader>
+      <cm:setBody>
+        <cm:simple></cm:simple>
+      </cm:setBody>
       <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=true"/>
+        uri="http4://index?throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="java.lang.String"/>
+      <cm:unmarshal ref="xmljson"/>
 
-      <cm:convertBodyTo type="org.w3c.dom.Document"/>
       <cm:choice>
         <cm:when>
-          <cm:xpath>count(//doc[arr/@name="inspireTheme"]) = 1</cm:xpath>
+          <cm:xpath>count(.//inspireTheme) = 1</cm:xpath>
           <cm:setHeader headerName="themes">
-            <cm:xpath resultType="java.lang.String">normalize-space(//doc[arr/@name="inspireTheme"])</cm:xpath>
+            <cm:xpath resultType="java.lang.String">normalize-space(//inspireTheme)</cm:xpath>
           </cm:setHeader>
           <cm:log
             message="INSPIRE themes for dataset '$simple{header.datasetIdentifier}' are '$simple{header.themes}'."
             loggingLevel="INFO"
             logName="org.daobs.task.ServiceDatasetIndexer"/>
+
+          <cm:setHeader headerName="index">
+            <cm:simple>{{es.index.records}}</cm:simple>
+          </cm:setHeader>
+
+          <cm:setHeader headerName="type">
+            <cm:simple>{{es.index.records}}</cm:simple>
+          </cm:setHeader>
           <!-- Camel XSLT issue with Saxon 8
           http://camel.465427.n5.nabble.com/camel-xslt-with-saxon-8-7-td5759704.html
           <cm:to uri="xslt:WEB-INF/xslt/index-service-themes.xsl?saxon=false"/>
@@ -329,8 +377,7 @@
           <cm:choice>
             <cm:when>
               <cm:groovy>!"".equals(body)</cm:groovy>
-              <cm:convertBodyTo type="org.w3c.dom.Document"/>
-              <cm:aggregate strategyRef="solrAddAggregatorStrategy"
+              <cm:aggregate strategyRef="addAggregatorStrategy"
                             completionSize="200"
                             completionTimeout="30000"
                             parallelProcessing="false">
@@ -364,37 +411,32 @@
 
     <cm:route id="save-association">
       <cm:from uri="direct:save-association"/>
+      <cm:setBody>
+              <cm:simple>${body}\n</cm:simple>
+      </cm:setBody>
       <cm:log message="Updating index with '$simple{body}' ..."
               loggingLevel="DEBUG"
               logName="org.daobs.task.ServiceDatasetIndexer"/>
       <cm:removeHeaders pattern="*"/>
-      <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
-      </cm:setHeader>
-      <cm:setHeader headerName="camelHttpMethod">
+
+      <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>POST</cm:constant>
       </cm:setHeader>
-      <cm:setHeader headerName="Content-Type">
-        <cm:constant>application/xml</cm:constant>
-      </cm:setHeader>
-      <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:log message="Solr response: ${body}."
-              loggingLevel="DEBUG"
-              logName="org.daobs.task.ServiceDatasetIndexer"/>
 
-      <!-- Commit -->
-      <cm:setBody>
-        <cm:constant><![CDATA[<commit/>]]></cm:constant>
-      </cm:setBody>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
+        <cm:groovy>'{{es.url}}/{{es.index.records}}/_bulk'</cm:groovy>
       </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_QUERY"><cm:simple></cm:simple></cm:setHeader>
       <cm:setHeader headerName="Content-Type">
-        <cm:simple>text/xml</cm:simple>
+        <cm:constant>application/json</cm:constant>
       </cm:setHeader>
-      <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+
+      <cm:to uri="http4://index?throwExceptionOnFailure=false"/>
+
+      <cm:log
+        message="Association saved. ${body}"
+        loggingLevel="INFO"
+        logName="org.daobs.task.ServiceDatasetIndexer"/>
     </cm:route>
   </cm:camelContext>
 </beans>
