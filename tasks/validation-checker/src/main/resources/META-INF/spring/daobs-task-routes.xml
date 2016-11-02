@@ -56,6 +56,7 @@
   <bean id="utility" class="org.daobs.routing.utility.Utility"/>
   <bean id="urlEncoder" class="java.net.URLEncoder"/>
 
+
   <cm:errorHandler id="loggingErrorHandler"
                    type="LoggingErrorHandler"
                    logName="daobs.tasks.validation-checker"
@@ -79,6 +80,16 @@
                           defaultProfile="true"
                           poolSize="10"
                           maxPoolSize="10"/>
+
+    <cm:dataFormats>
+      <cm:xmljson id="xmljson"/>
+      <cm:xmljson id="xmljsonNoNs"
+                  forceTopLevelObject="true"
+                  trimSpaces="true"
+                  rootName="root"
+                  skipNamespaces="true"
+                  removeNamespacePrefixes="true"/>
+    </cm:dataFormats>
 
     <cm:onException>
       <cm:exception>
@@ -130,17 +141,36 @@
         logName="org.daobs.task.ValidationChecker"/>
 
       <cm:setHeader headerName="CamelHttpMethod">
-        <cm:constant>GET</cm:constant>
+        <cm:constant>POST</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+        <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
-        <cm:groovy>'q=' + URLEncoder.encode('{{task.validation-checker.background.filter}}', 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=0&amp;rows={{task.validation-checker.background.records}}'</cm:groovy>
+        <cm:groovy>'from=0&amp;size={{task.validation-checker.background.records}}'</cm:groovy>
       </cm:setHeader>
+      <cm:setBody>
+        <cm:simple>
+          {
+            "sort" : [{
+              "id" : {"order" : "asc"}
+            }],
+            "_source": [{{task.validation-checker.fields}}],
+            "query": {
+              "query_string" : {
+                "query" : "{{task.validation-checker.background.filter}}"
+              }
+            }
+          }
+        </cm:simple>
+      </cm:setBody>
       <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        uri="http4://index?throwExceptionOnFailure=false"/>
+      <cm:log
+        message="$simple{body}"
+        loggingLevel="INFO"
+        logName="org.daobs.task.ValidationChecker"/>
+      <!--<cm:convertBodyTo type="org.w3c.dom.Document"/>-->
       <cm:setHeader headerName="numberOfRecordsMatched">
         <cm:xpath resultType="java.lang.String">
           //result/@numFound
@@ -148,18 +178,16 @@
       </cm:setHeader>
       <cm:choice>
         <cm:when>
-          <cm:xpath>//result/@numFound and //result/@numFound > 0</cm:xpath>
+          <cm:xpath>//hits/total and //hits/total > 0</cm:xpath>
           <cm:log
             message="$simple{header.numberOfRecordsMatched} record(s) with no validation info. Processing the first {{task.validation-checker.background.records}} in background."
             loggingLevel="INFO"
             logName="org.daobs.task.ValidationChecker"/>
 
           <cm:split parallelProcessing="true" strategyRef="nullBodyStrategy">
-            <cm:xpath>//doc</cm:xpath>
-            <!-- Retrieve UUID from Solr response -->
+            <cm:xpath>//hits/hits//e[_source]</cm:xpath>
             <cm:setHeader headerName="documentIdentifier">
-              <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']
-              </cm:xpath>
+              <cm:xpath resultType="java.lang.String">e/_source/id</cm:xpath>
             </cm:setHeader>
             <!-- Compute filename suffix for saving update queries -->
             <cm:setHeader headerName="stringToEncrypt">
@@ -170,8 +198,7 @@
             </cm:setHeader>
             <!-- Retrieve XML document from Solr document -->
             <cm:setBody>
-              <cm:xpath resultType="java.lang.String">doc/str[@name =
-                'document']/text()
+              <cm:xpath resultType="java.lang.String">e/_source/document/text()
               </cm:xpath>
             </cm:setBody>
             <cm:log
@@ -199,7 +226,6 @@
         Check against the XSD.
       </cm:description>
       <cm:from uri="direct:task-validate-start"/>
-
       <cm:log message="Background task checking document validation status ..."
               loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
@@ -208,20 +234,44 @@
       <!-- Get number of records to validate -->
       <cm:removeHeaders pattern="harvesterName"/>
       <cm:setHeader headerName="CamelHttpMethod">
-        <cm:constant>GET</cm:constant>
+        <cm:constant>POST</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+        <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
-        <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'</cm:groovy>
+        <cm:groovy>'from=0&amp;size=0'</cm:groovy>
       </cm:setHeader>
+      <cm:setBody>
+        <cm:simple>
+          {
+            "sort" : [{
+              "id" : {"order" : "asc"}
+            }],
+            "_source": [{{task.validation-checker.fields}}],
+            "query": {
+              "query_string" : {
+              "query" : "$simple{header.documentFilter}"
+              }
+            }
+          }
+        </cm:simple>
+      </cm:setBody>
+      <cm:log
+        message="$simple{body}"
+        loggingLevel="INFO"
+        logName="org.daobs.task.ValidationChecker"/>
       <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:convertBodyTo type="org.w3c.dom.Document"/>
+        uri="http4://index?throwExceptionOnFailure=false"/>
+      <cm:convertBodyTo type="java.lang.String"/>
+      <cm:log
+        message="$simple{body}"
+        loggingLevel="INFO"
+        logName="org.daobs.task.ValidationChecker"/>
+      <cm:unmarshal ref="xmljson"/>
       <cm:setHeader headerName="numberOfRecordsMatched">
         <cm:xpath resultType="java.lang.String">
-          //result/@numFound
+          //hits/total
         </cm:xpath>
       </cm:setHeader>
       <cm:log
@@ -243,27 +293,43 @@
           logName="org.daobs.task.ValidationChecker"/>
 
         <cm:setHeader headerName="CamelHttpMethod">
-          <cm:constant>GET</cm:constant>
+          <cm:constant>POST</cm:constant>
         </cm:setHeader>
-        <!-- TODO: Improve that part because the number of records to be validated
-        will change over time if isValid is in the search filter and
-        the paging can't be used as such. It would have been
-        better to grab the set of ids to validate and loop over them. -->
+        <!-- TODO: Use scroll instead. -->
         <cm:setHeader headerName="Exchange.HTTP_URI">
-          <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+          <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
         </cm:setHeader>
         <cm:setHeader headerName="Exchange.HTTP_QUERY">
-          <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.validation-checker.fields}}&amp;wt=xml&amp;sort=id+asc&amp;start=' + exchange.in.headers.start + '&amp;rows=' + exchange.in.headers.row</cm:groovy>
+          <cm:groovy>'from=' + exchange.in.headers.start + '&amp;size=' + exchange.in.headers.row</cm:groovy>
         </cm:setHeader>
+        <cm:setBody>
+          <cm:simple>
+            {
+            "sort" : [{
+              "id" : {"order" : "asc"}
+            }],
+            "_source": [{{task.validation-checker.fields}}],
+            "query": {
+              "query_string" : {
+                "query" : "$simple{header.documentFilter}"
+                }
+              }
+            }
+          </cm:simple>
+        </cm:setBody>
         <cm:to
-          uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
+          uri="http4://index?throwExceptionOnFailure=false"/>
+        <cm:convertBodyTo type="java.lang.String"/>
+        <cm:unmarshal ref="xmljson"/>
+        <cm:log
+          message="$simple{body}"
+          loggingLevel="INFO"
+          logName="org.daobs.task.ValidationChecker"/>
         <cm:convertBodyTo type="org.w3c.dom.Document"/>
         <cm:split parallelProcessing="true" strategyRef="nullBodyStrategy">
-          <cm:xpath>//doc</cm:xpath>
-          <!-- Retrieve UUID from Solr response -->
+          <cm:xpath>//hits/hits//e[_source]</cm:xpath>
           <cm:setHeader headerName="documentIdentifier">
-            <cm:xpath resultType="java.lang.String">doc/str[@name = 'id']
-            </cm:xpath>
+            <cm:xpath resultType="java.lang.String">e/_source/id</cm:xpath>
           </cm:setHeader>
           <!-- Compute filename suffix for saving update queries -->
           <cm:setHeader headerName="stringToEncrypt">
@@ -272,11 +338,8 @@
           <cm:setHeader headerName="fileNameSuffix">
             <cm:simple>bean:utility?method=encrypt</cm:simple>
           </cm:setHeader>
-          <!-- Retrieve XML document from Solr document -->
           <cm:setBody>
-            <cm:xpath resultType="java.lang.String">doc/str[@name =
-              'document']/text()
-            </cm:xpath>
+            <cm:xpath resultType="java.lang.String">e/_source/document/text()</cm:xpath>
           </cm:setBody>
 
 
@@ -307,7 +370,7 @@
       <cm:from uri="file:src/test/resources/?fileName=*.xml&amp;noop=true&amp;consumer.delay=100000"/>-->
       <cm:from uri="direct:validation-xsd"/>
       <cm:setHeader headerName="beginTime">
-        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+        <cm:simple>${date:now:yyyy-MM-dd'T'HH':'mm':'ss}</cm:simple>
       </cm:setHeader>
       <cm:log
         message="Checking record with UUID '$simple{header.documentIdentifier}' using its standards XSD. Start at $simple{header.beginTime}."
@@ -317,19 +380,28 @@
       <!-- Check document against an XSD -->
       <cm:doTry>
         <cm:to uri="validator:xsd/iso19139/schema.xsd?useDom=false"/>
+
+        <cm:setHeader headerName="CamelHttpMethod">
+          <cm:constant>POST</cm:constant>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_URI">
+          <cm:groovy>'{{es.url}}/{{es.index.records}}/{{es.index.records}}/' +
+            URLEncoder.encode(exchange.in.headers.documentIdentifier, 'UTF-8') + '/_update'</cm:groovy>
+        </cm:setHeader>
+        <cm:setHeader headerName="Exchange.HTTP_QUERY"><cm:simple></cm:simple></cm:setHeader>
         <cm:setBody>
-          <cm:simple>
-            <![CDATA[<add commitWithin="10000">
-              <doc>
-                <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-                <field name="schemaValidDate" update="set">$simple{header.beginTime}</field>
-                <field name="isSchemaValid" update="set">true</field>
-              </doc>
-            </add>]]>
-          </cm:simple>
+          <cm:simple>{"doc":{
+                "schemaValidDate": "$simple{header.beginTime}",
+                "isSchemaValid": "true"
+          }}</cm:simple>
         </cm:setBody>
-        <cm:to
-          uri="file:{{task.validation-checker.folder}}?fileName=xsd-valid-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+        <cm:to uri="http4://index?throwExceptionOnFailure=false"/>
+
+        <cm:log
+          message="XSD validation status saved."
+          loggingLevel="INFO"
+          logName="org.daobs.task.ValidationChecker"/>
+
         <cm:doCatch>
           <cm:exception>org.apache.camel.ValidationException</cm:exception>
           <cm:transform>
@@ -346,21 +418,25 @@
             loggingLevel="INFO"
             logName="org.daobs.task.ValidationChecker"/>
 
+
+          <cm:setHeader headerName="CamelHttpMethod">
+            <cm:constant>POST</cm:constant>
+          </cm:setHeader>
+          <cm:setHeader headerName="Exchange.HTTP_QUERY"><cm:simple></cm:simple></cm:setHeader>
           <cm:setBody>
-            <cm:simple>
-              <![CDATA[<add commitWithin="10000">
-              <doc>
-                <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-                <field name="schemaValidDate" update="set">$simple{header.beginTime}</field>
-                <field name="isSchemaValid" update="set">false</field>
-                <field name="schemaValidReport" update="set"><![CDATA[$simple{body}]]>
-              <![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-              </doc>
-            </add>]]>
-            </cm:simple>
+            <cm:simple>{"doc": {
+              "schemaValidDate": "$simple{header.beginTime}",
+              "isSchemaValid": "false",
+              "schemaValidReport": "$simple{body}"
+              }}</cm:simple>
           </cm:setBody>
+          <cm:setHeader headerName="Exchange.HTTP_URI">
+            <cm:groovy>'{{es.url}}/{{es.index.records}}/{{es.index.records}}/' +
+              URLEncoder.encode(exchange.in.headers.documentIdentifier, 'UTF-8') + '/_update'</cm:groovy>
+          </cm:setHeader>
+          <cm:setHeader headerName="Exchange.HTTP_QUERY"><cm:simple></cm:simple></cm:setHeader>
           <cm:to
-            uri="file:{{task.validation-checker.folder}}?fileName=xsd-invalid-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
+            uri="http4://index?throwExceptionOnFailure=false"/>
         </cm:doCatch>
         <cm:doFinally>
         </cm:doFinally>
@@ -376,7 +452,7 @@
         </cm:xpath>
       </cm:setHeader>
       <cm:setHeader headerName="beginTime">
-        <cm:simple>${date:now:yyyyMMdd'T'HH':'mm':'SS}</cm:simple>
+        <cm:simple>${date:now:yyyy-MM-dd'T'HH':'mm':'ss}</cm:simple>
       </cm:setHeader>
       <cm:log
         message="Checking record with UUID '$simple{header.documentIdentifier}' using INSPIRE validation service. Start at $simple{header.beginTime}."
@@ -388,50 +464,31 @@
       <cm:log message="Validated in $simple{body.totalTimeSeconds}s."
               loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
-      <cm:setBody>
-        <cm:simple>
-          <![CDATA[<add commitWithin="10000">
-              <doc>
-                <field name="id"><![CDATA[$simple{header.documentIdentifier}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-                <field name="validDate" update="set">$simple{header.beginTime}</field>
-                <field name="isValid" update="set">${body.status}</field>
-                <field name="completenessIndicator" update="set">${body.completenessIndicator}</field>
-                <field name="isAboveThreshold" update="set">${body.isAboveThreshold}</field>
-                <field name="validReport" update="set"><![CDATA[${body.report}]]><![CDATA[]]]]><![CDATA[>]]><![CDATA[</field>
-                <field name="validInfo" update="set">${body.info} - ${body.completenessIndicator}</field>
-              </doc>
-            </add>]]>
-        </cm:simple>
-      </cm:setBody>
-      <cm:to
-        uri="file:{{task.validation-checker.folder}}?fileName=inspire-validation-$simple{header.fileNameSuffix}.xml&amp;charset=utf-8"/>
-    </cm:route>
 
-
-    <cm:route id="save-validation-status">
-      <!--<cm:from uri="direct:save-validation-status"/>-->
-      <cm:from
-        uri="file:{{task.validation-checker.folder}}?consumer.delay={{task.validation-checker.delay}}"/>
-      <cm:log message="Updating index with '$simple{body}' ..."
-              loggingLevel="INFO"
-              logName="org.daobs.task.ValidationChecker"/>
-      <cm:removeHeaders pattern="*"/>
-      <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/update</cm:simple>
-      </cm:setHeader>
-      <cm:setHeader headerName="camelHttpMethod">
+      <cm:setHeader headerName="CamelHttpMethod">
         <cm:constant>POST</cm:constant>
       </cm:setHeader>
-      <cm:setHeader headerName="Content-Type">
-        <cm:constant>application/xml</cm:constant>
+      <cm:setBody>
+        <cm:simple>{"doc":{
+            "validDate": "$simple{header.beginTime}",
+            "isValid": "${body.status}",
+            "completenessIndicator": "${body.completenessIndicator}",
+            "isAboveThreshold": "${body.isAboveThreshold}",
+            "validReport": "${body.report}",
+            "validInfo": "${body.info} - ${body.completenessIndicator}"
+          }}</cm:simple>
+      </cm:setBody>
+      <cm:setHeader headerName="Exchange.HTTP_URI">
+        <cm:groovy>'{{es.url}}/{{es.index.records}}/{{es.index.records}}/' +
+          URLEncoder.encode(exchange.in.headers.documentIdentifier, 'UTF-8') + '/_update'</cm:groovy>
       </cm:setHeader>
+      <cm:setHeader headerName="Exchange.HTTP_QUERY"><cm:simple></cm:simple></cm:setHeader>
       <cm:to
-        uri="http4://solr.server.url?authUsername={{solr.server.user}}&amp;authPassword={{solr.server.password}}&amp;authenticationPreemptive=true&amp;throwExceptionOnFailure=false"/>
-      <cm:log message="Solr response: ${body}."
-              loggingLevel="DEBUG"
+        uri="http4://index?throwExceptionOnFailure=false"/>
+
+      <cm:log message="INSPIRE validation status saved."
+              loggingLevel="INFO"
               logName="org.daobs.task.ValidationChecker"/>
     </cm:route>
-
   </cm:camelContext>
-
 </beans>

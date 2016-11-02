@@ -30,7 +30,7 @@
                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:daobs="http://daobs.org"
-                xmlns:solr="java:org.daobs.index.ESRequestBean"
+                xmlns:solr="java:org.daobs.index.EsRequestBean"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"

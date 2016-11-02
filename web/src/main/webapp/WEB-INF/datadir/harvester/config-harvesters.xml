@@ -46,6 +46,14 @@
   </daobs:harvester>
   -->
 
+  <daobs:harvester>
+    <daobs:uuid>0ab2a240-4f61-46a4-a274-97df2b7c33b1</daobs:uuid>
+    <daobs:territory>EU</daobs:territory>
+    <daobs:folder>EU</daobs:folder>
+    <daobs:name>INSPIRE Geoportal</daobs:name>
+    <daobs:url>http://inspire-geoportal.ec.europa.eu/GeoportalProxyWebServices/resources/OGCCSW202</daobs:url>
+  </daobs:harvester>
+
   <!--
   List of CSW endpoints from
   http://inspire-geoportal.ec.europa.eu/INSPIRERegistry/

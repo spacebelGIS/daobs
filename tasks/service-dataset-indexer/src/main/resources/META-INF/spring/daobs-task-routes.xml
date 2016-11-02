@@ -142,7 +142,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+        <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
         <cm:groovy>'q=' + URLEncoder.encode(exchange.in.headers.documentFilter, 'UTF-8') + '&amp;fl={{task.service-dataset-indexer.fields}}&amp;wt=xml&amp;start=0&amp;rows=0'</cm:groovy>
@@ -181,7 +181,7 @@
               <cm:constant>GET</cm:constant>
             </cm:setHeader>
             <cm:setHeader headerName="Exchange.HTTP_URI">
-              <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select
+              <cm:simple>{{es.url}}/{{es.index.records}}/_search
               </cm:simple>
             </cm:setHeader>
             <cm:setHeader headerName="Exchange.HTTP_QUERY">
@@ -300,7 +300,7 @@
         <cm:constant>GET</cm:constant>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{solr.server.url}}/{{solr.core.data}}/select</cm:simple>
+        <cm:simple>{{es.url}}/{{es.index.records}}/_search</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Exchange.HTTP_QUERY">
         <cm:groovy>'q=' + URLEncoder.encode('id:"' + exchange.in.headers.datasetIdentifier + '"', 'UTF-8') + '&amp;fl=inspireTheme,inspireAnnex&amp;wt=xml&amp;start=0&amp;rows=1'</cm:groovy>

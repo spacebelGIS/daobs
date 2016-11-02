@@ -50,7 +50,7 @@
 
       <cm:bean ref="xsltUtility" method="xmlToBulkJson"/>
       <cm:setHeader headerName="Exchange.HTTP_URI">
-        <cm:simple>{{es.url}}/records/_bulk</cm:simple>
+        <cm:simple>{{es.url}}/{{es.index.records}}/_bulk</cm:simple>
       </cm:setHeader>
       <cm:setHeader headerName="Content-Type">
         <cm:simple>application/json</cm:simple>

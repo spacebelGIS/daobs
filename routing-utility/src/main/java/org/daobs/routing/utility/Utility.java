@@ -28,6 +28,7 @@ import net.sf.saxon.FeatureKeys;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
+import org.apache.camel.dataformat.xmljson.XmlJsonDataFormat;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.springframework.util.Assert;
@@ -38,6 +39,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -95,6 +97,7 @@ public class Utility {
       throw new RuntimeException("Error converting to String", ex);
     }
   }
+
 
   /**
    * Convert document to JSON.

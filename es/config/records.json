@@ -1162,6 +1162,14 @@
         "topic": {
           "type": "keyword"
         },
+        "validDate": {
+          "type": "date",
+          "format": "date_hour_minute_second"
+        },
+        "schemaValidDate": {
+          "type": "date",
+          "format": "date_hour_minute_second"
+        },
         "useLimitation": {
           "type": "text",
           "fields": {

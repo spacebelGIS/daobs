@@ -222,14 +222,14 @@ public class OnlineServiceValidatorClient {
         // or of the resource metadata if no issues were found
         String xml = org.apache.commons.io.IOUtils.toString(
             validatorResponse.getEntity().getContent(), "UTF-8");
-        report.setReport(xml);
+        report.setReport(xml.replace("\"", "\\\""));
       } else {
         report.setInfo(String.format(
             "Exception. HTTP status is %d expected 201.", responseStatusCode
         ));
       }
     } catch (IOException ex) {
-      report.setInfo("Exception: " + ex.getMessage());
+      report.setInfo("Exception: " + ex.getMessage().replace("\"", "\\\""));
     }
   }
 }

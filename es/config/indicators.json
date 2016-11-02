@@ -19,61 +19,6 @@
         },
         "isOfficial": {
           "type": "boolean"
-        },
-        "document": {
-          "type": "text"
-        },
-        "documentType": {
-          "type": "keyword"
-        },
-        "harvesterId": {
-          "type": "keyword"
-        },
-        "harvesterUuid": {
-          "type": "keyword",
-          "fielddata": true
-        },
-        "id": {
-          "type": "keyword"
-        },
-        "inspireAnnex": {
-          "type": "keyword"
-        },
-        "inspireAnnexForFirstTheme": {
-          "type": "keyword"
-        },
-        "inspireServiceType": {
-          "type": "keyword"
-        },
-        "inspireTheme": {
-          "type": "keyword"
-        },
-        "link": {
-          "type": "text"
-        },
-        "linkProtocol": {
-          "type": "keyword"
-        },
-        "linkUrl": {
-          "type": "text"
-        },
-        "resourceTitle": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "resourceType": {
-          "type": "keyword"
-        },
-        "serviceType": {
-          "type": "keyword"
-        },
-        "territory": {
-          "type": "keyword"
         }
       }
     }
