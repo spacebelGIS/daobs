@@ -48,25 +48,25 @@
       <xsl:for-each select="gmd:identificationInfo/*/
                               gmd:resourceConstraints/*/
                                 gmd:otherConstraints/*">
-        <field name="extra_medsea_dataPolicy">
+        <xsl:element name="extra_medsea_dataPolicy">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
 
       <xsl:for-each select="gmd:identificationInfo/*/
                               gmd:resourceConstraints/*/
                                 gmd:useLimitation/*">
-        <field name="extra_medsea_costBasis">
+        <xsl:element name="extra_medsea_costBasis">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
 
       <xsl:for-each select="gmd:dataQualityInfo/*/
                               gmd:report/gmd:DQ_DomainConsistency[gmd:nameOfMeasure/gco:CharacterString = 'Responsiveness']/
                               gmd:result/gmd:DQ_QuantitativeResult/gmd:value/*">
-        <field name="extra_medsea_responsiveness">
+        <xsl:element name="extra_medsea_responsiveness">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
@@ -81,9 +81,9 @@
                    gmd:thesaurusName[1]/gmd:CI_Citation/
                      gmd:title[1]/gco:CharacterString/text(),
                      $thesaurusName)]/gmd:keyword/gco:CharacterString">
-      <field name="{$fieldName}">
+      <xsl:element name="{$fieldName}">
         <xsl:value-of select="text()"/>
-      </field>
+      </xsl:element>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>

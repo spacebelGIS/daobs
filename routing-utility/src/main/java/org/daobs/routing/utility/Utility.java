@@ -33,6 +33,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.springframework.util.Assert;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -45,8 +46,10 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -109,36 +112,63 @@ public class Utility {
       Map<String, String> listOfXcb = new HashMap<>();
       if (root != null) {
         NodeList records = addNode.getChildNodes();
+
+        // Loop on docs
         for (int i = 0; i < records.getLength(); i++) {
           Node record = records.item(i);
           if (record != null && record.getNodeType() == Node.ELEMENT_NODE) {
             XContentBuilder xcb = jsonBuilder()
                 .startObject();
             String id = null;
+            Element element = (Element) record;
+            List<String> elementNames = new ArrayList();
             NodeList fields = record.getChildNodes();
+
+            // Loop on doc fields
             for (int j = 0; j < fields.getLength(); j++) {
               Node currentField = fields.item(j);
               if (currentField != null && currentField.getNodeType() == Node.ELEMENT_NODE) {
-                Node name = currentField.getAttributes().getNamedItem("name");
+                String name = currentField.getNodeName();
+                if (!elementNames.contains(name)) {
+                  // Register list of already processed names
+                  elementNames.add(name);
 
-                if (name != null) {
-                  if (name.getTextContent().equals("geom")) {
-                    continue;
+                  NodeList nodeElements = element.getElementsByTagName(name);
+                  boolean isArray = nodeElements.getLength() > 1;
+
+                  if (isArray) {
+                    xcb.startArray(name);
                   }
 
-                  if (name.getTextContent().equals("id")) {
-                    id = currentField.getTextContent();
+                  // Group fields in array if needed
+                  for (int k = 0; k < nodeElements.getLength(); k++) {
+                    Node node = nodeElements.item(k);
+                    if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
+
+                      if (name.equals("id")) {
+                        id = node.getTextContent();
+                      }
+
+                      if (name.equals("geom")) {
+                        continue;
+                      }
+
+                      if (isArray) {
+                        xcb.value(node.getTextContent());
+                      } else if (name.equals("geojson")) {
+                        xcb.field("geom", node.getTextContent());
+                      } else if (
+                        // Skip some fields causing errors / TODO
+                        !name.startsWith("conformTo_")) {
+                        xcb.field(
+                          name,
+                          node.getTextContent());
+                      }
+                    }
                   }
 
-                  if (name.getTextContent().equals("geojson")) {
-                    xcb.field("geom", currentField.getTextContent());
-                  } else if (
-                      // Skip some fields causing errors / TODO
-                      !name.getTextContent().startsWith("conformTo_")
-                      && !name.getTextContent().startsWith("thesaurus_")) {
-                    xcb.field(
-                        name.getTextContent(),
-                        currentField.getTextContent());
+                  if (isArray) {
+                    xcb.endArray();
                   }
                 }
               }

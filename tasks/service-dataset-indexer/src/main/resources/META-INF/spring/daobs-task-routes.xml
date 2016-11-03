@@ -295,6 +295,7 @@
         logName="org.daobs.task.ServiceDatasetIndexer"/>
 
       <cm:setBody>
+        <!-- TODO: record may be operated by more than one service  -->
         <cm:simple>{ "update" : { "_index" : "{{es.index.records}}", "_type" : "{{es.index.records}}", "_id" : "$simple{body}"} }
 {"doc": { "recordOperatedByType": "$simple{header.serviceType}", "recordOperatedBy": "$simple{header.documentIdentifier}", "recordOperatedByType$simple{header.serviceType}": "$simple{header.documentIdentifier}"} }</cm:simple>
       </cm:setBody>

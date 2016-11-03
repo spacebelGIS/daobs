@@ -50,33 +50,33 @@
                    mri:thesaurusName[1]/cit:CI_Citation/
                      cit:title[1]/gco:CharacterString/text(),
                      $thesaurusName)]/mri:keyword/gco:CharacterString">
-        <field name="{$fieldName}">
+        <xsl:element name="{$fieldName}">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
 
       <xsl:for-each select="mdb:identificationInfo/*/
                               mri:resourceConstraints/*/
                                 mco:otherConstraints/*">
-        <field name="extra_medsea_dataPolicy">
+        <xsl:element name="extra_medsea_dataPolicy">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
 
       <xsl:for-each select="mdb:identificationInfo/*/
                               mri:resourceConstraints/*/
                                 mri:useLimitation/*">
-        <field name="extra_medsea_costBasis">
+        <xsl:element name="extra_medsea_costBasis">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
 
       <xsl:for-each select="mdb:dataQualityInfo/*/
                               mdq:report/mdq:DQ_DomainConsistency[mdq:nameOfMeasure/gco:CharacterString = 'Responsiveness']/
                               mdq:result/mdq:DQ_QuantitativeResult/mdq:value/*">
-        <field name="extra_medsea_responsiveness">
+        <xsl:element name="extra_medsea_responsiveness">
           <xsl:value-of select="text()"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>

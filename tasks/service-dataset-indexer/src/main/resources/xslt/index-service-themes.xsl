@@ -36,10 +36,10 @@
       select="$index"/>", "_type": "<xsl:value-of
       select="$type"/>", "_id" : "<xsl:value-of
       select="$serviceIdentifier"/>"}}
-{"script": { "inline": "ctx._source.inspireTheme += params.inspireTheme;ctx._source.inspireAnnex += params.inspireAnnex", "lang": "painless", "params": {"inspireTheme": [<xsl:for-each
-      select="distinct-values(//inspireTheme//text())">"<xsl:value-of
-      select="."/>"<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>], "inspireAnnex":[<xsl:for-each
-      select="distinct-values(//inspireAnnex//text())">"<xsl:value-of
-      select="."/>"<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>]}}}</xsl:if>
+{"script": { "inline": "<xsl:for-each
+      select="distinct-values(//inspireTheme//text())">ctx._source.inspireTheme.add(\"<xsl:value-of
+      select="."/>\");</xsl:for-each><xsl:for-each
+      select="distinct-values(//inspireAnnex//text())">ctx._source.inspireAnnex.add(\"<xsl:value-of
+      select="."/>\");</xsl:for-each>"}}</xsl:if>
   </xsl:template>
 </xsl:stylesheet>

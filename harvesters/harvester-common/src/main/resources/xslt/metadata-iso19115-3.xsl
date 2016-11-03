@@ -87,50 +87,50 @@
 
     <!-- Create a first document representing the main record. -->
     <doc>
-      <field name="documentType">metadata</field>
-      <field name="documentStandard">iso19115-3</field>
+      <documentType>metadata</documentType>
+      <documentStandard>iso19115-3</documentStandard>
 
       <!-- Index the metadata document as XML -->
-      <field name="document">
+      <document>
         <xsl:value-of select="saxon:serialize(., 'default-serialize-mode')"/>
-      </field>
-      <field name="id">
+      </document>
+      <id>
         <xsl:value-of select="$identifier"/>
-      </field>
-      <field name="metadataIdentifier">
+      </id>
+      <metadataIdentifier>
         <xsl:value-of select="$identifier"/>
-      </field>
+      </metadataIdentifier>
 
       <xsl:if test="$pointOfTruthURLPattern != ''">
         <!-- TODO: add metadataLinkage-->
-        <field name="pointOfTruthURL">
+        <pointOfTruthURL>
           <xsl:value-of
             select="replace($pointOfTruthURLPattern, '\{\{uuid\}\}', $identifier)"/>
-        </field>
+        </pointOfTruthURL>
       </xsl:if>
 
       <xsl:for-each
         select="mdb:metadataStandard/cit:CI_Citation/cit:title/gco:CharacterString">
-        <field name="standardName">
+        <standardName>
           <xsl:value-of select="normalize-space(.)"/>
-        </field>
+        </standardName>
       </xsl:for-each>
 
       <!-- Harvester details -->
-      <field name="territory">
+      <territory>
         <xsl:value-of select="normalize-space($harvester/daobs:territory)"/>
-      </field>
-      <field name="harvesterId">
+      </territory>
+      <harvesterId>
         <xsl:value-of select="normalize-space($harvester/daobs:url)"/>
-      </field>
-      <field name="harvesterUuid">
+      </harvesterId>
+      <harvesterUuid>
         <xsl:value-of select="normalize-space($harvester/daobs:uuid)"/>
-      </field>
-      <field name="harvestedDate">
+      </harvesterUuid>
+      <harvestedDate>
         <xsl:value-of select="if ($harvester/daobs:date)
                               then $harvester/daobs:date
                               else format-dateTime(current-dateTime(), $dateFormat)"/>
-      </field>
+      </harvestedDate>
 
 
       <!-- Indexing record information -->
@@ -142,7 +142,7 @@
       <xsl:for-each select="mdb:dateInfo/
                               cit:CI_Date[cit:dateType/cit:CI_DateTypeCode/@codeListValue = 'revision']/
                                 cit:date/*[text() != '' and position() = 1]">
-        <field name="dateStamp">
+        <dateStamp>
           <xsl:value-of select="if (name() = 'gco:Date' and string-length(.) = 4)
                                 then concat(., '-01-01T00:00:00Z')
                                 else if (name() = 'gco:Date' and string-length(.) = 7)
@@ -154,33 +154,33 @@
                                   then .
                                   else concat(., 'Z')
                                 )"/>
-        </field>
+        </dateStamp>
       </xsl:for-each>
 
 
       <!-- # Languages -->
-      <field name="mainLanguage">
+      <mainLanguage>
         <xsl:value-of select="$mainLanguage"/>
-      </field>
+      </mainLanguage>
 
       <xsl:for-each select="$otherLanguages">
-        <field name="otherLanguage">
+        <otherLanguage>
           <xsl:value-of select="."/>
-        </field>
+        </otherLanguage>
       </xsl:for-each>
 
 
       <!-- # Resource type -->
       <xsl:choose>
         <xsl:when test="$isDataset">
-          <field name="resourceType">dataset</field>
+          <resourceType>dataset</resourceType>
         </xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="mdb:metadataScope/mdb:MD_MetadataScope/
                                   mdb:resourceScope/mcc:MD_ScopeCode/@codeListValue[normalize-space(.) != '']">
-            <field name="resourceType">
+            <resourceType>
               <xsl:value-of select="."/>
-            </field>
+            </resourceType>
           </xsl:for-each>
         </xsl:otherwise>
       </xsl:choose>
@@ -207,9 +207,9 @@
                             name() != 'cit:CI_DateTypeCode' and
                             name() != 'lan:LanguageCode'
                             ]">
-        <field name="codelist_{local-name(..)}">
+        <xsl:element name="codelist_{local-name(..)}">
           <xsl:value-of select="@codeListValue"/>
-        </field>
+        </xsl:element>
       </xsl:for-each>
 
 
@@ -222,13 +222,13 @@
       -->
       <xsl:for-each select="mdb:identificationInfo[1]/*[1]">
         <xsl:for-each select="cit:citation/cit:CI_Citation">
-          <field name="resourceTitle">
+          <resourceTitle>
             <xsl:value-of select="cit:title/gco:CharacterString/text()"/>
-          </field>
-          <field name="resourceAltTitle">
+          </resourceTitle>
+          <resourceAltTitle>
             <xsl:value-of
               select="cit:alternateTitle/gco:CharacterString/text()"/>
-          </field>
+          </resourceAltTitle>
 
           <xsl:for-each select="cit:date/cit:CI_Date[cit:date/*/text() != '']">
             <xsl:variable name="dateType"
@@ -236,29 +236,29 @@
                           as="xs:string?"/>
             <xsl:variable name="date"
                           select="string(cit:date/gco:Date|cit:date/gco:DateTime)"/>
-            <field name="{$dateType}DateForResource">
+            <xsl:element name="{$dateType}DateForResource">
               <xsl:value-of select="$date"/>
-            </field>
-            <field name="{$dateType}YearForResource">
+            </xsl:element>
+            <xsl:element name="{$dateType}YearForResource">
               <xsl:value-of select="substring($date, 0, 5)"/>
-            </field>
-            <field name="{$dateType}MonthForResource">
+            </xsl:element>
+            <xsl:element name="{$dateType}MonthForResource">
               <xsl:value-of select="substring($date, 0, 8)"/>
-            </field>
+            </xsl:element>
           </xsl:for-each>
 
           <xsl:for-each
             select="cit:presentationForm/cit:CI_PresentationFormCode/@codeListValue[. != '']">
-            <field name="presentationForm">
+            <presentationForm>
               <xsl:value-of select="."/>
-            </field>
+            </presentationForm>
           </xsl:for-each>
         </xsl:for-each>
 
-        <field name="resourceAbstract">
+        <resourceAbstract>
           <xsl:value-of
             select="substring(mri:abstract/gco:CharacterString, 0, $maxFieldLength)"/>
-        </field>
+        </resourceAbstract>
 
 
         <!-- Indexing resource contact -->
@@ -269,24 +269,24 @@
 
 
         <xsl:for-each select="mri:credit/*[. != '']">
-          <field name="resourceCredit">
+          <resourceCredit>
             <xsl:value-of select="."/>
-          </field>
+          </resourceCredit>
         </xsl:for-each>
 
 
         <xsl:for-each select="mri:graphicOverview/mcc:MD_BrowseGraphic/
                                 mcc:fileName/gco:CharacterString[. != '']">
-          <field name="overviewUrl">
+          <overviewUrl>
             <xsl:value-of select="."/>
-          </field>
+          </overviewUrl>
         </xsl:for-each>
 
         <xsl:for-each
           select="mri:defaultLocale/lan:PT_Locale/lan:language/lan:LanguageCode/@codeListValue">
-          <field name="resourceLanguage">
+          <resourceLanguage>
             <xsl:value-of select="."/>
-          </field>
+          </resourceLanguage>
         </xsl:for-each>
 
 
@@ -320,39 +320,39 @@
           <xsl:variable name="inspireTheme" as="xs:string"
                         select="solr:analyzeField('synInspireThemes', text())"/>
 
-          <field name="inspireTheme_syn">
+          <inspireTheme_syn>
             <xsl:value-of select="text()"/>
-          </field>
-          <field name="inspireTheme">
+          </inspireTheme_syn>
+          <inspireTheme>
             <xsl:value-of select="$inspireTheme"/>
-          </field>
+          </inspireTheme>
 
           <!--
           WARNING: Here we only index the first keyword in order
           to properly compute one INSPIRE annex.
           -->
           <xsl:if test="position() = 1">
-            <field name="inspireThemeFirst_syn">
+            <inspireThemeFirst_syn>
               <xsl:value-of select="text()"/>
-            </field>
-            <field name="inspireThemeFirst">
+            </inspireThemeFirst_syn>
+            <inspireThemeFirst>
               <xsl:value-of select="$inspireTheme"/>
-            </field>
-            <field name="inspireAnnexForFirstTheme">
+            </inspireThemeFirst>
+            <inspireAnnexForFirstTheme>
               <xsl:value-of
                 select="solr:analyzeField('synInspireAnnexes', $inspireTheme)"/>
-            </field>
+            </inspireAnnexForFirstTheme>
           </xsl:if>
-          <field name="inspireAnnex">
+          <inspireAnnex>
             <xsl:value-of
               select="solr:analyzeField('synInspireAnnexes', $inspireTheme)"/>
-          </field>
+          </inspireAnnex>
         </xsl:for-each>
 
-        <field name="numberOfInspireTheme">
+        <numberOfInspireTheme>
           <xsl:value-of
             select="count($inspireKeywords)"/>
-        </field>
+        </numberOfInspireTheme>
 
 
         <!-- Index all keywords -->
@@ -362,9 +362,9 @@
                         */mri:MD_Keywords/
                           mri:keyword/lan:PT_FreeText/lan:textGroup/
                             lan:LocalisedCharacterString">
-          <field name="tag">
+          <tag>
             <xsl:value-of select="text()"/>
-          </field>
+          </tag>
         </xsl:for-each>
 
         <!-- Index keywords which are of type place -->
@@ -375,9 +375,9 @@
                         */mri:MD_Keywords/
                           mri:keyword[mri:type/mri:MD_KeywordTypeCode/@codeListValue = 'place']/
                             lan:PT_FreeText/lan:textGroup/lan:LocalisedCharacterString">
-          <field name="geotag">
+          <geotag>
             <xsl:value-of select="text()"/>
-          </field>
+          </geotag>
         </xsl:for-each>
 
 
@@ -403,7 +403,7 @@
               <!-- Try to build a thesaurus key based on the name
               by removing space - to be improved. -->
               <xsl:when test="normalize-space($thesaurusName) != ''">
-                <xsl:value-of select="replace($thesaurusName, ' ', '')"/>
+                <!--<xsl:value-of select="replace($thesaurusName, ' ', '')"/>-->
               </xsl:when>
             </xsl:choose>
           </xsl:variable>
@@ -415,18 +415,18 @@
             <xsl:for-each select="*[normalize-space() != '']|
                                   */@xlink:href[normalize-space() != '']|
                                   lan:PT_FreeText/lan:textGroup/lan:LocalisedCharacterString[normalize-space() != '']">
-              <field name="thesaurus_{$key}">
+              <xsl:element name="thesaurus_{$key}">
                 <xsl:value-of select="normalize-space(.)"/>
-              </field>
+              </xsl:element>
             </xsl:for-each>
           </xsl:if>
         </xsl:for-each>
 
 
         <xsl:for-each select="mri:topicCategory/mri:MD_TopicCategoryCode">
-          <field name="topic">
+          <topic>
             <xsl:value-of select="."/>
-          </field>
+          </topic>
           <!-- TODO: Get translation ? -->
         </xsl:for-each>
 
@@ -434,50 +434,50 @@
         <xsl:for-each select="mri:spatialResolution/mri:MD_Resolution">
           <xsl:for-each
             select="mri:equivalentScale/mri:MD_RepresentativeFraction/mri:denominator/gco:Integer[. != '']">
-            <field name="resolutionScaleDenominator">
+            <resolutionScaleDenominator>
               <xsl:value-of select="."/>
-            </field>
+            </resolutionScaleDenominator>
           </xsl:for-each>
 
           <xsl:for-each select="mri:distance/gco:Distance[. != '']">
-            <field name="resolutionDistance">
+            <resolutionDistance>
               <xsl:value-of select="concat(., @uom)"/>
-            </field>
+            </resolutionDistance>
           </xsl:for-each>
         </xsl:for-each>
 
         <xsl:for-each
           select="mri:spatialRepresentationType/mcc:MD_SpatialRepresentationTypeCode/@codeListValue[. != '']">
-          <field name="spatialRepresentationType">
+          <spatialRepresentationType>
             <xsl:value-of select="."/>
-          </field>
+          </spatialRepresentationType>
         </xsl:for-each>
 
 
         <xsl:for-each select="mri:resourceConstraints">
           <xsl:for-each
             select="*/mco:accessConstraints/mco:MD_RestrictionCode/@codeListValue[. != '']">
-            <field name="accessConstraints">
+            <accessConstraints>
               <xsl:value-of select="."/>
-            </field>
+            </accessConstraints>
           </xsl:for-each>
           <xsl:for-each
             select="*/mco:otherConstraints/gco:CharacterString[. != '']">
-            <field name="otherConstraints">
+            <otherConstraints>
               <xsl:value-of select="."/>
-            </field>
+            </otherConstraints>
           </xsl:for-each>
           <xsl:for-each
             select="*/mco:classification/mco:MD_ClassificationCode/@codeListValue[. != '']">
-            <field name="constraintClassification">
+            <constraintClassification>
               <xsl:value-of select="."/>
-            </field>
+            </constraintClassification>
           </xsl:for-each>
           <xsl:for-each
             select="*/mco:useLimitation/gco:CharacterString[. != '']">
-            <field name="useLimitation">
+            <useLimitation>
               <xsl:value-of select="."/>
-            </field>
+            </useLimitation>
           </xsl:for-each>
         </xsl:for-each>
 
@@ -487,9 +487,9 @@
           <xsl:for-each select="gex:geographicElement/gex:EX_GeographicDescription/
                                   gex:geographicIdentifier/mcc:MD_Identifier/
                                     mcc:code/gco:CharacterString[normalize-space(.) != '']">
-            <field name="geoTag">
+            <geoTag>
               <xsl:value-of select="."/>
-            </field>
+            </geoTag>
           </xsl:for-each>
 
           <!-- TODO: index bounding polygon -->
@@ -516,7 +516,7 @@
 
             bbox field type limited to one. TODO
             <xsl:if test="position() = 1">
-              <field name="bbox">
+              <bbox>
                 <xsl:text>ENVELOPE(</xsl:text>
                 <xsl:value-of select="$w"/>
                 <xsl:text>,</xsl:text>
@@ -536,23 +536,23 @@
                               -90 &lt;= number($n) and number($n) &lt;= 90">
                 <xsl:choose>
                   <xsl:when test="$e = $w and $s = $n">
-                    <field name="geom">
+                    <geom>
                       <xsl:text>POINT(</xsl:text>
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>)</xsl:text>
-                    </field>
+                    </geom>
                   </xsl:when>
                   <xsl:when
                     test="($e = $w and $s != $n) or ($e != $w and $s = $n)">
                     <!-- Probably an invalid bbox indexing a point only -->
-                    <field name="geom">
+                    <geom>
                       <xsl:text>POINT(</xsl:text>
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>)</xsl:text>
-                    </field>
+                    </geom>
                   </xsl:when>
                   <xsl:otherwise>
-                    <field name="geom">
+                    <geom>
                       <xsl:text>POLYGON((</xsl:text>
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>,</xsl:text>
@@ -564,7 +564,7 @@
                       <xsl:text>,</xsl:text>
                       <xsl:value-of select="concat($w, ' ', $s)"/>
                       <xsl:text>))</xsl:text>
-                    </field>
+                    </geom>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:when>
@@ -578,24 +578,24 @@
 
         <!-- Service information -->
         <xsl:for-each select="srv:serviceType/gco:LocalName">
-          <field name="serviceType">
+          <serviceType>
             <xsl:value-of select="text()"/>
-          </field>
+          </serviceType>
           <xsl:variable name="inspireServiceType" as="xs:string"
                         select="solr:analyzeField(
                         'keepInspireServiceTypes', text())"/>
           <xsl:if test="$inspireServiceType != ''">
-            <field name="inspireServiceType">
+            <inspireServiceType>
               <xsl:value-of select="lower-case($inspireServiceType)"/>
-            </field>
+            </inspireServiceType>
           </xsl:if>
           <xsl:if test="following-sibling::srv:serviceTypeVersion">
-            <field name="serviceTypeAndVersion">
+            <serviceTypeAndVersion>
               <xsl:value-of select="concat(
                         text(),
                         $separator,
                         following-sibling::srv:serviceTypeVersion/gco:CharacterString/text())"/>
-            </field>
+            </serviceTypeAndVersion>
           </xsl:if>
         </xsl:for-each>
       </xsl:for-each>
@@ -606,9 +606,9 @@
           <xsl:variable name="crs" select="mcc:code/gco:CharacterString"/>
 
           <xsl:if test="$crs != ''">
-            <field name="coordinateSystem">
+            <coordinateSystem>
               <xsl:value-of select="$crs"/>
-            </field>
+            </coordinateSystem>
           </xsl:if>
         </xsl:for-each>
       </xsl:for-each>
@@ -629,9 +629,9 @@
 
               <xsl:variable name="pass"
                             select="*/mdq:result/*/mdq:pass/gco:Boolean"/>
-              <field name="inspireConformResource">
+              <inspireConformResource>
                 <xsl:value-of select="$pass"/>
-              </field>
+              </inspireConformResource>
             </xsl:if>
           </xsl:for-each-group>
         </xsl:when>
@@ -649,9 +649,9 @@
 
               <xsl:variable name="pass"
                             select="*/mdq:result/*/mdq:pass/gco:Boolean"/>
-              <field name="inspireConformResource">
+              <inspireConformResource>
                 <xsl:value-of select="$pass"/>
-              </field>
+              </inspireConformResource>
             </xsl:if>
           </xsl:for-each-group>
         </xsl:otherwise>
@@ -661,9 +661,9 @@
       <xsl:for-each select="mdb:resourceLineage/*">
         <xsl:for-each select="mrl:lineage/mrl:LI_Lineage/
                                 mrl:statement/gco:CharacterString[. != '']">
-          <field name="lineage">
+          <lineage>
             <xsl:value-of select="."/>
-          </field>
+          </lineage>
         </xsl:for-each>
       </xsl:for-each>
 
@@ -673,12 +673,12 @@
         <xsl:for-each select="mdq:report/*[
                 normalize-space(mdq:nameOfMeasure/gco:CharacterString) != '']">
           <xsl:variable name="measureName"
-                        select="normalize-space(mdq:nameOfMeasure/gco:CharacterString)"/>
+                        select="replace(normalize-space(mdq:nameOfMeasure/gco:CharacterString), '[^a-zA-Z0-9]', '')"/>
           <xsl:for-each select="mdq:result/mdq:DQ_QuantitativeResult/mdq:value">
             <xsl:if test=". != ''">
-              <field name="measure_{$measureName}">
+              <xsl:element name="measure_{$measureName}">
                 <xsl:value-of select="."/>
-              </field>
+              </xsl:element>
             </xsl:if>
           </xsl:for-each>
         </xsl:for-each>
@@ -688,20 +688,20 @@
       <xsl:for-each select="mdb:distributionInfo/*">
         <xsl:for-each select="mrd:distributionFormat/*/mrd:formatSpecificationCitation/
                                 cit:CI_Citation/cit:title/gco:CharacterString">
-          <field name="format">
+          <format>
             <xsl:value-of select="."/>
-          </field>
+          </format>
         </xsl:for-each>
 
         <xsl:for-each select="mrd:transferOptions/*/
                                 mrd:onLine/*[cit:linkage/gco:CharacterString != '']">
-          <field name="linkUrl">
+          <linkUrl>
             <xsl:value-of select="cit:linkage/gco:CharacterString"/>
-          </field>
-          <field name="linkProtocol">
+          </linkUrl>
+          <linkProtocol>
             <xsl:value-of select="cit:protocol/gco:CharacterString/text()"/>
-          </field>
-          <field name="link">
+          </linkProtocol>
+          <link>
             <xsl:value-of select="cit:protocol/*/text()"/>
             <xsl:text>|</xsl:text>
             <xsl:value-of select="cit:linkage/*/text()"/>
@@ -709,7 +709,7 @@
             <xsl:value-of select="normalize-space(cit:name/*/text())"/>
             <xsl:text>|</xsl:text>
             <xsl:value-of select="normalize-space(cit:description/*/text())"/>
-          </field>
+          </link>
         </xsl:for-each>
       </xsl:for-each>
 
@@ -749,28 +749,9 @@
         </xsl:variable>
 
         <xsl:if test="$datasetId != ''">
-          <field name="recordOperateOn">
+          <recordOperateOn>
             <xsl:value-of select="$datasetId"/>
-          </field>
-
-          <!--<doc>
-            <field name="id"><xsl:value-of
-                    select="concat('association', $identifier,
-              $associationType, $datasetId)"/></field>
-            <field name="documentType">association</field>
-            <field name="record"><xsl:value-of select="$identifier"/></field>
-            <field name="associationType"><xsl:value-of select="$associationType"/></field>
-            <field name="relatedTo"><xsl:value-of select="$datasetId"/></field>
-          </doc>
-          <doc>
-            <field name="id"><xsl:value-of
-                    select="concat('association',
-              $associationType, $datasetId)"/></field>
-            <field name="documentType">association2</field>
-            <field name="record"><xsl:value-of select="$identifier"/></field>
-            <field name="associationType"><xsl:value-of select="concat($associationType, $serviceType)"/></field>
-            <field name="relatedTo"><xsl:value-of select="$datasetId"/></field>
-          </doc>-->
+          </recordOperateOn>
         </xsl:if>
       </xsl:for-each>
 
@@ -781,59 +762,6 @@
     <!-- Index more documents for this element -->
     <xsl:apply-templates mode="index-extra-documents" select="."/>
 
-    <!-- Create or update child document and register service relation
-    in recordOperatedBy field and als associated resources.
-
-     TODO: Some countries are using uuidref to store
-     resource identifier and not metadata identifier. -->
-    <xsl:for-each
-      select="mdb:identificationInfo/srv:SV_ServiceIdentification/srv:operatesOn">
-      <!--<xsl:message>## child record <xsl:value-of select="@xlink:href"/> </xsl:message>-->
-
-      <!--
-      uuiref store resource identifier and not metadata identifier.
-          <xsl:variable name="relatedTo" select="@uuidref"/>
-      -->
-      <xsl:variable name="relatedTo">
-        <xsl:if test="@xlink:href != ''">
-          <xsl:analyze-string select="@xlink:href"
-                              regex=".*id=([\w-]*).*">
-            <xsl:matching-substring>
-              <xsl:value-of select="regex-group(1)"/>
-            </xsl:matching-substring>
-          </xsl:analyze-string>
-        </xsl:if>
-      </xsl:variable>
-      <!--<xsl:message>## child record <xsl:value-of select="$relatedTo"/> </xsl:message>-->
-
-      <xsl:choose>
-        <xsl:when test="$relatedTo">
-          <doc>
-            <field name="id">
-              <xsl:value-of select="$relatedTo"/>
-            </field>
-            <field name="metadataIdentifier" update="set">
-              <xsl:value-of select="$relatedTo"/>
-            </field>
-            <field name="recordOperatedBy" update="add">
-              <xsl:value-of select="$identifier"/>
-            </field>
-            <xsl:for-each select="../srv:serviceType/gco:LocalName">
-              <field name="recordOperatedByType" update="add">
-                <xsl:value-of select="."/>
-              </field>
-            </xsl:for-each>
-          </doc>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Failed to extract metadata identifier from @uuidref or
-            xlink:href
-            <xsl:value-of select="@xlink:href"/>
-          </xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-
-    </xsl:for-each>
   </xsl:template>
 
 
@@ -852,15 +780,15 @@
                   select="*[1]/cit:role/*/@codeListValue"
                   as="xs:string?"/>
     <xsl:if test="normalize-space($organisationName) != ''">
-      <field name="Org{$fieldSuffix}">
+      <xsl:element name="Org{$fieldSuffix}">
         <xsl:value-of select="$organisationName"/>
-      </field>
-      <field name="{$role}Org{$fieldSuffix}">
+      </xsl:element>
+      <xsl:element name="{$role}Org{$fieldSuffix}">
         <xsl:value-of select="$organisationName"/>
-      </field>
+      </xsl:element>
     </xsl:if>
-    <field name="contact{$fieldSuffix}">{"org":"<xsl:value-of
+    <xsl:element name="contact{$fieldSuffix}">{"org":"<xsl:value-of
         select="replace($organisationName, '&quot;', '\\&quot;')"/>", "role":"<xsl:value-of select="$role"/>"}
-    </field>
+    </xsl:element>
   </xsl:template>
 </xsl:stylesheet>
