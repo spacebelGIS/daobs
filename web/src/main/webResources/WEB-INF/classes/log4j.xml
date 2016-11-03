@@ -50,11 +50,11 @@
   </logger>
 
   <logger name="org.daobs.task.ServiceDatasetIndexer">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.daobs.task.ValidationChecker">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.daobs.task.DBValidationChecker">
@@ -62,7 +62,7 @@
   </logger>
 
   <logger name="org.daobs.tasks.validation.etf">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
 
   <logger name="org.daobs.messaging">

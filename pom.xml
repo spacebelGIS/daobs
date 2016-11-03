@@ -475,7 +475,7 @@
     This is used by all services requesting the
     Solr instance. eg. Harvesters. -->
     <webapp.protocol>http</webapp.protocol>
-    <webapp.port>8983</webapp.port>
+    <webapp.port>8081</webapp.port>
     <webapp.url>${webapp.protocol}://localhost:${webapp.port}</webapp.url>
 
     <!-- root.dir set by directory-maven-plugin -->
