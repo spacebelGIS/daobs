@@ -158,11 +158,11 @@ public class Utility {
                       } else if (name.equals("geojson")) {
                         xcb.field("geom", node.getTextContent());
                       } else if (
-                        // Skip some fields causing errors / TODO
-                        !name.startsWith("conformTo_")) {
+                          // Skip some fields causing errors / TODO
+                          !name.startsWith("conformTo_")) {
                         xcb.field(
-                          name,
-                          node.getTextContent());
+                            name,
+                            node.getTextContent());
                       }
                     }
                   }
