@@ -126,6 +126,11 @@
       <cm:setHeader headerName="documentFilter">
         <cm:groovy>'{{task.validation-checker.filter}}' + ' ' + exchange.in.body.trim()</cm:groovy>
       </cm:setHeader>
+      <cm:log
+        message="JMS $simple{header.documentFilter}."
+        loggingLevel="INFO"
+        logName="org.daobs.task.ValidationChecker"/>
+
       <cm:to uri="direct:task-validate-start"/>
     </cm:route>
 

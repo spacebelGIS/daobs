@@ -58,7 +58,7 @@
       <cm:setHeader headerName="Exchange.HTTP_METHOD">
         <cm:simple>POST</cm:simple>
       </cm:setHeader>
-      <cm:to uri="http4://localhost/es-server"/>
+      <cm:to uri="http4://index"/>
     </cm:route>
 
     <!--<cm:route id="route-delete">

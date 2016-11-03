@@ -94,7 +94,7 @@ public class HarvesterConfigRepository implements InitializingBean {
 
   /**
    * Add or update an harvester configuration.
-     */
+   */
   public synchronized Harvester addOrUpdate(Harvester harvester) throws Exception {
     if (harvester != null) {
       String uuid = harvester.getUuid();

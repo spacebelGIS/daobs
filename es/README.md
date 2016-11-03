@@ -26,6 +26,7 @@ cd es
 mvn install -Pes-download
 mvn exec:exec -Des-start
 curl -X PUT http://localhost:9200/records -d @config/records.json
+curl -X PUT http://localhost:9200/indicators -d @config/indicators.json
 ```
 
 ### Production use

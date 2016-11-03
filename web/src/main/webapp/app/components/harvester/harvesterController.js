@@ -112,6 +112,24 @@
                 "top_territory": {
                   "terms":  {
                     "field": "harvesterUuid"
+                  },
+                  "aggs" : {
+                    "isValid": {
+                      "terms": {
+                        "field": "isValid"
+                      }
+                    },
+                    "isValidMissing": {
+                      "missing" : { "field" : "isValid" }
+                    },
+                    "isAboveThreshold": {
+                      "terms": {
+                        "field": "isAboveThreshold"
+                      }
+                    },
+                    "isAboveThresholdMissing": {
+                      "missing" : { "field" : "isAboveThreshold" }
+                    },
                   }
                 }
               }
@@ -120,7 +138,10 @@
             if (r.data.aggregations.top_territory && r.data.aggregations.top_territory.buckets) {
               var facets = r.data.aggregations.top_territory.buckets;
               for (var i = 0; i < facets.length; i++) {
-                $scope.statsForTerritory[facets[i].key] = {count: facets[i].doc_count};
+                $scope.statsForTerritory[facets[i].key] = {
+                  count: facets[i].doc_count,
+                  isValid: facets[i].isAboveThreshold
+                };
               }
             }
           });

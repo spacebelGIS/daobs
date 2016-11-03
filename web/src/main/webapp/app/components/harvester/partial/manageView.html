@@ -188,7 +188,7 @@
             <h6>{{key | translate}}</h6>
             <ul>
               <li data-ng-repeat="b in value.buckets">
-                {{b.val}} ({{b.count}})
+                {{b.key_as_string}} ({{b.doc_count}})
               </li>
               <li data-ng-if="value.missing">
                 {{'missing' | translate}} ({{value.missing.count}})

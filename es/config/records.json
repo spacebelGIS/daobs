@@ -967,28 +967,6 @@
         }
       ]
     },
-    "indicators": {
-      "properties": {
-        "reportingDateSubmission": {
-          "type": "date"
-        },
-        "indicatorType": {
-          "type": "text"
-        },
-        "indicatorName": {
-          "type": "text"
-        },
-        "indicatorValue": {
-          "type": "double"
-        },
-        "reportingYear": {
-          "type": "text"
-        },
-        "isOfficial": {
-          "type": "boolean"
-        }
-      }
-    },
     "records": {
       "properties": {
         "accessConstraints": {
@@ -1032,6 +1010,15 @@
         },
         "id": {
           "type": "keyword"
+        },
+        "isValid": {
+          "type": "boolean"
+        },
+        "isSchemaValid": {
+          "type": "boolean"
+        },
+        "isAboveThreshold": {
+          "type": "boolean"
         },
         "inspireAnnex": {
           "type": "keyword"

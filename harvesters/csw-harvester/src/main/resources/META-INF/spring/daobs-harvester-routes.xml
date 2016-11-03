@@ -394,15 +394,15 @@
         logName="org.daobs.harvester.CswHarvester"/>
 
       <cm:setBody>
-        <cm:simple>+harvesterUuid:"${property.harvesterUuid}"</cm:simple>
+        <cm:simple>+harvesterUuid:\"${property.harvesterUuid}\"</cm:simple>
       </cm:setBody>
-      <!--<cm:multicast stopOnException="false"
+      <cm:multicast stopOnException="false"
                     parallelProcessing="false">
         <cm:to uri="activemq:queue:task-analyze?jmsMessageType=Text"/>
         <cm:to uri="activemq:queue:task-validate?jmsMessageType=Text"/>
-        <cm:to uri="activemq:queue:task-db-validate?jmsMessageType=Text"/>
-        <cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>
-      </cm:multicast>-->
+        <!--<cm:to uri="activemq:queue:task-db-validate?jmsMessageType=Text"/>-->
+        <!--<cm:to uri="activemq:queue:etf-task-validate?jmsMessageType=Text"/>-->
+      </cm:multicast>
     </cm:route>
   </cm:camelContext>
 </beans>

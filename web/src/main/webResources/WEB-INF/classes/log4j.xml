@@ -50,11 +50,11 @@
   </logger>
 
   <logger name="org.daobs.task.ServiceDatasetIndexer">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
 
   <logger name="org.daobs.task.ValidationChecker">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
 
   <logger name="org.daobs.task.DBValidationChecker">
