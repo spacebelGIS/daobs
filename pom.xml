@@ -542,7 +542,7 @@
     <es.username></es.username>
     <es.password></es.password>
 
-    <kb.version.md5>519ba1553a0b85564bccdba8e3aef985</kb.version.md5>
+    <kb.version.md5>503430018187fd947dc4bf9046013d7b</kb.version.md5>
     <kb.port>5601</kb.port>
     <kb.url>http://localhost:${kb.port}</kb.url>
 
