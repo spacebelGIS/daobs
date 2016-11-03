@@ -5,11 +5,15 @@
         "reportingDateSubmission": {
           "type": "date"
         },
+        "reportingDate": {
+          "type": "date",
+          "format": "date_hour_minute_second"
+        },
         "indicatorType": {
-          "type": "text"
+          "type": "keyword"
         },
         "indicatorName": {
-          "type": "text"
+          "type": "keyword"
         },
         "indicatorValue": {
           "type": "double"
@@ -19,6 +23,9 @@
         },
         "isOfficial": {
           "type": "boolean"
+        },
+        "territory": {
+          "type": "keyword"
         }
       }
     }

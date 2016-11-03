@@ -50,20 +50,22 @@
     <!-- Format date properly. Sometimes month is written
 using one character or two. Prepend 0 when needed. -->
     <xsl:variable name="month"
-                  select="if (string-length($dateNode/month) = 1)
+                  select="if ($dateNode/month = '00' or $dateNode/month = '0') then '12'
+                        else if (string-length($dateNode/month) = 1)
                         then concat('0', $dateNode/month)
                         else if (string-length($dateNode/month) = 2)
                         then $dateNode/month
                         else '12'"/>
     <xsl:variable name="day"
-                  select="if (string-length($dateNode/day) = 1)
+                  select="if ($dateNode/day = '00' or $dateNode/day = '0') then '31'
+                        else if (string-length($dateNode/day) = 1)
                         then concat('0', $dateNode/day)
                         else if (string-length($dateNode/day) = 2)
                         then $dateNode/day
                         else '31'"/>
     <xsl:value-of select="concat(
                             $year, '-', $month, '-', $day,
-                            'T12:00:00Z')"/>
+                            'T12:00:00')"/>
   </xsl:function>
 
 

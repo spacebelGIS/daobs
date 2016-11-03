@@ -9,7 +9,7 @@ Start Kibana.
 Set Kibana base path in config/kibana.yml
 
 ```
-server.basePath: "/dashboard"
+server.basePath: "/webappname/dashboard"
 ```
 
 ### Maven installation
