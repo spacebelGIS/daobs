@@ -62,7 +62,7 @@
                 select="normalize-space($harvester/daobs:pointOfTruthURLPattern)"/>
 
   <xsl:variable name="dateFormat" as="xs:string"
-                select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z'"/>
+                select="'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'"/>
 
   <xsl:variable name="separator" as="xs:string"
                 select="'|'"/>

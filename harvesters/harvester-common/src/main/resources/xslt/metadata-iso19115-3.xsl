@@ -143,17 +143,20 @@
                               cit:CI_Date[cit:dateType/cit:CI_DateTypeCode/@codeListValue = 'revision']/
                                 cit:date/*[text() != '' and position() = 1]">
         <dateStamp>
-          <xsl:value-of select="if (name() = 'gco:Date' and string-length(.) = 4)
-                                then concat(., '-01-01T00:00:00Z')
+          <xsl:variable name="date"
+                        select="if (name() = 'gco:Date' and string-length(.) = 4)
+                                then concat(., '-01-01T00:00:00')
                                 else if (name() = 'gco:Date' and string-length(.) = 7)
-                                then concat(., '-01T00:00:00Z')
+                                then concat(., '-01T00:00:00')
                                 else if (name() = 'gco:Date' or string-length(.) = 10)
-                                then concat(., 'T00:00:00Z')
-                                else (
-                                  if (ends-with(., 'Z'))
-                                  then .
-                                  else concat(., 'Z')
-                                )"/>
+                                then concat(., 'T00:00:00')
+                                else ."/>
+
+          <xsl:value-of select="translate(string(
+                                   adjust-dateTime-to-timezone(
+                                      xs:dateTime($date),
+                                      xs:dayTimeDuration('PT0H'))
+                                     ), 'Z', '')"/>
         </dateStamp>
       </xsl:for-each>
 
