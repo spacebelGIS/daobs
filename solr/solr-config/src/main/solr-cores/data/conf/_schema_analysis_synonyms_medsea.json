@@ -7,68 +7,65 @@
   "initializedOn": "2014-09-30T09:46:43.104Z",
   "updatedSinceInit": "2014-09-30T09:47:03.147Z",
   "managedMap": {
-    "No charge": [
-      "Free"
+    "Not or not well documented": [
+      "No information"
     ],
-    "Distribution cost charge": [
-      "Cost charge"
+    "Distribution charge": [
+      "Charge"
     ],
-    "Collection cost charge": [
-      "Cost charge"
+    "Collection charge": [
+      "Charge"
     ],
-    "Commercial cost charge": [
-      "Commercial cost"
+    "Commercial charge": [
+      "Charge"
     ],
-    "Cost charge depends on intented use and category of users": [
-      "Cost charge"
+    "Free of charge for academic institutions and uses": [
+      "Charge"
     ],
-    "Cost charge depends on intended use and category of users": [
-      "Cost charge"
+    "Open and Free. No charge": [
+      "No charge"
+    ],
+    "Not or not well documented": [
+      "No information"
     ],
     "Restricted": [
-      "Restricted"
+      "Low sharing"
     ],
     "Accessible under moratorium": [
-      "Partially restricted"
+      "Medium sharing"
     ],
     "Unrestricted": [
-      "Unrestricted"
+      "High sharing"
     ],
-    "&lt;15mn (on-line download)": [
-      "High response"
-    ],
-    "Less than 3 hours": [
-      "Medium response"
-    ],
-    "Less than 24 hours": [
-      "Medium response"
-    ],
-    "Less than 1 week": [
-      "Medium response"
-    ],
-    "More than 1 week": [
+    "No information is found on response time": [
       "Low response"
     ],
-    "Not documented": [
-      "Unknown"
+    "More than 1 week for release": [
+      "Low response"
+    ],
+    "Less or equal to 1 week for release": [
+      "Medium response"
+    ],
+    "Online downloading (i.e. a few hours or less) for release": [
+      "Medium response"
     ],
     "Unknown": [
       "Unknown"
     ],
     "No information was found on data delivery mechanisms": [
-      "No information"
+      "Low accessibility"
     ],
     "Manual process: Order form/invoice is requested": [
-      "Manual"
+      "Low accessibility"
     ],
     "Online downloading services": [
-      "Partial INSPIRE function"
+      "Medium accessibility"
     ],
     "Online discovery + downloading + viewing services (Advanced services)": [
-      "Full INSPIRE function"
+      "High accessibility"
     ],
     "Online discovery and downloading services": [
-      "Full INSPIRE function"
+      "High accessibility"
     ],
     "Cited in peer reviewed paper or grey literature but no info on how to access": [
       "Low visibility"
@@ -80,19 +77,19 @@
       "Medium visibility"
     ],
     "Search via reference catalogue (e.g. MyOcean, GEOSS Geoportal…)": [
-      "Good visibility"
+      "High visibility"
     ],
     "Use of open search engines, searching by name either the data provider or the characteristics": [
-      "Good visibility"
+      "High visibility"
     ],
     "Data sets are not referenced in a catalogue or are referenced in a non public catalogue": [
-      "Inadequate"
+      "Low visibility"
     ],
     "The datasets are referenced in a public national catalogue, in an international catalogue service": [
-      "Partly adequate"
+      "Medium visibility"
     ],
     "The datasets are provided through an EU Inspire catalogue service (OGC)": [
-      "Totally adequate"
+      "High visibility"
     ],
     "There is no information at all on data policy adopted by data providers": [
       "Low transparency"
@@ -104,7 +101,7 @@
       "High transparency"
     ],
     "Format not or not well documented": [
-      "Not documented"
+      "Not ready to be consumed"
     ],
     "Proprietary format and not well documented": [
       "Not ready to be consumed"
