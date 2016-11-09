@@ -25,7 +25,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
-                xmlns:solr="java:org.daobs.index.SolrRequestBean"
+                xmlns:solr="java:org.daobs.index.EsRequestBean"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
