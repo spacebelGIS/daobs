@@ -20,3 +20,40 @@ Restricted
 Accessible under moratorium
 Unrestricted
 Unknown
+Not or not well documented
+Distribution charge
+Collection charge
+Commercial charge
+Free of charge for academic institutions and uses
+Open and Free. No charge
+Not or not well documented
+Restricted
+Accessible under moratorium
+Unrestricted
+No information is found on response time
+More than 1 week for release
+Less or equal to 1 week for release
+Online downloading (i.e. a few hours or less) for release
+Unknown
+No information was found on data delivery mechanisms
+Manual process: Order form/invoice is requested
+Online downloading services
+Online discovery + downloading + viewing services (Advanced services)
+Online discovery and downloading services
+Cited in peer reviewed paper or grey literature but no info on how to access
+Information retrieved upon specific request to the data source
+Use of social network, community of practices sharing information, portals of organization where no search is organized
+Search via reference catalogue (e.g. MyOcean, GEOSS Geoportal…)
+Use of open search engines, searching by name either the data provider or the characteristics
+Data sets are not referenced in a catalogue or are referenced in a non public catalogue
+The datasets are referenced in a public national catalogue, in an international catalogue service
+The datasets are provided through an EU Inspire catalogue service (OGC)
+There is no information at all on data policy adopted by data providers
+There is information, but details are available only on request
+There is detailed information provided to understand data policy
+Format not or not well documented
+Proprietary format and not well documented
+Format not proprietary but content not clearly specified
+Format proprietary but content clearly specified
+Format not proprietary and content clearly specified (e.g. autodescriptive like ODV, NetCDF CF) or at least with appropriate document describing the content": [
+Ready to be consumed

@@ -426,7 +426,7 @@
             <xsl:for-each select="*[normalize-space() != '']|
                                   */@xlink:href[normalize-space() != '']|
                                   gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[normalize-space() != '']">
-              <field name="thesaurus_{$key}">
+              <field name="thesaurus_{replace($key, '[^a-zA-Z0-9]', '')}">
                 <xsl:value-of select="normalize-space(.)"/>
               </field>
             </xsl:for-each>
@@ -679,7 +679,7 @@
         <xsl:variable name="title" select="current-grouping-key()"/>
         <xsl:variable name="pass" select="*/gmd:result/*/gmd:pass/gco:Boolean"/>
         <xsl:if test="$pass">
-          <field name="conformTo_{replace(normalize-space($title), ' ', '-')}">
+          <field name="conformTo_{replace(normalize-space($title), '[^a-zA-Z0-9]', '')}">
             <xsl:value-of select="$pass"/>
           </field>
         </xsl:if>
@@ -703,7 +703,7 @@
                         select="normalize-space(gmd:nameOfMeasure/gco:CharacterString)"/>
           <xsl:for-each select="gmd:result/gmd:DQ_QuantitativeResult/gmd:value">
             <xsl:if test=". != ''">
-              <field name="measure_{$measureName}">
+              <field name="measure_{replace($measureName, '[^a-zA-Z0-9]', '')}">
                 <xsl:value-of select="."/>
               </field>
             </xsl:if>

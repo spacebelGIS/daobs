@@ -258,7 +258,7 @@
 
   <dynamicField name="extra_*" type="string" stored="true" indexed="true"
                 multiValued="true" docValues="true"/>
-  <dynamicField name="extra_medsea_*" type="managed_medsea" stored="true"
+  <field name="extra_medsea_syn" type="managed_medsea" stored="true"
                 indexed="true" multiValued="true"/>
 
   <field name="isOpenData" type="boolean" stored="true" indexed="true"

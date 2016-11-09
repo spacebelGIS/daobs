@@ -25,6 +25,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                xmlns:solr="java:org.daobs.index.SolrRequestBean"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
@@ -47,17 +48,16 @@
 
 
       <xsl:variable name="thesaurusList">
-        <entry key="Data delivery mechanisms">extra_medsea_dataDeliveryMechanism</entry>
-        <entry key="emodnet-checkpoint.policy.visibility">extra_medsea_policyVisibility</entry>
-        <entry key="emodnet-checkpoint.service.extent">extra_medsea_serviceExtent</entry>
-        <entry key="emodnet-checkpoint.visibility">extra_medsea_visibility</entry>
-        <entry key="emodnet-checkpoint.readyness">extra_medsea_readyness</entry>
+        <entry key="Data delivery mechanisms">dataDeliveryMechanism</entry>
+        <entry key="emodnet-checkpoint.policy.visibility">policyVisibility</entry>
+        <entry key="emodnet-checkpoint.service.extent">serviceExtent</entry>
+        <entry key="emodnet-checkpoint.visibility">visibility</entry>
+        <entry key="emodnet-checkpoint.readyness">readyness</entry>
       </xsl:variable>
 
       <xsl:variable name="identification" select="gmd:identificationInfo"/>
 
       <xsl:for-each select="$thesaurusList/entry">
-        <xsl:message>##19:<xsl:value-of select="."/> </xsl:message>
         <xsl:variable name="thesaurusName" select="@key"/>
         <xsl:variable name="fieldName" select="."/>
         <xsl:for-each
@@ -70,8 +70,13 @@
                      gmd:thesaurusName[1]/*/gmd:identifier[1]/*/gmd:code/*/text(),
                      $thesaurusName)
                      ]/gmd:keyword/gco:CharacterString">
-          <field name="{$fieldName}">
+          <field name="extra_medsea_{$fieldName}">
             <xsl:value-of select="text()"/>
+          </field>
+
+          <field name="extra_medsea_syn_{$fieldName}">
+            <xsl:value-of
+              select="solr:analyzeField('extra_medsea_syn', text())"/>
           </field>
         </xsl:for-each>
       </xsl:for-each>
@@ -82,6 +87,10 @@
         <field name="extra_medsea_dataPolicy">
           <xsl:value-of select="text()"/>
         </field>
+        <field name="extra_medsea_syn_dataPolicy">
+          <xsl:value-of
+            select="solr:analyzeField('extra_medsea_syn', text())"/>
+        </field>
       </xsl:for-each>
 
       <xsl:for-each select="gmd:identificationInfo/*/
@@ -90,6 +99,10 @@
         <field name="extra_medsea_costBasis">
           <xsl:value-of select="text()"/>
         </field>
+        <field name="extra_medsea_syn_costBasis_syn">
+          <xsl:value-of
+            select="solr:analyzeField('extra_medsea_syn', text())"/>
+        </field>
       </xsl:for-each>
 
       <xsl:for-each select="gmd:dataQualityInfo/*/
@@ -97,6 +110,10 @@
                               gmd:result/gmd:DQ_QuantitativeResult/gmd:value/*">
         <field name="extra_medsea_responsiveness">
           <xsl:value-of select="text()"/>
+        </field>
+        <field name="extra_medsea_syn_responsiveness">
+          <xsl:value-of
+            select="solr:analyzeField('extra_medsea_syn', text())"/>
         </field>
       </xsl:for-each>
     </xsl:if>
@@ -112,7 +129,7 @@
                    gmd:thesaurusName[1]/gmd:CI_Citation/
                      gmd:title[1]/gco:CharacterString/text(),
                      $thesaurusName)]/gmd:keyword/gco:CharacterString">
-      <field name="{$fieldName}">
+      <field name="{replace($fieldName, '[^a-zA-Z0-9]', '')}">
         <xsl:value-of select="text()"/>
       </field>
     </xsl:for-each>
