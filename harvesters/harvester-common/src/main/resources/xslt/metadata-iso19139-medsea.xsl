@@ -25,6 +25,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                xmlns:solr="java:org.daobs.index.SolrRequestBean"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
@@ -38,18 +39,57 @@
 
     <xsl:if
       test="contains(gmd:metadataStandardName/gco:CharacterString, 'Emodnet')">
-      <xsl:call-template name="medsea-index-keyword">
+      <!--<xsl:call-template name="medsea-index-keyword">
         <xsl:with-param name="thesaurusName"
                         select="'Data delivery mechanisms'"/>
         <xsl:with-param name="fieldName"
                         select="'extra_medsea_dataDeliveryMechanism'"/>
-      </xsl:call-template>
+      </xsl:call-template>-->
+
+
+      <xsl:variable name="thesaurusList">
+        <entry key="Data delivery mechanisms">dataDeliveryMechanism</entry>
+        <entry key="emodnet-checkpoint.policy.visibility">policyVisibility</entry>
+        <entry key="emodnet-checkpoint.service.extent">serviceExtent</entry>
+        <entry key="emodnet-checkpoint.visibility">visibility</entry>
+        <entry key="emodnet-checkpoint.readyness">readyness</entry>
+      </xsl:variable>
+
+      <xsl:variable name="identification" select="gmd:identificationInfo"/>
+
+      <xsl:for-each select="$thesaurusList/entry">
+        <xsl:variable name="thesaurusName" select="@key"/>
+        <xsl:variable name="fieldName" select="."/>
+        <xsl:for-each
+          select="$identification/*/
+                 gmd:descriptiveKeywords/gmd:MD_Keywords[
+                 contains(
+                     gmd:thesaurusName[1]/*/gmd:title[1]/gco:CharacterString/text(),
+                     $thesaurusName) or
+                 contains(
+                     gmd:thesaurusName[1]/*/gmd:identifier[1]/*/gmd:code/*/text(),
+                     $thesaurusName)
+                     ]/gmd:keyword/gco:CharacterString">
+          <field name="extra_medsea_{$fieldName}">
+            <xsl:value-of select="text()"/>
+          </field>
+
+          <field name="extra_medsea_syn_{$fieldName}">
+            <xsl:value-of
+              select="solr:analyzeField('extra_medsea_syn', text())"/>
+          </field>
+        </xsl:for-each>
+      </xsl:for-each>
 
       <xsl:for-each select="gmd:identificationInfo/*/
                               gmd:resourceConstraints/*/
                                 gmd:otherConstraints/*">
         <xsl:element name="extra_medsea_dataPolicy">
           <xsl:value-of select="text()"/>
+        </xsl:element>
+        <xsl:element name="extra_medsea_syn_dataPolicy">
+          <xsl:value-of
+            select="solr:analyzeField('extra_medsea_syn', text())"/>
         </xsl:element>
       </xsl:for-each>
 
@@ -59,6 +99,10 @@
         <xsl:element name="extra_medsea_costBasis">
           <xsl:value-of select="text()"/>
         </xsl:element>
+        <xsl:element name="extra_medsea_syn_costBasis_syn">
+          <xsl:value-of
+            select="solr:analyzeField('extra_medsea_syn', text())"/>
+        </xsl:element>
       </xsl:for-each>
 
       <xsl:for-each select="gmd:dataQualityInfo/*/
@@ -66,6 +110,10 @@
                               gmd:result/gmd:DQ_QuantitativeResult/gmd:value/*">
         <xsl:element name="extra_medsea_responsiveness">
           <xsl:value-of select="text()"/>
+        </xsl:element>
+        <xsl:element name="extra_medsea_syn_responsiveness">
+          <xsl:value-of
+            select="solr:analyzeField('extra_medsea_syn', text())"/>
         </xsl:element>
       </xsl:for-each>
     </xsl:if>
@@ -81,7 +129,7 @@
                    gmd:thesaurusName[1]/gmd:CI_Citation/
                      gmd:title[1]/gco:CharacterString/text(),
                      $thesaurusName)]/gmd:keyword/gco:CharacterString">
-      <xsl:element name="{$fieldName}">
+      <xsl:element name="{replace($fieldName, '[^a-zA-Z0-9]', '')}">
         <xsl:value-of select="text()"/>
       </xsl:element>
     </xsl:for-each>

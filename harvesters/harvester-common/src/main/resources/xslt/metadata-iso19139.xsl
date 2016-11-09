@@ -430,7 +430,7 @@
             <xsl:for-each select="*[normalize-space() != '']|
                                   */@xlink:href[normalize-space() != '']|
                                   gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[normalize-space() != '']">
-              <xsl:element name="thesaurus_{$key}">
+              <xsl:element name="thesaurus_{replace($key, '[^a-zA-Z0-9]', '')}">
                 <xsl:value-of select="normalize-space(.)"/>
               </xsl:element>
             </xsl:for-each>
@@ -734,7 +734,7 @@
                                   gmd:nameOfMeasure/gco:CharacterString), ' ', '-')"/>
           <xsl:for-each select="gmd:result/gmd:DQ_QuantitativeResult/gmd:value">
             <xsl:if test=". != ''">
-              <xsl:element name="measure_{$measureName}">
+              <xsl:element name="measure_{replace($measureName, '[^a-zA-Z0-9]', '')}">
                 <xsl:value-of select="."/>
               </xsl:element>
             </xsl:if>

@@ -21,14 +21,13 @@
     permissions and limitations under the Licence.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.daobs</groupId>
   <artifactId>daobs</artifactId>
   <packaging>pom</packaging>
-  <version>0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>Data analyzer and observer</name>
   <organization>
     <name>INSPIRE MIF</name>
@@ -487,9 +486,9 @@
     <!--<log.dir>${catalina.home}/logs</log.dir>-->
 
     <!-- Proxy configuration -->
-    <http.proxyHost></http.proxyHost>
-    <http.proxyPort></http.proxyPort>
-    <http.nonProxyHosts></http.nonProxyHosts>
+    <http.proxyHost />
+    <http.proxyPort />
+    <http.nonProxyHosts />
 
     <!--
       Option to configure authentication mode:
@@ -511,8 +510,8 @@
     <!-- For LDAP based authentication -->
     <ldap.base.provider.url>ldap://ldap.eionet.europa.eu</ldap.base.provider.url>
     <ldap.base.dn>o=EIONET,l=Europe</ldap.base.dn>
-    <ldap.security.principal></ldap.security.principal>
-    <ldap.security.credentials></ldap.security.credentials>
+    <ldap.security.principal />
+    <ldap.security.credentials />
     <ldap.base.search.base>ou=Users</ldap.base.search.base>
     <ldap.base.dn.pattern>uid={0}</ldap.base.dn.pattern>
 
@@ -520,8 +519,8 @@
     <solr.webapp.name>solr</solr.webapp.name>
     <solr.port>8984</solr.port>
     <solr.url>http://localhost:${solr.port}/${solr.webapp.name}</solr.url>
-    <solr.username></solr.username>
-    <solr.password></solr.password>
+    <solr.username />
+    <solr.password />
     <!-- Define the link to Solr admin page
     displayed in the top tool bar. If Solr
     is not accessible, leave it empty. -->
