@@ -4,13 +4,17 @@
 
 Download Kibana from https://www.elastic.co/fr/downloads/kibana
 
+Set Kibana base path and index name in config/kibana.yml
+
+```
+server.basePath: "/<webappname>/dashboard"
+
+kibana.index: ".dashboards"
+
+```
+
 Start Kibana.
 
-Set Kibana base path in config/kibana.yml
-
-```
-server.basePath: "/webappname/dashboard"
-```
 
 ### Maven installation
 
