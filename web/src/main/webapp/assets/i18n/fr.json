@@ -19,7 +19,7 @@
   "dashboardNotLoaded": "<strong>{{number}}</strong> tableau(x) de bord avec des erreurs.",
   "deleteAllDashboards": "Supprimer les <strong>{{number}}</strong> tableau(x) de bord",
   "home": "Accueil",
-  "solrConnectionError": "Échec de la connection à l'index. Vérifier que <a href='{{url}}'>l'URL</a> est correcte et que le serveur Solr est lancé.",
+  "solrConnectionError": "Échec de la connection à l'index. Vérifier que <a href='{{url}}'>l'URL</a> est correcte et que le moteur de recherche est lancé.",
   "removeAllMonitoring": "Supprimer les rapportages",
   "homeTitle": "Retour à l'accueil",
   "monitoring": "Rapportage",
