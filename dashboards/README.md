@@ -15,6 +15,14 @@ kibana.index: ".dashboards"
 
 Start Kibana.
 
+Import configuration
+
+```
+curl -X PUT http://localhost:9200/.dashboard -d @config/idx-pattern-indicators.json
+curl -X PUT http://localhost:9200/.dashboard -d @config/idx-pattern-records.json
+curl -X PUT http://localhost:9200/.dashboard -d @config/dashboards.json
+```
+
 
 ### Maven installation
 
